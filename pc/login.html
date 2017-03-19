@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>登录</title>
+    <link rel="stylesheet" href="lib/layui/css/layui.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+    <div class="header">
+        <div class="main">
+            <a class="logo" href="/" title="Wesys"></a>
+        </div>
+    </div>
+    <div class="main layui-clear">
+        <div class="fly-panel" style="padding: 5px 20px;">
+            <div class="layui-tab layui-tab-brief" lay-filter="user">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">登录</li>
+                </ul>
+                <div class="layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+                    <div class="layui-tab-item layui-show">
+                        <form class="layui-form layui-form-pane" action="" method="post">
+                            <input type="hidden" name="pubkey" id="pubkey" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwpSBCzntA06ceIathHYbN/RsrXey/L5nhhJmrT5z+qrfjz0+zKE/XwmerNnOMYKDt1YRXzmwD/ma+6mQN0yXMnqCIpNGy/QvOqHlQbVy7DJLHXVP7kHl1T4tkxzUbMmA9y7/B0cp1yorfF8oJbe3M2/p0qQ8zF74kXpGaum5FJkqoLTzl+v10qso2PQxp4TP5U1qPioLF1uJAJzlv1lb5Z0RBesOPj+FgG0oh/+bPvL0rJ4QCYnFqDsMcvi4jd9wD6+hyZVG4j+R92YhJHWNy+sgXboLXZTwdTE8sglfAtRK1+ITGKdcYo94Jlo65Kdlxrn0vEPrYSN4/nBwsfq7BQIDAQAB">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">用户名</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="login_name" lay-verify="required" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="password" name="login_pwd" lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">验证码</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="captcha" lay-verify="required" placeholder="请输入验证码" autocomplete="off" class="layui-input">
+                                </div>
+                                <img class="login__captcha-img" alt="验证码" src="/p/action/user/captcha" onclick="this.src='/p/action/user/captcha?t='+new Date().getTime()">
+                            </div>
+                            <div class="layui-form-item">
+                                <button class="layui-btn" lay-filter="*" lay-submit="">立即登录</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p><a href="#">Wesys</a> 2017 ©</p>
+    </div>
+    <script type="text/javascript" src="lib/jquery/jquery.min.js"></script>
+    <!-- <script type="text/javascript" src="lib/jquery-json/jquery.json.min.js"></script> -->
+    <script type="text/javascript" src="lib/layui/layui.js"></script>
+    <script type="text/javascript" src="lib/jsencrypt/jsencrypt.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script type="text/javascript">
+    function encryptPassword(password) {
+        //加密密码
+        var crypt = new JSEncrypt();
+        crypt.setPublicKey($('#pubkey').val());
+        return crypt.encrypt(password);
+    }
+
+    layui.use(['layer', 'form'], function() {
+        var layer = layui.layer,
+            form = layui.form();
+
+        form.on('submit(*)', function(data) {
+            data.field.login_pwd = encryptPassword(data.field.login_pwd);
+
+            $$.request('/action/user/login', data.field, function(data) {
+                window.location.href = 'index.html';
+            }, function(data) {
+                layer.msg($$.errmsg(data));
+            });
+
+            return false; //阻止表单跳转
+        });
+    });
+    </script>
+</body>
+
+</html>
+
