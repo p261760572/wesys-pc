@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>首页</title>
+    <link rel="stylesheet" href="lib/layui/css/layui.css">
+    <style type="text/css">
+    .logo {
+        position: absolute;
+        left: 40px;
+        top: 12px;
+    }
+    
+    .header .layui-nav {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: none;
+    }
+    
+    .layui-layout-admin .layui-body {
+        border-left: solid 1px #1AA094;
+        overflow-y: hidden;
+    }
+    
+    .layui-body .layui-tab {
+        margin: 0;
+        /*border-bottom: 1px solid #1AA094;*/
+    }
+    
+    .layui-body .layui-tab-title .layui-this {
+        background: #1FA094;
+        background: linear-gradient(#1FA094, #009688);
+        color: #FFF;
+    }
+    
+    .layui-tab-content {
+        height: 100%;
+        padding: 0;
+    }
+    
+    .layui-tab-content .layui-tab-item {
+        position: absolute;
+        top: 41px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0;
+        margin: 0;
+        background-color: #fff;
+    }
+    
+    .tab-iframe {
+        width: 100%;
+        border: 0;
+        height: 100%;
+    }
+    
+    .layui-nav-tree .layui-nav-item dl dd:hover {
+        background: #1AA094;
+    }
+    
+    .layui-layout .footer {
+        padding: 15px 0;
+        height: 26px;
+        line-height: 26px;
+        text-align: center;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header header">
+            <div class="layui-main">
+                <a class="logo" href="/">
+                    <img src="images/logo.png" alt="layui">
+                </a>
+                <ul class="layui-nav">
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">我</a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="javascript:;">退出</a>
+                            </dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <ul class="layui-nav layui-nav-tree" lay-filter="nav">                    
+                </ul>
+            </div>
+        </div>
+        <div class="layui-body">
+            <div class="layui-tab layui-tab-card" lay-filter="tab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">首页</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        首页
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-footer footer">
+            <div class="layui-main">
+                <p>Wesys 2017 ©</p>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="lib/jquery/jquery.min.js"></script>
+    <!-- <script type="text/javascript" src="lib/jquery-json/jquery.json.min.js"></script> -->
+    <script type="text/javascript" src="lib/layui/layui.js"></script>
+    <script type="text/javascript" src="lib/jsencrypt/jsencrypt.min.js"></script>
+    <script type="text/javascript" src="js/template.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+    <script id="menu-tpl" type="text/html">
+        {{each menu as item i}}
+        <li class="layui-nav-item layui-nav-itemed" data-id="{{item.menu_id}}" data-url="{{item.url}}">
+            <a href="javascript:;">{{item.menu_name}}</a> 
+            {{if item.children}}
+            <dl class="layui-nav-child">
+                {{each item.children}}
+                <dd data-id="{{$value.menu_id}}" data-url="{{$value.url}}"><a href="javascript:;">{{$value.menu_name}}</a></dd>
+                {{/each}}
+            </dl>
+            {{/if}}
+        </li>
+        {{/each}}
+    </script>
+    <script type="text/javascript">
+    function encryptPassword(password) {
+        //加密密码
+        var crypt = new JSEncrypt();
+        crypt.setPublicKey($('#pubkey').val());
+        return crypt.encrypt(password);
+    }
+
+    function logout() {
+        $$.request('/action/user/logout', {}, function() {
+            window.location.href = 'login.html';
+        });
+    }
+
+    function generateMenuData(rows) {
+        var data = [];
+        var temp = {};
+
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            temp[row.menu_id] = row;
+        }
+
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var p = temp[row.menu_pid];
+            if (!p) { //没有找到parent
+                data.push(row);
+            } else { //找到parent
+                p.children = p.children || [];
+                p.children.push(row);
+            }
+        }
+
+        return data.length > 0 ? data[0].children : [];
+    }
+
+    $$.request('/action/user/view', {}, function(data) {
+        $('#login-name').html(data.data.login_name);
+    }, function(data) {
+        if ($$.errcode(data) == -11 || $$.errcode(data) == 5) {
+            window.location.href = 'login.html';
+        }
+    });
+
+    $$.request('/action/user/menu', {}, function(data) {
+        var menu = generateMenuData(data.rows);
+        var $nav = $('.layui-nav-tree[lay-filter=nav]');
+        $nav.html(template('menu-tpl', {
+            menu: menu
+        }));
+    });
+
+    layui.use(['layer', 'form', 'element'], function() {
+        var layer = layui.layer;
+        var form = layui.form();
+        var element = layui.element();
+
+        // form.on('submit(*)', function(data) {
+        //     data.field.login_pwd = encryptPassword(data.field.login_pwd);
+
+        //     $$.request('/action/user/login', data.field, function(data) {
+        //         window.location.href = 'index.html';
+        //     }, function(data) {
+        //         layer.msg($$.errmsg(data));
+        //     });
+
+        //     return false; //阻止表单跳转
+        // });
+
+        element.on('nav(nav)', function(elem) {
+            console.log(elem); //得到当前点击的DOM对象
+            var $tab = $('.layui-tab[lay-filter=tab]');
+            var $title = $tab.children('.layui-tab-title')
+
+            var id = elem.attr('data-id');
+            var url = elem.attr('data-url');
+            element.tabAdd('tab', {
+                title: elem.text() + '<i class="layui-icon layui-tab-close">&#x1006;</i>',
+                content: '<iframe class="tab-iframe" src="'+url+'"></iframe>',
+                id: id
+            });
+
+            $title.find('li[lay-id=' + id + '] .layui-tab-close').on('click', function() {
+                element.tabDelete('tab', $(this).parent('li').attr('lay-id'));
+            })
+
+            element.tabChange('tab', id);
+        });
+    });
+    </script>
+</body>
+
+</html>

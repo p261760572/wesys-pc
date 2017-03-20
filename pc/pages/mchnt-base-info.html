@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>测试</title>
+    <link rel="stylesheet" href="../lib/layui/css/layui.css">
+    <style type="text/css">
+        body {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <form class="layui-form" action="" method="POST">
+            <div class="layui-form-item">
+                <label class="layui-form-label">验证必填项</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">验证必填项</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="search">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="group-button">
+        <button class="layui-btn layui-btn-small layui-btn-danger">
+            <i class="layui-icon">&#xe640;</i> 删除
+        </button>
+        <button class="layui-btn layui-btn-small layui-btn-normal">
+            <i class="layui-icon">&#x1005;</i> 审核
+        </button>
+        <button class="layui-btn layui-btn-small modal-iframe">
+            <i class="layui-icon">&#xe654;</i> 添加
+        </button>
+    </div>
+    <div id="list">
+        <div class="layui-form">
+            <table class="layui-table">
+                <colgroup>
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>客户号</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="list-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div style="text-align: right;" id="page"></div>
+    <div id="detail">
+        <form class="layui-form" action="" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">验证必填项</label>
+                <div class="layui-input-block">
+                    <input type="text" name="mchnt_id" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="detail">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+    <!-- <script type="text/javascript" src="lib/jquery-json/jquery.json.min.js"></script> -->
+    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
+    <script type="text/javascript" src="../js/template.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script id="list-tpl" type="text/html">
+        {{each rows as row i}}
+        <tr>
+            <td>{{row.mchnt_id}}</td>
+            <td>
+                <button class="layui-btn layui-btn-mini" onclick="onView('{{row.rec_id}}')">
+                    <i class="layui-icon">&#xe60a;</i>查看
+                </button>
+                <button class="layui-btn layui-btn-mini" onclick="onView()">
+                    <i class="layui-icon">&#xe642;</i>编辑
+                </button>
+                <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete()">
+                    <i class="layui-icon">&#xe640;</i>删除
+                </button>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
+    <script type="text/javascript">
+    var laypage = layui.laypage;
+    var layer = layui.layer;
+    var form = layui.form();
+    var element = layui.element();
+
+    function onSearch(param, curr) {
+        param.page = curr;
+        $$.request('/action/bm/mchnt-base-info/search', param, function(data) {
+            $('#list-body').html(template('list-tpl', data));
+            laypage({
+                cont: 'page',
+                pages: Math.ceil(data.total / 10),
+                curr: curr,
+                skip: true,
+                jump: function(obj, first) {
+                    console.log(this, arguments);
+                    if (!first) {
+                        onSearch(param, obj.curr);
+                    }
+                }
+            });
+        });
+    }
+
+    function onView(rec_id) {
+        var index = layer.open({
+            type: 1,
+            title: '客户基本资料',
+            content: $('#detail'),
+            end: function() {
+                $('#detail').hide();
+            }
+        });
+        layer.full(index);
+
+        $$.request('/action/bm/mchnt-base-info/view', {
+            rec_id: rec_id
+        }, function(data) {
+            $$.loadData('#detail', data.data);
+        });
+    }
+
+    function onEdit(rec_id) {
+        onView(rec_id);
+    }
+
+    function onSubmit() {
+        $$.request('/action/bm/mchnt-base-info/' + operateType, vm.detailForm, function(data) {
+            //
+        });
+    }
+
+    form.on('submit(search)', function(data) {
+        console.log(this, arguments);
+        onSearch(data.field, 1);
+        return false; //阻止表单跳转
+    });
+    </script>
+</body>
+
+</html>

@@ -119,6 +119,51 @@ var baseJs = (function() {
         return date;
     };
 
+
+    $$.loadData = function(selector, data) {
+        var $eles = $(selector);
+
+        function _load($form, data) {
+            for (var name in data) {
+                var val = data[name];
+                if (!_checkField($form, name, val)) {
+                    $form.find('input[name="' + name + '"]').val(val);
+                    $form.find('textarea[name="' + name + '"]').val(val);
+                    $form.find('select[name="' + name + '"]').val(val);
+                }
+            }
+        }
+
+        function _checkField($form, name, val) {
+            var $cc = $form.find('input[name="' + name + '"][type=radio], input[name="' + name + '"][type=checkbox]');
+            if ($cc.length) {
+                $cc.each(function(i, ele) {
+                    $ele = $(ele);
+                    if (_isChecked($ele.val(), val)) {
+                        $ele.prop('checked', true);
+                    }
+                });
+                return true;
+            }
+            return false;
+        }
+
+        function _isChecked(v, val) {
+            if (v == String(val) || $.inArray(v, $.isArray(val) ? val : [val]) >= 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        $eles.each(function(i, ele) {
+            var $form = $(ele);
+            _load($form, data);
+        });
+
+        return this;
+    }
+
     return $$;
 })();
 
@@ -532,7 +577,9 @@ $$.batchSubmit = function(target) {
         for (var i = 0; i < rows.length; i++) {
             keysRows.push($$.getKeys(rows[i], [dgOpts.idField]));
         }
-        var requestData = { rows: keysRows };
+        var requestData = {
+            rows: keysRows
+        };
 
         if (opts.onBefore && opts.onBefore.call(target, requestData) == false) {
             return false;
