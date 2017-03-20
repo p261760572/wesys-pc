@@ -28,7 +28,11 @@
     
     .layui-body .layui-tab {
         margin: 0;
-        /*border-bottom: 1px solid #1AA094;*/
+        border-bottom: 1px solid #1AA094;
+    }
+    
+    .layui-tab .layui-tab-title li {
+        border-right: 1px solid #E2E2E2;
     }
     
     .layui-body .layui-tab-title .layui-this {
@@ -44,7 +48,7 @@
     
     .layui-tab-content .layui-tab-item {
         position: absolute;
-        top: 41px;
+        top: 42px;
         bottom: 0;
         left: 0;
         right: 0;
@@ -64,7 +68,7 @@
     }
     
     .layui-layout .footer {
-        padding: 15px 0;
+        padding: 10px 0;
         height: 26px;
         line-height: 26px;
         text-align: center;
@@ -84,7 +88,7 @@
                         <a href="javascript:;">我</a>
                         <dl class="layui-nav-child">
                             <dd>
-                                <a href="javascript:;">退出</a>
+                                <a href="javascript:;" onclick="logout()">退出</a>
                             </dd>
                         </dl>
                     </li>
@@ -93,7 +97,7 @@
         </div>
         <div class="layui-side layui-bg-black">
             <div class="layui-side-scroll">
-                <ul class="layui-nav layui-nav-tree" lay-filter="nav">                    
+                <ul class="layui-nav layui-nav-tree" lay-filter="nav">
                 </ul>
             </div>
         </div>
@@ -124,8 +128,7 @@
     <script id="menu-tpl" type="text/html">
         {{each menu as item i}}
         <li class="layui-nav-item layui-nav-itemed" data-id="{{item.menu_id}}" data-url="{{item.url}}">
-            <a href="javascript:;">{{item.menu_name}}</a> 
-            {{if item.children}}
+            <a href="javascript:;">{{item.menu_name}}</a> {{if item.children}}
             <dl class="layui-nav-child">
                 {{each item.children}}
                 <dd data-id="{{$value.menu_id}}" data-url="{{$value.url}}"><a href="javascript:;">{{$value.menu_name}}</a></dd>
@@ -186,12 +189,17 @@
         $nav.html(template('menu-tpl', {
             menu: menu
         }));
+        if (element) {
+            element.init();
+        }
     });
 
+
+    var element;
     layui.use(['layer', 'form', 'element'], function() {
         var layer = layui.layer;
         var form = layui.form();
-        var element = layui.element();
+        element = layui.element();
 
         // form.on('submit(*)', function(data) {
         //     data.field.login_pwd = encryptPassword(data.field.login_pwd);
@@ -212,15 +220,20 @@
 
             var id = elem.attr('data-id');
             var url = elem.attr('data-url');
-            element.tabAdd('tab', {
-                title: elem.text() + '<i class="layui-icon layui-tab-close">&#x1006;</i>',
-                content: '<iframe class="tab-iframe" src="'+url+'"></iframe>',
-                id: id
-            });
 
-            $title.find('li[lay-id=' + id + '] .layui-tab-close').on('click', function() {
-                element.tabDelete('tab', $(this).parent('li').attr('lay-id'));
-            })
+            var $li = $title.find('li[lay-id=' + id + ']');
+            if (!$li.length) {
+
+                element.tabAdd('tab', {
+                    title: elem.text() + '<i class="layui-icon layui-tab-close">&#x1006;</i>',
+                    content: '<iframe class="tab-iframe" src="' + url + '"></iframe>',
+                    id: id
+                });
+
+                $title.find('li[lay-id=' + id + '] .layui-tab-close').on('click', function() {
+                    element.tabDelete('tab', $(this).parent('li').attr('lay-id'));
+                })
+            }
 
             element.tabChange('tab', id);
         });
