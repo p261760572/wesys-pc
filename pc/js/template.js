@@ -176,7 +176,7 @@
 
         var code = headerCode + mainCode + footerCode;
 
-        if (template.debug) console.log(code);
+        if (template.debug && console) console.log(code);
         var Render = new Function("$data", code);
         Render.prototype = utils;
 

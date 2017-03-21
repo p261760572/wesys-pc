@@ -6,44 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>商户信息</title>
-    <link rel="stylesheet" href="../lib/layui/css/layui.css">
-    <style type="text/css">
-    body {
-        background: #f8f8f8;
-        color: #999;
-    }
-    
-    .hide {
-        display: none;
-    }
-    
-    .container {
-        margin: 20px auto;
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-    
-    .panel-padding {
-        padding: 20px 10px;
-    }
-    
-    .panel {
-        margin-bottom: 20px;
-        background-color: #fff;
-        border: 1px solid transparent;
-        border-radius: 4px;
-        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-    }
-
-    .layui-form-label {
-        width: 100px;
-    }
-
-    .layui-input-block {
-        margin-left: 130px;
-    }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
 </head>
 
 <body>
@@ -51,30 +15,52 @@
         <div class="panel panel-padding">
             <form class="layui-form" action="" method="post">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">客户号</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">客户号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">联系人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="linkman" placeholder="请输入联系人" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">联系人</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="linkman" placeholder="请输入联系人" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">手机</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mobile" placeholder="请输入手机" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">商户简称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mchnt_abbr" placeholder="请输入商户简称" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">手机</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="mobile" placeholder="请输入手机" autocomplete="off" class="layui-input">
+                    <label class="layui-form-label">所在地区</label>
+                    <div class="layui-input-inline">
+                        <select name="province">
+                            <option value="">请选择省</option>
+                            <option value="43" selected="">湖南</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="city">
+                            <option value="">请选择市</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="district">
+                            <option value="">请选择县/区</option>
+                        </select>
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">常用邮箱</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="email" placeholder="请输入常用邮箱" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit lay-filter="search">查询</button>
@@ -97,156 +83,181 @@
             </div>
             <div id="list">
             </div>
+            <div id="page" style="text-align: right;"></div>
         </div>
     </div>
     <div id="detail" class="hide">
         <div class="panel panel-padding">
             <form class="layui-form" action="" method="post">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">客户号</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="mchnt_id" lay-verify="required" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>客户号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mchnt_id" lay-verify="required" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>联系人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="linkman" lay-verify="required" placeholder="请输入联系人" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">联系人</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="linkman" lay-verify="required" placeholder="请输入联系人" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>手机</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mobile" lay-verify="required" placeholder="请输入手机" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">常用邮箱</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="email" placeholder="请输入常用邮箱" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">手机</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="mobile" lay-verify="required" placeholder="请输入手机" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>商户简称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mchnt_abbr" lay-verify="required" placeholder="请输入商户简称" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">联系电话</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="telno" placeholder="请输入联系电话" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">常用邮箱</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="email"  placeholder="请输入常用邮箱" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>所在地区(省)</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="province" lay-verify="required" placeholder="请输入所在地区(省)" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>所在地区(市)</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="city" lay-verify="required" placeholder="请输入所在地区(市)" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">商户简称</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="mchnt_abbr" lay-verify="required" placeholder="请输入商户简称" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>所在地区(区)</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="district" lay-verify="required" placeholder="请输入所在地区(区)" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>详细地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="addr" lay-verify="required" placeholder="请输入详细地址" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">联系电话</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="telno"  placeholder="请输入联系电话" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">商户名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mchnt_name" placeholder="请输入商户名称" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">营业执照号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="license_no" placeholder="请输入营业执照号" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">所在地区(省)</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="province" lay-verify="required" placeholder="请输入所在地区(省)" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">营业执照期限</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="license_date" placeholder="请输入营业执照期限" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">注册地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="license_addr" placeholder="请输入注册地址" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">所在地区(市)</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="city" lay-verify="required" placeholder="请输入所在地区(市)" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">经营范围</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="business_scope" placeholder="请输入经营范围" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">证件类型</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="cert_type" placeholder="请输入证件类型" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">所在地区(区)</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="district" lay-verify="required" placeholder="请输入所在地区(区)" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">证件姓名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="cert_name" placeholder="请输入证件姓名" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">证件号码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="cert_id" placeholder="请输入证件号码" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">详细地址</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="addr" lay-verify="required" placeholder="请输入详细地址" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">证件有效期</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="cert_date" placeholder="请输入证件有效期" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">组织机构代码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="org_code" placeholder="请输入组织机构代码" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">商户名称</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="mchnt_name" lay-verify="required" placeholder="请输入商户名称" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">状态-删除</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="status" placeholder="请输入状态-删除" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="remark" placeholder="请输入备注" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">营业执照号</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="license_no" lay-verify="required" placeholder="请输入营业执照号" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>拓展方</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="expand_inst_id" lay-verify="required" placeholder="请输入拓展方" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>拓展人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="expand_id" lay-verify="required" placeholder="请输入拓展人" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">营业执照期限</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="license_date"  placeholder="请输入营业执照期限" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">注册地址</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="license_addr"  placeholder="请输入注册地址" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">经营范围</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="business_scope"  placeholder="请输入经营范围" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">证件类型</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="cert_type" lay-verify="required" placeholder="请输入证件类型" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">证件姓名</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="cert_name" lay-verify="required" placeholder="请输入证件姓名" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">证件号码</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="cert_id" lay-verify="required" placeholder="请输入证件号码" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">证件有效期</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="cert_date"  placeholder="请输入证件有效期" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">组织机构代码</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="org_code"  placeholder="请输入组织机构代码" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">状态-删除</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="status"  placeholder="请输入状态-删除" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">备注</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="remark"  placeholder="请输入备注" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">拓展方</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="expand_inst_id" lay-verify="required" placeholder="请输入拓展方" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">拓展人</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="expand_id" lay-verify="required" placeholder="请输入拓展人" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item" id="">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit="" lay-filter="detail">提交</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
@@ -259,98 +270,55 @@
     <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
     <script type="text/javascript" src="../js/template.js"></script>
     <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/district.js"></script>
     <script id="list-tpl" type="text/html">
         <div class="layui-form">
             <table class="layui-table">
                 <thead>
                     <tr>
                         <th>
-                            <input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose">
+                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
                         </th>
                         <th>客户号</th>
                         <th>联系人</th>
                         <th>手机</th>
-                        <th>常用邮箱</th>
                         <th>商户简称</th>
                         <th>联系电话</th>
-                        <th>所在地区(省)</th>
-                        <th>所在地区(市)</th>
-                        <th>所在地区(区)</th>
-                        <th>详细地址</th>
-                        <th>商户名称</th>
+                        <th>所在地区</th>
                         <th>营业执照号</th>
-                        <th>营业执照期限</th>
-                        <th>注册地址</th>
-                        <th>经营范围</th>
-                        <th>证件类型</th>
-                        <th>证件姓名</th>
-                        <th>证件号码</th>
-                        <th>证件有效期</th>
-                        <th>组织机构代码</th>
-                        <th>状态-删除</th>
-                        <th>备注</th>
-                        <th>拓展方</th>
-                        <th>拓展人</th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
                     {{each rows as row i}}
                     <tr>
                         <td>
-                            <input type="checkbox" name="" lay-skin="primary">
+                            <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
                         </td>
-                        <th>客户号</th>
-                        <td>{{row.mchnt_id}}</td>
-                        <th>联系人</th>
-                        <td>{{row.linkman}}</td>
-                        <th>手机</th>
-                        <td>{{row.mobile}}</td>
-                        <th>常用邮箱</th>
-                        <td>{{row.email}}</td>
-                        <th>商户简称</th>
-                        <td>{{row.mchnt_abbr}}</td>
-                        <th>联系电话</th>
-                        <td>{{row.telno}}</td>
-                        <th>所在地区(省)</th>
-                        <td>{{row.province}}</td>
-                        <th>所在地区(市)</th>
-                        <td>{{row.city}}</td>
-                        <th>所在地区(区)</th>
-                        <td>{{row.district}}</td>
-                        <th>详细地址</th>
-                        <td>{{row.addr}}</td>
-                        <th>商户名称</th>
-                        <td>{{row.mchnt_name}}</td>
-                        <th>营业执照号</th>
-                        <td>{{row.license_no}}</td>
-                        <th>营业执照期限</th>
-                        <td>{{row.license_date}}</td>
-                        <th>注册地址</th>
-                        <td>{{row.license_addr}}</td>
-                        <th>经营范围</th>
-                        <td>{{row.business_scope}}</td>
-                        <th>证件类型</th>
-                        <td>{{row.cert_type}}</td>
-                        <th>证件姓名</th>
-                        <td>{{row.cert_name}}</td>
-                        <th>证件号码</th>
-                        <td>{{row.cert_id}}</td>
-                        <th>证件有效期</th>
-                        <td>{{row.cert_date}}</td>
-                        <th>组织机构代码</th>
-                        <td>{{row.org_code}}</td>
-                        <th>状态-删除</th>
-                        <td>{{row.status}}</td>
-                        <th>备注</th>
-                        <td>{{row.remark}}</td>
-                        <th>拓展方</th>
-                        <td>{{row.expand_inst_id}}</td>
-                        <th>拓展人</th>
-                        <td>{{row.expand_id}}</td>
-
+                        <td>
+                            {{row.mchnt_id}}
+                        </td>
+                        <td>
+                            {{row.linkman}}
+                        </td>
+                        <td>
+                            {{row.mobile}}
+                        </td>
+                        <td>
+                            {{row.mchnt_abbr}}
+                        </td>
+                        <td>
+                            {{row.telno}}
+                        </td>
+                        <td>
+                            {{row.district_name}}
+                        </td>
+                        <td>
+                            {{row.license_no}}
+                        </td>
                         <td>
                             <div class="layui-btn-group">
-                                <button class="layui-btn layui-btn-mini" onclick="onView({{i}})">
+                                <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
                                     <i class="layui-icon">&#xe60a;</i>查看
                                 </button>
                                 <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
@@ -366,102 +334,67 @@
                 </tbody>
             </table>
         </div>
-        <div style="text-align: right;" id="page"></div>
     </script>
     <script type="text/javascript">
-    var laypage = layui.laypage;
     var layer = layui.layer;
+    var laypage = layui.laypage;
     var form = layui.form();
     var element = layui.element();
 
     var operateType;
 
-    function onSearch(param, curr) {
-        param.page = curr;
-        $$.request('/action/bm/mchnt-base-info/search', param, function(data) {
-            $('#list').html(template('list-tpl', data)).data('data', data);
-            form.render('checkbox');
-            laypage({
-                cont: 'page',
-                pages: Math.ceil(data.total / 10),
-                curr: curr,
-                skip: true,
-                jump: function(obj, first) {
-                    console.log(this, arguments);
-                    if (!first) {
-                        onSearch(param, obj.curr);
-                    }
-                }
-            });
-        });
-    }
-
-    function showDetail() {
-        var typesName = {
-            'create': '新增',
-            'view': '查看',
-            'update': '编辑',
-            'check1': '审核'
-        };
-
-        var index = layer.open({
-            type: 1,
-            title: typesName[operateType] + '商户信息',
-            content: $('#detail'),
-            end: function() {
-                $('#detail').hide();
-            }
-        });
-        layer.full(index);
-    }
-
     function onAdd() {
         operateType = 'create';
-        showDetail();
+        $$.open('#detail', '新增商户信息');
     }
 
-    function onView(index) {
+    function view(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        showDetail();
-
         $$.request('/action/bm/mchnt-base-info/view', row, function(data) {
             $$.loadData('#detail', data.data);
         });
     }
 
+    function onView(index) {
+        $$.open('#detail', '查看商户信息');
+        view(index);
+    }
+
     function onEdit(index) {
         operateType = 'update';
-        onView(index);
+        $$.open('#detail', '编辑商户信息');
+        view(index);
     }
 
     function onDelete(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        layer.confirm('确认要删除?', {
-            icon: 3,
-            title: '提示'
-        }, function(index) {
+
+        $$.confirm('确认要删除?', function() {
             $$.request('/action/bm/mchnt-base-info/delete', row, function(data) {
-                layer.close(index);
-                layer.msg('操作成功');
+                $$.info('操作成功');
             });
         });
     }
 
     function onSubmit(param) {
         $$.request('/action/bm/mchnt-base-info/' + operateType, param, function(data) {
-            layer.msg('操作成功');
+            $$.info('操作成功');
         });
     }
 
     function onBatchCheck1() {
-        $('#list').find('tbody input[type="checkbox"][name="checkbox"]:checked')
+        $$.batchSubmit('#list', '/action/bm/mchnt-base-info/batch-check1');
+    }
+
+    function onBatchDelete() {
+        $$.batchSubmit('#list', '/action/bm/mchnt-base-info/batch-delete');
     }
 
     //全选
-    form.on('checkbox(allChoose)', function(data) {
-        var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+    form.on('checkbox(allCheck)', function(data) {
+        var child = $(data.elem).parents('table').find('tbody input[type=checkbox]');
         child.each(function(index, item) {
             item.checked = data.elem.checked;
         });
@@ -469,7 +402,7 @@
     });
 
     form.on('submit(search)', function(data) {
-        onSearch(data.field, 1);
+        $$.search('/action/bm/mchnt-base-info/search', data.field);
         return false; //阻止表单跳转
     });
 

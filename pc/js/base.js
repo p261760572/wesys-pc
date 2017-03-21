@@ -20,6 +20,33 @@ var baseJs = (function() {
         }
     };
 
+    $$.info = function(content) {
+        layer.msg(content);
+    };
+
+    $$.confirm = function(content, yes) {
+        layer.confirm(content, {
+            icon: 3,
+            title: '提示'
+        }, function(index) {
+            layer.close(index);
+            if (yes) yes();
+        });
+    };
+
+    $$.open = function(selector, title) {
+        var index = layer.open({
+            type: 1,
+            title: title,
+            content: $(selector),
+            fixed: false,
+            end: function() {
+                $(selector).hide();
+            }
+        });
+        layer.full(index);
+    }
+
     //解析查询字符串
     $$.parseQueryString = function() {
         var query = {};
@@ -40,10 +67,16 @@ var baseJs = (function() {
     //POST请求
     $$.request = function(url, data, success, error, async) {
         error = error || function(data) {
-            layer.msg($$.errmsg(data), {
-                icon: 2
-            });
+            if (window.layer) {
+                layer.msg($$.errmsg(data), {
+                    icon: 2
+                });
+            }
         };
+
+        var index;
+        if (window.layer) index = layer.load(2);
+
         $.ajax({
             url: $$.wrapUrl(url),
             type: 'POST',
@@ -52,6 +85,7 @@ var baseJs = (function() {
             dataType: 'json',
             data: $.toJSON(data),
             success: function(data) {
+                if (index !== undefined) layer.close(index);
                 if ($$.errcode(data) == 0) {
                     success(data)
                 } else {
@@ -59,6 +93,7 @@ var baseJs = (function() {
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
+                if (index !== undefined) layer.close(index);
                 if (console) console.log(arguments);
             }
         });
@@ -121,6 +156,35 @@ var baseJs = (function() {
         return date;
     };
 
+    $$.search = function(url, param, options) {
+        param.page = param.page || 1;
+        options = $.extend({
+            selector: '#list',
+            pageSelector: '#page',
+            tpl: 'list-tpl',
+            checkbox: true
+        }, options || {})
+
+        $$.request(url, param, function(data) {
+            $(options.selector).html(template(options.tpl, data)).data('data', data);
+
+            if (options.checkbox) form.render('checkbox');
+
+            console.log($(options.pageSelector).length);
+            laypage({
+                cont: $(options.pageSelector),
+                pages: Math.ceil(data.total / 10),
+                curr: param.page,
+                skip: true,
+                jump: function(obj, first) {
+                    if (!first) {
+                        param.page = obj.curr;
+                        $$.search(param);
+                    }
+                }
+            });
+        });
+    }
 
     $$.loadData = function(selector, data) {
         var $eles = $(selector);
@@ -166,26 +230,57 @@ var baseJs = (function() {
         return this;
     }
 
+    $$.getKeys = function(row, keys) {
+        var data = {};
+        //string支持
+        if (typeof keys == 'string') {
+            keys = keys.split(',');
+        }
+
+        if (row) {
+            for (var i = 0; i < keys.length; i++) {
+                data[keys[i]] = row[keys[i]];
+            }
+        }
+        return data;
+    }
+
+    $$.batchSubmit = function(selector, url, options) {
+        options = options || {};
+
+        var $checkbox = $(selector).find('tbody input[type=checkbox]:checked');
+        if ($checkbox.length == 0) {
+            layer.msg('请选择需要操作的记录');
+            return;
+        }
+
+        var data = $(selector).data('data');
+        var rows = [];
+
+        $checkbox.each(function(index, item) {
+            var i = parseInt($(item).val());
+            if (options.keys) {
+                rows.push($$.getKeys(data.rows[i], options.keys));
+            } else {
+                rows.push(data.rows[i]);
+            }
+        });
+
+        $$.request(url, {
+            rows: rows
+        }, function(data) {
+            layer.msg('操作成功');
+            if (options.success) options.success(data);
+        });
+    }
+
     return $$;
 })();
 
 window.$$ === undefined && (window.$$ = baseJs);
 
 
-$$.getKeys = function(row, keys) {
-    var data = {};
-    //string支持
-    if (typeof keys == 'string') {
-        keys = keys.split(',');
-    }
 
-    if (row) {
-        for (var i = 0; i < keys.length; i++) {
-            data[keys[i]] = row[keys[i]];
-        }
-    }
-    return data;
-}
 
 $$.transformStatus = function(target, status) {
     target = $(target)[0];

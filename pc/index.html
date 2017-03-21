@@ -7,71 +7,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>首页</title>
     <link rel="stylesheet" href="lib/layui/css/layui.css">
+    <!-- <link rel="stylesheet" type="text/css" href="css/base.css"> -->
+    <link rel="stylesheet" type="text/css" href="css/index.css">
     <style type="text/css">
-    .logo {
-        position: absolute;
-        left: 40px;
-        top: 12px;
+    .panel-body h2 {
+        font-size: 1.4em;
+        color: #333;
+        line-height: 2.2em;
     }
     
-    .header .layui-nav {
-        position: absolute;
-        top: 0;
-        right: 0;
-        background: none;
+    h1,
+    h2,
+    h3 {
+        font-size: 14px;
+        font-weight: 400;
     }
     
-    .layui-layout-admin .layui-body {
-        border-left: solid 1px #1AA094;
-        overflow-y: hidden;
+    .panel-heading a {
+        color: #DDD;
+        font-weight: bold;
     }
     
-    .layui-body .layui-tab {
-        margin: 0;
-        border-bottom: 1px solid #1AA094;
-    }
-    
-    .layui-tab .layui-tab-title li {
-        border-right: 1px solid #E2E2E2;
-    }
-    
-    .layui-body .layui-tab-title .layui-this {
-        background: #1FA094;
-        background: linear-gradient(#1FA094, #009688);
-        color: #FFF;
-    }
-    
-    .layui-tab-content {
-        height: 100%;
-        padding: 0;
-    }
-    
-    .layui-tab-content .layui-tab-item {
-        position: absolute;
-        top: 42px;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 0;
-        margin: 0;
-        background-color: #fff;
-    }
-    
-    .tab-iframe {
-        width: 100%;
-        border: 0;
-        height: 100%;
-    }
-    
-    .layui-nav-tree .layui-nav-item dl dd:hover {
-        background: #1AA094;
-    }
-    
-    .layui-layout .footer {
-        padding: 10px 0;
-        height: 26px;
-        line-height: 26px;
-        text-align: center;
+    .panel-body ul li {
+        list-style: square inside;
+        line-height: 2em;
     }
     </style>
 </head>
@@ -85,7 +44,7 @@
                 </a>
                 <ul class="layui-nav">
                     <li class="layui-nav-item">
-                        <a href="javascript:;">我</a>
+                        <a href="javascript:;" id="name">我</a>
                         <dl class="layui-nav-child">
                             <dd>
                                 <a href="javascript:;" onclick="logout()">退出</a>
@@ -107,8 +66,12 @@
                     <li class="layui-this">首页</li>
                 </ul>
                 <div class="layui-tab-content">
-                    <div class="layui-tab-item layui-show">
-                        首页
+                    <div class="layui-tab-item layui-show" style="background: #f8f8f8;">
+                        <div class="layui-main" style="margin: 15px;">
+                            <blockquote class="layui-elem-quote">
+                                更新日志
+                            </blockquote>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -176,7 +139,7 @@
     }
 
     $$.request('/action/user/view', {}, function(data) {
-        $('#login-name').html(data.data.login_name);
+        $('#name').html(data.data.login_name);
     }, function(data) {
         if ($$.errcode(data) == -11 || $$.errcode(data) == 5) {
             window.location.href = 'login.html';
@@ -197,7 +160,6 @@
 
     var element;
     layui.use(['layer', 'form', 'element'], function() {
-        var layer = layui.layer;
         var form = layui.form();
         element = layui.element();
 

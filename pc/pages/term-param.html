@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>终端参数</title>
+    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="panel panel-padding">
+            <form class="layui-form" action="" method="post"><div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">终端参数ID</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="term_param_id" placeholder="请输入终端参数ID" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">商户参数ID</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="mchnt_param_id" placeholder="请输入商户参数ID" autocomplete="off" class="layui-input">
+                    </div>
+                </div></div><div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">终端号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="term_id" placeholder="请输入终端号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">参数状态</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="status" placeholder="请输入参数状态" autocomplete="off" class="layui-input">
+                    </div>
+                </div></div><div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">拓展方</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="expand_inst_id" placeholder="请输入拓展方" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">拓展人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="expand_id" placeholder="请输入拓展人" autocomplete="off" class="layui-input">
+                    </div>
+                </div></div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="search">查询</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="panel panel-padding">
+            <div class="layui-btn-group">
+                <button class="layui-btn layui-btn-small" onclick="onAdd()">
+                    <i class="layui-icon">&#xe654;</i> 添加
+                </button>
+                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1()">
+                    <i class="layui-icon">&#x1005;</i> 审核
+                </button>
+                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
+                    <i class="layui-icon">&#xe640;</i> 删除
+                </button>
+            </div>
+            <div id="list">                
+            </div>
+            <div id="page" style="text-align: right;"></div>
+        </div>
+    </div>
+    <div id="detail" class="hide">
+        <div class="panel panel-padding">
+            <form class="layui-form" action="" method="post"><div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>终端参数ID</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="term_param_id" lay-verify="required"  placeholder="请输入终端参数ID" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>商户参数ID</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="mchnt_param_id" lay-verify="required"  placeholder="请输入商户参数ID" autocomplete="off" class="layui-input">
+                    </div>
+                </div></div><div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">终端号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="term_id"  placeholder="请输入终端号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>参数状态</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="status" lay-verify="required"  placeholder="请输入参数状态" autocomplete="off" class="layui-input">
+                    </div>
+                </div></div><div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">拓展方</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="expand_inst_id"  placeholder="请输入拓展方" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">拓展人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="expand_id"  placeholder="请输入拓展人" autocomplete="off" class="layui-input">
+                    </div>
+                </div></div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="detail">提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
+    <script type="text/javascript" src="../js/template.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script id="list-tpl" type="text/html">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
+                        </th>
+                        <th>终端参数ID</th>
+                        <th>商户参数ID</th>
+                        <th>终端号</th>
+                        <th>参数状态</th>
+                        <th>拓展方</th>
+                        <th>拓展人</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each rows as row i}}
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
+                            </td>
+                            <td>
+                                {{row.term_param_id}}
+                            </td>
+                            <td>
+                                {{row.mchnt_param_id}}
+                            </td>
+                            <td>
+                                {{row.term_id}}
+                            </td>
+                            <td>
+                                {{row.status}}
+                            </td>
+                            <td>
+                                {{row.expand_inst_id}}
+                            </td>
+                            <td>
+                                {{row.expand_id}}
+                            </td>
+                            <td>
+                                <div class="layui-btn-group">
+                                    <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
+                                        <i class="layui-icon">&#xe60a;</i>查看
+                                    </button>
+                                    <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
+                                        <i class="layui-icon">&#xe642;</i>编辑
+                                    </button>
+                                    <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
+                                        <i class="layui-icon">&#xe640;</i>删除
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {{/each}}
+                </tbody>
+            </table>
+        </div>        
+    </script>
+    <script type="text/javascript">
+    var layer = layui.layer;
+    var laypage = layui.laypage;
+    var form = layui.form();
+    var element = layui.element();
+
+    var operateType;
+
+    function onAdd() {
+        operateType = 'create';
+        $$.open('#detail', '新增终端参数');
+    }
+
+    function view(index) {
+        var data = $('#list').data('data');
+        var row = data.rows[index];
+        $$.request('/action/bm/term-param/view', row, function(data) {
+            $$.loadData('#detail', data.data);
+        });
+    }
+
+    function onView(index) {
+        $$.open('#detail', '查看终端参数');
+        view(index);
+    }
+
+    function onEdit(index) {
+        operateType = 'update';
+        $$.open('#detail', '编辑终端参数');
+        view(index);
+    }
+
+    function onDelete(index) {
+        var data = $('#list').data('data');
+        var row = data.rows[index];
+
+        $$.confirm('确认要删除?', function() {
+            $$.request('/action/bm/term-param/delete', row, function(data) {
+                $$.info('操作成功');
+            });
+        });
+    }
+
+    function onSubmit(param) {
+        $$.request('/action/bm/term-param/' + operateType, param, function(data) {
+            $$.info('操作成功');
+        });
+    }
+
+    function onBatchCheck1() {
+        $$.batchSubmit('#list', '/action/bm/term-param/batch-check1');
+    }
+
+    function onBatchDelete() {
+        $$.batchSubmit('#list', '/action/bm/term-param/batch-delete');
+    }
+
+    //全选
+    form.on('checkbox(allCheck)', function(data) {
+        var child = $(data.elem).parents('table').find('tbody input[type=checkbox]');
+        child.each(function(index, item) {
+            item.checked = data.elem.checked;
+        });
+        form.render('checkbox');
+    });
+
+    form.on('submit(search)', function(data) {
+        $$.search('/action/bm/term-param/search', data.field);
+        return false; //阻止表单跳转
+    });
+
+    form.on('submit(detail)', function(data) {
+        onSubmit(data.field);
+        return false; //阻止表单跳转
+    });
+    </script>
+</body>
+
+</html>

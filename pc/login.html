@@ -72,8 +72,7 @@
     }
 
     layui.use(['layer', 'form'], function() {
-        var layer = layui.layer,
-            form = layui.form();
+        var form = layui.form();
 
         form.on('submit(*)', function(data) {
             data.field.login_pwd = encryptPassword(data.field.login_pwd);
@@ -81,7 +80,7 @@
             $$.request('/action/user/login', data.field, function(data) {
                 window.location.href = 'index.html';
             }, function(data) {
-                layer.msg($$.errmsg(data));
+                $$.info($$.errmsg(data));
             });
 
             return false; //阻止表单跳转
