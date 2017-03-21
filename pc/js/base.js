@@ -1,6 +1,8 @@
-var baseJs = (function() {
+window.basedir = '/p';
+
+window.$$ = (function() {
     var $$ = {};
-    window.basedir = '/p';
+    var selectTpl = '{{each rows as row i}} <option value="{{row.value}}">{{row.text}}</option> {{/each}}';
 
     $$.wrapUrl = function(url) {
         return window.basedir ? window.basedir + url : url;
@@ -39,7 +41,6 @@ var baseJs = (function() {
             type: 1,
             title: title,
             content: $(selector),
-            fixed: false,
             end: function() {
                 $(selector).hide();
             }
@@ -186,6 +187,17 @@ var baseJs = (function() {
         });
     }
 
+    $$.loadSelect = function(selector, data, options) {
+        options = $.extend({
+            valueField: 'value',
+            textField: 'text',
+            rows: data
+        }, options || {});
+        var $select = $(selector);
+        $select.children().slice(1).remove();
+        $(selector).append(template.render(selectTpl, options));
+    }
+
     $$.loadData = function(selector, data) {
         var $eles = $(selector);
 
@@ -274,81 +286,70 @@ var baseJs = (function() {
         });
     }
 
+
+    $$.transformStatus = function(selector, status) {
+        var $target = $(selector);
+        status = status || 'view';
+
+        //显示/隐藏
+        $target.find('.visible').show().filter('.invisible-' + status).hide();
+        $target.find('.invisible').hide().filter('.visible-' + status).show();
+
+        $target.find('input[type!="button"],textarea,select').each(function(index, element) {
+            if ($.inArray(status, ['add', 'edit']) < 0) {
+                readonly(index, element);
+            } else {
+                editable(index, element);
+            }
+        });
+
+        $target.find('.readonly,.readonly-' + status).find('input[type!="button"],textarea,select').each(readonly);
+        $target.find('.editable,.editable-' + status).find('input[type!="button"],textarea,select').each(editable);
+
+        function readonly(index, element) {
+            var $tmp = $(element);
+            if (element.tagName == 'SELECT' || (element.tagName == 'INPUT' && element.type == 'checkbox')) {
+                $tmp.attr('disabled', 'disabled');
+            } else {
+                $tmp.attr('readonly', 'readonly');
+            }
+        }
+
+        function editable(index, element) {
+            var $tmp = $(element);
+            if (element.tagName == 'SELECT' || (element.tagName == 'INPUT' && element.type == 'checkbox')) {
+                $tmp.removeAttr('disabled');
+            } else {
+                $tmp.removeAttr('readonly');
+            }
+        }
+    };
+
+
+    $$.formatField = function(rows, value, valueField, textField) {
+        valueField = valueField || 'value';
+        textField = textField || 'text';
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i][valueField] == value) {
+                return rows[i][textField];
+            }
+        }
+        return null;
+    };
+
+    $$.hasNextStatus = function(rows, oper_in, proc_st, action) {
+        oper_in = oper_in || '0';
+        proc_st = proc_st || '0';
+
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            if (row[0] == oper_in && row[1] == proc_st && row[2] == action) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
     return $$;
 })();
-
-window.$$ === undefined && (window.$$ = baseJs);
-
-
-
-
-$$.transformStatus = function(target, status) {
-    target = $(target)[0];
-    status = status || 'view';
-    var opts = $.parser.parseOptions(target);
-
-    //显示/隐藏
-    $('.visible', target).show().filter('.invisible-' + status).hide();
-    $('.invisible', target).hide().filter('.visible-' + status).show();
-
-    $('input[type!="button"],textarea,select', target).each(function(index, element) {
-        if ($.inArray(status, ['create', 'update']) < 0) {
-            readonly(index, element);
-        } else {
-            editable(index, element);
-        }
-    });
-
-    $('.readonly,.readonly-' + status, target).find('input[type!="button"],textarea,select').each(readonly);
-
-    $('.editable,.editable-' + status, target).find('input[type!="button"],textarea,select').each(editable);
-
-    function readonly(index, element) {
-        var t = $(element);
-        if (t.hasClass('combobox-f')) {
-            t.combobox('disable');
-        } else if (element.tagName == 'SELECT' || (element.tagName == 'INPUT' && element.type == 'checkbox')) {
-            t.attr('disabled', 'disabled');
-        } else {
-            t.attr('readonly', 'readonly');
-        }
-    }
-
-    function editable(index, element) {
-        var t = $(element);
-        if (t.hasClass('combobox-f')) {
-            t.combobox('enable');
-        } else if (element.tagName == 'SELECT' || (element.tagName == 'INPUT' && element.type == 'checkbox')) {
-            t.removeAttr('disabled');
-        } else {
-            t.removeAttr('readonly');
-        }
-    }
-};
-
-
-$$.formatField = function(rows, value, valueField, textField) {
-    valueField = valueField || 'value';
-    textField = textField || 'text';
-    for (var i = 0; i < rows.length; i++) {
-        if (rows[i][valueField] == value) {
-            return rows[i][textField];
-        }
-    }
-    return null;
-};
-
-
-$$.hasNextStatus = function(rows, oper_in, proc_st, action) {
-    oper_in = oper_in || '0';
-    proc_st = proc_st || '0';
-
-    for (var i = 0; i < rows.length; i++) {
-        var row = rows[i];
-        if (row[0] == oper_in && row[1] == proc_st && row[2] == action) {
-            return true;
-        }
-    }
-
-    return false;
-};
