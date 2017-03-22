@@ -13,7 +13,7 @@
 <body>
     <div class="container">
         <div class="panel panel-padding">
-            <form class="layui-form" action="" method="post">
+            <form id="search" class="layui-form" action="" method="post">
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">客户号</label>
@@ -73,206 +73,21 @@
                 <button class="layui-btn layui-btn-small" onclick="onAdd()">
                     <i class="layui-icon">&#xe654;</i> 添加
                 </button>
-                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1()">
+                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
                     <i class="layui-icon">&#x1005;</i> 审核
                 </button>
-                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
-                    <i class="layui-icon">&#xe640;</i> 删除
+                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchCheck1Nopass()">
+                    <i class="layui-icon">&#xe633;</i> 驳回
                 </button>
+                <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
+                    <i class="layui-icon">&#xe640;</i> 删除
+                </button> -->
             </div>
             <div id="list">
             </div>
             <div id="page" style="text-align: right;"></div>
         </div>
     </div>
-    <div id="detail" class="hide">
-        <div class="panel panel-padding">
-            <form class="layui-form" action="" method="post">
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>客户号</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="mchnt_id" placeholder="" autocomplete="off" class="layui-input">
-                        </div>
-                        <div class="layui-form-mid layui-word-aux">系统生成</div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>联系人</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="linkman" lay-verify="required" placeholder="请输入联系人" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>手机</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="mobile" lay-verify="required" placeholder="请输入手机" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="required">*</span>商户简称</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="mchnt_abbr" lay-verify="required" placeholder="请输入商户简称" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">联系电话</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="telno" placeholder="请输入联系电话" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">常用邮箱</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="email" placeholder="请输入常用邮箱" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="required">*</span>所在地区</label>
-                    <div class="layui-input-inline">
-                        <select name="province" lay-verify="required" lay-filter="province" id="province">
-                            <option value="">请选择省</option>
-                        </select>
-                    </div>
-                    <div class="layui-input-inline">
-                        <select name="city" lay-verify="required" lay-filter="city" id="city">
-                            <option value="">请选择市</option>
-                        </select>
-                    </div>
-                    <div class="layui-input-inline">
-                        <select name="district" lay-verify="required" lay-filter="district" id="district">
-                            <option value="">请选择县/区</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="required">*</span>详细地址</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="addr" lay-verify="required" placeholder="请输入详细地址" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">商户名称</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="mchnt_name" placeholder="请输入商户名称" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">营业执照号</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="license_no" placeholder="请输入营业执照号" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">营业执照期限</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="license_date" placeholder="请输入营业执照期限" autocomplete="off" class="layui-input" onClick="WdatePicker()">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">注册地址</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="license_addr" placeholder="请输入注册地址" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">经营范围</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="business_scope" placeholder="请输入经营范围" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">证件类型</label>
-                        <div class="layui-input-inline">
-                            <select name="cert_type" id="cert-type">
-                                <option value="">请选择证件类型</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">证件姓名</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="cert_name" placeholder="请输入证件姓名" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">证件号码</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="cert_id" placeholder="请输入证件号码" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">证件有效期</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="cert_date" placeholder="请输入证件有效期" autocomplete="off" class="layui-input" onClick="WdatePicker()">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">组织机构代码</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="org_code" placeholder="请输入组织机构代码" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">备注</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="remark" placeholder="请输入备注" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <!-- <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">状态-删除</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="status" placeholder="请输入状态-删除" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div> -->
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>拓展方</label>
-                        <div class="layui-input-inline">
-                            <select name="expand_inst_id" lay-verify="required" lay-search id="expand-inst-id">
-                                <option value="">请选择拓展方</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>拓展人</label>
-                        <div class="layui-input-inline">
-                            <select name="expand_id" lay-verify="required" lay-search id="expand-id">
-                                <option value="">请选择拓展人</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" lay-filter="detail">提交</button>
-                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
-    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
-    <script type="text/javascript" src="../js/template.js"></script>
-    <script type="text/javascript" src="../js/base.js"></script>
-    <script type="text/javascript" src="../js/param.js"></script>
-    <script type="text/javascript" src="../js/district.js"></script>
     <script id="list-tpl" type="text/html">
         <div class="layui-form">
             <table class="layui-table">
@@ -288,6 +103,8 @@
                         <th>联系电话</th>
                         <th>所在地区</th>
                         <th>营业执照号</th>
+                        <!-- <th>操作标志</th> -->
+                        <th>处理状态</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -318,16 +135,27 @@
                         <td>
                             {{row.license_no}}
                         </td>
+                        <!-- <td>
+                            {{row.oper_in_nm}}
+                        </td> -->
+                        <td>
+                            {{row.proc_st_nm}}
+                        </td>
                         <td>
                             <div class="layui-btn-group">
-                                <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
-                                    <i class="layui-icon">&#xe60a;</i>查看
+                                <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="onView({{i}})">
+                                    查看
                                 </button>
+                                {{if hasNext(row.oper_in,row.proc_st,'update')}}
                                 <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
-                                    <i class="layui-icon">&#xe642;</i>编辑
+                                    编辑
                                 </button>
-                                <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
-                                    <i class="layui-icon">&#xe640;</i>删除
+                                {{/if}}
+                                <button class="layui-btn layui-btn-mini  layui-btn-normal" data-url="term-info.html" onclick="onGoto({{i}},this)">
+                                    终端管理
+                                </button>
+                                <button class="layui-btn layui-btn-mini layui-btn-danger" data-url="mchnt-param.html" onclick="onGoto({{i}},this)">
+                                    商户参数
                                 </button>
                             </div>
                         </td>
@@ -337,7 +165,17 @@
             </table>
         </div>
     </script>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
+    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../js/template.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/st.js"></script>
+    <script type="text/javascript" src="../js/param.js"></script>
+    <script type="text/javascript" src="../js/district.js"></script>
     <script type="text/javascript">
+    var query = $$.parseQueryString();
+    var operateType = query.operateType;
     var layer = layui.layer;
     var laypage = layui.laypage;
     var form = layui.form();
@@ -346,28 +184,23 @@
     var operateType;
 
     function onAdd() {
-        operateType = 'create';
-        $$.open('#detail', '新增商户信息');
-    }
-
-    function view(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        $$.request('/action/bm/mchnt-base-info/view', row, function(data) {
-            $$.loadData('#detail', data.data);
-            form.render();
-        });
+        $$.open('mchnt-base-info-detail.html?operateType=create', '新增商户信息');
     }
 
     function onView(index) {
-        $$.open('#detail', '查看商户信息');
-        view(index);
+        var data = $('#list').data('data');
+        var row = data.rows[index];
+        $$.open('mchnt-base-info-detail.html?operateType=view', '查看商户信息', {
+            rec_id: row.rec_id
+        });
     }
 
     function onEdit(index) {
-        operateType = 'update';
-        $$.open('#detail', '编辑商户信息');
-        view(index);
+        var data = $('#list').data('data');
+        var row = data.rows[index];
+        $$.open('mchnt-base-info-detail.html?operateType=update', '编辑商户信息', {
+            rec_id: row.rec_id
+        });
     }
 
     function onDelete(index) {
@@ -381,73 +214,93 @@
         });
     }
 
-    function onSubmit(param) {
-        $$.request('/action/bm/mchnt-base-info/' + operateType, param, function(data) {
-            $$.info('操作成功');
+    function onGoto(index, target) {
+        var $target = $(target);
+        var data = $('#list').data('data');
+        var row = data.rows[index];
+        var url = $target.attr('data-url');
+        var title = $target.text() + '-' + row.mchnt_abbr;
+        url += '?' + $.param({
+            operateType: operateType,
+            mchnt_id: row.mchnt_id
         });
+
+        if (parent.addTab) {
+            url = 'pages/' + url;
+            parent.addTab(url, title, url);
+        } else {
+            $$.open(url, title, {
+                mchnt_id: row.mchnt_id
+            });
+        }
     }
 
-    function onBatchCheck1() {
+    function onBatchCheck1Pass() {
         $$.batchSubmit('#list', '/action/bm/mchnt-base-info/batch-check1');
     }
 
-    function onBatchDelete() {
-        $$.batchSubmit('#list', '/action/bm/mchnt-base-info/batch-delete');
+    function onBatchCheck1Nopass() {
+        var $checkbox = $$.getChecked('#list');
+        if ($checkbox.length == 0) {
+            $$.info('请选择需要操作的记录');
+            return;
+        }
+        $$.prompt('请输入驳回备注', function(value) {
+            $$.batchSubmit('#list', '/action/bm/mchnt-base-info/batch-check1-nopass', {
+                params: {
+                    checked_reason: value
+                }
+            });
+        });
     }
 
-    //全选
-    form.on('checkbox(allCheck)', function(data) {
-        var child = $(data.elem).parents('table').find('tbody input[type=checkbox]');
-        child.each(function(index, item) {
-            item.checked = data.elem.checked;
+    function onBatchDelete() {
+        var $checkbox = $$.getChecked('#list');
+        if ($checkbox.length == 0) {
+            $$.info('请选择需要操作的记录');
+            return;
+        }
+
+        $$.confirm('确认要删除?', function() {
+            $$.batchSubmit('#list', '/action/bm/mchnt-base-info/batch-delete');
         });
-        form.render('checkbox');
-    });
+    }
 
-    form.on('submit(search)', function(data) {
-        $$.search('/action/bm/mchnt-base-info/search', data.field);
-        return false; //阻止表单跳转
-    });
+    function hasNextStatus(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['mchnt_base_info']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
 
-    form.on('submit(detail)', function(data) {
-        onSubmit(data.field);
-        return false; //阻止表单跳转
-    });
+    template.helper('hasNext', hasNextStatus);
+    template.helper('operateType', operateType);
 
-    form.on('select(province)', function(data) {
-        $$.loadSelect('#city', districtData['city'][data.value]);
-        $$.loadSelect('#district', []);
-        form.render('select');
-    });
+    $(function() {
+        //全选
+        form.on('checkbox(allCheck)', function(data) {
+            var child = $(data.elem).parents('table').find('tbody input[type=checkbox]');
+            child.each(function(index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
 
-    form.on('select(city)', function(data) {
-        $$.loadSelect('#district', districtData['district'][$('#province').val() + data.value]);
-        form.render('select');
-    });
+        form.on('submit(search)', function(data) {
+            $$.search('/action/bm/mchnt-base-info/search', data.field);
+            return false; //阻止表单跳转
+        });
 
-    form.on('select(province2)', function(data) {
-        $$.loadSelect('#city2', districtData['city'][data.value]);
-        $$.loadSelect('#district2', []);
-        form.render('select');
-    });
+        form.on('select(province)', function(data) {
+            $$.loadSelect('#city', districtData['city'][data.value]);
+            $$.loadSelect('#district', []);
+            form.render('select');
+        });
 
-    form.on('select(city2)', function(data) {
-        $$.loadSelect('#district2', districtData['district'][$('#province2').val() + data.value]);
-        form.render('select');
-    });
+        form.on('select(city)', function(data) {
+            $$.loadSelect('#district', districtData['district'][$('#province').val() + data.value]);
+            form.render('select');
+        });
 
-    $$.loadSelect('#province', districtData['province']);
-    $$.loadSelect('#province2', districtData['province']);
-    $$.loadSelect('#cert-type', $$.param['cert_type']);
-    form.render('select');
-
-    $$.request('/action/bm/expand-inst/list', {}, function(data) {
-        $$.loadSelect('#expand-inst-id', data.rows);
-        form.render('select');
-    });
-
-    $$.request('/action/bm/expand/list', {}, function(data) {
-        $$.loadSelect('#expand-id', data.rows);
+        $$.loadSelect('#province', districtData['province']);
         form.render('select');
     });
     </script>

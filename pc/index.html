@@ -9,30 +9,6 @@
     <link rel="stylesheet" href="lib/layui/css/layui.css">
     <!-- <link rel="stylesheet" type="text/css" href="css/base.css"> -->
     <link rel="stylesheet" type="text/css" href="css/index.css">
-    <style type="text/css">
-    .panel-body h2 {
-        font-size: 1.4em;
-        color: #333;
-        line-height: 2.2em;
-    }
-    
-    h1,
-    h2,
-    h3 {
-        font-size: 14px;
-        font-weight: 400;
-    }
-    
-    .panel-heading a {
-        color: #DDD;
-        font-weight: bold;
-    }
-    
-    .panel-body ul li {
-        list-style: square inside;
-        line-height: 2em;
-    }
-    </style>
 </head>
 
 <body>
@@ -139,7 +115,11 @@
     }
 
     $$.request('/action/user/view', {}, function(data) {
-        $('#name').html(data.data.login_name);
+        var name = data.data.mobile;
+        if (data.data.nickname) {
+            name = data.data.nickname;
+        }
+        $('#name').html(name);
     }, function(data) {
         if ($$.errcode(data) == -11 || $$.errcode(data) == 5) {
             window.location.href = 'login.html';
@@ -157,6 +137,26 @@
         }
     });
 
+    function addTab(id, title, url) {
+        var $tab = $('.layui-tab[lay-filter=tab]');
+        var $title = $tab.children('.layui-tab-title')
+
+        var $li = $title.find('li[lay-id="' + id + '"]');
+        if (!$li.length) {
+
+            element.tabAdd('tab', {
+                title: title + '<i class="layui-icon layui-tab-close">&#x1006;</i>',
+                content: '<iframe class="tab-iframe" src="' + url + '"></iframe>',
+                id: id
+            });
+
+            $title.find('li[lay-id="' + id + '"] .layui-tab-close').on('click', function() {
+                element.tabDelete('tab', $(this).parent('li').attr('lay-id'));
+            })
+        }
+
+        element.tabChange('tab', id);
+    }
 
     var element;
     layui.use(['layer', 'form', 'element'], function() {
@@ -176,28 +176,11 @@
         // });
 
         element.on('nav(nav)', function(elem) {
-            console.log(elem); //得到当前点击的DOM对象
-            var $tab = $('.layui-tab[lay-filter=tab]');
-            var $title = $tab.children('.layui-tab-title')
-
             var id = elem.attr('data-id');
+            var title = elem.text();
             var url = elem.attr('data-url');
 
-            var $li = $title.find('li[lay-id=' + id + ']');
-            if (!$li.length) {
-
-                element.tabAdd('tab', {
-                    title: elem.text() + '<i class="layui-icon layui-tab-close">&#x1006;</i>',
-                    content: '<iframe class="tab-iframe" src="' + url + '"></iframe>',
-                    id: id
-                });
-
-                $title.find('li[lay-id=' + id + '] .layui-tab-close').on('click', function() {
-                    element.tabDelete('tab', $(this).parent('li').attr('lay-id'));
-                })
-            }
-
-            element.tabChange('tab', id);
+            addTab(id, title, url);
         });
     });
     </script>

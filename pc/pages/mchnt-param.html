@@ -13,20 +13,26 @@
 <body>
     <div class="container">
         <div class="panel panel-padding">
-            <form class="layui-form" action="" method="post">
+            <form id="search" class="layui-form" action="" method="post">
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">收单机构</label>
+                        <label class="layui-form-label">客户号</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="acq_inst_id" placeholder="请输入收单机构" autocomplete="off" class="layui-input">
+                            <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">业务类型</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="busi_type" placeholder="请输入业务类型" autocomplete="off" class="layui-input">
+                            <input type="text" name="busi_type" placeholder="请输入业务类型" autocomplete="off" class="layui-input" id="busi-type">
                         </div>
                     </div>
+                    <!-- <div class="layui-inline">
+                        <label class="layui-form-label">收单机构</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="acq_inst_id" placeholder="请输入收单机构" autocomplete="off" class="layui-input">
+                        </div>
+                    </div> -->
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
@@ -44,7 +50,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="search">查询</button>
+                        <button id="submit-btn" class="layui-btn" lay-submit lay-filter="search">查询</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -52,207 +58,24 @@
         </div>
         <div class="panel panel-padding">
             <div class="layui-btn-group">
-                <button class="layui-btn layui-btn-small" onclick="onAdd()">
+                <button id="add-btn" class="layui-btn layui-btn-small hide" onclick="onAdd()">
                     <i class="layui-icon">&#xe654;</i> 添加
                 </button>
-                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1()">
+                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
                     <i class="layui-icon">&#x1005;</i> 审核
                 </button>
-                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
-                    <i class="layui-icon">&#xe640;</i> 删除
+                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchCheck1Nopass()">
+                    <i class="layui-icon">&#xe633;</i> 驳回
                 </button>
+                <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
+                    <i class="layui-icon">&#xe640;</i> 删除
+                </button> -->
             </div>
             <div id="list">
             </div>
             <div id="page" style="text-align: right;"></div>
         </div>
     </div>
-    <div id="detail" class="hide">
-        <div class="panel panel-padding">
-            <form class="layui-form" action="" method="post">
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>业务类型</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="busi_type" lay-verify="required" placeholder="请输入业务类型" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">收单机构</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="acq_inst_id" placeholder="请输入收单机构" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">商户号</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="mchnt_cd" placeholder="请输入商户号" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">商户名称</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="mchnt_name" placeholder="请输入商户名称" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">开户名称</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="account_name" placeholder="请输入开户名称" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">账户类型</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="account_type" placeholder="请输入账户类型" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">开户银行</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="account_bank" placeholder="请输入开户银行" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">开户银行省</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="account_province" placeholder="请输入开户银行省" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">开户银行市</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="account_city" placeholder="请输入开户银行市" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">开户支行</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="account_bank_branch_cd" placeholder="请输入开户支行" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">银行账号</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="account_no" placeholder="请输入银行账号" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">信用卡开关</label>
-                        <div class="layui-input-inline">
-                            <select name="credit_flag">
-                                <option value="">请选择信用卡开关</option>
-                                <option value="1">开</option>
-                                <option value="0">关</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">信用卡限额</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="credit_card_limit" placeholder="请输入信用卡限额" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">信用卡日限额</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="credit_date_limit" placeholder="请输入信用卡日限额" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">借记卡限额</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="debit_card_limit" placeholder="请输入借记卡限额" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">借记卡日限额</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="debit_date_limit" placeholder="请输入借记卡日限额" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">MCC</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="mcc" placeholder="请输入MCC" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">MCC18</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="mcc18" placeholder="请输入MCC18" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">借记卡手续费</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="debit_card_fee" placeholder="请输入借记卡手续费" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">贷记卡手续费</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="credit_card_fee" placeholder="请输入贷记卡手续费" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">手续费(千分比)</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="fee" placeholder="请输入手续费(千分比)" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">参数状态</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="status" placeholder="请输入参数状态" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>拓展方</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="expand_inst_id" lay-verify="required" placeholder="请输入拓展方" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>拓展人</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="expand_id" lay-verify="required" placeholder="请输入拓展人" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" lay-filter="detail">提交</button>
-                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
-    <script type="text/javascript" src="../js/template.js"></script>
-    <script type="text/javascript" src="../js/base.js"></script>
     <script id="list-tpl" type="text/html">
         <div class="layui-form">
             <table class="layui-table">
@@ -261,7 +84,7 @@
                         <th>
                             <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
                         </th>
-                        <th>商户参数ID</th>
+                        <!-- <th>商户参数ID</th> -->
                         <th>业务类型</th>
                         <th>收单机构</th>
                         <th>商户号</th>
@@ -269,6 +92,8 @@
                         <th>账户类型</th>
                         <th>开户名称</th>
                         <th>开户银行</th>
+                        <!-- <th>操作标志</th> -->
+                        <th>处理状态</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -278,9 +103,9 @@
                         <td>
                             <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
                         </td>
-                        <td>
+                        <!-- <td>
                             {{row.mchnt_param_id}}
-                        </td>
+                        </td> -->
                         <td>
                             {{row.busi_type}}
                         </td>
@@ -294,25 +119,30 @@
                             {{row.mchnt_name}}
                         </td>
                         <td>
-                            {{row.account_type}}
+                            {{row.account_type | formatAccountType}}
                         </td>
                         <td>
                             {{row.account_name}}
                         </td>
                         <td>
-                            {{row.account_bank}}
+                            {{row.account_bank_branch_nm}}
+                        </td>
+                        <!-- <td>
+                            {{row.oper_in_nm}}
+                        </td> -->
+                        <td>
+                            {{row.proc_st_nm}}
                         </td>
                         <td>
                             <div class="layui-btn-group">
                                 <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
                                     <i class="layui-icon">&#xe60a;</i>查看
                                 </button>
+                                {{if hasNext(row.oper_in,row.proc_st,'update')}}
                                 <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
                                     <i class="layui-icon">&#xe642;</i>编辑
                                 </button>
-                                <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
-                                    <i class="layui-icon">&#xe640;</i>删除
-                                </button>
+                                {{/if}}
                             </div>
                         </td>
                     </tr>
@@ -321,7 +151,17 @@
             </table>
         </div>
     </script>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
+    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../js/template.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/st.js"></script>
+    <script type="text/javascript" src="../js/param.js"></script>
+    <script type="text/javascript" src="../js/district.js"></script>
     <script type="text/javascript">
+    var query = $$.parseQueryString();
+    var operateType = query.operateType;
     var layer = layui.layer;
     var laypage = layui.laypage;
     var form = layui.form();
@@ -330,27 +170,25 @@
     var operateType;
 
     function onAdd() {
-        operateType = 'create';
-        $$.open('#detail', '新增商户参数');
-    }
-
-    function view(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        $$.request('/action/bm/mchnt-param/view', row, function(data) {
-            $$.loadData('#detail', data.data);
+        $$.open('mchnt-param-detail.html?operateType=create', '新增商户参数', {
+            mchnt_id: query.mchnt_id
         });
     }
 
     function onView(index) {
-        $$.open('#detail', '查看商户参数');
-        view(index);
+        var data = $('#list').data('data');
+        var row = data.rows[index];
+        $$.open('mchnt-param-detail.html?operateType=view', '查看商户参数', {
+            rec_id: row.rec_id
+        });
     }
 
     function onEdit(index) {
-        operateType = 'update';
-        $$.open('#detail', '编辑商户参数');
-        view(index);
+        var data = $('#list').data('data');
+        var row = data.rows[index];
+        $$.open('mchnt-param-detail.html?operateType=update', '编辑商户参数', {
+            rec_id: row.rec_id
+        });
     }
 
     function onDelete(index) {
@@ -364,37 +202,74 @@
         });
     }
 
-    function onSubmit(param) {
-        $$.request('/action/bm/mchnt-param/' + operateType, param, function(data) {
-            $$.info('操作成功');
-        });
-    }
-
-    function onBatchCheck1() {
+    function onBatchCheck1Pass() {
         $$.batchSubmit('#list', '/action/bm/mchnt-param/batch-check1');
     }
 
-    function onBatchDelete() {
-        $$.batchSubmit('#list', '/action/bm/mchnt-param/batch-delete');
+    function onBatchCheck1Nopass() {
+        var $checkbox = $$.getChecked('#list');
+        if ($checkbox.length == 0) {
+            $$.info('请选择需要操作的记录');
+            return;
+        }
+        $$.prompt('请输入驳回备注', function(value) {
+            $$.batchSubmit('#list', '/action/bm/mchnt-param/batch-check1-nopass', {
+                params: {
+                    checked_reason: value
+                }
+            });
+        });
     }
 
-    //全选
-    form.on('checkbox(allCheck)', function(data) {
-        var child = $(data.elem).parents('table').find('tbody input[type=checkbox]');
-        child.each(function(index, item) {
-            item.checked = data.elem.checked;
+    function onBatchDelete() {
+        var $checkbox = $$.getChecked('#list');
+        if ($checkbox.length == 0) {
+            $$.info('请选择需要操作的记录');
+            return;
+        }
+
+        $$.confirm('确认要删除?', function() {
+            $$.batchSubmit('#list', '/action/bm/mchnt-param/batch-delete');
         });
-        form.render('checkbox');
-    });
+    }
 
-    form.on('submit(search)', function(data) {
-        $$.search('/action/bm/mchnt-param/search', data.field);
-        return false; //阻止表单跳转
-    });
+    function hasNextStatus(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['mchnt_base_info']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
 
-    form.on('submit(detail)', function(data) {
-        onSubmit(data.field);
-        return false; //阻止表单跳转
+    function formatAccountType(value) {        
+        return $$.formatField($$.param['account_type'], value);
+    }
+
+    template.helper('hasNext', hasNextStatus);
+    template.helper('operateType', operateType);
+    template.helper('formatAccountType', formatAccountType);
+
+    $(function() {
+
+        //全选
+        form.on('checkbox(allCheck)', function(data) {
+            var child = $(data.elem).parents('table').find('tbody input[type=checkbox]');
+            child.each(function(index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+
+        form.on('submit(search)', function(data) {
+            $$.search('/action/bm/mchnt-param/search', data.field);
+            return false; //阻止表单跳转
+        });
+
+        $$.loadSelect('#busi-type', $$.param['busi_type']);
+        form.render('select');
+
+        if(query.mchnt_id) {
+            $$.loadData('#search', query);
+            $('#submit-btn').click();
+            $('#add-btn').removeClass('hide');
+        }
     });
     </script>
 </body>

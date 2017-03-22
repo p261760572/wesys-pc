@@ -2,7 +2,7 @@ window.basedir = '/p';
 
 window.$$ = (function() {
     var $$ = {};
-    var selectTpl = '{{each rows as row i}} <option value="{{row.value}}">{{row.text}}</option> {{/each}}';
+    var selectTpl = '{{each rows as row i}} <option value="{{row[valueField]}}">{{row[textField]}}</option> {{/each}}';
 
     $$.wrapUrl = function(url) {
         return window.basedir ? window.basedir + url : url;
@@ -22,8 +22,8 @@ window.$$ = (function() {
         }
     };
 
-    $$.info = function(content) {
-        layer.msg(content);
+    $$.info = function(content, options, end) {
+        layer.msg(content, options, end);
     };
 
     $$.confirm = function(content, yes) {
@@ -36,14 +36,32 @@ window.$$ = (function() {
         });
     };
 
-    $$.open = function(selector, title) {
-        var index = layer.open({
-            type: 1,
+    $$.prompt = function(title, yes) {
+        layer.prompt({
             title: title,
-            content: $(selector),
-            end: function() {
-                $(selector).hide();
+        }, function(value, index, elem) {
+            layer.close(index);
+            if (yes) yes(value);
+        });
+    };
+
+    $$.open = function(url, title, params) {
+        params = params || {};
+
+        var query = $.param(params);
+
+        if (query.length) {
+            if (url.indexOf('?') >= 0) {
+                url = url + '&' + query;
+            } else {
+                url = url + '?' + query;
             }
+        }
+
+        var index = layer.open({
+            type: 2,
+            title: title,
+            content: url
         });
         layer.full(index);
     }
@@ -69,7 +87,7 @@ window.$$ = (function() {
     $$.request = function(url, data, success, error, async) {
         error = error || function(data) {
             if (window.layer) {
-                layer.msg($$.errmsg(data), {
+                $$.info($$.errmsg(data), {
                     icon: 2
                 });
             }
@@ -157,8 +175,8 @@ window.$$ = (function() {
         return date;
     };
 
-    $$.search = function(url, param, options) {
-        param.page = param.page || 1;
+    $$.search = function(url, params, options) {
+        params.page = params.page || 1;
         options = $.extend({
             selector: '#list',
             pageSelector: '#page',
@@ -166,7 +184,7 @@ window.$$ = (function() {
             checkbox: true
         }, options || {})
 
-        $$.request(url, param, function(data) {
+        $$.request(url, params, function(data) {
             $(options.selector).html(template(options.tpl, data)).data('data', data);
 
             if (options.checkbox) form.render('checkbox');
@@ -175,12 +193,12 @@ window.$$ = (function() {
             laypage({
                 cont: $(options.pageSelector),
                 pages: Math.ceil(data.total / 10),
-                curr: param.page,
+                curr: params.page,
                 skip: true,
                 jump: function(obj, first) {
                     if (!first) {
-                        param.page = obj.curr;
-                        $$.search(param);
+                        params.page = obj.curr;
+                        $$.search(url, params);
                     }
                 }
             });
@@ -257,12 +275,17 @@ window.$$ = (function() {
         return data;
     }
 
+    $$.getChecked = function(selector) {
+        return $(selector).find('tbody input[type=checkbox]:checked');
+    }
+
     $$.batchSubmit = function(selector, url, options) {
         options = options || {};
+        params = options.params || {};
 
-        var $checkbox = $(selector).find('tbody input[type=checkbox]:checked');
+        var $checkbox = $$.getChecked(selector);
         if ($checkbox.length == 0) {
-            layer.msg('请选择需要操作的记录');
+            $$.info('请选择需要操作的记录');
             return;
         }
 
@@ -278,14 +301,15 @@ window.$$ = (function() {
             }
         });
 
-        $$.request(url, {
+        params = $.extend(params, {
             rows: rows
-        }, function(data) {
-            layer.msg('操作成功');
+        })
+
+        $$.request(url, params, function(data) {
+            $$.info('操作成功');
             if (options.success) options.success(data);
         });
     }
-
 
     $$.transformStatus = function(selector, status) {
         var $target = $(selector);
@@ -296,7 +320,7 @@ window.$$ = (function() {
         $target.find('.invisible').hide().filter('.visible-' + status).show();
 
         $target.find('input[type!="button"],textarea,select').each(function(index, element) {
-            if ($.inArray(status, ['add', 'edit']) < 0) {
+            if ($.inArray(status, ['create', 'update']) < 0) {
                 readonly(index, element);
             } else {
                 editable(index, element);

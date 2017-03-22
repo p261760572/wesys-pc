@@ -1,6 +1,6 @@
 body {
     background: #f8f8f8;
-    color: #999;
+    /*color: #999;*/
 }
 
 .hide {
@@ -40,4 +40,9 @@ body {
 
 .layui-input-block {
     margin-left: 115px;
+}
+
+.layui-disabled, .layui-disabled:hover {
+    color: #000!important;;
+    cursor: auto!important;
 }
