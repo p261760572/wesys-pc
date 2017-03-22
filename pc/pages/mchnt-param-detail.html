@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>商户参数</title>
+    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+</head>
+
+<body>
+    <div id="detail">
+        <div class="panel panel-padding">
+            <form class="layui-form" action="" method="post">
+                <div class="layui-form-item">
+                    <div class="layui-inline readonly">
+                        <label class="layui-form-label"><span class="required">*</span>客户号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mchnt_id" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>业务类型</label>
+                        <div class="layui-input-inline">
+                            <select name="busi_type" lay-verify="required" id="busi-type">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">收单机构</label>
+                        <div class="layui-input-inline">
+                            <select name="acq_inst_id" lay-verify="required" lay-search id="acq-inst-id">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">商户号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mchnt_cd" placeholder="请输入商户号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">商户名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="mchnt_name" placeholder="请输入商户名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">开户名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="account_name" placeholder="请输入开户名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">账户类型</label>
+                        <div class="layui-input-inline">
+                            <select name="account_type" lay-verify="required" id="account-type">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">开户银行</label>
+                        <div class="layui-input-inline">
+                            <select name="account_bank" lay-verify="required" lay-search id="account-bank">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">开户银行省</label>
+                        <div class="layui-input-inline">
+                            <select name="account_province" lay-verify="required" lay-search lay-filter="province" id="province">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">开户银行市</label>
+                        <div class="layui-input-inline">
+                            <select name="account_city" lay-verify="required" lay-search lay-filter="city" id="city">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">开户支行</label>
+                    <div class="layui-input-block">
+                        <select name="account_bank_branch_cd" lay-verify="required" lay-search id="account-bank-branch-cd">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">银行账号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="account_no" placeholder="请输入银行账号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">信用卡开关</label>
+                        <div class="layui-input-inline">
+                            <select name="credit_flag">
+                                <option value=""></option>
+                                <option value="1">开</option>
+                                <option value="0">关</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">信用卡限额</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="credit_card_limit" placeholder="请输入信用卡限额" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">信用卡日限额</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="credit_date_limit" placeholder="请输入信用卡日限额" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">借记卡限额</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="debit_card_limit" placeholder="请输入借记卡限额" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">借记卡日限额</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="debit_date_limit" placeholder="请输入借记卡日限额" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">MCC</label>
+                        <div class="layui-input-inline">
+                            <select name="mcc" lay-verify="required" lay-search id="mcc">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">MCC18</label>
+                        <div class="layui-input-inline">
+                            <select name="mcc18" lay-verify="required" lay-search id="mcc18">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">借记卡手续费</label>
+                        <div class="layui-input-inline">
+                            <select name="debit_card_fee" lay-verify="required" lay-search id="debit-card-fee">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">贷记卡手续费</label>
+                        <div class="layui-input-inline">
+                            <select name="credit_card_fee" lay-verify="required" lay-search id="credit-card-fee">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">手续费(‰)</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="fee" placeholder="请输入手续费(千分比)" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <!-- <div class="layui-inline">
+                        <label class="layui-form-label">参数状态</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="status" placeholder="请输入参数状态" autocomplete="off" class="layui-input">
+                        </div>
+                    </div> -->
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>拓展方</label>
+                        <div class="layui-input-inline">
+                            <select name="expand_inst_id" lay-verify="required" lay-search id="expand-inst-id">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>拓展人</label>
+                        <div class="layui-input-inline">
+                            <select name="expand_id" lay-verify="required" lay-search id="expand-id">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item invisible visible-view">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">记录编号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="rec_id" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">处理状态</label>
+                        <div class="layui-input-inline" style="width: 100px;">
+                            <input type="text" name="oper_in" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-input-inline" style="width: 100px;">
+                            <input type="text" name="proc_st" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item invisible visible-view">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">创建人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="created_by" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">创建时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="created_time" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item invisible visible-view">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">最后修改人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="last_modified_by" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">最后修改时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="last_modified_time" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item invisible visible-view">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">最后审核人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="last_checked_by" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">最后审核时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="last_checked_time" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item invisible visible-view">
+                    <label class="layui-form-label">审核备注</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="checked_reason" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="detail">提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
+    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../js/template.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/param.js"></script>
+    <script type="text/javascript" src="../js/district.js"></script>
+    <script type="text/javascript">
+    var query = $$.parseQueryString();
+    var operateType = query.operateType;
+    var layer = layui.layer;
+    var form = layui.form();
+    var element = layui.element();
+
+    function view() {
+        $$.request('/action/bm/mchnt-param/view', query, function(data) {
+            $$.loadData('#detail', data.data);
+            $('#province').change();
+            $('#city').val(data.data.city).change();
+            $('#district').val(data.data.district);
+            form.render();
+        });
+    }
+
+    function onSubmit(param) {
+        $$.request('/action/bm/mchnt-param/' + operateType, param, function(data) {
+            $$.info('操作成功', function() {
+                onClose();
+            });
+        });
+    }
+
+    function onClose() {
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+
+    function onChangeProvince() {
+        var value = $(this).val();
+        $$.loadSelect('#city', districtData['city'][value]);
+        $$.loadSelect('#district', []);
+        form.render('select');
+    }
+
+    function onChangeCity() {
+        var value = $(this).val();
+        $$.loadSelect('#district', districtData['district'][$('#province').val() + value]);
+        form.render('select');
+    }
+
+    $(function() {
+        form.on('submit(detail)', function(data) {
+            onSubmit(data.field);
+            return false; //阻止表单跳转
+        });
+
+        $('#province').on('change', onChangeProvince);
+        $('#city').on('change', onChangeCity);
+
+        form.on('select(province)', function(data) {
+            console.log(this, arguments);
+            $(data.elem).change();
+        });
+
+        form.on('select(city)', function(data) {
+            console.log(this, arguments);
+            $(data.elem).change();
+        });
+
+        $$.loadSelect('#province', districtData['province']);
+        $$.loadSelect('#busi-type', $$.param['busi_type']);
+        $$.loadSelect('#account-type', $$.param['account_type']);
+
+        form.render('select');
+
+        $$.request('/action/bm/acq-inst/list', {}, function(data) {
+            $$.loadSelect('#acq-inst-id', data.rows, {
+                valueField: 'acq_inst_id',
+                textField: 'acq_inst_nm'
+            });
+            form.render('select');
+        });
+
+        $$.request('/action/bm/bank/list', {}, function(data) {
+            $$.loadSelect('#account-bank', data.rows, {
+                valueField: 'bank_cd',
+                textField: 'bank_nm'
+            });
+            form.render('select');
+        });
+
+        $$.request('/action/bm/mcc/list', {}, function(data) {
+            $$.loadSelect('#mcc', data.rows, {
+                valueField: 'mcc',
+                textField: 'mcc_nm'
+            });
+            $$.loadSelect('#mcc18', data.rows, {
+                valueField: 'mcc',
+                textField: 'mcc_nm'
+            });
+            form.render('select');
+
+        });
+
+        $$.request('/action/bm/fee/list', {}, function(data) {
+            $$.loadSelect('#debit-card-fee', data.rows, {
+                valueField: 'fee_cd',
+                textField: 'fee_nm'
+            });
+            form.render('select');
+        });
+
+        $$.request('/action/bm/fee/list', {
+            credit_flag: '1'
+        }, function(data) {
+            $$.loadSelect('#credit-card-fee', data.rows, {
+                valueField: 'fee_cd',
+                textField: 'fee_nm'
+            });
+            form.render('select');
+        });
+
+        $$.request('/action/bm/expand-inst/list', {}, function(data) {
+            $$.loadSelect('#expand-inst-id', data.rows);
+            form.render('select');
+        });
+
+        $$.request('/action/bm/expand/list', {}, function(data) {
+            $$.loadSelect('#expand-id', data.rows);
+            form.render('select');
+        });
+
+        // $$.request('/action/bm/parameter/list', {
+        //     term_inves: '1',
+        //     equi_type: '1'
+        // }, function(data) {
+        //     $$.loadSelect('#term-inves', data.term_inves);
+        //     $$.loadSelect('#equi-type', data.equi_type);
+        //     form.render('select');
+        // });
+
+        $$.transformStatus('#detail', operateType);
+        $$.loadData('#detail', query);
+        view();
+    });
+    </script>
+</body>
+
+</html>
