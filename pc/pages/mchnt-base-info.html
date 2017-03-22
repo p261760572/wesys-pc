@@ -71,7 +71,7 @@
         <div class="panel panel-padding">
             <div class="layui-btn-group">
                 <button class="layui-btn layui-btn-small" onclick="onAdd()">
-                    <i class="layui-icon">&#xe654;</i> 添加
+                    <i class="layui-icon">&#xe654;</i> 新增
                 </button>
                 <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
                     <i class="layui-icon">&#x1005;</i> 审核
@@ -143,20 +143,27 @@
                         </td>
                         <td>
                             <div class="layui-btn-group">
-                                <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="onView({{i}})">
-                                    查看
-                                </button>
-                                {{if hasNext(row.oper_in,row.proc_st,'update')}}
-                                <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
-                                    编辑
-                                </button>
-                                {{/if}}
-                                <button class="layui-btn layui-btn-mini  layui-btn-normal" data-url="term-info.html" onclick="onGoto({{i}},this)">
-                                    终端管理
-                                </button>
-                                <button class="layui-btn layui-btn-mini layui-btn-danger" data-url="mchnt-param.html" onclick="onGoto({{i}},this)">
-                                    商户参数
-                                </button>
+                                <div>
+                                    <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="onView({{i}})">
+                                        查看
+                                    </button>
+                                    {{if hasNext(row.oper_in,row.proc_st,'update')}}
+                                    <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
+                                        编辑
+                                    </button>
+                                    {{/if}}
+                                </div>
+                                <div>
+                                    <button class="layui-btn layui-btn-mini  layui-btn-normal" data-url="term-info.html" onclick="onGoto({{i}},this)">
+                                        终端管理
+                                    </button>
+                                    <button class="layui-btn layui-btn-mini layui-btn-danger" data-url="mchnt-param.html" onclick="onGoto({{i}},this)">
+                                        商户参数
+                                    </button>
+                                    <button class="layui-btn layui-btn-mini" data-url="mchnt-elec-info.html" onclick="onGoto({{i}},this)">
+                                        电子资料
+                                    </button>
+                                </div>
                             </div>
                         </td>
                     </tr>

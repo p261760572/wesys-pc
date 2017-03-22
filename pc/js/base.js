@@ -45,7 +45,7 @@ window.$$ = (function() {
         });
     };
 
-    $$.open = function(url, title, params) {
+    $$.open = function(url, title, params, options) {
         params = params || {};
 
         var query = $.param(params);
@@ -58,11 +58,13 @@ window.$$ = (function() {
             }
         }
 
-        var index = layer.open({
+        options = $.extend({
             type: 2,
             title: title,
             content: url
-        });
+        }, options || {});
+
+        var index = layer.open(options);
         layer.full(index);
     }
 

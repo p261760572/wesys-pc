@@ -85,7 +85,7 @@
         <div class="panel panel-padding">
             <div class="layui-btn-group">
                 <button id="add-btn" class="layui-btn layui-btn-small hide" onclick="onAdd()">
-                    <i class="layui-icon">&#xe654;</i> 添加
+                    <i class="layui-icon">&#xe654;</i> 新增
                 </button>
                 <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
                     <i class="layui-icon">&#x1005;</i> 审核
@@ -161,6 +161,9 @@
                                     <i class="layui-icon">&#xe642;</i>编辑
                                 </button>
                                 {{/if}}
+                                <button class="layui-btn layui-btn-mini layui-btn-danger" data-url="term-param.html" onclick="onGoto({{i}},this)">
+                                        终端参数
+                                    </button>
                             </div>
                         </td>
                     </tr>
@@ -190,6 +193,10 @@
     function onAdd() {
         $$.open('term-info-detail.html?operateType=create', '新增终端信息', {
             mchnt_id: query.mchnt_id
+        }, {
+            end: function() {
+                $('#submit-btn').click();
+            }
         });
     }
 
@@ -218,6 +225,27 @@
                 $$.info('操作成功');
             });
         });
+    }
+
+    function onGoto(index, target) {
+        var $target = $(target);
+        var data = $('#list').data('data');
+        var row = data.rows[index];
+        var url = $target.attr('data-url');
+        var title = $target.text() + '-' + row.shop_name;
+        url += '?' + $.param({
+            operateType: operateType,
+            term_no: row.term_no
+        });
+
+        if (parent.addTab) {
+            url = 'pages/' + url;
+            parent.addTab(url, title, url);
+        } else {
+            $$.open(url, title, {
+                term_no: row.term_no
+            });
+        }
     }
 
     function onBatchCheck1Pass() {

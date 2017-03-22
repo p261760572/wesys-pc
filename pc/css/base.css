@@ -35,14 +35,14 @@ body {
 }
 
 .layui-form-label {
-    width: 85px;
+    width: 100px;
 }
 
 .layui-input-block {
-    margin-left: 115px;
+    margin-left: 130px;
 }
 
 .layui-disabled, .layui-disabled:hover {
-    color: #000!important;;
+    color: #000!important;
     cursor: auto!important;
 }

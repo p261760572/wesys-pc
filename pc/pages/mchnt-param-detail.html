@@ -14,13 +14,21 @@
     <div id="detail">
         <div class="panel panel-padding">
             <form class="layui-form" action="" method="post">
-                <div class="layui-form-item">
-                    <div class="layui-inline readonly">
+                <div class="layui-form-item readonly">
+                    <div class="layui-inline">
                         <label class="layui-form-label"><span class="required">*</span>客户号</label>
                         <div class="layui-input-inline">
                             <input type="text" name="mchnt_id" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
                         </div>
                     </div>
+                    <div class="layui-inline visible invisible-create">
+                        <label class="layui-form-label"><span class="required">*</span>商户参数ID</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mchnt_param_id" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label"><span class="required">*</span>业务类型</label>
                         <div class="layui-input-inline">
@@ -29,12 +37,20 @@
                             </select>
                         </div>
                     </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>收单机构</label>
+                        <div class="layui-input-inline">
+                            <select name="acq_inst_id" lay-verify="required" lay-search id="acq-inst-id">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">收单机构</label>
+                        <label class="layui-form-label"><span class="required">*</span>MCC</label>
                         <div class="layui-input-inline">
-                            <select name="acq_inst_id" lay-verify="required" lay-search id="acq-inst-id">
+                            <select name="mcc" lay-verify="required" lay-search id="mcc">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -45,22 +61,30 @@
                             <input type="text" name="mchnt_cd" placeholder="请输入商户号" autocomplete="off" class="layui-input">
                         </div>
                     </div>
+                    <!-- <div class="layui-inline">
+                        <label class="layui-form-label">MCC18</label>
+                        <div class="layui-input-inline">
+                            <select name="mcc18" lay-verify="required" lay-search id="mcc18">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div> -->
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">商户名称</label>
+                    <label class="layui-form-label"><span class="required">*</span>商户名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="mchnt_name" placeholder="请输入商户名称" autocomplete="off" class="layui-input">
+                        <input type="text" name="mchnt_name" lay-verify="required" placeholder="请输入商户名称" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">开户名称</label>
+                    <label class="layui-form-label"><span class="required">*</span>开户名称</label>
                     <div class="layui-input-block">
-                        <input type="text" name="account_name" placeholder="请输入开户名称" autocomplete="off" class="layui-input">
+                        <input type="text" name="account_name" lay-verify="required" placeholder="请输入开户名称" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">账户类型</label>
+                        <label class="layui-form-label"><span class="required">*</span>账户类型</label>
                         <div class="layui-input-inline">
                             <select name="account_type" lay-verify="required" id="account-type">
                                 <option value=""></option>
@@ -70,7 +94,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">开户银行</label>
                         <div class="layui-input-inline">
-                            <select name="account_bank" lay-verify="required" lay-search id="account-bank">
+                            <select name="account_bank" lay-search id="account-bank">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -80,7 +104,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">开户银行省</label>
                         <div class="layui-input-inline">
-                            <select name="account_province" lay-verify="required" lay-search lay-filter="province" id="province">
+                            <select name="account_province" lay-search lay-filter="province" id="province">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -88,14 +112,14 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">开户银行市</label>
                         <div class="layui-input-inline">
-                            <select name="account_city" lay-verify="required" lay-search lay-filter="city" id="city">
+                            <select name="account_city" lay-search lay-filter="city" id="city">
                                 <option value=""></option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">开户支行</label>
+                    <label class="layui-form-label"><span class="required">*</span>开户支行</label>
                     <div class="layui-input-block">
                         <select name="account_bank_branch_cd" lay-verify="required" lay-search id="account-bank-branch-cd">
                             <option value=""></option>
@@ -103,90 +127,72 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">银行账号</label>
+                    <label class="layui-form-label"><span class="required">*</span>银行账号</label>
                     <div class="layui-input-block">
                         <input type="text" name="account_no" placeholder="请输入银行账号" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">信用卡开关</label>
-                        <div class="layui-input-inline">
-                            <select name="credit_flag">
-                                <option value=""></option>
-                                <option value="1">开</option>
-                                <option value="0">关</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">信用卡限额</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="credit_card_limit" placeholder="请输入信用卡限额" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">信用卡日限额</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="credit_date_limit" placeholder="请输入信用卡日限额" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">借记卡限额</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="debit_card_limit" placeholder="请输入借记卡限额" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">借记卡日限额</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="debit_date_limit" placeholder="请输入借记卡日限额" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">MCC</label>
-                        <div class="layui-input-inline">
-                            <select name="mcc" lay-verify="required" lay-search id="mcc">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">MCC18</label>
-                        <div class="layui-input-inline">
-                            <select name="mcc18" lay-verify="required" lay-search id="mcc18">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">借记卡手续费</label>
+                        <label class="layui-form-label"><span class="required">*</span>借记卡手续费</label>
                         <div class="layui-input-inline">
                             <select name="debit_card_fee" lay-verify="required" lay-search id="debit-card-fee">
                                 <option value=""></option>
                             </select>
                         </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">贷记卡手续费</label>
+                        <label class="layui-form-label"><span class="required">*</span>贷记卡手续费</label>
                         <div class="layui-input-inline">
                             <select name="credit_card_fee" lay-verify="required" lay-search id="credit-card-fee">
                                 <option value=""></option>
                             </select>
                         </div>
                     </div>
+                </div>
+                <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">手续费(‰)</label>
+                        <label class="layui-form-label"><span class="required">*</span>扫码手续费(‰)</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="fee" placeholder="请输入手续费(千分比)" autocomplete="off" class="layui-input">
+                            <input type="text" name="fee" lay-verify="required" placeholder="请输入手续费(千分比)" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">信用卡开关</label>
+                        <div class="layui-input-inline">
+                            <select name="credit_flag">
+                                <!-- <option value=""></option> -->
+                                <option value="1">开</option>
+                                <option value="0">关</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item hide">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">信用卡限额</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="credit_card_limit" placeholder="请输入信用卡限额" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">信用卡日限额</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="credit_date_limit" placeholder="请输入信用卡日限额" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item hide">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">借记卡限额</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="debit_card_limit" placeholder="请输入借记卡限额" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline hide">
+                        <label class="layui-form-label">借记卡日限额</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="debit_date_limit" placeholder="请输入借记卡日限额" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                 </div>
@@ -281,8 +287,8 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" lay-filter="detail">提交</button>
-                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        <button class="layui-btn visible invisible-view" lay-submit="" lay-filter="detail">提交</button>
+                        <button type="button" class="layui-btn layui-btn-primary" onclick="onClose()">关闭</button>
                     </div>
                 </div>
             </form>
@@ -391,6 +397,15 @@
             form.render('select');
 
         });
+
+
+        $$.request('/action/bm/bank-branch/list', {}, function(data) {
+            $$.loadSelect('#account-bank-branch-cd', data.rows, {
+                valueField: 'bank_branch_cd',
+                textField: 'bank_branch_nm',
+            });
+        });
+
 
         $$.request('/action/bm/fee/list', {}, function(data) {
             $$.loadSelect('#debit-card-fee', data.rows, {
