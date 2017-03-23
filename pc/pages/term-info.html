@@ -235,6 +235,7 @@
         var title = $target.text() + '-' + row.shop_name;
         url += '?' + $.param({
             operateType: operateType,
+            mchnt_id: row.mchnt_id,
             term_no: row.term_no
         });
 
@@ -249,7 +250,11 @@
     }
 
     function onBatchCheck1Pass() {
-        $$.batchSubmit('#list', '/action/bm/term-info/batch-check1');
+        $$.batchSubmit('#list', '/action/bm/term-info/batch-check1-pass', {
+            success: function() {
+                $('#submit-btn').click();
+            }
+        });
     }
 
     function onBatchCheck1Nopass() {
@@ -262,6 +267,9 @@
             $$.batchSubmit('#list', '/action/bm/term-info/batch-check1-nopass', {
                 params: {
                     checked_reason: value
+                },
+                success: function() {
+                    $('#submit-btn').click();
                 }
             });
         });

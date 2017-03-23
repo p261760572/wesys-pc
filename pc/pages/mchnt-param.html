@@ -94,7 +94,7 @@
                         <th>
                             <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
                         </th>
-                        <!-- <th>商户参数ID</th> -->
+                        <th>客户号</th>
                         <th>业务类型</th>
                         <th>收单机构</th>
                         <th>商户号</th>
@@ -113,9 +113,9 @@
                         <td>
                             <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
                         </td>
-                        <!-- <td>
-                            {{row.mchnt_param_id}}
-                        </td> -->
+                        <td>
+                            {{row.mchnt_id}}
+                        </td>
                         <td>
                             {{row.busi_type_nm}}
                         </td>
@@ -217,7 +217,11 @@
     }
 
     function onBatchCheck1Pass() {
-        $$.batchSubmit('#list', '/action/bm/mchnt-param/batch-check1');
+        $$.batchSubmit('#list', '/action/bm/mchnt-param/batch-check1-pass', {
+            success: function() {
+                $('#submit-btn').click();
+            }
+        });
     }
 
     function onBatchCheck1Nopass() {
@@ -230,6 +234,9 @@
             $$.batchSubmit('#list', '/action/bm/mchnt-param/batch-check1-nopass', {
                 params: {
                     checked_reason: value
+                },
+                success: function() {
+                    $('#submit-btn').click();
                 }
             });
         });

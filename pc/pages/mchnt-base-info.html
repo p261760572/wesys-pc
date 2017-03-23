@@ -243,7 +243,11 @@
     }
 
     function onBatchCheck1Pass() {
-        $$.batchSubmit('#list', '/action/bm/mchnt-base-info/batch-check1');
+        $$.batchSubmit('#list', '/action/bm/mchnt-base-info/batch-check1-pass', {
+            success: function() {
+                $('#submit-btn').click();
+            }
+        });
     }
 
     function onBatchCheck1Nopass() {
@@ -256,6 +260,9 @@
             $$.batchSubmit('#list', '/action/bm/mchnt-base-info/batch-check1-nopass', {
                 params: {
                     checked_reason: value
+                },
+                success: function() {
+                    $('#submit-btn').click();
                 }
             });
         });

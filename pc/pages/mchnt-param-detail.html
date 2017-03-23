@@ -123,6 +123,7 @@
                     <label class="layui-form-label"><span class="required">*</span>开户支行</label>
                     <div class="layui-input-block">
                         <select name="account_bank_branch_cd" style="width: 100%;" lay-verify="required" lay-ignore id="account-bank-branch-cd">
+                        <option value=""></option>
                         </select>
                     </div>
                 </div>
@@ -315,7 +316,9 @@
             $('#province').change();
             $('#city').val(data.data.city).change();
             // $('#district').val(data.data.district);
-            $('#account-bank-branch-cd').html('<option value="' + data.data.account_bank_branch_cd + '">' + data.data.account_bank_branch_nm + '</option>').trigger('change');
+            if (data.data.account_bank_branch_cd) {
+                $('#account-bank-branch-cd').html('<option value="' + data.data.account_bank_branch_cd + '">' + data.data.account_bank_branch_nm + '</option>').trigger('change');
+            }
             form.render();
         });
     }

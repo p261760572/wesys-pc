@@ -21,6 +21,10 @@
    border-bottom: 1px solid #1AA094;
 }
 
+.layui-tab-more {
+    z-index: 1;
+}
+
 .layui-tab .layui-tab-title li {
    border-right: 1px solid #E2E2E2;
 }

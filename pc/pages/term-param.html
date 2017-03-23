@@ -97,11 +97,11 @@
                             <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
                         </th>
                         <th>终端标识</th>
+                        <th>商户名称</th>
                         <th>商户号</th>
                         <th>终端号</th>
-                        <th>参数状态</th>
-                        <th>拓展方</th>
-                        <th>拓展人</th>
+                        <!-- <th>参数状态</th> -->
+                        <th>处理状态</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -114,20 +114,20 @@
                         <td>
                             {{row.term_no}}
                         </td>
+                         <td>
+                            {{row.mchnt_name}}
+                        </td>
                         <td>
                             {{row.mchnt_cd}}
                         </td>
                         <td>
                             {{row.term_id}}
                         </td>
-                        <td>
+                        <!-- <td>
                             {{row.status}}
-                        </td>
+                        </td> -->
                         <td>
-                            {{row.expand_inst_id}}
-                        </td>
-                        <td>
-                            {{row.expand_id}}
+                            {{row.proc_st_nm}}
                         </td>
                         <td>
                             <div class="layui-btn-group">
@@ -137,9 +137,9 @@
                                 <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
                                     编辑
                                 </button>
-                                <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
+                                <!-- <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
                                     删除
-                                </button>
+                                </button> -->
                             </div>
                         </td>
                     </tr>
@@ -169,6 +169,10 @@
     function onAdd() {
         $$.open('term-param-detail.html?operateType=create', '新增终端信息', {
             term_no: query.term_no
+        }, {
+            end: function() {
+                $('#submit-btn').click();
+            }
         });
     }
 
@@ -200,7 +204,11 @@
     }
 
     function onBatchCheck1Pass() {
-        $$.batchSubmit('#list', '/action/bm/term-param/batch-check1');
+        $$.batchSubmit('#list', '/action/bm/term-param/batch-check1-pass', {
+            success: function() {
+                $('#submit-btn').click();
+            }
+        });
     }
 
     function onBatchCheck1Nopass() {
@@ -213,6 +221,9 @@
             $$.batchSubmit('#list', '/action/bm/term-param/batch-check1-nopass', {
                 params: {
                     checked_reason: value
+                },
+                success: function() {
+                    $('#submit-btn').click();
                 }
             });
         });

@@ -89,7 +89,7 @@
                             {{row.elec_info_type | formatElecInfoType}}
                         </td>
                         <td>
-                            {{row.proc_st}}
+                            {{row.proc_st_nm}}
                         </td>
                         <td>
                             <div class="layui-btn-group">
@@ -160,7 +160,11 @@
     }
 
     function onBatchCheck1Pass() {
-        $$.batchSubmit('#list', '/action/bm/mchnt-elec-info/batch-check1');
+        $$.batchSubmit('#list', '/action/bm/mchnt-elec-info/batch-check1-pass', {
+            success: function() {
+                $('#submit-btn').click();
+            }
+        });
     }
 
     function onBatchCheck1Nopass() {
@@ -173,6 +177,9 @@
             $$.batchSubmit('#list', '/action/bm/mchnt-elec-info/batch-check1-nopass', {
                 params: {
                     checked_reason: value
+                },
+                success: function() {
+                    $('#submit-btn').click();
                 }
             });
         });
@@ -229,7 +236,7 @@
             $$.loadSelect('#district', districtData['district'][$('#province').val() + data.value]);
             form.render('select');
         });
-        
+
         $$.loadSelect('#elec-info-type', $$.param['elec_info_type']);
         form.render('select');
 
