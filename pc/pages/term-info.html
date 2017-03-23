@@ -76,7 +76,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="search"  id="submit-btn">查询</button>
+                        <button class="layui-btn" lay-submit lay-filter="search" id="submit-btn">查询</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -154,16 +154,16 @@
                         <td>
                             <div class="layui-btn-group">
                                 <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
-                                    <i class="layui-icon">&#xe60a;</i>查看
+                                    查看
                                 </button>
                                 {{if hasNext(row.oper_in,row.proc_st,'update')}}
                                 <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
-                                    <i class="layui-icon">&#xe642;</i>编辑
+                                    编辑
                                 </button>
                                 {{/if}}
                                 <button class="layui-btn layui-btn-mini layui-btn-danger" data-url="term-param.html" onclick="onGoto({{i}},this)">
-                                        终端参数
-                                    </button>
+                                    终端参数
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -317,7 +317,7 @@
         $$.loadSelect('#province', districtData['province']);
         form.render('select');
 
-        if(query.mchnt_id) {
+        if (query.mchnt_id) {
             $$.loadData('#search', query);
             $('#submit-btn').click();
             $('#add-btn').removeClass('hide');

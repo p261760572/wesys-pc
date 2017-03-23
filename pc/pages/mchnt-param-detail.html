@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>商户参数</title>
     <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../lib/select2/css/select2.min.css">
     <link rel="stylesheet" type="text/css" href="../css/base.css">
 </head>
 
@@ -121,8 +122,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label"><span class="required">*</span>开户支行</label>
                     <div class="layui-input-block">
-                        <select name="account_bank_branch_cd" lay-verify="required" lay-search id="account-bank-branch-cd">
-                            <option value=""></option>
+                        <select name="account_bank_branch_cd" style="width: 100%;" lay-verify="required" lay-ignore id="account-bank-branch-cd">
                         </select>
                     </div>
                 </div>
@@ -297,6 +297,7 @@
     <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
     <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../lib/select2/js/select2.min.js"></script>
     <script type="text/javascript" src="../js/template.js"></script>
     <script type="text/javascript" src="../js/base.js"></script>
     <script type="text/javascript" src="../js/param.js"></script>
@@ -313,7 +314,8 @@
             $$.loadData('#detail', data.data);
             $('#province').change();
             $('#city').val(data.data.city).change();
-            $('#district').val(data.data.district);
+            // $('#district').val(data.data.district);
+            $('#account-bank-branch-cd').html('<option value="' + data.data.account_bank_branch_cd + '">' + data.data.account_bank_branch_nm + '</option>').trigger('change');
             form.render();
         });
     }
@@ -398,12 +400,52 @@
 
         });
 
+        $('#account-bank-branch-cd').select2({
+            language: 'zh-CN',
+            placeholder: '请选择',
+            ajax: {
+                url: $$.wrapUrl('/action/bm/bank-branch/search'),
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    console.log(arguments);
+                    return $.toJSON({
+                        q: params.term,
+                        page: params.page,
+                        size: 20
+                    });
+                },
+                processResults: function(data, params) {
+                    console.log(arguments);
+                    params.page = params.page || 1;
 
-        $$.request('/action/bm/bank-branch/list', {}, function(data) {
-            $$.loadSelect('#account-bank-branch-cd', data.rows, {
-                valueField: 'bank_branch_cd',
-                textField: 'bank_branch_nm',
-            });
+                    if ($$.errcode(data) == 0) {
+                        for (var i = 0; i < data.rows.length; i++) {
+                            data.rows[i].id = data.rows[i].bank_branch_cd;
+                            data.rows[i].text = data.rows[i].bank_branch_nm;
+                        }
+                        return {
+                            results: data.rows,
+                            pagination: {
+                                more: (params.page * 20) < data.total
+                            }
+                        };
+                    }
+
+                    return {};
+                },
+                cache: true
+            },
+            // escapeMarkup: function (markup) { return markup; },
+            minimumInputLength: 1
+            // templateResult: function(branch) {
+            //     return branch.bank_branch_nm;
+            // },
+            // templateSelection: function(branch) {
+            //     return branch.bank_branch_nm;
+            // }
         });
 
 

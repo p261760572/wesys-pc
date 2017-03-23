@@ -96,8 +96,8 @@
                         <th>
                             <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
                         </th>
-                        <th>终端参数ID</th>
-                        <th>商户参数ID</th>
+                        <th>终端标识</th>
+                        <th>商户号</th>
                         <th>终端号</th>
                         <th>参数状态</th>
                         <th>拓展方</th>
@@ -112,10 +112,10 @@
                             <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
                         </td>
                         <td>
-                            {{row.term_param_id}}
+                            {{row.term_no}}
                         </td>
                         <td>
-                            {{row.mchnt_param_id}}
+                            {{row.mchnt_cd}}
                         </td>
                         <td>
                             {{row.term_id}}
@@ -132,13 +132,13 @@
                         <td>
                             <div class="layui-btn-group">
                                 <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
-                                    <i class="layui-icon">&#xe60a;</i>查看
+                                    查看
                                 </button>
                                 <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
-                                    <i class="layui-icon">&#xe642;</i>编辑
+                                    编辑
                                 </button>
                                 <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
-                                    <i class="layui-icon">&#xe640;</i>删除
+                                    删除
                                 </button>
                             </div>
                         </td>

@@ -117,7 +117,7 @@
                             {{row.mchnt_param_id}}
                         </td> -->
                         <td>
-                            {{row.busi_type}}
+                            {{row.busi_type_nm}}
                         </td>
                         <td>
                             {{row.acq_inst_id}}
@@ -146,11 +146,11 @@
                         <td>
                             <div class="layui-btn-group">
                                 <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
-                                    <i class="layui-icon">&#xe60a;</i>查看
+                                    查看
                                 </button>
                                 {{if hasNext(row.oper_in,row.proc_st,'update')}}
                                 <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
-                                    <i class="layui-icon">&#xe642;</i>编辑
+                                    编辑
                                 </button>
                                 {{/if}}
                             </div>
