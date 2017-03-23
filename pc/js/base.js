@@ -61,7 +61,10 @@ window.$$ = (function() {
         options = $.extend({
             type: 2,
             title: title,
-            content: url
+            content: url,
+            end: function() {
+                if (window.pagination) window.pagination.reload();
+            }
         }, options || {});
 
         var index = layer.open(options);
@@ -86,22 +89,27 @@ window.$$ = (function() {
     };
 
     //POST请求
-    $$.request = function(url, data, success, error, async) {
-        error = error || function(data) {
-            if (window.layer) {
-                $$.info($$.errmsg(data), {
-                    icon: 2
-                });
-            }
-        };
-
+    $$.request = function(url, data, success, error, options) {
         var index;
-        if (window.layer) index = layer.load(2);
 
-        $.ajax({
+        if (typeof error !== 'function') {
+            options = error;
+            error = function(data) {
+                if (window.layer) {
+                    $$.info($$.errmsg(data), {
+                        icon: 2
+                    });
+                }
+            };
+        }
+
+        options = options || {};
+        options = $.extend({
+            async: true,
+            loading: true
+        }, options, {
             url: $$.wrapUrl(url),
             type: 'POST',
-            async: (async == false ? false : true),
             contentType: 'application/json',
             dataType: 'json',
             data: $.toJSON(data),
@@ -115,9 +123,16 @@ window.$$ = (function() {
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 if (index !== undefined) layer.close(index);
-                if (console) console.log(arguments);
+                error({
+                    errcode: -1,
+                    errmsg: textStatus
+                });
             }
         });
+
+
+        if (window.layer && options.loading) index = layer.load(2);
+        $.ajax(options);
     };
 
 
@@ -186,30 +201,40 @@ window.$$ = (function() {
             checkbox: true
         }, options || {})
 
-        $$.request(url, params, function(data) {
-            var $list = $(options.selector).html(template(options.tpl, data)).data('data', data);
-            $list.on('click', '.layui-table tr', function() {
-                var $chk = $(this).find('input[type=checkbox]');
-                $$.getChecked(options.selector).not($chk).prop('checked', false);
-                $chk.prop('checked', true);
+        load();
+
+        function load() {
+            $$.request(url, params, function(data) {
+                var $list = $(options.selector).html(template(options.tpl, data)).data('data', data);
                 if (options.checkbox) form.render('checkbox');
-            });
 
-            if (options.checkbox) form.render('checkbox');
+                $list.on('click', 'tbody td:has(input[type=checkbox])', function() {
+                    return false
+                }).on('click', 'tbody tr', function() {
+                    var $chk = $(this).find('input[type=checkbox]');
+                    $$.getChecked(options.selector).not($chk).prop('checked', false);
+                    $chk.prop('checked', true);
+                    if (options.checkbox) form.render('checkbox');
+                });
 
-            laypage({
-                cont: $(options.pageSelector),
-                pages: Math.ceil(data.total / 10),
-                curr: params.page,
-                skip: true,
-                jump: function(obj, first) {
-                    if (!first) {
-                        params.page = obj.curr;
-                        $$.search(url, params);
+                laypage({
+                    cont: $(options.pageSelector),
+                    pages: Math.ceil(data.total / 10),
+                    curr: params.page,
+                    skip: true,
+                    jump: function(obj, first) {
+                        if (!first) {
+                            params.page = obj.curr;
+                            load();
+                        }
                     }
-                }
+                });
             });
-        });
+        }
+
+        return {
+            reload: load
+        }
     }
 
     $$.loadSelect = function(selector, data, options) {
@@ -287,8 +312,14 @@ window.$$ = (function() {
     }
 
     $$.batchSubmit = function(selector, url, options) {
-        options = options || {};
-        params = options.params || {};
+        options = $.extend({
+            params: {},
+            success: function() {
+                if (window.pagination) window.pagination.reload();
+            }
+        }, options || {});
+
+        params = options.params;
 
         var $checkbox = $$.getChecked(selector);
         if ($checkbox.length == 0) {
@@ -313,7 +344,9 @@ window.$$ = (function() {
         })
 
         $$.request(url, params, function(data) {
-            $$.info('操作成功');
+            $$.info('操作成功', {
+                icon: 1
+            });
             if (options.success) options.success(data);
         });
     }

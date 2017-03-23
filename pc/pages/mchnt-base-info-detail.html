@@ -19,7 +19,6 @@
                     <div class="layui-input-inline">
                         <input type="text" name="mchnt_id" placeholder="" autocomplete="off" class="layui-input">
                     </div>
-                    <div class="layui-form-mid layui-word-aux">系统生成</div>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -81,6 +80,12 @@
                 </div>
             </div>
             <div class="layui-form-item">
+                <label class="layui-form-label">营业执照</label>
+                <div class="layui-input-block">
+                    <input type="file" name="file" class="layui-upload-file">
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <label class="layui-form-label">商户名称</label>
                 <div class="layui-input-block">
                     <input type="text" name="mchnt_name" placeholder="请输入商户名称" autocomplete="off" class="layui-input">
@@ -110,6 +115,18 @@
                 <label class="layui-form-label">经营范围</label>
                 <div class="layui-input-block">
                     <input type="text" name="business_scope" placeholder="请输入经营范围" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">身份证正面</label>
+                <div class="layui-input-block">
+                    <input type="file" name="file" class="layui-upload-file">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">身份证反面</label>
+                <div class="layui-input-block">
+                    <input type="file" name="file" class="layui-upload-file">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -255,6 +272,9 @@
             </div>
         </form>
     </div>
+    <script id="upload-tpl" type="text/html">
+        <div class="img-box"><img src="/p/action/uploads/{{serverid}}" alt="..." class="img-thumbnail"></div>
+    </script>
     <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
     <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
@@ -281,7 +301,9 @@
 
     function onSubmit(param) {
         $$.request('/action/bm/mchnt-base-info/' + operateType, param, function(data) {
-            $$.info('操作成功', function() {
+            $$.info('操作成功', {
+                icon: 1
+            }, function() {
                 onClose();
             });
         });
@@ -311,7 +333,44 @@
         form.render('select');
     }
 
+    function initUpload() {
+        var index;
+        layui.upload({
+            url: $$.wrapUrl('/action/upload'),
+            before: function(input) {
+                index = layer.load(2);
+            },
+            success: function(res, elem) {
+                if (index) layer.close(index);
+
+                if ($$.errcode(res) == 0) {
+                    var $item = $(elem).closest('.layui-form-item');
+                    var $wrap = $item.find('.img-box-wrap');
+                    if (!$wrap.length) {
+                        $wrap = $('<div class="layui-input-block img-box-wrap"></div>').appendTo($item);
+                    }
+                    var $box = $(template('upload-tpl', res)).data('data', res);
+                    $wrap.html($box);
+                    $item.find('input[name=serverid]').val(res.serverid); //方便验证
+                } else {
+                    $$.info($$.errmsg(res), {
+                        icon: 2
+                    });
+                }
+            }
+        });
+
+        $(document).on('click', '.img-box-wrap', function() {
+            layer.photos({
+                photos: $(this),
+                anim: 5
+            });
+        });
+    }
+
     $(function() {
+        initUpload();
+
         $('#province').on('change', onChangeProvince);
         $('#city').on('change', onChangeCity);
 

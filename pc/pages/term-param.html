@@ -12,7 +12,7 @@
 
 <body>
     <div class="container">
-        <div class="panel panel-padding">
+        <div id="search-panel" class="panel panel-padding">
             <form id="search" class="layui-form" action="" method="post">
                 <div class="layui-form-item">
                     <div class="layui-inline">
@@ -114,7 +114,7 @@
                         <td>
                             {{row.term_no}}
                         </td>
-                         <td>
+                        <td>
                             {{row.mchnt_name}}
                         </td>
                         <td>
@@ -134,9 +134,11 @@
                                 <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
                                     查看
                                 </button>
+                                {{if hasNext(row.oper_in,row.proc_st,'update')}}
                                 <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
                                     编辑
                                 </button>
+                                {{/if}}
                                 <!-- <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
                                     删除
                                 </button> -->
@@ -164,15 +166,11 @@
     var form = layui.form();
     var element = layui.element();
 
-    var operateType;
+    var pagination;
 
     function onAdd() {
         $$.open('term-param-detail.html?operateType=create', '新增终端信息', {
             term_no: query.term_no
-        }, {
-            end: function() {
-                $('#submit-btn').click();
-            }
         });
     }
 
@@ -198,17 +196,15 @@
 
         $$.confirm('确认要删除?', function() {
             $$.request('/action/bm/term-param/delete', row, function(data) {
-                $$.info('操作成功');
+                $$.info('操作成功', {
+                    icon: 1
+                });
             });
         });
     }
 
     function onBatchCheck1Pass() {
-        $$.batchSubmit('#list', '/action/bm/term-param/batch-check1-pass', {
-            success: function() {
-                $('#submit-btn').click();
-            }
-        });
+        $$.batchSubmit('#list', '/action/bm/term-param/batch-check1-pass');
     }
 
     function onBatchCheck1Nopass() {
@@ -221,9 +217,6 @@
             $$.batchSubmit('#list', '/action/bm/term-param/batch-check1-nopass', {
                 params: {
                     checked_reason: value
-                },
-                success: function() {
-                    $('#submit-btn').click();
                 }
             });
         });
@@ -261,7 +254,7 @@
         });
 
         form.on('submit(search)', function(data) {
-            $$.search('/action/bm/term-param/search', data.field);
+            pagination = $$.search('/action/bm/term-param/search', data.field);
             return false; //阻止表单跳转
         });
 
@@ -277,9 +270,10 @@
 
 
         if (query.term_no) {
+            $('#search-panel').addClass('hide');
             $$.loadData('#search', query);
             $('#submit-btn').click();
-            $('#add-btn').removeClass('hide');
+            $('#add-btn').removeClass('hide');            
         }
     });
     </script>

@@ -30,28 +30,28 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>商户参数</label>
-                        <div class="layui-input-inline">
-                            <select name="mchnt_param_id" style="width: 100%;" lay-verify="required" lay-ignore id="mchnt-param-id">
-                                <option value=""></option>
-                            </select>
-                        </div>
+                    <label class="layui-form-label"><span class="required">*</span>商户参数</label>
+                    <div class="layui-input-block">
+                        <select name="mchnt_param_id" style="width: 100%;" lay-verify="required" lay-ignore id="mchnt-param-id">
+                            <option value=""></option>
+                        </select>
                     </div>
+                </div>
+                <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">终端号</label>
                         <div class="layui-input-inline">
                             <input type="text" name="term_id" placeholder="请输入终端号" autocomplete="off" class="layui-input">
                         </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
                     <!-- <div class="layui-inline">
                         <label class="layui-form-label">参数状态</label>
                         <div class="layui-input-inline">
                             <input type="text" name="status" placeholder="请输入参数状态" autocomplete="off" class="layui-input">
                         </div>
                     </div> -->
+                </div>
+                <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label"><span class="required">*</span>拓展方</label>
                         <div class="layui-input-inline">
@@ -60,6 +60,8 @@
                             </select>
                         </div>
                     </div>
+                </div>
+                <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label"><span class="required">*</span>拓展人</label>
                         <div class="layui-input-inline">
@@ -105,7 +107,9 @@
 
     function onSubmit(param) {
         $$.request('/action/bm/term-param/' + operateType, param, function(data) {
-            $$.info('操作成功', function() {
+            $$.info('操作成功', {
+                icon: 1
+            }, function() {
                 onClose();
             });
         });
@@ -117,7 +121,7 @@
     }
 
     function formatMchntParam(row) {
-        return row.busi_type_nm + '/' + row.mchnt_name + '/' + (row.mchnt_cd||'');
+        return row.busi_type_nm + '/' + row.mchnt_name + '/' + (row.mchnt_cd || '');
     }
 
     $(function() {
@@ -137,7 +141,7 @@
                 delay: 250,
                 data: function(params) {
                     return $.toJSON({
-                        mchnt_id: query.mchnt_id,
+                        term_no2: query.term_no,
                         q: params.term,
                         page: params.page,
                         size: 20
@@ -185,8 +189,23 @@
         });
 
         $$.transformStatus('#detail', operateType);
-        $$.loadData('#detail', query);
-        view();
+        if (query.operateType == 'create') {
+            $$.loadData('#detail', query);
+        } else {
+            view();
+        }
+        if(query.operateType=='create') {
+            $$.loadData('#detail', query);
+            $$.request('/action/bm/term-info/view', query, function(data) {
+                $$.loadData('#detail', data.data);
+                // $('#province').change();
+                // $('#city').val(data.data.city).change();
+                // $('#district').val(data.data.district);
+                form.render();
+            });
+        } else {            
+            view();
+        }
     });
     </script>
 </body>

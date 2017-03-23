@@ -62,7 +62,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="search">查询</button>
+                        <button class="layui-btn" lay-submit lay-filter="search" id="submit-btn">查询</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -82,6 +82,17 @@
                 <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
                     <i class="layui-icon">&#xe640;</i> 删除
                 </button> -->
+            </div>
+            <div class="layui-btn-group">
+                <button class="layui-btn layui-btn-small layui-btn-normal" data-url="term-info.html" onclick="onGoto(this)">
+                    终端管理
+                </button>
+                <button class="layui-btn layui-btn-small layui-btn-danger" data-url="mchnt-param.html" onclick="onGoto(this)">
+                    商户参数
+                </button>
+                <button class="layui-btn layui-btn-small" data-url="mchnt-elec-info.html" onclick="onGoto(this)">
+                    电子资料
+                </button>
             </div>
             <div id="list">
             </div>
@@ -153,17 +164,6 @@
                                     </button>
                                     {{/if}}
                                 </div>
-                                <div>
-                                    <button class="layui-btn layui-btn-mini  layui-btn-normal" data-url="term-info.html" onclick="onGoto({{i}},this)">
-                                        终端管理
-                                    </button>
-                                    <button class="layui-btn layui-btn-mini layui-btn-danger" data-url="mchnt-param.html" onclick="onGoto({{i}},this)">
-                                        商户参数
-                                    </button>
-                                    <button class="layui-btn layui-btn-mini" data-url="mchnt-elec-info.html" onclick="onGoto({{i}},this)">
-                                        电子资料
-                                    </button>
-                                </div>
                             </div>
                         </td>
                     </tr>
@@ -188,7 +188,7 @@
     var form = layui.form();
     var element = layui.element();
 
-    var operateType;
+    var pagination;
 
     function onAdd() {
         $$.open('mchnt-base-info-detail.html?operateType=create', '新增商户信息');
@@ -216,12 +216,20 @@
 
         $$.confirm('确认要删除?', function() {
             $$.request('/action/bm/mchnt-base-info/delete', row, function(data) {
-                $$.info('操作成功');
+                $$.info('操作成功', {
+                    icon: 1
+                });
             });
         });
     }
 
-    function onGoto(index, target) {
+    function onGoto(target) {
+        var $checkbox = $$.getChecked('#list');
+        if ($checkbox.length != 1) {
+            $$.info('请选择需要操作的一条记录');
+            return;
+        }
+        var index = parseInt($checkbox.val());
         var $target = $(target);
         var data = $('#list').data('data');
         var row = data.rows[index];
@@ -243,11 +251,7 @@
     }
 
     function onBatchCheck1Pass() {
-        $$.batchSubmit('#list', '/action/bm/mchnt-base-info/batch-check1-pass', {
-            success: function() {
-                $('#submit-btn').click();
-            }
-        });
+        $$.batchSubmit('#list', '/action/bm/mchnt-base-info/batch-check1-pass');
     }
 
     function onBatchCheck1Nopass() {
@@ -260,9 +264,6 @@
             $$.batchSubmit('#list', '/action/bm/mchnt-base-info/batch-check1-nopass', {
                 params: {
                     checked_reason: value
-                },
-                success: function() {
-                    $('#submit-btn').click();
                 }
             });
         });
@@ -297,13 +298,13 @@
             });
             form.render('checkbox');
         });
-        
+
         form.on('checkbox(check)', function(data) {
             return false;
         });
 
         form.on('submit(search)', function(data) {
-            $$.search('/action/bm/mchnt-base-info/search', data.field);
+            pagination = $$.search('/action/bm/mchnt-base-info/search', data.field);
             return false; //阻止表单跳转
         });
 

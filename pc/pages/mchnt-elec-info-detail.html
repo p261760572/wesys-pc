@@ -9,13 +9,13 @@
     <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
     <link rel="stylesheet" type="text/css" href="../css/base.css">
     <style type="text/css">
-    .imgbox {
+    .img-box {
         line-height: 200px;
         height: 200px;
         width: 200px;
     }
     
-    .imgbox img {
+    .img-box .img-thumbnail {
         max-width: 100%;
         height: auto;
     }
@@ -44,9 +44,9 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><span class="required">*</span>影印件</label>
-                    <div class="layui-input-block" id="upload-box">
-                        <input type="file" name="file" class="layui-upload-file" id="upload">
-                        <input type="text" name="serverid" class="hide" id="serverid">
+                    <input type="text" name="serverid" class="hide">
+                    <div class="layui-input-block">
+                        <input type="file" name="file" class="layui-upload-file">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -59,9 +59,7 @@
         </div>
     </div>
     <script id="upload-tpl" type="text/html">
-        <div class="layui-input-block">
-            <div class="imgbox"><img src="/p/action/uploads/{{serverid}}" alt="..." class="img-thumbnail"></div>
-        </div>
+        <div class="img-box"><img src="/p/action/uploads/{{serverid}}" alt="..." class="img-thumbnail"></div>
     </script>
     <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
@@ -81,7 +79,9 @@
 
     function onSubmit(param) {
         $$.request('/action/bm/mchnt-elec-info/' + operateType, param, function(data) {
-            $$.info('操作成功', function() {
+            $$.info('操作成功', {
+                icon: 1
+            }, function() {
                 onClose();
             });
         });
@@ -92,19 +92,25 @@
         parent.layer.close(index);
     }
 
-    $(function() {
+    function initUpload() {
+        var index;
         layui.upload({
-            elem: '#upload',
             url: $$.wrapUrl('/action/upload'),
             before: function(input) {
-                var index = layer.load(2);
+                index = layer.load(2);
             },
-            success: function(res) {
-                layer.closeAll('loading');
+            success: function(res, elem) {
+                if (index) layer.close(index);
+
                 if ($$.errcode(res) == 0) {
-                    $('#serverid').val(res.serverid);
-                    $('#upload-box').next().remove();
-                    $('#upload-box').after(template('upload-tpl', res));
+                    var $item = $(elem).closest('.layui-form-item');
+                    var $wrap = $item.find('.img-box-wrap');
+                    if (!$wrap.length) {
+                        $wrap = $('<div class="layui-input-block img-box-wrap"></div>').appendTo($item);
+                    }
+                    var $box = $(template('upload-tpl', res)).data('data', res);
+                    $wrap.html($box);
+                    $item.find('input[name=serverid]').val(res.serverid); //方便验证
                 } else {
                     $$.info($$.errmsg(res), {
                         icon: 2
@@ -112,6 +118,17 @@
                 }
             }
         });
+
+        $(document).on('click', '.img-box-wrap', function() {
+            layer.photos({
+                photos: $(this),
+                anim: 5
+            });
+        });
+    }
+
+    $(function() {
+        initUpload();
 
         form.on('submit(detail)', function(data) {
             onSubmit(data.field);

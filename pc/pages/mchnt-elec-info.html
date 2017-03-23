@@ -12,7 +12,7 @@
 
 <body>
     <div class="container">
-        <div class="panel panel-padding">
+        <div id="search-panel" class="panel panel-padding">
             <form id="search" class="layui-form" action="" method="post">
                 <div class="layui-form-item">
                     <div class="layui-inline">
@@ -92,11 +92,11 @@
                             {{row.proc_st_nm}}
                         </td>
                         <td>
-                            <div class="layui-btn-group">
+                            <!-- <div class="layui-btn-group">
                                 <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
                                     <i class="layui-icon">&#xe640;</i>删除
                                 </button>
-                            </div>
+                            </div> -->
                         </td>
                     </tr>
                     {{/each}}
@@ -120,15 +120,11 @@
     var form = layui.form();
     var element = layui.element();
 
-    var operateType;
+    var pagination;
 
     function onAdd() {
         $$.open('mchnt-elec-info-detail.html?operateType=create', '新增商户电子资料', {
             mchnt_id: query.mchnt_id
-        }, {
-            end: function() {
-                $('#submit-btn').click();
-            }
         });
     }
 
@@ -154,17 +150,15 @@
 
         $$.confirm('确认要删除?', function() {
             $$.request('/action/bm/mchnt-elec-info/delete', row, function(data) {
-                $$.info('操作成功');
+                $$.info('操作成功', {
+                    icon: 1
+                });
             });
         });
     }
 
     function onBatchCheck1Pass() {
-        $$.batchSubmit('#list', '/action/bm/mchnt-elec-info/batch-check1-pass', {
-            success: function() {
-                $('#submit-btn').click();
-            }
-        });
+        $$.batchSubmit('#list', '/action/bm/mchnt-elec-info/batch-check1-pass');
     }
 
     function onBatchCheck1Nopass() {
@@ -177,9 +171,6 @@
             $$.batchSubmit('#list', '/action/bm/mchnt-elec-info/batch-check1-nopass', {
                 params: {
                     checked_reason: value
-                },
-                success: function() {
-                    $('#submit-btn').click();
                 }
             });
         });
@@ -222,7 +213,7 @@
         });
 
         form.on('submit(search)', function(data) {
-            $$.search('/action/bm/mchnt-elec-info/search', data.field);
+            pagination = $$.search('/action/bm/mchnt-elec-info/search', data.field);
             return false; //阻止表单跳转
         });
 
@@ -241,6 +232,7 @@
         form.render('select');
 
         if (query.mchnt_id) {
+            $('#search-panel').addClass('hide');
             $$.loadData('#search', query);
             $('#submit-btn').click();
             $('#add-btn').removeClass('hide');

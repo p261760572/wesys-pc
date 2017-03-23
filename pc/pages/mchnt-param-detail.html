@@ -123,7 +123,7 @@
                     <label class="layui-form-label"><span class="required">*</span>开户支行</label>
                     <div class="layui-input-block">
                         <select name="account_bank_branch_cd" style="width: 100%;" lay-verify="required" lay-ignore id="account-bank-branch-cd">
-                        <option value=""></option>
+                            <option value=""></option>
                         </select>
                     </div>
                 </div>
@@ -325,7 +325,9 @@
 
     function onSubmit(param) {
         $$.request('/action/bm/mchnt-param/' + operateType, param, function(data) {
-            $$.info('操作成功', function() {
+            $$.info('操作成功', {
+                icon: 1
+            }, function() {
                 onClose();
             });
         });
@@ -443,12 +445,12 @@
             },
             // escapeMarkup: function (markup) { return markup; },
             minimumInputLength: 1
-            // templateResult: function(branch) {
-            //     return branch.bank_branch_nm;
-            // },
-            // templateSelection: function(branch) {
-            //     return branch.bank_branch_nm;
-            // }
+                // templateResult: function(branch) {
+                //     return branch.bank_branch_nm;
+                // },
+                // templateSelection: function(branch) {
+                //     return branch.bank_branch_nm;
+                // }
         });
 
 
@@ -490,8 +492,19 @@
         // });
 
         $$.transformStatus('#detail', operateType);
-        $$.loadData('#detail', query);
-        view();
+        if(query.operateType=='create') {
+            $$.loadData('#detail', query);
+            $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
+                // data.data.shop_name = data.data.mchnt_abbr;
+                $$.loadData('#detail', data.data);
+                $('#province').change();
+                $('#city').val(data.data.city).change();
+                // $('#district').val(data.data.district);
+                form.render();
+            });
+        } else {            
+            view();
+        }
     });
     </script>
 </body>
