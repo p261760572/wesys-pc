@@ -187,11 +187,16 @@ window.$$ = (function() {
         }, options || {})
 
         $$.request(url, params, function(data) {
-            $(options.selector).html(template(options.tpl, data)).data('data', data);
+            var $list = $(options.selector).html(template(options.tpl, data)).data('data', data);
+            $list.on('click', '.layui-table tr', function() {
+                var $chk = $(this).find('input[type=checkbox]');
+                $$.getChecked(options.selector).not($chk).prop('checked', false);
+                $chk.prop('checked', true);
+                if (options.checkbox) form.render('checkbox');
+            });
 
             if (options.checkbox) form.render('checkbox');
 
-            console.log($(options.pageSelector).length);
             laypage({
                 cont: $(options.pageSelector),
                 pages: Math.ceil(data.total / 10),

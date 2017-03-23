@@ -112,7 +112,7 @@
                     {{each rows as row i}}
                     <tr>
                         <td>
-                            <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
+                            <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary" lay-filter="check">
                         </td>
                         <td>
                             {{row.mchnt_id}}
@@ -296,6 +296,10 @@
                 item.checked = data.elem.checked;
             });
             form.render('checkbox');
+        });
+        
+        form.on('checkbox(check)', function(data) {
+            return false;
         });
 
         form.on('submit(search)', function(data) {
