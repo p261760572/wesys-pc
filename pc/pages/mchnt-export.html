@@ -62,17 +62,17 @@
                 </div> -->
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>业务类型</label>
+                        <label class="layui-form-label"><span class="required">*</span>收单机构</label>
                         <div class="layui-input-inline">
-                            <select name="busi_type" lay-verify="required" id="busi-type">
+                            <select name="acq_inst_id" lay-verify="required" lay-filter="acq_inst_id" lay-search id="acq-inst-id">
                                 <option value=""></option>
                             </select>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>收单机构</label>
+                        <label class="layui-form-label"><span class="required">*</span>业务类型</label>
                         <div class="layui-input-inline">
-                            <select name="acq_inst_id" lay-verify="required" lay-search id="acq-inst-id">
+                            <select name="busi_type" lay-verify="required" id="busi-type">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -173,13 +173,18 @@
 
     var pagination;
 
-    function onExport(param) {    
+    function onExport(param) {
         $$.request('/action/bm/mchnt-export/export', param, function(data) {
-            $$.info('操作成功', {
-                icon: 1
-            }, function() {
-                onClose();
+            // $$.info('操作成功', {
+            //     icon: 1
+            // });
+            var index = layer.open({                
+                type: 2,
+                title: false,
+                content: $$.wrapUrl(data.url)
             });
+
+            layer.close(index);            
         });
     }
 
@@ -200,6 +205,18 @@
                 item.checked = data.elem.checked;
             });
             form.render('checkbox');
+        });
+
+        form.on('select(acq_inst_id)', function(data) {
+            $$.request('/action/bm/acq-inst-busi/list', {
+                acq_inst_id: data.value
+            }, function(data) {
+                $$.loadSelect('#busi-type', data.rows, {
+                    valueField: 'busi_type',
+                    textField: 'busi_type_nm'
+                });
+                form.render('select');
+            });
         });
 
         form.on('submit(search)', function(data) {
@@ -226,7 +243,7 @@
         // 
         $$.request('/action/bm/parameter/list', {
             acq_inst: '1'
-        }, function(data) {                        
+        }, function(data) {
             $$.loadSelect('#acq-inst-id', data.acq_inst, {
                 valueField: 'acq_inst_id',
                 textField: 'acq_inst_nm'
@@ -235,8 +252,8 @@
         });
 
 
-        $$.loadSelect('#busi-type', $$.param['busi_type']);
-        form.render('select');    
+        // $$.loadSelect('#busi-type', $$.param['busi_type']);
+        // form.render('select');
     });
     </script>
 </body>
