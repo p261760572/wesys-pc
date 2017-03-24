@@ -189,11 +189,6 @@
         });
 
         $$.transformStatus('#detail', operateType);
-        if (query.operateType == 'create') {
-            $$.loadData('#detail', query);
-        } else {
-            view();
-        }
         if(query.operateType=='create') {
             $$.loadData('#detail', query);
             $$.request('/action/bm/term-info/view', query, function(data) {

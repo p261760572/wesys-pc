@@ -132,7 +132,7 @@ window.$$ = (function() {
 
 
         if (window.layer && options.loading) index = layer.load(2);
-        $.ajax(options);
+        return $.ajax(options);
     };
 
 

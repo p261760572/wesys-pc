@@ -8,18 +8,6 @@
     <title>商户电子资料</title>
     <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
     <link rel="stylesheet" type="text/css" href="../css/base.css">
-    <style type="text/css">
-    .img-box {
-        line-height: 200px;
-        height: 200px;
-        width: 200px;
-    }
-    
-    .img-box .img-thumbnail {
-        max-width: 100%;
-        height: auto;
-    }
-    </style>
 </head>
 
 <body>
@@ -44,7 +32,7 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><span class="required">*</span>影印件</label>
-                    <input type="text" name="serverid" class="hide">
+                    <input type="text" name="serverid" lay-verify="required" class="hide">
                     <div class="layui-input-block">
                         <input type="file" name="file" class="layui-upload-file">
                     </div>
@@ -75,7 +63,24 @@
     var form = layui.form();
     var element = layui.element();
 
+    function renderImgbox(elem, data) {
+        var $item = $(elem).closest('.layui-form-item');
+        var $wrap = $item.find('.img-box-wrap');
+        if (!$wrap.length) {
+            $wrap = $('<div class="layui-input-block img-box-wrap"></div>').appendTo($item);
+        }
+        var $box = $(template('upload-tpl', data)).data('data', {
+            elec_info_type: $(elem).attr('data-type'),
+            serverid: data.serverid
+        });
+        $wrap.html($box);
+        $item.find('input[name=serverid]').val(data.serverid); //方便验证
 
+        layer.photos({
+            photos: $wrap,
+            anim: 5
+        });
+    }
 
     function onSubmit(param) {
         $$.request('/action/bm/mchnt-elec-info/' + operateType, param, function(data) {
@@ -103,27 +108,13 @@
                 if (index) layer.close(index);
 
                 if ($$.errcode(res) == 0) {
-                    var $item = $(elem).closest('.layui-form-item');
-                    var $wrap = $item.find('.img-box-wrap');
-                    if (!$wrap.length) {
-                        $wrap = $('<div class="layui-input-block img-box-wrap"></div>').appendTo($item);
-                    }
-                    var $box = $(template('upload-tpl', res)).data('data', res);
-                    $wrap.html($box);
-                    $item.find('input[name=serverid]').val(res.serverid); //方便验证
+                    renderImgbox(elem, res);
                 } else {
                     $$.info($$.errmsg(res), {
                         icon: 2
                     });
                 }
             }
-        });
-
-        $(document).on('click', '.img-box-wrap', function() {
-            layer.photos({
-                photos: $(this),
-                anim: 5
-            });
         });
     }
 

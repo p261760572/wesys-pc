@@ -80,9 +80,9 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">营业执照</label>
+                <label class="layui-form-label">营业执照正面</label>
                 <div class="layui-input-block">
-                    <input type="file" name="file" class="layui-upload-file">
+                    <input type="file" name="file" class="layui-upload-file" data-type="yyzzzm">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -120,13 +120,13 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">身份证正面</label>
                 <div class="layui-input-block">
-                    <input type="file" name="file" class="layui-upload-file">
+                    <input type="file" name="file" class="layui-upload-file" data-type="sfzzm">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">身份证反面</label>
                 <div class="layui-input-block">
-                    <input type="file" name="file" class="layui-upload-file">
+                    <input type="file" name="file" class="layui-upload-file" data-type="sfzfm">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -289,17 +289,50 @@
     var form = layui.form();
     var element = layui.element();
 
+    function renderImgbox(elem, data) {
+        var $item = $(elem).closest('.layui-form-item');
+        var $wrap = $item.find('.img-box-wrap');
+        if (!$wrap.length) {
+            $wrap = $('<div class="layui-input-block img-box-wrap"></div>').appendTo($item);
+        }
+        var $box = $(template('upload-tpl', data)).data('data', {
+            elec_info_type: $(elem).attr('data-type'),
+            serverid: data.serverid
+        });
+        $wrap.html($box);
+        $item.find('input[name=serverid]').val(data.serverid); //方便验证
+
+        layer.photos({
+            photos: $wrap,
+            anim: 5
+        });
+    }
+
     function view() {
         $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
             $$.loadData('#detail', data.data);
             $('#province').change();
             $('#city').val(data.data.city).change();
             $('#district').val(data.data.district);
+
+            $.each(data.images, function(index, value) {
+                var $elem = $('#detail').find('input[type=file][data-type=' + value.elec_info_type + ']');
+                renderImgbox($elem, value);
+            });
             form.render();
         });
     }
 
     function onSubmit(param) {
+        // 照片
+        var images = [];
+        $('#detail').find('.img-box').each(function(index, elem) {
+            var data = $(elem).data('data');
+            images.push(data);
+        });
+
+        param.images = images;
+        
         $$.request('/action/bm/mchnt-base-info/' + operateType, param, function(data) {
             $$.info('操作成功', {
                 icon: 1
@@ -314,11 +347,6 @@
         var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);
     }
-
-    form.on('submit(detail)', function(data) {
-        onSubmit(data.field);
-        return false; //阻止表单跳转
-    });
 
     function onChangeProvince() {
         var value = $(this).val();
@@ -344,14 +372,7 @@
                 if (index) layer.close(index);
 
                 if ($$.errcode(res) == 0) {
-                    var $item = $(elem).closest('.layui-form-item');
-                    var $wrap = $item.find('.img-box-wrap');
-                    if (!$wrap.length) {
-                        $wrap = $('<div class="layui-input-block img-box-wrap"></div>').appendTo($item);
-                    }
-                    var $box = $(template('upload-tpl', res)).data('data', res);
-                    $wrap.html($box);
-                    $item.find('input[name=serverid]').val(res.serverid); //方便验证
+                    renderImgbox(elem, res);
                 } else {
                     $$.info($$.errmsg(res), {
                         icon: 2
@@ -359,17 +380,15 @@
                 }
             }
         });
-
-        $(document).on('click', '.img-box-wrap', function() {
-            layer.photos({
-                photos: $(this),
-                anim: 5
-            });
-        });
     }
 
     $(function() {
         initUpload();
+
+        form.on('submit(detail)', function(data) {
+            onSubmit(data.field);
+            return false; //阻止表单跳转
+        });
 
         $('#province').on('change', onChangeProvince);
         $('#city').on('change', onChangeCity);

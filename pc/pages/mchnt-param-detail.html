@@ -128,6 +128,19 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label class="layui-form-label"><span class="required">*</span>账户正面</label>
+                    <input type="text" name="serverid" lay-verify="required" class="hide">
+                    <div class="layui-input-block">
+                        <input type="file" name="file" class="layui-upload-file" data-type="zhzm">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">账户反面</label>
+                    <div class="layui-input-block">
+                        <input type="file" name="file" class="layui-upload-file" data-type="zhfm">
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label"><span class="required">*</span>银行账号</label>
                     <div class="layui-input-block">
                         <input type="text" name="account_no" placeholder="请输入银行账号" autocomplete="off" class="layui-input">
@@ -137,7 +150,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label"><span class="required">*</span>借记卡手续费</label>
                         <div class="layui-input-inline">
-                            <select name="debit_card_fee" lay-verify="required" lay-search id="debit-card-fee">
+                            <select name="debit_card_fee" lay-search id="debit-card-fee">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -145,7 +158,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label"><span class="required">*</span>贷记卡手续费</label>
                         <div class="layui-input-inline">
-                            <select name="credit_card_fee" lay-verify="required" lay-search id="credit-card-fee">
+                            <select name="credit_card_fee" lay-search id="credit-card-fee">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -155,7 +168,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label"><span class="required">*</span>扫码手续费(‰)</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="fee" lay-verify="required" placeholder="请输入手续费(千分比)" autocomplete="off" class="layui-input">
+                            <input type="text" name="fee" placeholder="请输入手续费(千分比)" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
@@ -295,6 +308,9 @@
             </form>
         </div>
     </div>
+    <script id="upload-tpl" type="text/html">
+        <div class="img-box"><img src="/p/action/uploads/{{serverid}}" alt="..." class="img-thumbnail"></div>
+    </script>
     <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
     <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
@@ -310,6 +326,25 @@
     var form = layui.form();
     var element = layui.element();
 
+    function renderImgbox(elem, data) {
+        var $item = $(elem).closest('.layui-form-item');
+        var $wrap = $item.find('.img-box-wrap');
+        if (!$wrap.length) {
+            $wrap = $('<div class="layui-input-block img-box-wrap"></div>').appendTo($item);
+        }
+        var $box = $(template('upload-tpl', data)).data('data', {
+            elec_info_type: $(elem).attr('data-type'),
+            serverid: data.serverid
+        });
+        $wrap.html($box);
+        $item.find('input[name=serverid]').val(data.serverid); //方便验证
+
+        layer.photos({
+            photos: $wrap,
+            anim: 5
+        });
+    }
+
     function view() {
         $$.request('/action/bm/mchnt-param/view', query, function(data) {
             $$.loadData('#detail', data.data);
@@ -319,11 +354,26 @@
             if (data.data.account_bank_branch_cd) {
                 $('#account-bank-branch-cd').html('<option value="' + data.data.account_bank_branch_cd + '">' + data.data.account_bank_branch_nm + '</option>').trigger('change');
             }
+
+            $.each(data.images, function(index, value) {
+                var $elem = $('#detail').find('input[type=file][data-type=' + value.elec_info_type + ']');
+                renderImgbox($elem, value);
+            });
+
             form.render();
         });
     }
 
     function onSubmit(param) {
+        // 照片
+        var images = [];
+        $('#detail').find('.img-box').each(function(index, elem) {
+            var data = $(elem).data('data');
+            images.push(data);
+        });
+
+        param.images = images;
+
         $$.request('/action/bm/mchnt-param/' + operateType, param, function(data) {
             $$.info('操作成功', {
                 icon: 1
@@ -345,20 +395,43 @@
         form.render('select');
     }
 
-    function onChangeCity() {
-        var value = $(this).val();
-        $$.loadSelect('#district', districtData['district'][$('#province').val() + value]);
-        form.render('select');
+    // function onChangeCity() {
+    //     var value = $(this).val();
+    //     $$.loadSelect('#district', districtData['district'][$('#province').val() + value]);
+    //     form.render('select');
+    // }
+
+    function initUpload() {
+        var index;
+        layui.upload({
+            url: $$.wrapUrl('/action/upload'),
+            before: function(input) {
+                index = layer.load(2);
+            },
+            success: function(res, elem) {
+                if (index) layer.close(index);
+
+                if ($$.errcode(res) == 0) {
+                    renderImgbox(elem, res);
+                } else {
+                    $$.info($$.errmsg(res), {
+                        icon: 2
+                    });
+                }
+            }
+        });
     }
 
     $(function() {
+        initUpload();
+
         form.on('submit(detail)', function(data) {
             onSubmit(data.field);
             return false; //阻止表单跳转
         });
 
         $('#province').on('change', onChangeProvince);
-        $('#city').on('change', onChangeCity);
+        // $('#city').on('change', onChangeCity);
 
         form.on('select(province)', function(data) {
             console.log(this, arguments);
@@ -375,36 +448,7 @@
         $$.loadSelect('#account-type', $$.param['account_type']);
 
         form.render('select');
-
-        $$.request('/action/bm/acq-inst/list', {}, function(data) {
-            $$.loadSelect('#acq-inst-id', data.rows, {
-                valueField: 'acq_inst_id',
-                textField: 'acq_inst_nm'
-            });
-            form.render('select');
-        });
-
-        $$.request('/action/bm/bank/list', {}, function(data) {
-            $$.loadSelect('#account-bank', data.rows, {
-                valueField: 'bank_cd',
-                textField: 'bank_nm'
-            });
-            form.render('select');
-        });
-
-        $$.request('/action/bm/mcc/list', {}, function(data) {
-            $$.loadSelect('#mcc', data.rows, {
-                valueField: 'mcc',
-                textField: 'mcc_nm'
-            });
-            $$.loadSelect('#mcc18', data.rows, {
-                valueField: 'mcc',
-                textField: 'mcc_nm'
-            });
-            form.render('select');
-
-        });
-
+        
         $('#account-bank-branch-cd').select2({
             language: 'zh-CN',
             placeholder: '请选择',
@@ -453,56 +497,59 @@
                 // }
         });
 
-
-        $$.request('/action/bm/fee/list', {}, function(data) {
-            $$.loadSelect('#debit-card-fee', data.rows, {
-                valueField: 'fee_cd',
-                textField: 'fee_nm'
-            });
-            form.render('select');
-        });
-
-        $$.request('/action/bm/fee/list', {
-            credit_flag: '1'
-        }, function(data) {
-            $$.loadSelect('#credit-card-fee', data.rows, {
-                valueField: 'fee_cd',
-                textField: 'fee_nm'
-            });
-            form.render('select');
-        });
-
-        $$.request('/action/bm/expand-inst/list', {}, function(data) {
-            $$.loadSelect('#expand-inst-id', data.rows);
-            form.render('select');
-        });
-
         $$.request('/action/bm/expand/list', {}, function(data) {
             $$.loadSelect('#expand-id', data.rows);
             form.render('select');
         });
 
-        // $$.request('/action/bm/parameter/list', {
-        //     term_inves: '1',
-        //     equi_type: '1'
-        // }, function(data) {
-        //     $$.loadSelect('#term-inves', data.term_inves);
-        //     $$.loadSelect('#equi-type', data.equi_type);
-        //     form.render('select');
-        // });
+        $$.request('/action/bm/parameter/list', {
+            expand_inst: '1',
+            debit_fee_algo: '1',
+            credit_fee_algo: '1',
+            mcc: '1',
+            acq_inst: '1',
+            bank: '1'
+        }, function(data) {            
+            $$.loadSelect('#expand-inst-id', data.expand_inst);
+            $$.loadSelect('#debit-card-fee', data.debit_fee_algo, {
+                // valueField: 'fee_cd',
+                // textField: 'fee_nm'
+            });
+            $$.loadSelect('#credit-card-fee', data.credit_fee_algo, {
+                // valueField: 'fee_cd',
+                // textField: 'fee_nm'
+            });
+            $$.loadSelect('#mcc', data.mcc, {
+                // valueField: 'mcc',
+                // textField: 'mcc_nm'
+            });
+            $$.loadSelect('#mcc18', data.mcc, {
+                // valueField: 'mcc',
+                // textField: 'mcc_nm'
+            });
+            $$.loadSelect('#acq-inst-id', data.acq_inst, {
+                valueField: 'acq_inst_id',
+                textField: 'acq_inst_nm'
+            });
+            $$.loadSelect('#account-bank', data.bank, {
+                valueField: 'bank_cd',
+                textField: 'bank_nm'
+            });
+            form.render('select');
+        });
 
         $$.transformStatus('#detail', operateType);
-        if(query.operateType=='create') {
+        if (query.operateType == 'create') {
             $$.loadData('#detail', query);
             $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
                 // data.data.shop_name = data.data.mchnt_abbr;
                 $$.loadData('#detail', data.data);
                 $('#province').change();
-                $('#city').val(data.data.city).change();
+                $('#city').val(data.data.city);
                 // $('#district').val(data.data.district);
                 form.render();
             });
-        } else {            
+        } else {
             view();
         }
     });

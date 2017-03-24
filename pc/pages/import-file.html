@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>商户参数</title>
+    <title>终端参数</title>
     <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
     <link rel="stylesheet" type="text/css" href="../css/base.css">
 </head>
@@ -22,65 +22,72 @@
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">业务类型</label>
+                        <label class="layui-form-label">终端标识</label>
                         <div class="layui-input-inline">
-                            <select name="busi_type" id="busi-type">
-                                <option value=""></option>
-                            </select>
+                            <input type="text" name="term_no" placeholder="请输入终端标识" autocomplete="off" class="layui-input">
                         </div>
                     </div>
-                    <!-- <div class="layui-inline">
-                        <label class="layui-form-label">收单机构</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="acq_inst_id" placeholder="请输入收单机构" autocomplete="off" class="layui-input">
-                        </div>
-                    </div> -->
                 </div>
                 <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">收单机构</label>
-                        <div class="layui-input-inline">
-                            <select name="acq_inst_id" lay-search id="acq-inst-id">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
                     <div class="layui-inline">
                         <label class="layui-form-label">商户号</label>
                         <div class="layui-input-inline">
                             <input type="text" name="mchnt_cd" placeholder="请输入商户号" autocomplete="off" class="layui-input">
                         </div>
                     </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">终端号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="term_id" placeholder="请输入终端号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
                 </div>
+                <!-- <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">拓展方</label>
+                        <div class="layui-input-inline">
+                            <select name="expand_inst_id" lay-search id="expand-inst-id">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">拓展人</label>
+                        <div class="layui-input-inline">
+                            <select name="expand_id" lay-search id="expand-id">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div> -->
                 <div class="layui-form-item">
-                    <label class="layui-form-label">商户名称</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="mchnt_name" placeholder="请输入商户名称" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>业务类型</label>
+                        <div class="layui-input-inline">
+                            <select name="busi_type" lay-verify="required" id="busi-type">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>收单机构</label>
+                        <div class="layui-input-inline">
+                            <select name="acq_inst_id" lay-verify="required" lay-search id="acq-inst-id">
+                                <option value=""></option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button id="submit-btn" class="layui-btn" lay-submit lay-filter="search">查询</button>
+                        <button class="layui-btn" lay-submit lay-filter="search" id="submit-btn">查询</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        <button type="button" class="layui-btn layui-btn-normal" id="export-btn">导出</button>
                     </div>
                 </div>
             </form>
         </div>
         <div class="panel panel-padding">
-            <div class="layui-btn-group">
-                <button id="add-btn" class="layui-btn layui-btn-small hide" onclick="onAdd()">
-                    <i class="layui-icon">&#xe654;</i> 新增
-                </button>
-                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
-                    <i class="layui-icon">&#x1005;</i> 审核
-                </button>
-                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchCheck1Nopass()">
-                    <i class="layui-icon">&#xe633;</i> 驳回
-                </button>
-                <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
-                    <i class="layui-icon">&#xe640;</i> 删除
-                </button> -->
-            </div>
             <div id="list">
             </div>
             <div id="page" style="text-align: right;"></div>
@@ -94,17 +101,13 @@
                         <th>
                             <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
                         </th>
-                        <th>客户号</th>
-                        <th>业务类型</th>
-                        <th>收单机构</th>
-                        <th>商户号</th>
+                        <th>终端标识</th>
                         <th>商户名称</th>
-                        <th>账户类型</th>
-                        <th>开户名称</th>
-                        <th>开户银行</th>
-                        <!-- <th>操作标志</th> -->
+                        <th>商户号</th>
+                        <th>终端号</th>
+                        <!-- <th>参数状态</th> -->
                         <th>处理状态</th>
-                        <th>操作</th>
+                        <!-- <th>操作</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -114,36 +117,24 @@
                             <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
                         </td>
                         <td>
-                            {{row.mchnt_id}}
-                        </td>
-                        <td>
-                            {{row.busi_type_nm}}
-                        </td>
-                        <td>
-                            {{row.acq_inst_id}}
-                        </td>
-                        <td>
-                            {{row.mchnt_cd}}
+                            {{row.term_no}}
                         </td>
                         <td>
                             {{row.mchnt_name}}
                         </td>
                         <td>
-                            {{row.account_type | formatAccountType}}
+                            {{row.mchnt_cd}}
                         </td>
                         <td>
-                            {{row.account_name}}
-                        </td>
-                        <td>
-                            {{row.account_bank_branch_nm}}
+                            {{row.term_id}}
                         </td>
                         <!-- <td>
-                            {{row.oper_in_nm}}
+                            {{row.status}}
                         </td> -->
                         <td>
                             {{row.proc_st_nm}}
                         </td>
-                        <td>
+                        <!-- <td>
                             <div class="layui-btn-group">
                                 <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
                                     查看
@@ -153,8 +144,11 @@
                                     编辑
                                 </button>
                                 {{/if}}
+                                <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
+                                    删除
+                                </button>
                             </div>
-                        </td>
+                        </td> -->
                     </tr>
                     {{/each}}
                 </tbody>
@@ -180,15 +174,15 @@
     var pagination;
 
     function onAdd() {
-        $$.open('mchnt-param-detail.html?operateType=create', '新增商户参数', {
-            mchnt_id: query.mchnt_id
+        $$.open('term-param-detail.html?operateType=create', '新增终端信息', {
+            term_no: query.term_no
         });
     }
 
     function onView(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        $$.open('mchnt-param-detail.html?operateType=view', '查看商户参数', {
+        $$.open('term-param-detail.html?operateType=view', '查看终端信息', {
             rec_id: row.rec_id
         });
     }
@@ -196,7 +190,7 @@
     function onEdit(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        $$.open('mchnt-param-detail.html?operateType=update', '编辑商户参数', {
+        $$.open('term-param-detail.html?operateType=update', '编辑终端信息', {
             rec_id: row.rec_id
         });
     }
@@ -206,7 +200,7 @@
         var row = data.rows[index];
 
         $$.confirm('确认要删除?', function() {
-            $$.request('/action/bm/mchnt-param/delete', row, function(data) {
+            $$.request('/action/bm/term-param/delete', row, function(data) {
                 $$.info('操作成功', {
                     icon: 1
                 });
@@ -215,7 +209,7 @@
     }
 
     function onBatchCheck1Pass() {
-        $$.batchSubmit('#list', '/action/bm/mchnt-param/batch-check1-pass');
+        $$.batchSubmit('#list', '/action/bm/term-param/batch-check1-pass');
     }
 
     function onBatchCheck1Nopass() {
@@ -225,7 +219,7 @@
             return;
         }
         $$.prompt('请输入驳回备注', function(value) {
-            $$.batchSubmit('#list', '/action/bm/mchnt-param/batch-check1-nopass', {
+            $$.batchSubmit('#list', '/action/bm/term-param/batch-check1-nopass', {
                 params: {
                     checked_reason: value
                 }
@@ -241,7 +235,7 @@
         }
 
         $$.confirm('确认要删除?', function() {
-            $$.batchSubmit('#list', '/action/bm/mchnt-param/batch-delete');
+            $$.batchSubmit('#list', '/action/bm/term-param/batch-delete');
         });
     }
 
@@ -250,13 +244,8 @@
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
 
-    function formatAccountType(value) {
-        return $$.formatField($$.param['account_type'], value);
-    }
-
     template.helper('hasNext', hasNextStatus);
     template.helper('operateType', operateType);
-    template.helper('formatAccountType', formatAccountType);
 
     $(function() {
 
@@ -270,24 +259,23 @@
         });
 
         form.on('submit(search)', function(data) {
-            pagination = $$.search('/action/bm/mchnt-param/search', data.field);
+            pagination = $$.search('/action/bm/term-param/search', data.field);
             return false; //阻止表单跳转
         });
 
-        $$.request('/action/bm/parameter/list', {
-            acq_inst: '1'
-        }, function(data) {                        
-            $$.loadSelect('#acq-inst-id', data.acq_inst, {
-                valueField: 'acq_inst_id',
-                textField: 'acq_inst_nm'
-            });
+        $$.request('/action/bm/expand/list', {}, function(data) {
+            $$.loadSelect('#expand-id', data.rows);
             form.render('select');
         });
 
-        $$.loadSelect('#busi-type', $$.param['busi_type']);
-        form.render('select');
+        $$.request('/action/bm/parameter/list', {
+            expand_inst: '1'
+        }, function(data) {
+            $$.loadSelect('#expand-inst-id', data.expand_inst);
+            form.render('select');
+        });
 
-        if (query.mchnt_id) {
+        if (query.term_no) {
             $('#search-panel').addClass('hide');
             $$.loadData('#search', query);
             $('#submit-btn').click();
