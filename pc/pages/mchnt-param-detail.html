@@ -31,17 +31,17 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>业务类型</label>
+                        <label class="layui-form-label"><span class="required">*</span>收单机构</label>
                         <div class="layui-input-inline">
-                            <select name="busi_type" lay-verify="required" id="busi-type">
+                            <select name="acq_inst_id" lay-verify="required" lay-filter="acq_inst_id" lay-search id="acq-inst-id">
                                 <option value=""></option>
                             </select>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>收单机构</label>
+                        <label class="layui-form-label"><span class="required">*</span>业务类型</label>
                         <div class="layui-input-inline">
-                            <select name="acq_inst_id" lay-verify="required" lay-search id="acq-inst-id">
+                            <select name="busi_type" lay-verify="required" id="busi-type">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -348,6 +348,7 @@
     function view() {
         $$.request('/action/bm/mchnt-param/view', query, function(data) {
             $$.loadData('#detail', data.data);
+            $('#acq-inst-id').change();
             $('#province').change();
             $('#city').val(data.data.city).change();
             // $('#district').val(data.data.district);
@@ -386,6 +387,19 @@
     function onClose() {
         var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);
+    }
+
+    function onChangeAcqInstId() {
+        var value = $(this).val();
+        $$.request('/action/bm/acq-inst-busi/list', {
+            acq_inst_id: value
+        }, function(data) {
+            $$.loadSelect('#busi-type', data.rows, {
+                valueField: 'busi_type',
+                textField: 'busi_type_nm'
+            });
+            form.render('select');
+        });
     }
 
     function onChangeProvince() {
@@ -430,8 +444,13 @@
             return false; //阻止表单跳转
         });
 
+        $('#acq-inst-id').on('change', onChangeAcqInstId);
         $('#province').on('change', onChangeProvince);
         // $('#city').on('change', onChangeCity);
+        // 
+        form.on('select(acq_inst_id)', function(data) {
+            $(data.elem).change();
+        });
 
         form.on('select(province)', function(data) {
             console.log(this, arguments);
@@ -448,7 +467,7 @@
         $$.loadSelect('#account-type', $$.param['account_type']);
 
         form.render('select');
-        
+
         $('#account-bank-branch-cd').select2({
             language: 'zh-CN',
             placeholder: '请选择',
@@ -509,7 +528,7 @@
             mcc: '1',
             acq_inst: '1',
             bank: '1'
-        }, function(data) {            
+        }, function(data) {
             $$.loadSelect('#expand-inst-id', data.expand_inst);
             $$.loadSelect('#debit-card-fee', data.debit_fee_algo, {
                 // valueField: 'fee_cd',

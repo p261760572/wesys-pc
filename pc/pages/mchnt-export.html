@@ -194,6 +194,19 @@
         });
     }
 
+    function onChangeAcqInstId() {
+        var value = $(this).val();
+        $$.request('/action/bm/acq-inst-busi/list', {
+            acq_inst_id: value
+        }, function(data) {
+            $$.loadSelect('#busi-type', data.rows, {
+                valueField: 'busi_type',
+                textField: 'busi_type_nm'
+            });
+            form.render('select');
+        });
+    }
+
     template.helper('operateType', operateType);
 
     $(function() {
@@ -207,16 +220,10 @@
             form.render('checkbox');
         });
 
+        $('#acq-inst-id').on('change', onChangeAcqInstId);
+
         form.on('select(acq_inst_id)', function(data) {
-            $$.request('/action/bm/acq-inst-busi/list', {
-                acq_inst_id: data.value
-            }, function(data) {
-                $$.loadSelect('#busi-type', data.rows, {
-                    valueField: 'busi_type',
-                    textField: 'busi_type_nm'
-                });
-                form.render('select');
-            });
+            $(data.elem).change();
         });
 
         form.on('submit(search)', function(data) {

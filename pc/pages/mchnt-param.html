@@ -22,11 +22,9 @@
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">业务类型</label>
+                        <label class="layui-form-label">商户号</label>
                         <div class="layui-input-inline">
-                            <select name="busi_type" id="busi-type">
-                                <option value=""></option>
-                            </select>
+                            <input type="text" name="mchnt_cd" placeholder="请输入商户号" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <!-- <div class="layui-inline">
@@ -40,15 +38,17 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">收单机构</label>
                         <div class="layui-input-inline">
-                            <select name="acq_inst_id" lay-search id="acq-inst-id">
+                            <select name="acq_inst_id" lay-filter="acq_inst_id" lay-search id="acq-inst-id">
                                 <option value=""></option>
                             </select>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">商户号</label>
+                        <label class="layui-form-label">业务类型</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="mchnt_cd" placeholder="请输入商户号" autocomplete="off" class="layui-input">
+                            <select name="busi_type" id="busi-type">
+                                <option value=""></option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -269,6 +269,18 @@
             form.render('checkbox');
         });
 
+        form.on('select(acq_inst_id)', function(data) {
+            $$.request('/action/bm/acq-inst-busi/list', {
+                acq_inst_id: data.value
+            }, function(data) {
+                $$.loadSelect('#busi-type', data.rows, {
+                    valueField: 'busi_type',
+                    textField: 'busi_type_nm'
+                });
+                form.render('select');
+            });
+        });
+
         form.on('submit(search)', function(data) {
             pagination = $$.search('/action/bm/mchnt-param/search', data.field);
             return false; //阻止表单跳转
@@ -276,7 +288,7 @@
 
         $$.request('/action/bm/parameter/list', {
             acq_inst: '1'
-        }, function(data) {                        
+        }, function(data) {
             $$.loadSelect('#acq-inst-id', data.acq_inst, {
                 valueField: 'acq_inst_id',
                 textField: 'acq_inst_nm'
