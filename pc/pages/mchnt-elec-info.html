@@ -79,6 +79,7 @@
                             <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
                         </th>
                         <th>客户号</th>
+                        <th>商户简称</th>
                         <th>文件名</th>
                         <th>影印件类型</th>
                         <th>处理状态</th>
@@ -93,6 +94,9 @@
                         </td>
                         <td>
                             {{row.mchnt_id}}
+                        </td>
+                         <td>
+                            {{row.mchnt_abbr}}
                         </td>
                         <td>
                             <a href="/p/action/uploads/{{row.serverid}}" target="_blank" style="color: #01AAED;">{{row.filename}}</a>
