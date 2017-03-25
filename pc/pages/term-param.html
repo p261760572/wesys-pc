@@ -44,19 +44,13 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">拓展方</label>
+                        <label class="layui-form-label">创建日期</label>
                         <div class="layui-input-inline">
-                            <select name="expand_inst_id" lay-search id="expand-inst-id">
-                                <option value=""></option>
-                            </select>
+                            <input type="text" name="created_time" placeholder="请输入开始日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})" id="created_time">
                         </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">拓展人</label>
+                        <div class="layui-form-mid">-</div>
                         <div class="layui-input-inline">
-                            <select name="expand_id" lay-search id="expand-id">
-                                <option value=""></option>
-                            </select>
+                            <input type="text" name="created_time2" placeholder="请输入结束日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})" id="created_time2">
                         </div>
                     </div>
                 </div>

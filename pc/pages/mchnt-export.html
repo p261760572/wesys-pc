@@ -60,24 +60,18 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="layui-form-item">
+                <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">拓展方</label>
+                        <label class="layui-form-label">创建日期</label>
                         <div class="layui-input-inline">
-                            <select name="expand_inst_id" lay-search id="expand-inst-id">
-                                <option value=""></option>
-                            </select>
+                            <input type="text" name="created_time" placeholder="请输入开始日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})" id="created_time">
+                        </div>
+                        <div class="layui-form-mid">-</div>
+                        <div class="layui-input-inline">
+                            <input type="text" name="created_time2" placeholder="请输入结束日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})" id="created_time2">
                         </div>
                     </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">拓展人</label>
-                        <div class="layui-input-inline">
-                            <select name="expand_id" lay-search id="expand-id">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                </div> -->
+                </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit lay-filter="search" id="submit-btn">查询</button>
@@ -98,9 +92,6 @@
             <table class="layui-table">
                 <thead>
                     <tr>
-                        <th>
-                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
-                        </th>
                         <th>终端标识</th>
                         <th>商户名称</th>
                         <th>商户号</th>
@@ -113,9 +104,6 @@
                 <tbody>
                     {{each rows as row i}}
                     <tr>
-                        <td>
-                            <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
-                        </td>
                         <td>
                             {{row.term_no}}
                         </td>
@@ -134,21 +122,6 @@
                         <td>
                             {{row.proc_st_nm}}
                         </td>
-                        <!-- <td>
-                            <div class="layui-btn-group">
-                                <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
-                                    查看
-                                </button>
-                                {{if hasNext(row.oper_in,row.proc_st,'update')}}
-                                <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
-                                    编辑
-                                </button>
-                                {{/if}}
-                                <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
-                                    删除
-                                </button>
-                            </div>
-                        </td> -->
                     </tr>
                     {{/each}}
                 </tbody>
@@ -178,7 +151,7 @@
             $$.info('操作成功', {
                 icon: 1
             });
-            
+
             var index = layer.open({
                 type: 2,
                 title: false,
@@ -211,15 +184,6 @@
     template.helper('operateType', operateType);
 
     $(function() {
-
-        //全选
-        form.on('checkbox(allCheck)', function(data) {
-            var child = $(data.elem).parents('table').find('tbody input[type=checkbox]');
-            child.each(function(index, item) {
-                item.checked = data.elem.checked;
-            });
-            form.render('checkbox');
-        });
 
         $('#acq-inst-id').on('change', onChangeAcqInstId);
 

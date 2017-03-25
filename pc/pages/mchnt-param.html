@@ -27,12 +27,6 @@
                             <input type="text" name="mchnt_cd" placeholder="请输入商户号" autocomplete="off" class="layui-input">
                         </div>
                     </div>
-                    <!-- <div class="layui-inline">
-                        <label class="layui-form-label">收单机构</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="acq_inst_id" placeholder="请输入收单机构" autocomplete="off" class="layui-input">
-                        </div>
-                    </div> -->
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
@@ -54,8 +48,20 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">商户名称</label>
-                    <div class="layui-input-inline">
+                    <div class="layui-input-block">
                         <input type="text" name="mchnt_name" placeholder="请输入商户名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">创建日期</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="created_time" placeholder="请输入开始日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})" id="created_time">
+                        </div>
+                        <div class="layui-form-mid">-</div>
+                        <div class="layui-input-inline">
+                            <input type="text" name="created_time2" placeholder="请输入结束日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})" id="created_time2">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -296,8 +302,8 @@
             form.render('select');
         });
 
-        $$.loadSelect('#busi-type', $$.param['busi_type']);
-        form.render('select');
+        // $$.loadSelect('#busi-type', $$.param['busi_type']);
+        // form.render('select');
 
         if (query.mchnt_id) {
             $('#search-panel').addClass('hide');
