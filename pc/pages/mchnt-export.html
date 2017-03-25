@@ -16,6 +16,24 @@
             <form id="search" class="layui-form" action="" method="post">
                 <div class="layui-form-item">
                     <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>收单机构</label>
+                        <div class="layui-input-inline">
+                            <select name="acq_inst_id" lay-verify="required" lay-filter="acq_inst_id" lay-search id="acq-inst-id">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">业务类型</label>
+                        <div class="layui-input-inline">
+                            <select name="busi_type" id="busi-type">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
                         <label class="layui-form-label">客户号</label>
                         <div class="layui-input-inline">
                             <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
@@ -60,24 +78,6 @@
                         </div>
                     </div>
                 </div> -->
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>收单机构</label>
-                        <div class="layui-input-inline">
-                            <select name="acq_inst_id" lay-verify="required" lay-filter="acq_inst_id" lay-search id="acq-inst-id">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>业务类型</label>
-                        <div class="layui-input-inline">
-                            <select name="busi_type" lay-verify="required" id="busi-type">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit lay-filter="search" id="submit-btn">查询</button>
@@ -175,16 +175,17 @@
 
     function onExport(param) {
         $$.request('/action/bm/mchnt-export/export', param, function(data) {
-            // $$.info('操作成功', {
-            //     icon: 1
-            // });
-            var index = layer.open({                
+            $$.info('操作成功', {
+                icon: 1
+            });
+            
+            var index = layer.open({
                 type: 2,
                 title: false,
                 content: $$.wrapUrl(data.url)
             });
 
-            layer.close(index);            
+            layer.close(index);
         });
     }
 
