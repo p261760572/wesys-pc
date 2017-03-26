@@ -133,7 +133,7 @@
                 </thead>
                 <tbody>
                     {{each rows as row i}}
-                    <tr>
+                    <tr data-index="{{i}}">
                         <td>
                             <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary" lay-filter="check">
                         </td>
@@ -236,12 +236,12 @@
     }
 
     function onGoto(target) {
-        var $checkbox = $$.getChecked('#list');
-        if ($checkbox.length != 1) {
-            $$.info('请选择需要操作的一条记录');
+        var $selected = $$.getSelected('#list');
+        if ($selected.length != 1) {
+            $$.info('请选择需要操作的记录');
             return;
         }
-        var index = parseInt($checkbox.val());
+        var index = parseInt($selected.attr('data-index'));
         var $target = $(target);
         var data = $('#list').data('data');
         var row = data.rows[index];
@@ -269,7 +269,7 @@
     function onBatchCheck1Nopass() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请选择需要操作的记录');
+            $$.info('请勾选需要操作的记录');
             return;
         }
         $$.prompt('请输入驳回备注', function(value) {
@@ -284,7 +284,7 @@
     function onBatchDelete() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请选择需要操作的记录');
+            $$.info('请勾选需要操作的记录');
             return;
         }
 

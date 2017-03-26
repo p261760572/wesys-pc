@@ -90,6 +90,7 @@
                         <th>
                             <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
                         </th>
+                        <th>客户号</th>
                         <th>终端标识</th>
                         <th>商户简称</th>
                         <th>商户名称</th>
@@ -105,6 +106,9 @@
                     <tr>
                         <td>
                             <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
+                        </td>
+                        <td>
+                            {{row.mchnt_id}}
                         </td>
                         <td>
                             {{row.term_no}}
@@ -208,7 +212,7 @@
     function onBatchCheck1Nopass() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请选择需要操作的记录');
+            $$.info('请勾选需要操作的记录');
             return;
         }
         $$.prompt('请输入驳回备注', function(value) {
@@ -223,7 +227,7 @@
     function onBatchDelete() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请选择需要操作的记录');
+            $$.info('请勾选需要操作的记录');
             return;
         }
 

@@ -211,9 +211,10 @@ window.$$ = (function() {
                 $list.on('click', 'tbody td:has(input[type=checkbox])', function() {
                     return false
                 }).on('click', 'tbody tr', function() {
-                    var $chk = $(this).find('input[type=checkbox]');
-                    $$.getChecked(options.selector).not($chk).prop('checked', false);
-                    $chk.prop('checked', true);
+                    var $this = $(this);
+                    var $siblings = $this.addClass('bg-gray').siblings().removeClass('bg-gray');
+                    $this.find('input[type=checkbox]').prop('checked', true);;
+                    $siblings.find('input[type=checkbox]:checked').prop('checked', false);
                     if (options.checkbox) form.render('checkbox');
                 });
 
@@ -309,6 +310,10 @@ window.$$ = (function() {
 
     $$.getChecked = function(selector) {
         return $(selector).find('tbody input[type=checkbox]:checked');
+    }
+
+    $$.getSelected = function(selector) {
+        return $(selector).find('tbody tr.bg-gray');
     }
 
     $$.batchSubmit = function(selector, url, options) {

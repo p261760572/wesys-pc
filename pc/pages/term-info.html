@@ -113,8 +113,8 @@
                         <th>
                             <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
                         </th>
-                        <th>终端标识</th>
                         <th>客户号</th>
+                        <th>终端标识</th>
                         <th>联系人</th>
                         <th>手机号</th>
                         <th>门店名称</th>
@@ -126,15 +126,15 @@
                 </thead>
                 <tbody>
                     {{each rows as row i}}
-                    <tr>
+                    <tr data-index="{{i}}">
                         <td>
                             <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
                         </td>
                         <td>
-                            {{row.term_no}}
-                        </td>
-                        <td>
                             {{row.mchnt_id}}
+                        </td>
+                         <td>
+                            {{row.term_no}}
                         </td>
                         <td>
                             {{row.linkman}}
@@ -224,12 +224,12 @@
     }
 
     function onGoto(target) {
-        var $checkbox = $$.getChecked('#list');
-        if ($checkbox.length != 1) {
-            $$.info('请选择需要操作的一条记录');
+        var $selected = $$.getSelected('#list');
+        if ($selected.length != 1) {
+            $$.info('请选择需要操作的记录');
             return;
         }
-        var index = parseInt($checkbox.val());
+        var index = parseInt($selected.attr('data-index'));
         var $target = $(target);
         var data = $('#list').data('data');
         var row = data.rows[index];
@@ -258,7 +258,7 @@
     function onBatchCheck1Nopass() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请选择需要操作的记录');
+            $$.info('请勾选需要操作的记录');
             return;
         }
         $$.prompt('请输入驳回备注', function(value) {
@@ -273,7 +273,7 @@
     function onBatchDelete() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请选择需要操作的记录');
+            $$.info('请勾选需要操作的记录');
             return;
         }
 

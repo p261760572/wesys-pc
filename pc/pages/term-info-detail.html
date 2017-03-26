@@ -303,39 +303,39 @@
         $$.loadSelect('#term-status', $$.param['term_status']);
         form.render('select');
 
-        $$.request('/action/bm/expand-inst/list', {}, function(data) {
-            $$.loadSelect('#expand-inst-id', data.rows);
-            form.render('select');
-        });
-
-        $$.request('/action/bm/expand/list', {}, function(data) {
+        var d1 = $$.request('/action/bm/expand/list', {}, function(data) {
             $$.loadSelect('#expand-id', data.rows);
             form.render('select');
         });
 
-        $$.request('/action/bm/parameter/list', {
+        var d2 = $$.request('/action/bm/parameter/list', {
+            expand_inst: '1',
             term_inves: '1',
             equi_type: '1'
         }, function(data) {
+            $$.loadSelect('#expand-inst-id', data.expand_inst);
             $$.loadSelect('#term-inves', data.term_inves);
             $$.loadSelect('#equi-type', data.equi_type);
             form.render('select');
         });
 
         $$.transformStatus('#detail', operateType);
-        if(query.operateType=='create') {
-            $$.loadData('#detail', query);
-            $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
-                data.data.shop_name = data.data.mchnt_abbr;
-                $$.loadData('#detail', data.data);
-                $('#province').change();
-                $('#city').val(data.data.city).change();
-                $('#district').val(data.data.district);
-                form.render();
-            });
-        } else {            
-            view();
-        }
+
+        $.when(d1, d2).done(function() {
+            if (query.operateType == 'create') {
+                $$.loadData('#detail', query);
+                $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
+                    data.data.shop_name = data.data.mchnt_abbr;
+                    $$.loadData('#detail', data.data);
+                    $('#province').change();
+                    $('#city').val(data.data.city).change();
+                    $('#district').val(data.data.district);
+                    form.render();
+                });
+            } else {
+                view();
+            }
+        });
     });
     </script>
 </body>

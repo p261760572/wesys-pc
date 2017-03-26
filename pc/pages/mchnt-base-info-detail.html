@@ -80,9 +80,16 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">营业执照正面</label>
-                <div class="layui-input-block">
-                    <input type="file" name="file" class="layui-upload-file" data-type="yyzzzm">
+                <div class="layui-inline">
+                    <label class="layui-form-label">营业执照正面</label>
+                    <div class="layui-input-inline visible invisible-view">
+                        <input type="file" name="file" class="layui-upload-file" data-type="yyzzzm">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline readonly">
+                        <input type="text" name="serverid" placeholder="请上传营业执照正面" autocomplete="off" class="layui-input">
+                    </div>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -118,15 +125,29 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">身份证正面</label>
-                <div class="layui-input-block">
-                    <input type="file" name="file" class="layui-upload-file" data-type="sfzzm">
+                <div class="layui-inline">
+                    <label class="layui-form-label">证件正面</label>
+                    <div class="layui-input-block visible invisible-view">
+                        <input type="file" name="file" class="layui-upload-file" data-type="sfzzm">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline readonly">
+                        <input type="text" name="serverid" placeholder="请上传营业执照正面" autocomplete="off" class="layui-input">
+                    </div>
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">身份证反面</label>
-                <div class="layui-input-block">
-                    <input type="file" name="file" class="layui-upload-file" data-type="sfzfm">
+                <div class="layui-inline">
+                    <label class="layui-form-label">证件反面</label>
+                    <div class="layui-input-block visible invisible-view">
+                        <input type="file" name="file" class="layui-upload-file" data-type="sfzfm">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline readonly">
+                        <input type="text" name="serverid" placeholder="请上传营业执照正面" autocomplete="off" class="layui-input">
+                    </div>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -332,7 +353,7 @@
         });
 
         param.images = images;
-        
+
         $$.request('/action/bm/mchnt-base-info/' + operateType, param, function(data) {
             $$.info('操作成功', {
                 icon: 1
@@ -343,7 +364,6 @@
     }
 
     function onClose() {
-        console.log(window.name);
         var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);
     }
@@ -383,7 +403,9 @@
     }
 
     $(function() {
-        initUpload();
+        if (operateType != 'view') {
+            initUpload();
+        }
 
         form.on('submit(detail)', function(data) {
             onSubmit(data.field);

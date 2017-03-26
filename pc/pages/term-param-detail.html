@@ -30,6 +30,12 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label class="layui-form-label"><span class="required">*</span>门店名称</label>
+                    <div class="layui-input-block readonly">
+                        <input type="text" name="shop_name" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label"><span class="required">*</span>商户参数</label>
                     <div class="layui-input-block">
                         <select name="mchnt_param_id" style="width: 100%;" lay-verify="required" lay-ignore id="mchnt-param-id">
@@ -169,38 +175,39 @@
             }
         });
 
-        $$.request('/action/bm/expand-inst/list', {}, function(data) {
-            $$.loadSelect('#expand-inst-id', data.rows);
-            form.render('select');
-        });
 
-        $$.request('/action/bm/expand/list', {}, function(data) {
+        var d1 = $$.request('/action/bm/expand/list', {}, function(data) {
             $$.loadSelect('#expand-id', data.rows);
             form.render('select');
         });
 
-        $$.request('/action/bm/parameter/list', {
+        var d2 = $$.request('/action/bm/parameter/list', {
+            expand_inst: '1',
             term_inves: '1',
             equi_type: '1'
         }, function(data) {
+            $$.loadSelect('#expand-inst-id', data.expand_inst);
             $$.loadSelect('#term-inves', data.term_inves);
             $$.loadSelect('#equi-type', data.equi_type);
             form.render('select');
         });
 
         $$.transformStatus('#detail', operateType);
-        if(query.operateType=='create') {
-            $$.loadData('#detail', query);
-            $$.request('/action/bm/term-info/view', query, function(data) {
-                $$.loadData('#detail', data.data);
-                // $('#province').change();
-                // $('#city').val(data.data.city).change();
-                // $('#district').val(data.data.district);
-                form.render();
-            });
-        } else {            
-            view();
-        }
+
+        $.when(d1, d2).done(function() {
+            if (query.operateType == 'create') {
+                $$.loadData('#detail', query);
+                $$.request('/action/bm/term-info/view', query, function(data) {
+                    $$.loadData('#detail', data.data);
+                    // $('#province').change();
+                    // $('#city').val(data.data.city).change();
+                    // $('#district').val(data.data.district);
+                    form.render();
+                });
+            } else {
+                view();
+            }
+        });
     });
     </script>
 </body>
