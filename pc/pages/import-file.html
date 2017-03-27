@@ -75,17 +75,22 @@
             <table class="layui-table">
                 <thead>
                     <tr>
+                        <th>批次号</th>
                         <th>处理类型</th>
                         <th>文件名</th>
                         <th>创建人</th>
                         <th>创建时间</th>
                         <th>处理状态</th>
+                        <th>备注</th>
                         <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
                     {{each rows as row i}}
                     <tr>
+                        <td>
+                            {{row.rec_id}}
+                        </td>
                         <td>
                             {{row.file_type_nm}}
                         </td>
@@ -102,14 +107,20 @@
                             {{row.proc_st_nm}}
                         </td>
                         <td>
+                            {{row.remark}}
+                        </td>
+                        <td>
                             <div class="layui-btn-group">
-                                <div>
-                                    {{if row.proc_st = '0'}}
-                                    <button class="layui-btn layui-btn-mini" onclick="onImport({{i}})">
-                                        导入
-                                    </button>
-                                    {{/if}}
-                                </div>
+                                {{if row.proc_st == '1'}}
+                                <button class="layui-btn layui-btn-mini" onclick="onImport({{i}})">
+                                    导入
+                                </button>
+                                {{/if}} 
+                                {{if row.result_url}}
+                                <a class="layui-btn layui-btn-mini" href="/p/{{row.result_url}}">
+                                    下载
+                                </a> 
+                                {{/if}}
                             </div>
                         </td>
                     </tr>
@@ -166,6 +177,8 @@
 
                 layer.close(index);
             }
+
+            $('#search-btn').click();
         });
     }
 
