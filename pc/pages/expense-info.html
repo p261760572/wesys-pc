@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>费用信息</title>
+    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="panel panel-padding">
+            <form id="search" class="layui-form" action="" method="post"><div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">费用单据号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="expense_no" placeholder="请输入费用单据号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">客户号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                    </div>
+                </div></div><div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">费用类型</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="expense_type" placeholder="请输入费用类型" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">金额</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="amount" placeholder="请输入金额" autocomplete="off" class="layui-input">
+                    </div>
+                </div></div><div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">收费周期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="expense_cycle" placeholder="请输入收费周期" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">收费开始时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="start_date" placeholder="请输入收费开始时间" autocomplete="off" class="layui-input">
+                    </div>
+                </div></div><div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">收费结束时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="end_date" placeholder="请输入收费结束时间" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">领用人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="recipient_by" placeholder="请输入领用人" autocomplete="off" class="layui-input">
+                    </div>
+                </div></div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="search" id="search-btn">查询</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="panel panel-padding">
+            <div class="layui-btn-group">
+                <button class="layui-btn layui-btn-small" onclick="onAdd()">
+                    <i class="layui-icon">&#xe654;</i> 新增
+                </button>
+                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
+                    <i class="layui-icon">&#x1005;</i> 审核
+                </button>
+                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchCheck1Nopass()">
+                    <i class="layui-icon">&#xe633;</i> 驳回
+                </button>
+                <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
+                    <i class="layui-icon">&#xe640;</i> 删除
+                </button> -->
+            </div>
+            <div class="layui-btn-group">
+                <button class="layui-btn layui-btn-small layui-btn-normal" data-url="other.html" onclick="onGoto(this)">
+                    跳转
+                </button>                
+            </div>
+            <div id="list">
+            </div>
+            <div id="page" style="text-align: right;"></div>
+        </div>
+    </div>
+    <script id="list-tpl" type="text/html">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
+                        </th>
+                        <th>费用单据号</th>
+                        <th>客户号</th>
+                        <th>费用类型</th>
+                        <th>金额</th>
+                        <th>收费周期</th>
+                        <th>收费开始时间</th>
+                        <th>收费结束时间</th>
+                        <th>领用人</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each rows as row i}}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
+                        </td>
+                        <td>
+                            {{row.expense_no}}
+                        </td>
+                        <td>
+                            {{row.mchnt_id}}
+                        </td>
+                        <td>
+                            {{row.expense_type}}
+                        </td>
+                        <td>
+                            {{row.amount}}
+                        </td>
+                        <td>
+                            {{row.expense_cycle}}
+                        </td>
+                        <td>
+                            {{row.start_date}}
+                        </td>
+                        <td>
+                            {{row.end_date}}
+                        </td>
+                        <td>
+                            {{row.recipient_by}}
+                        </td>
+                        <td>
+                            <div class="layui-btn-group">
+                                <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
+                                    <i class="layui-icon">&#xe60a;</i>查看
+                                </button>
+                                <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
+                                    <i class="layui-icon">&#xe642;</i>编辑
+                                </button>
+                                <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
+                                    <i class="layui-icon">&#xe640;</i>删除
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}                    
+                </tbody>
+            </table>
+        </div>
+    </script>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
+    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../js/template.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/st.js"></script>
+    <script type="text/javascript" src="../js/param.js"></script>
+    <script type="text/javascript" src="../js/district.js"></script>
+    <script type="text/javascript">
+    var query = $$.parseQueryString();
+    var operateType = query.operateType;
+    var layer = layui.layer;
+    var laypage = layui.laypage;
+    var form = layui.form();
+    var element = layui.element();
+
+    var pagination;
+
+    function onAdd() {
+        $$.open('expense-info-detail.html?operateType=create', '新增费用信息');
+    }
+
+    function onView(index) {
+        var data = $('#list').data('data');
+        var row = data.rows[index];
+        $$.open('expense-info-detail.html?operateType=view', '查看费用信息', {
+            rec_id: row.rec_id
+        });
+    }
+
+    function onEdit(index) {
+        var data = $('#list').data('data');
+        var row = data.rows[index];
+        $$.open('expense-info-detail.html?operateType=update', '编辑费用信息', {
+            rec_id: row.rec_id
+        });
+    }
+
+    function onDelete(index) {
+        var data = $('#list').data('data');
+        var row = data.rows[index];
+
+        $$.confirm('确认要删除?', function() {
+            $$.request('/action/bm/expense-info/delete', row, function(data) {
+                $$.info('操作成功', {
+                    icon: 1
+                });
+            });
+        });
+    }
+
+    function onGoto(target) {
+        var $selected = $$.getSelected('#list');
+        if ($selected.length != 1) {
+            $$.info('请选择需要操作的记录');
+            return;
+        }
+        var index = parseInt($selected.attr('data-index'));
+        var $target = $(target);
+        var data = $('#list').data('data');
+        var row = data.rows[index];
+        var url = $target.attr('data-url');
+        var title = $target.text() + '-' + row.key;
+        url += '?' + $.param({
+            operateType: operateType,
+            key: row.key
+        });
+
+        if (parent.addTab) {
+            url = 'pages/' + url;
+            parent.addTab(url, title, url);
+        } else {
+            $$.open(url, title, {
+                key: row.key
+            });
+        }
+    }
+
+    function onBatchCheck1Pass() {
+        $$.batchSubmit('#list', '/action/bm/expense-info/batch-check1-pass');
+    }
+
+    function onBatchCheck1Nopass() {
+        var $checkbox = $$.getChecked('#list');
+        if ($checkbox.length == 0) {
+            $$.info('请勾选需要操作的记录');
+            return;
+        }
+        $$.prompt('请输入驳回备注', function(value) {
+            $$.batchSubmit('#list', '/action/bm/expense-info/batch-check1-nopass', {
+                params: {
+                    checked_reason: value
+                }
+            });
+        });
+    }
+
+    function onBatchDelete() {
+        var $checkbox = $$.getChecked('#list');
+        if ($checkbox.length == 0) {
+            $$.info('请勾选需要操作的记录');
+            return;
+        }
+
+        $$.confirm('确认要删除?', function() {
+            $$.batchSubmit('#list', '/action/bm/expense-info/batch-delete');
+        });
+    }
+
+    function hasNextStatus(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
+
+    template.helper('hasNext', hasNextStatus);
+    template.helper('operateType', operateType);
+
+    $(function() {
+        //全选
+        form.on('checkbox(allCheck)', function(data) {
+            var child = $(data.elem).parents('table').find('tbody input[type=checkbox]');
+            child.each(function(index, item) {
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+
+        form.on('checkbox(check)', function(data) {
+            return false;
+        });
+
+        form.on('submit(search)', function(data) {
+            pagination = $$.search('/action/bm/expense-info/search', data.field);
+            return false; //阻止表单跳转
+        });
+    });
+    </script>
+</body>
+
+</html>
