@@ -72,24 +72,24 @@
         </div>
         <div class="panel panel-padding">
             <div class="layui-btn-group">
-                <button class="layui-btn layui-btn-small" onclick="onAdd()">
+                <!-- <button class="layui-btn layui-btn-small" onclick="onAdd()">
                     <i class="layui-icon">&#xe654;</i> 新增
-                </button>
-                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
-                    <i class="layui-icon">&#x1005;</i> 审核
+                </button> -->
+                <!-- <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
+                    <i class="layui-icon">&#x1005;</i> 收款
                 </button>
                 <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchCheck1Nopass()">
-                    <i class="layui-icon">&#xe633;</i> 驳回
-                </button>
-                <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
-                    <i class="layui-icon">&#xe640;</i> 删除
+                    <i class="layui-icon">&#xe633;</i> 退款
                 </button> -->
+                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchCancel()">
+                    <i class="layui-icon">&#xe640;</i> 作废
+                </button>
             </div>
-            <div class="layui-btn-group">
+            <!-- <div class="layui-btn-group">
                 <button class="layui-btn layui-btn-small layui-btn-normal" data-url="other.html" onclick="onGoto(this)">
                     跳转
                 </button>                
-            </div>
+            </div> -->
             <div id="list">
             </div>
             <div id="page" style="text-align: right;"></div>
@@ -111,6 +111,7 @@
                         <th>收费开始时间</th>
                         <th>收费结束时间</th>
                         <th>领用人</th>
+                        <th>处理状态</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -127,13 +128,13 @@
                             {{row.mchnt_id}}
                         </td>
                         <td>
-                            {{row.expense_type}}
+                            {{row.expense_type | formatExpenseType}}
                         </td>
                         <td>
                             {{row.amount}}
                         </td>
                         <td>
-                            {{row.expense_cycle}}
+                            {{row.expense_cycle | formatExpenseCycle}}
                         </td>
                         <td>
                             {{row.start_date}}
@@ -145,16 +146,29 @@
                             {{row.recipient_by}}
                         </td>
                         <td>
+                            {{row.proc_st_nm}}
+                        </td>
+                        <td>
                             <div class="layui-btn-group">
                                 <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
                                     <i class="layui-icon">&#xe60a;</i>查看
                                 </button>
-                                <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
+                                {{if hasNext(row.oper_in,row.proc_st,'receipt')}}
+                                <button class="layui-btn layui-btn-mini" onclick="onReceipt({{i}})">
+                                    收款
+                                </button>
+                                {{/if}}
+                                {{if hasNext(row.oper_in,row.proc_st,'refund')}}
+                                <button class="layui-btn layui-btn-mini" onclick="onRefund({{i}})">
+                                    退款
+                                </button>
+                                {{/if}}
+                                <!-- <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
                                     <i class="layui-icon">&#xe642;</i>编辑
                                 </button>
                                 <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
                                     <i class="layui-icon">&#xe640;</i>删除
-                                </button>
+                                </button> -->
                             </div>
                         </td>
                     </tr>
@@ -211,6 +225,22 @@
                     icon: 1
                 });
             });
+        });
+    }
+
+    function onReceipt(index) {
+        var data = $('#list').data('data');
+        var row = data.rows[index];
+        $$.open('expense-info-detail.html?operateType=receipt', '收款费用信息', {
+            rec_id: row.rec_id
+        });
+    }
+
+    function onRefund(index) {
+        var data = $('#list').data('data');
+        var row = data.rows[index];
+        $$.open('expense-info-detail.html?operateType=refund', '退款费用信息', {
+            rec_id: row.rec_id
         });
     }
 
@@ -272,12 +302,34 @@
         });
     }
 
+    function onBatchCancel() {
+        var $checkbox = $$.getChecked('#list');
+        if ($checkbox.length == 0) {
+            $$.info('请勾选需要操作的记录');
+            return;
+        }
+
+        $$.confirm('确认要作废?', function() {
+            $$.batchSubmit('#list', '/action/bm/expense-info/batch-cancel');
+        });
+    }
+
     function hasNextStatus(oper_in, proc_st, action) {
-        var rows = $$.st.transition[$$.st.alias['']]
+        var rows = $$.st.transition[$$.st.alias['expense_info']]
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
 
+    function formatExpenseType(value) {
+        return $$.formatField($$.param['expense_type'], value);
+    }
+
+    function formatExpenseCycle(value) {
+        return $$.formatField($$.param['expense_cycle'], value);
+    }
+
     template.helper('hasNext', hasNextStatus);
+    template.helper('formatExpenseType', formatExpenseType);
+    template.helper('formatExpenseCycle', formatExpenseCycle);
     template.helper('operateType', operateType);
 
     $(function() {

@@ -3,6 +3,23 @@ body {
     /*color: #999;*/
 }
 
+input[disabled],
+select[disabled],
+textarea[disabled],
+input[readonly],
+select[readonly],
+textarea[readonly] {
+    /*cursor: not-allowed;*/
+    background-color: #f2f2f2;
+}
+
+input[type="radio"][disabled],
+input[type="checkbox"][disabled],
+input[type="radio"][readonly],
+input[type="checkbox"][readonly] {
+    background-color: transparent;
+}
+
 .hide {
     display: none;
 }
@@ -44,7 +61,7 @@ body {
 
 .layui-disabled,
 .layui-disabled:hover {
-    color: #000!important;
+    color: #959595!important;
     cursor: auto!important;
 }
 
@@ -87,4 +104,8 @@ body {
 
 .bg-gray {
     background-color: #e2e2e2!important;
+}
+
+input.layui-unselect {
+    background-color: transparent;
 }

@@ -7,13 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>费用信息</title>
     <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../lib/select2/css/select2.min.css">
     <link rel="stylesheet" type="text/css" href="../css/base.css">
 </head>
 
 <body>
     <div class="panel panel-padding">
         <form id="detail" class="layui-form" action="" method="post">
-            <div class="layui-form-item">
+            <div class="layui-form-item readonly">
                 <div class="layui-inline visible invisible-create">
                     <label class="layui-form-label"><span class="required">*</span>费用单据号</label>
                     <div class="layui-input-inline">
@@ -31,7 +32,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>费用类型</label>
                     <div class="layui-input-inline">
-                        <select name="expense_type" id="expense-type">
+                        <select name="expense_type" lay-verify="required" lay-filter="expense_type" id="expense-type">
                             <option value=""></option>
                         </select>
                     </div>
@@ -47,7 +48,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>收费周期</label>
                     <div class="layui-input-inline">
-                        <select name="expense_cycle" id="expense-cycle">
+                        <select name="expense_cycle" lay-verify="required" id="expense-cycle">
                             <option value=""></option>
                         </select>
                     </div>
@@ -55,7 +56,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>收费开始时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="start_date" lay-verify="required" placeholder="请输入收费开始时间" autocomplete="off" class="layui-input">
+                        <input type="text" name="start_date" lay-verify="required" placeholder="请输入收费开始时间" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({onpicked:function(){$dp.$('end_date').focus();},maxDate:'#F{$dp.$D(\'end_date\')}'})" id="start_date">
                     </div>
                 </div>
             </div>
@@ -63,17 +64,25 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">收费结束时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="end_date" placeholder="请输入收费结束时间" autocomplete="off" class="layui-input">
+                        <input type="text" name="end_date" placeholder="请输入收费结束时间" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'start_date\')}'})" id="end_date">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">领用人</label>
+                    <label class="layui-form-label"><span class="required">*</span>领用人</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="recipient_by" placeholder="请输入领用人" autocomplete="off" class="layui-input">
+                        <select name="recipient_by" lay-verify="required" id="recipient-by">
+                            <option value=""></option>
+                        </select>
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible">
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input type="text" name="remark" placeholder="请输入备注" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item visible invisible-create editable-receipt">
                 <div class="layui-inline">
                     <label class="layui-form-label">发票号</label>
                     <div class="layui-input-inline">
@@ -89,11 +98,11 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible">
+            <div class="layui-form-item visible invisible-create editable-receipt">
                 <div class="layui-inline">
                     <label class="layui-form-label">收款日期</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="receipt_date" placeholder="请输入收款日期" autocomplete="off" class="layui-input">
+                        <input type="text" name="receipt_date" placeholder="请输入收款日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker()">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -103,7 +112,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible">
+            <div class="layui-form-item invisible visible-view visible-refund">
                 <div class="layui-inline">
                     <label class="layui-form-label">收款人</label>
                     <div class="layui-input-inline">
@@ -117,27 +126,29 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible">
-                <div class="layui-inline">
+            <div class="layui-form-item">
+                <div class="layui-inline invisible visible-view visible-cancel editable-cancel">
                     <label class="layui-form-label">作废备注</label>
                     <div class="layui-input-inline">
                         <input type="text" name="cancel_remark" placeholder="请输入作废备注" autocomplete="off" class="layui-input">
                     </div>
                 </div>
-                <div class="layui-inline">
+                <div class="layui-inline invisible visible-view">
                     <label class="layui-form-label">作废人</label>
                     <div class="layui-input-inline">
                         <input type="text" name="cancel_by" placeholder="请输入作废人" autocomplete="off" class="layui-input">
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible">
-                <div class="layui-inline">
+            <div class="layui-form-item">
+                <div class="layui-inline invisible visible-view">
                     <label class="layui-form-label">作废时间</label>
                     <div class="layui-input-inline">
                         <input type="text" name="cancel_time" placeholder="请输入作废时间" autocomplete="off" class="layui-input">
                     </div>
                 </div>
+            </div>
+            <div class="layui-form-item invisible visible-view visible-refund editable-refund">                
                 <div class="layui-inline">
                     <label class="layui-form-label">退款方式</label>
                     <div class="layui-input-inline">
@@ -146,8 +157,16 @@
                         </select>
                     </div>
                 </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">退款金额</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="refund_amount" placeholder="请输入退款金额" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">退款金额累计</div>
+                </div>
+
             </div>
-            <div class="layui-form-item invisible">
+            <div class="layui-form-item invisible visible-view visible-refund editable-refund">
                 <div class="layui-inline">
                     <label class="layui-form-label">退款开户名称</label>
                     <div class="layui-input-inline">
@@ -157,15 +176,19 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">退款开户银行</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="refund_account_bank" placeholder="请输入退款开户银行" autocomplete="off" class="layui-input">
+                        <select name="refund_account_bank" lay-search id="refund-account-bank">
+                                <option value=""></option>
+                            </select>
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible">
+            <div class="layui-form-item invisible visible-view visible-refund editable-refund">
                 <div class="layui-inline">
                     <label class="layui-form-label">退款开户支行</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="refund_account_bank_branch_cd" placeholder="请输入退款开户支行" autocomplete="off" class="layui-input">
+                        <select name="refund_account_bank_branch_cd" style="width: 100%;" lay-verify="required" lay-ignore id="refund-account-bank-branch-cd">
+                            <option value=""></option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -175,11 +198,11 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible">
+            <div class="layui-form-item invisible visible-view visible-refund editable-refund">
                 <div class="layui-inline">
                     <label class="layui-form-label">可退付日期</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="refund_date" placeholder="请输入可退付日期" autocomplete="off" class="layui-input">
+                        <input type="text" name="refund_date" placeholder="请输入可退付日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker()">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -207,7 +230,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>打印标志</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="print_flag" lay-verify="required" placeholder="请输入打印标志" autocomplete="off" class="layui-input">
+                        <input type="text" name="print_flag" placeholder="请输入打印标志" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -224,18 +247,27 @@
                         <input type="text" name="print_time" placeholder="请输入打印时间" autocomplete="off" class="layui-input">
                     </div>
                 </div>
-                <div class="layui-inline">
+                <!-- <div class="layui-inline">
                     <label class="layui-form-label">验证随机数</label>
                     <div class="layui-input-inline">
                         <input type="text" name="rand_num" placeholder="请输入验证随机数" autocomplete="off" class="layui-input">
                     </div>
-                </div>
+                </div> -->
             </div>
-            <div class="layui-form-item">
+            <div class="layui-form-item invisible visible-view">
                 <div class="layui-inline">
-                    <label class="layui-form-label">备注</label>
+                    <label class="layui-form-label">记录编号</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="remark" placeholder="请输入备注" autocomplete="off" class="layui-input">
+                        <input type="text" name="rec_id" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">处理状态</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="oper_in" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="proc_st" placeholder="" autocomplete="off" class="layui-input">
                     </div>
                 </div>
             </div>
@@ -267,7 +299,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible visible-view">
+            <!-- <div class="layui-form-item invisible visible-view">
                 <div class="layui-inline">
                     <label class="layui-form-label">最后审核人</label>
                     <div class="layui-input-inline">
@@ -286,7 +318,7 @@
                 <div class="layui-input-block">
                     <input type="text" name="checked_reason" placeholder="" autocomplete="off" class="layui-input">
                 </div>
-            </div>
+            </div> -->
             <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button class="layui-btn visible invisible-view" lay-submit="" lay-filter="detail">提交</button>
@@ -301,6 +333,7 @@
     <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
     <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../lib/select2/js/select2.min.js"></script>
     <script type="text/javascript" src="../js/template.js"></script>
     <script type="text/javascript" src="../js/base.js"></script>
     <script type="text/javascript" src="../js/param.js"></script>
@@ -335,11 +368,10 @@
         $$.request('/action/bm/expense-info/view', query, function(data) {
             $$.loadData('#detail', data.data);
 
+            if (data.data.refund_account_bank_branch_cd) {
+                $('#refund-account-bank-branch-cd').html('<option value="' + data.data.refund_account_bank_branch_cd + '">' + data.data.refund_account_bank_branch_nm + '</option>').trigger('change');
+            }
 
-            $.each(data.images, function(index, value) {
-                var $elem = $('#detail').find('input[type=file][data-type=' + value.elec_info_type + ']');
-                renderImgbox($elem, value);
-            });
             form.render();
         });
     }
@@ -366,6 +398,16 @@
     function onClose() {
         var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);
+    }
+
+    function onExpenseType() {
+        var value = $(this).val();
+        if (value == '1' || value == '4') {
+            $('#expense-cycle').val('1').attr('disabled', 'disabled');
+        } else {
+            $('#expense-cycle').removeAttr('disabled');
+        }
+        form.render('select');
     }
 
 
@@ -400,24 +442,91 @@
             return false; //阻止表单跳转
         });
 
+        $('#expense-type').on('change', onExpenseType);
+
+        form.on('select(expense_type)', function(data) {
+            $(data.elem).change();
+        });
+
+
         $$.loadSelect('#expense-type', $$.param['expense_type']);
         $$.loadSelect('#expense-cycle', $$.param['expense_cycle']);
-        $$.loadSelect('#account-type', $$.param['account_type']);
+        $$.loadSelect('#receipt-type', $$.param['receipt_type']);
+        $$.loadSelect('#refund-type', $$.param['refund_type']);
 
-        form.render('select');        
+        form.render('select');
 
+        $('#refund-account-bank-branch-cd').select2({
+            language: 'zh-CN',
+            placeholder: '请选择',
+            ajax: {
+                url: $$.wrapUrl('/action/bm/bank-branch/search'),
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    console.log(arguments);
+                    return $.toJSON({
+                        q: params.term,
+                        bank_cd: $('#refund-account-bank').val(),
+                        page: params.page,
+                        size: 20
+                    });
+                },
+                processResults: function(data, params) {
+                    console.log(arguments);
+                    params.page = params.page || 1;
+
+                    if ($$.errcode(data) == 0) {
+                        for (var i = 0; i < data.rows.length; i++) {
+                            data.rows[i].id = data.rows[i].bank_branch_cd;
+                            data.rows[i].text = data.rows[i].bank_branch_nm;
+                        }
+                        return {
+                            results: data.rows,
+                            pagination: {
+                                more: (params.page * 20) < data.total
+                            }
+                        };
+                    }
+
+                    return {};
+                },
+                cache: true
+            },
+            minimumInputLength: 1
+        });
+
+        var d1 = $$.request('/action/bm/recipient/list', {}, function(data) {
+            $$.loadSelect('#recipient-by', data.rows);
+            form.render('select');
+        });
+
+        var d2 = $$.request('/action/bm/parameter/list', {
+            bank: '1'
+        }, function(data) {
+            $$.loadSelect('#refund-account-bank', data.bank, {
+                valueField: 'bank_cd',
+                textField: 'bank_nm'
+            });
+            form.render('select');
+        });
 
         $$.transformStatus('#detail', operateType);
-        if (query.operateType == 'create') {
-            $$.loadData('#detail', query);
-            $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
-                // data.data.shop_name = data.data.mchnt_abbr;
-                $$.loadData('#detail', data.data);
-                form.render();
-            });
-        } else {
-            view();
-        }
+
+        $.when(d1, d2).done(function() {
+            if (query.operateType == 'create') {
+                $$.loadData('#detail', query);
+                $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
+                    // data.data.shop_name = data.data.mchnt_abbr;
+                    $$.loadData('#detail', data.data);
+                    form.render();
+                });
+            } else {
+                view();
+            }
+        });
     });
     </script>
 </body>
