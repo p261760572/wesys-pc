@@ -8,6 +8,7 @@
     <title>商户参数</title>
     <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
     <link rel="stylesheet" type="text/css" href="../lib/select2/css/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="../lib/cropperjs/cropper.min.css">
     <link rel="stylesheet" type="text/css" href="../css/base.css">
 </head>
 
@@ -128,35 +129,38 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <div class="layui-inline">
+                    <!-- <div class="layui-inline"> -->
                         <label class="layui-form-label"><span class="required">*</span>账户正面</label>
-                        <div class="layui-input-inline visible invisible-view">
+                        <div class="layui-input-block visible invisible-view">
                             <input type="file" name="file" class="layui-upload-file" data-type="zhzm">
+                            <button type="button" class="layui-btn layui-btn-primary" onclick="cropper_zhzm(this)">
+                            <i class="layui-icon">&#xe615;</i>
+                        </button>
                         </div>
-                    </div>
-                    <div class="layui-inline">
+                    <!-- </div> -->
+                    <!-- <div class="layui-inline">
                         <div class="layui-input-inline readonly">
                             <input type="text" name="serverid" lay-verify="required" placeholder="请上传账户正面" autocomplete="off" class="layui-input">
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="layui-form-item">
-                    <div class="layui-inline">
+                    <!-- <div class="layui-inline"> -->
                         <label class="layui-form-label">账户反面</label>
-                        <div class="layui-input-inline visible invisible-view">
+                        <div class="layui-input-block visible invisible-view">
                             <input type="file" name="file" class="layui-upload-file" data-type="zhfm">
                         </div>
-                    </div>
-                    <div class="layui-inline">
+                    <!-- </div> -->
+                    <!-- <div class="layui-inline">
                         <div class="layui-input-inline readonly">
                             <input type="text" name="serverid" placeholder="请上传账户反面" autocomplete="off" class="layui-input">
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><span class="required">*</span>银行账号</label>
                     <div class="layui-input-block">
-                        <input type="text" name="account_no" placeholder="请输入银行账号" autocomplete="off" class="layui-input">
+                        <input type="text" name="account_no" placeholder="请输入银行账号" autocomplete="off" class="layui-input" id="account-no">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -328,6 +332,7 @@
     <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
     <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
     <script type="text/javascript" src="../lib/select2/js/select2.min.js"></script>
+    <script type="text/javascript" src="../lib/cropperjs/cropper.min.js"></script>
     <script type="text/javascript" src="../js/template.js"></script>
     <script type="text/javascript" src="../js/base.js"></script>
     <script type="text/javascript" src="../js/param.js"></script>
@@ -429,6 +434,31 @@
     //     $$.loadSelect('#district', districtData['district'][$('#province').val() + value]);
     //     form.render('select');
     // }
+    
+    function fill_blank(selector, value) {
+        if (!$(selector).val()) {
+            $(selector).val(value)
+        }
+    }
+
+    function cropper_zhzm(target) {
+        var $box = $(target).closest('.layui-form-item').find('.img-box');
+        var $img = $box.find('img');
+
+        if ($img.length == 0) {
+            $$.info('未找到可裁剪的图片');
+            return;
+        }
+
+        var index = $$.cropperImage($img, function(imageData) {
+            $$.request('/gateway/ocr/bankcard', {
+                image: imageData
+            }, function(data) {
+                layer.close(index);
+                fill_blank('#account-no', data.data.bank_card_number);
+            });
+        });
+    }
 
     function initUpload() {
         var index;
@@ -447,6 +477,9 @@
                         icon: 2
                     });
                 }
+            },
+            error: function (elem) {
+                if (index) layer.close(index);
             }
         });
     }

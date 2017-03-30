@@ -90,9 +90,9 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">收款方式</label>
+                    <label class="layui-form-label"><span class="required">*</span>收款方式</label>
                     <div class="layui-input-inline">
-                        <select name="receipt_type" id="receipt-type">
+                        <select name="receipt_type" lay-verify="required" id="receipt-type">
                             <option value=""></option>
                         </select>
                     </div>
@@ -100,9 +100,9 @@
             </div>
             <div class="layui-form-item visible invisible-create editable-receipt">
                 <div class="layui-inline">
-                    <label class="layui-form-label">收款日期</label>
+                    <label class="layui-form-label"><span class="required">*</span>收款日期</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="receipt_date" placeholder="请输入收款日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker()">
+                        <input type="text" name="receipt_date" lay-verify="required" placeholder="请输入收款日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker()">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -152,7 +152,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>退款方式</label>
                     <div class="layui-input-inline">
-                        <select name="refund_type" id="refund-type">
+                        <select name="refund_type" lay-verify="required" id="refund-type">
                             <option value=""></option>
                         </select>
                     </div>
@@ -160,7 +160,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>退款金额</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="refund_amount" placeholder="请输入退款金额" autocomplete="off" class="layui-input">
+                        <input type="text" name="refund_amount" lay-verify="required" placeholder="请输入退款金额" autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-form-mid layui-word-aux">退款金额累计</div>
                 </div>
@@ -169,13 +169,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>退款开户名称</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="refund_account_name" placeholder="请输入退款开户名称" autocomplete="off" class="layui-input">
+                        <input type="text" name="refund_account_name" lay-verify="required" placeholder="请输入退款开户名称" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>退款开户银行</label>
                     <div class="layui-input-inline">
-                        <select name="refund_account_bank" lay-search id="refund-account-bank">
+                        <select name="refund_account_bank" lay-verify="required" lay-search id="refund-account-bank">
                             <option value=""></option>
                         </select>
                     </div>
@@ -193,7 +193,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>退款银行账号</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="refund_account_no" placeholder="请输入退款银行账号" autocomplete="off" class="layui-input">
+                        <input type="text" name="refund_account_no" lay-verify="required" placeholder="请输入退款银行账号" autocomplete="off" class="layui-input">
                     </div>
                 </div>
             </div>

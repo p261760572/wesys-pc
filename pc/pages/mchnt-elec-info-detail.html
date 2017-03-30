@@ -114,6 +114,9 @@
                         icon: 2
                     });
                 }
+            },
+            error: function (elem) {
+                if (index) layer.close(index);
             }
         });
     }

@@ -114,3 +114,11 @@ input[type="checkbox"][readonly] {
 input.layui-unselect {
     background-color: transparent;
 }
+
+.img-container {
+    margin: auto;
+}
+
+.img-container img {
+    max-width: 100%;
+}

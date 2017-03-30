@@ -26,6 +26,12 @@ window.$$ = (function() {
         layer.msg(content, options, end);
     };
 
+    $$.alert = function(content, options, yes) {
+        layer.alert(content, options, yes);
+    };
+
+    layer.alert('加了个图标', {icon: 0,ti});
+
     $$.confirm = function(content, yes) {
         layer.confirm(content, {
             icon: 3,
@@ -419,6 +425,66 @@ window.$$ = (function() {
 
         return false;
     };
+
+
+    $$.cropperImage = function($img, options, callback) {
+        if (typeof options === 'function') {
+            callback = options;
+            options = {};
+        }
+
+        options = $.extend({
+            aspectRatio: NaN,
+            autoCropArea: 0.8
+        }, options);
+
+        var $parent = $img.parent();
+        var $prev = $img.prev();
+        var image = $img[0];
+        var area = '500px';
+
+        if ($img.width() > $img.height()) {
+            area = '800px';
+        }
+
+        $container = $('<div class="img-container"></div>').appendTo('body');
+        $container.append($img);
+
+        var cropper = new Cropper(image, options);
+
+        var index = layer.open({
+            title: '图片裁剪',
+            type: 1,
+            area: area,
+            offset: '0px',
+            content: $container,
+            btn: ['确认', '取消', '向左', '向右'],
+            yes: function() {
+                var imageData = cropper.getCroppedCanvas().toDataURL('image/jpeg');
+                callback(imageData);
+            },
+            btn3: function(argument) {
+                cropper.rotate(-90);
+                return false;
+            },
+            btn4: function() {
+                cropper.rotate(90);
+                return false;
+            },
+            end: function() {
+                if (cropper) {
+                    if ($prev.length) {
+                        $prev.after($img)
+                    } else {
+                        $parent.append($img);
+                    }
+                    cropper.destroy();
+                }
+            }
+        });
+
+        return index;
+    }
 
     return $$;
 })();
