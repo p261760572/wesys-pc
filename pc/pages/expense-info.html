@@ -163,6 +163,11 @@
                                     退款
                                 </button>
                                 {{/if}}
+                                {{if hasNext(row.oper_in,row.proc_st,'refund-confirm')}}
+                                <button class="layui-btn layui-btn-mini" onclick="onRefundConfirm({{i}})">
+                                    退款确认
+                                </button>
+                                {{/if}}
                                 <!-- <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
                                     <i class="layui-icon">&#xe642;</i>编辑
                                 </button>
@@ -240,6 +245,14 @@
         var data = $('#list').data('data');
         var row = data.rows[index];
         $$.open('expense-info-detail.html?operateType=refund', '退款费用信息', {
+            rec_id: row.rec_id
+        });
+    }
+
+    function onRefundConfirm(index) {
+        var data = $('#list').data('data');
+        var row = data.rows[index];
+        $$.open('expense-info-detail.html?operateType=refund-confirm', '退款确认费用信息', {
             rec_id: row.rec_id
         });
     }

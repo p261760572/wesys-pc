@@ -30,8 +30,6 @@ window.$$ = (function() {
         layer.alert(content, options, yes);
     };
 
-    layer.alert('加了个图标', {icon: 0,ti});
-
     $$.confirm = function(content, yes) {
         layer.confirm(content, {
             icon: 3,

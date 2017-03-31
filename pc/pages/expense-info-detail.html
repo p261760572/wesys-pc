@@ -28,6 +28,18 @@
                     </div>
                 </div>
             </div>
+            <div class="layui-form-item readonly">
+                <label class="layui-form-label"><span class="required">*</span>商户简称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="mchnt_abbr" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item readonly">
+                <label class="layui-form-label"><span class="required">*</span>商户名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="mchnt_name" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>费用类型</label>
@@ -70,7 +82,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>领用人</label>
                     <div class="layui-input-inline">
-                        <select name="recipient_by" lay-verify="required" id="recipient-by">
+                        <select name="recipient_by" lay-verify="required" lay-search id="recipient-by">
                             <option value=""></option>
                         </select>
                     </div>
@@ -112,7 +124,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible visible-view visible-refund">
+            <div class="layui-form-item invisible visible-view visible-refund visible-refund-confirm">
                 <div class="layui-inline">
                     <label class="layui-form-label">收款人</label>
                     <div class="layui-input-inline">
@@ -148,7 +160,15 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible visible-view visible-refund editable-refund">
+            <div class="layui-form-item invisible visible-view visible-refund visible-refund-confirm editable-refund">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>退款原因</label>
+                    <div class="layui-input-inline">
+                        <select name="refund_reason_flag" lay-verify="required" id="refund-reason-flag">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>退款方式</label>
                     <div class="layui-input-inline">
@@ -157,15 +177,17 @@
                         </select>
                     </div>
                 </div>
+            </div>
+            <div class="layui-form-item invisible visible-view visible-refund visible-refund-confirm editable-refund">
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>退款金额</label>
                     <div class="layui-input-inline">
                         <input type="text" name="refund_amount" lay-verify="required" placeholder="请输入退款金额" autocomplete="off" class="layui-input">
                     </div>
-                    <div class="layui-form-mid layui-word-aux">退款金额累计</div>
+                    <div class="layui-form-mid layui-word-aux">退款金额累计<span id="refund-amount-total"></span></div>
                 </div>
             </div>
-            <div class="layui-form-item invisible visible-view visible-refund editable-refund">
+            <div class="layui-form-item invisible visible-view visible-refund visible-refund-confirm editable-refund">
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>退款开户名称</label>
                     <div class="layui-input-inline">
@@ -181,37 +203,43 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible visible-view visible-refund editable-refund">
-                <div class="layui-inline">
+            <div class="layui-form-item invisible visible-view visible-refund visible-refund-confirm editable-refund">
+                <label class="layui-form-label"><span class="required">*</span>退款开户支行</label>
+                <div class="layui-input-block">
+                    <select name="refund_account_bank_branch_cd" style="width: 100%;" lay-verify="required" lay-ignore id="refund-account-bank-branch-cd">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item invisible visible-view visible-refund visible-refund-confirm editable-refund">
+                <!-- <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>退款开户支行</label>
                     <div class="layui-input-inline">
                         <select name="refund_account_bank_branch_cd" style="width: 100%;" lay-verify="required" lay-ignore id="refund-account-bank-branch-cd">
                             <option value=""></option>
                         </select>
                     </div>
-                </div>
+                </div> -->
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>退款银行账号</label>
                     <div class="layui-input-inline">
                         <input type="text" name="refund_account_no" lay-verify="required" placeholder="请输入退款银行账号" autocomplete="off" class="layui-input">
                     </div>
                 </div>
-            </div>
-            <div class="layui-form-item invisible visible-view visible-refund editable-refund">
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>可退付日期</label>
                     <div class="layui-input-inline">
                         <input type="text" name="refund_date" placeholder="请输入可退付日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker()">
                     </div>
                 </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">退款备注</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="refund_remark" placeholder="请输入退款备注" autocomplete="off" class="layui-input">
-                    </div>
+            </div>
+            <div class="layui-form-item invisible visible-view visible-refund visible-refund-confirm editable-refund">
+                <label class="layui-form-label">退款备注</label>
+                <div class="layui-input-block">
+                    <input type="text" name="refund_remark" placeholder="请输入退款备注" autocomplete="off" class="layui-input">
                 </div>
             </div>
-            <div class="layui-form-item invisible visible-view">
+            <div class="layui-form-item invisible visible-view visible-refund-confirm">
                 <div class="layui-inline">
                     <label class="layui-form-label">退款人</label>
                     <div class="layui-input-inline">
@@ -284,7 +312,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible visible-view">
+            <div class="layui-form-item invisible visible-view visible-refund-confirm">
                 <div class="layui-inline">
                     <label class="layui-form-label">最后修改人</label>
                     <div class="layui-input-inline">
@@ -366,6 +394,8 @@
     function view() {
         $$.request('/action/bm/expense-info/view', query, function(data) {
             $$.loadData('#detail', data.data);
+
+            $('#refund-amount-total').text(parseFloat(data.data.refund_amount_total || 0).toFixed(2));
 
             if (data.data.refund_account_bank_branch_cd) {
                 $('#refund-account-bank-branch-cd').html('<option value="' + data.data.refund_account_bank_branch_cd + '">' + data.data.refund_account_bank_branch_nm + '</option>').trigger('change');
@@ -450,6 +480,7 @@
         $$.loadSelect('#expense-type', $$.param['expense_type']);
         $$.loadSelect('#expense-cycle', $$.param['expense_cycle']);
         $$.loadSelect('#receipt-type', $$.param['receipt_type']);
+        $$.loadSelect('#refund-reason-flag', $$.param['refund_reason_flag']);
         $$.loadSelect('#refund-type', $$.param['refund_type']);
 
         $('#refund-account-bank-branch-cd').select2({
@@ -511,7 +542,7 @@
 
         $$.transformStatus('#detail', operateType);
         form.render();
-        
+
         $.when(d1, d2).done(function() {
             if (query.operateType == 'create') {
                 $$.loadData('#detail', query);

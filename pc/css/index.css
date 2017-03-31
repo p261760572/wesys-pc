@@ -1,19 +1,33 @@
+html, body {
+   height: 100%;
+}
+
 .logo {
    position: absolute;
    left: 40px;
    top: 12px;
 }
 
+.header {
+   width: 200px;
+}
+
 .header .layui-nav {
-   position: absolute;
+   /*position: absolute;
    top: 0;
-   right: 0;
+   right: 0;*/
+   /*padding: 0 50px;*/
    background: none;
 }
 
 .layui-layout-admin .layui-body {
    border-left: solid 1px #1AA094;
    overflow-y: hidden;
+}
+
+.layui-layout-admin .layui-body {
+    top: 0px;
+    bottom: 0px;
 }
 
 .layui-body .layui-tab {

@@ -75,9 +75,12 @@
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button type="button" class="layui-btn layui-btn-normal" lay-submit lay-filter="export" id="export-btn">导出</button>
-                       <!--  <button class="layui-btn" lay-submit lay-filter="search" id="submit-btn">查询</button> -->
+                        <!--  <button class="layui-btn" lay-submit lay-filter="search" id="submit-btn">查询</button> -->
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                        
+                        <a style="float: right; color: #01AAED;" href="export-file.html" target="_blank">
+                        查看导出记录
+                        </a>
+                         
                     </div>
                 </div>
             </form>
@@ -88,50 +91,6 @@
             <div id="page" style="text-align: right;"></div>
         </div> -->
     </div>
-<!--     <script id="list-tpl" type="text/html">
-        <div class="layui-form">
-            <table class="layui-table">
-                <thead>
-                    <tr>
-                        <th>客户号</th>
-                        <th>终端标识</th>
-                        <th>商户简称</th>
-                        <th>商户名称</th>
-                        <th>商户号</th>
-                        <th>终端号</th>
-                        <th>处理状态</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{each rows as row i}}
-                    <tr>
-                        <td>
-                            {{row.mchnt_id}}
-                        </td>
-                        <td>
-                            {{row.term_no}}
-                        </td>
-                        <td>
-                            {{row.mchnt_abbr}}
-                        </td>
-                        <td>
-                            {{row.mchnt_name}}
-                        </td>
-                        <td>
-                            {{row.mchnt_cd}}
-                        </td>
-                        <td>
-                            {{row.term_id}}
-                        </td>
-                        <td>
-                            {{row.proc_st_nm}}
-                        </td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
-    </script> -->
     <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
     <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
