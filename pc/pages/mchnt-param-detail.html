@@ -395,7 +395,7 @@
         param.images = images;
 
         $$.request('/action/bm/mchnt-param/' + operateType, param, function(data) {
-            $$.info('操作成功', {
+            $$.msg('操作成功', {
                 icon: 1
             }, function() {
                 onClose();
@@ -446,7 +446,7 @@
         var $img = $box.find('img');
 
         if ($img.length == 0) {
-            $$.info('未找到可裁剪的图片');
+            $$.msg('未找到可裁剪的图片');
             return;
         }
 
@@ -473,7 +473,7 @@
                 if ($$.errcode(res) == 0) {
                     renderImgbox(elem, res);
                 } else if ($$.errmsg(res)) {
-                    $$.info($$.errmsg(res), {
+                    $$.msg($$.errmsg(res), {
                         icon: 2
                     });
                 }

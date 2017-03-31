@@ -113,7 +113,7 @@
 
     function onSubmit(param) {
         $$.request('/action/bm/term-param/' + operateType, param, function(data) {
-            $$.info('操作成功', {
+            $$.msg('操作成功', {
                 icon: 1
             }, function() {
                 onClose();

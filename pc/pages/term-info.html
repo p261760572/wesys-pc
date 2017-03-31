@@ -12,7 +12,7 @@
 
 <body>
     <div class="container">
-        <div id="search-panel" class="panel panel-padding">
+        <div id="search-panel" class="panel panel-padding hide">
             <form id="search" class="layui-form" action="" method="post">
                 <div class="layui-form-item">
                     <div class="layui-inline">
@@ -80,11 +80,13 @@
                 </div>
             </form>
         </div>
-        <div class="panel panel-padding">
-            <div class="layui-btn-group">
+        <div class="panel panel-padding" id="list-panel">
+            <div class="layui-btn-group invisible visible-update">
                 <button id="add-btn" class="layui-btn layui-btn-small hide" onclick="onAdd()">
                     <i class="layui-icon">&#xe654;</i> 新增
                 </button>
+            </div>
+            <div class="layui-btn-group invisible visible-check1">
                 <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
                     <i class="layui-icon">&#x1005;</i> 审核
                 </button>
@@ -95,11 +97,11 @@
                     <i class="layui-icon">&#xe640;</i> 删除
                 </button> -->
             </div>
-            <div class="layui-btn-group">
+            <!-- <div class="layui-btn-group">
                 <button class="layui-btn layui-btn-small layui-btn-normal" data-url="term-param.html" onclick="onGoto(this)">
                     终端参数
                 </button>
-            </div>
+            </div> -->
             <div id="list">
             </div>
             <div id="page" style="text-align: right;"></div>
@@ -133,7 +135,7 @@
                         <td>
                             {{row.mchnt_id}}
                         </td>
-                         <td>
+                        <td>
                             {{row.term_no}}
                         </td>
                         <td>
@@ -159,11 +161,11 @@
                                 <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
                                     查看
                                 </button>
-                                {{if hasNext(row.oper_in,row.proc_st,'update')}}
+                                {{if operateType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
                                 <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
                                     编辑
                                 </button>
-                                {{/if}}
+                                {{/if}} {{/if}}
                             </div>
                         </td>
                     </tr>
@@ -191,25 +193,31 @@
     var pagination;
 
     function onAdd() {
-        $$.open('term-info-detail.html?operateType=create', '新增终端信息', {
+        var url = $$.url('term-info-detail.html?operateType=create', {
             mchnt_id: query.mchnt_id
         });
+        var title = '新增终端信息';
+        $$.openTab(url, title);
     }
 
     function onView(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        $$.open('term-info-detail.html?operateType=view', '查看终端信息', {
+        var url = $$.url('term-info-detail.html?operateType=view', {
             rec_id: row.rec_id
         });
+        var title = '查看终端信息';
+        $$.openTab(url, title);
     }
 
     function onEdit(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        $$.open('term-info-detail.html?operateType=update', '编辑终端信息', {
+        var url = $$.url('term-info-detail.html?operateType=update', {
             rec_id: row.rec_id
         });
+        var title = '编辑终端信息';
+        $$.openTab(url, title);
     }
 
     function onDelete(index) {
@@ -218,7 +226,7 @@
 
         $$.confirm('确认要删除?', function() {
             $$.request('/action/bm/term-info/delete', row, function(data) {
-                $$.info('操作成功');
+                $$.msg('操作成功');
             });
         });
     }
@@ -226,7 +234,7 @@
     function onGoto(target) {
         var $selected = $$.getSelected('#list');
         if ($selected.length != 1) {
-            $$.info('请选择需要操作的记录');
+            $$.msg('请选择需要操作的记录');
             return;
         }
         var index = parseInt($selected.attr('data-index'));
@@ -258,7 +266,7 @@
     function onBatchCheck1Nopass() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请勾选需要操作的记录');
+            $$.msg('请勾选需要操作的记录');
             return;
         }
         $$.prompt('请输入驳回备注', function(value) {
@@ -273,7 +281,7 @@
     function onBatchDelete() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请勾选需要操作的记录');
+            $$.msg('请勾选需要操作的记录');
             return;
         }
 
@@ -318,6 +326,7 @@
         });
 
         $$.loadSelect('#province', districtData['province']);
+        $$.transformStatus('#list-panel', operateType);
         form.render('select');
 
         if (query.mchnt_id) {

@@ -22,7 +22,7 @@ window.$$ = (function() {
         }
     };
 
-    $$.info = function(content, options, end) {
+    $$.msg = function(content, options, end) {
         layer.msg(content, options, end);
     };
 
@@ -49,36 +49,9 @@ window.$$ = (function() {
         });
     };
 
-    $$.open = function(url, title, params, options) {
-        params = params || {};
-
-        var query = $.param(params);
-
-        if (query.length) {
-            if (url.indexOf('?') >= 0) {
-                url = url + '&' + query;
-            } else {
-                url = url + '?' + query;
-            }
-        }
-
-        options = $.extend({
-            type: 2,
-            title: title,
-            content: url,
-            end: function() {
-                if (window.pagination) window.pagination.reload();
-            }
-        }, options || {});
-
-        var index = layer.open(options);
-        layer.full(index);
-    }
-
-    //解析查询字符串
-    $$.parseQueryString = function() {
+    //解析查询
+    $$.parseQuery = function(queryString) {
         var query = {};
-        var queryString = window.location.search.substr(1);
         if (queryString.length > 0) {
             var pairs = queryString.split('&');
             for (var i = 0; i < pairs.length; i++) {
@@ -90,6 +63,50 @@ window.$$ = (function() {
             }
         }
         return query;
+    };
+
+    $$.url = function(url, params) {
+        var split = url.split('?');
+        var key = split.shift();
+        var args = split.join('?');
+        var query = $$.parseQuery(args);
+        var queryString = $.param($.extend(query, params || {}));
+
+        if (queryString.length) {
+            url = key + '?' + queryString;
+        }
+
+        return url;
+    }
+
+    $$.open = function(url, title, params, options) {
+        options = $.extend({
+            type: 2,
+            title: title,
+            content: $$.url(url, params),
+            end: function() {
+                if (window.pagination) window.pagination.reload();
+            }
+        }, options || {});
+
+        var index = layer.open(options);
+        layer.full(index);
+    }
+
+    $$.openTab = function(url, title) {
+        if (window.top.addTab) {
+            var id = url;
+            url = 'pages/' + url;
+            window.top.addTab(id, title, url);
+        } else {
+            $$.open(url, title);
+        }
+    }
+
+    //解析查询字符串
+    $$.parseQueryString = function() {
+        var queryString = window.location.search.substr(1);
+        return $$.parseQuery(queryString);
     };
 
     //POST请求

@@ -39,9 +39,9 @@
 </head>
 
 <body>
-    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+    <div class="layui-tab layui-tab-brief" lay-filter="base">
         <ul class="layui-tab-title">
-            <li class="layui-this">基本资料</li>
+            <li class="layui-this" lay-id="0">基本资料</li>
             <li>商户参数</li>
             <li>终端信息</li>
             <li>电子资料</li>
@@ -54,7 +54,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label"><span class="required">*</span>客户号</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="mchnt_id" placeholder="" autocomplete="off" class="layui-input">
+                                    <input type="text" name="mchnt_id" placeholder="" autocomplete="off" class="layui-input" id="mchnt-id">
                                 </div>
                             </div>
                         </div>
@@ -351,13 +351,13 @@
                 </div>
             </div>
             <div class="layui-tab-item">
-                <iframe class="tab-iframe" src="mchnt-param.html"></iframe>
+                <iframe class="tab-iframe" data-src="mchnt-param.html"></iframe>
             </div>
             <div class="layui-tab-item">
-                <iframe class="tab-iframe" src="term-info.html"></iframe>
+                <iframe class="tab-iframe" data-src="term-info.html"></iframe>
             </div>
             <div class="layui-tab-item">
-                <iframe class="tab-iframe" src="mchnt-elec-info.html"></iframe>
+                <iframe class="tab-iframe" data-src="mchnt-elec-info.html"></iframe>
             </div>
         </div>
     </div>
@@ -424,7 +424,10 @@
         param.images = images;
 
         $$.request('/action/bm/mchnt-base-info/' + operateType, param, function(data) {
-            $$.info('操作成功', {
+            if(data.data) {
+                $$.loadData('#detail', data.data);
+            }
+            $$.msg('操作成功', {
                 icon: 1
             }, function() {
                 onClose();
@@ -461,7 +464,7 @@
         var $img = $box.find('img');
 
         if ($img.length == 0) {
-            $$.info('未找到可裁剪的图片');
+            $$.msg('未找到可裁剪的图片');
             return;
         }
 
@@ -476,7 +479,7 @@
                     license_no: $('#license-no').val()
                 }, function(data) {
                     if (data.rows.length != 1) {
-                        $$.info('找到' + data.rows.length + '条记录,无法处理');
+                        $$.msg('找到' + data.rows.length + '条记录,无法处理');
                     } else {
                         fill_blank('#mchnt-name', data.rows[0].name);
                         fill_blank('#business-scope', data.rows[0].business_scope);
@@ -495,7 +498,7 @@
         var $img = $box.find('img');
 
         if ($img.length == 0) {
-            $$.info('未找到可裁剪的图片');
+            $$.msg('未找到可裁剪的图片');
             return;
         }
 
@@ -515,7 +518,7 @@
         var $img = $box.find('img');
 
         if ($img.length == 0) {
-            $$.info('未找到可裁剪的图片');
+            $$.msg('未找到可裁剪的图片');
             return;
         }
 
@@ -543,7 +546,7 @@
                 if ($$.errcode(res) == 0) {
                     renderImgbox(elem, res);
                 } else {
-                    $$.info($$.errmsg(res), {
+                    $$.msg($$.errmsg(res), {
                         icon: 2
                     });
                 }
@@ -558,6 +561,28 @@
         if (operateType != 'view') {
             initUpload();
         }
+
+        element.on('tab(base)', function(data) {
+            console.log(this); //当前Tab标题所在的原始DOM元素
+            console.log(data.index); //得到当前Tab的所在下标
+            console.log(data.elem); //得到当前的Tab大容器
+            if (data.index == 0) return;
+
+            var mchnt_id = $('#mchnt-id').val();
+            if (data.index > 0 && !mchnt_id) {
+                element.tabChange('base', '0');
+                $$.msg('请先新增基本资料');
+                return;
+            }
+
+            var $item = data.elem.children('.layui-tab-content').children('.layui-tab-item');
+            var $iframe = $item.eq(data.index).children('.tab-iframe');
+            $iframe.attr('src', $$.url($iframe.attr('data-src'), {
+                operateType: operateType,
+                mchnt_id: mchnt_id
+            }));
+
+        });
 
         form.on('submit(detail)', function(data) {
             onSubmit(data.field);

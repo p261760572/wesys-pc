@@ -12,7 +12,7 @@
 
 <body>
     <div class="container">
-        <div id="search-panel" class="panel panel-padding">
+        <div id="search-panel" class="panel panel-padding hide">
             <form id="search" class="layui-form" action="" method="post">
                 <div class="layui-form-item">
                     <div class="layui-inline">
@@ -72,11 +72,13 @@
                 </div>
             </form>
         </div>
-        <div class="panel panel-padding">
-            <div class="layui-btn-group">
+        <div class="panel panel-padding" id="list-panel">
+            <div class="layui-btn-group invisible visible-update">
                 <button id="add-btn" class="layui-btn layui-btn-small hide" onclick="onAdd()">
                     <i class="layui-icon">&#xe654;</i> 新增
                 </button>
+            </div>
+            <div class="layui-btn-group invisible visible-check1">
                 <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
                     <i class="layui-icon">&#x1005;</i> 审核
                 </button>
@@ -154,11 +156,11 @@
                                 <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
                                     查看
                                 </button>
-                                {{if hasNext(row.oper_in,row.proc_st,'update')}}
+                                {{if operateType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
                                 <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
                                     编辑
                                 </button>
-                                {{/if}}
+                                {{/if}} {{/if}}
                             </div>
                         </td>
                     </tr>
@@ -186,25 +188,31 @@
     var pagination;
 
     function onAdd() {
-        $$.open('mchnt-param-detail.html?operateType=create', '新增商户参数', {
+        var url = $$.url('mchnt-param-detail.html?operateType=create', {
             mchnt_id: query.mchnt_id
         });
+        var title = '新增商户参数';
+        $$.openTab(url, title);
     }
 
     function onView(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        $$.open('mchnt-param-detail.html?operateType=view', '查看商户参数', {
+        var url = $$.url('mchnt-param-detail.html?operateType=view', {
             rec_id: row.rec_id
         });
+        var title = '查看商户参数';
+        $$.openTab(url, title);
     }
 
     function onEdit(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        $$.open('mchnt-param-detail.html?operateType=update', '编辑商户参数', {
+        var url = $$.url('mchnt-param-detail.html?operateType=update', {
             rec_id: row.rec_id
         });
+        var title = '编辑商户参数';
+        $$.openTab(url, title);
     }
 
     function onDelete(index) {
@@ -213,7 +221,7 @@
 
         $$.confirm('确认要删除?', function() {
             $$.request('/action/bm/mchnt-param/delete', row, function(data) {
-                $$.info('操作成功', {
+                $$.msg('操作成功', {
                     icon: 1
                 });
             });
@@ -227,7 +235,7 @@
     function onBatchCheck1Nopass() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请勾选需要操作的记录');
+            $$.msg('请勾选需要操作的记录');
             return;
         }
         $$.prompt('请输入驳回备注', function(value) {
@@ -242,7 +250,7 @@
     function onBatchDelete() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请勾选需要操作的记录');
+            $$.msg('请勾选需要操作的记录');
             return;
         }
 
@@ -303,6 +311,7 @@
         });
 
         // $$.loadSelect('#busi-type', $$.param['busi_type']);
+        $$.transformStatus('#list-panel', operateType);
         // form.render('select');
 
         if (query.mchnt_id) {

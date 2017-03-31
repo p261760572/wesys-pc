@@ -226,7 +226,7 @@
 
         $$.confirm('确认要删除?', function() {
             $$.request('/action/bm/expense-info/delete', row, function(data) {
-                $$.info('操作成功', {
+                $$.msg('操作成功', {
                     icon: 1
                 });
             });
@@ -260,7 +260,7 @@
     function onGoto(target) {
         var $selected = $$.getSelected('#list');
         if ($selected.length != 1) {
-            $$.info('请选择需要操作的记录');
+            $$.msg('请选择需要操作的记录');
             return;
         }
         var index = parseInt($selected.attr('data-index'));
@@ -291,7 +291,7 @@
     function onBatchCheck1Nopass() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请勾选需要操作的记录');
+            $$.msg('请勾选需要操作的记录');
             return;
         }
         $$.prompt('请输入驳回备注', function(value) {
@@ -306,7 +306,7 @@
     function onBatchDelete() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请勾选需要操作的记录');
+            $$.msg('请勾选需要操作的记录');
             return;
         }
 
@@ -318,7 +318,7 @@
     function onBatchCancel() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请勾选需要操作的记录');
+            $$.msg('请勾选需要操作的记录');
             return;
         }
 

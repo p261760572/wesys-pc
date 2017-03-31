@@ -164,7 +164,7 @@
         var data = $('#list').data('data');
         var row = data.rows[index];
         $$.request('/action/bm/import-file/import', row, function(data) {
-            $$.info('操作成功', {
+            $$.msg('操作成功', {
                 icon: 1
             });
 
@@ -184,7 +184,7 @@
 
     function onSubmit(param) {
         $$.request('/action/bm/import-file/create', param, function(data) {
-            $$.info('操作成功', {
+            $$.msg('操作成功', {
                 icon: 1
             });
             $('#search-btn').click();
@@ -208,7 +208,7 @@
                     var $item = $(elem).closest('.layui-form-item');
                     $item.find('input[name=serverid]').val(res.serverid); //方便验证
                 } else {
-                    $$.info($$.errmsg(res), {
+                    $$.msg($$.errmsg(res), {
                         icon: 2
                     });
                 }

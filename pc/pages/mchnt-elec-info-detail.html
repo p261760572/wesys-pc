@@ -84,7 +84,7 @@
 
     function onSubmit(param) {
         $$.request('/action/bm/mchnt-elec-info/' + operateType, param, function(data) {
-            $$.info('操作成功', {
+            $$.msg('操作成功', {
                 icon: 1
             }, function() {
                 onClose();
@@ -110,7 +110,7 @@
                 if ($$.errcode(res) == 0) {
                     renderImgbox(elem, res);
                 } else {
-                    $$.info($$.errmsg(res), {
+                    $$.msg($$.errmsg(res), {
                         icon: 2
                     });
                 }

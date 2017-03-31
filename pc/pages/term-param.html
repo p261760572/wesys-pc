@@ -12,7 +12,7 @@
 
 <body>
     <div class="container">
-        <div id="search-panel" class="panel panel-padding">
+        <div id="search-panel" class="panel panel-padding hide">
             <form id="search" class="layui-form" action="" method="post">
                 <div class="layui-form-item">
                     <div class="layui-inline">
@@ -62,11 +62,13 @@
                 </div>
             </form>
         </div>
-        <div class="panel panel-padding">
-            <div class="layui-btn-group">
+        <div class="panel panel-padding" id="list-panel">
+            <div class="layui-btn-group invisible visible-update">
                 <button id="add-btn" class="layui-btn layui-btn-small hide" onclick="onAdd()">
                     <i class="layui-icon">&#xe654;</i> 新增
                 </button>
+            </div>
+            <div class="layui-btn-group invisible visible-check1">
                 <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
                     <i class="layui-icon">&#x1005;</i> 审核
                 </button>
@@ -136,11 +138,11 @@
                                 <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
                                     查看
                                 </button>
-                                {{if hasNext(row.oper_in,row.proc_st,'update')}}
+                                {{if operateType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
                                 <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
                                     编辑
                                 </button>
-                                {{/if}}
+                                {{/if}} {{/if}}
                                 <!-- <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
                                     删除
                                 </button> -->
@@ -198,7 +200,7 @@
 
         $$.confirm('确认要删除?', function() {
             $$.request('/action/bm/term-param/delete', row, function(data) {
-                $$.info('操作成功', {
+                $$.msg('操作成功', {
                     icon: 1
                 });
             });
@@ -212,7 +214,7 @@
     function onBatchCheck1Nopass() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请勾选需要操作的记录');
+            $$.msg('请勾选需要操作的记录');
             return;
         }
         $$.prompt('请输入驳回备注', function(value) {
@@ -227,7 +229,7 @@
     function onBatchDelete() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请勾选需要操作的记录');
+            $$.msg('请勾选需要操作的记录');
             return;
         }
 
@@ -270,12 +272,12 @@
             form.render('select');
         });
 
-
+        $$.transformStatus('#list-panel', operateType);
         if (query.term_no) {
             $('#search-panel').addClass('hide');
             $$.loadData('#search', query);
             $('#submit-btn').click();
-            $('#add-btn').removeClass('hide');            
+            $('#add-btn').removeClass('hide');
         }
     });
     </script>

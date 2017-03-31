@@ -80,11 +80,13 @@
                 </div>
             </form>
         </div>
-        <div class="panel panel-padding">
-            <div class="layui-btn-group">
+        <div class="panel panel-padding" id="list-panel">
+            <div class="layui-btn-group invisible visible-update">
                 <button class="layui-btn layui-btn-small" onclick="onAdd()">
                     <i class="layui-icon">&#xe654;</i> 新增
                 </button>
+            </div>
+            <div class="layui-btn-group invisible visible-check1">
                 <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
                     <i class="layui-icon">&#x1005;</i> 审核
                 </button>
@@ -95,7 +97,7 @@
                     <i class="layui-icon">&#xe640;</i> 删除
                 </button> -->
             </div>
-            <div class="layui-btn-group">
+            <!-- <div class="layui-btn-group">
                 <button class="layui-btn layui-btn-small layui-btn-normal" data-url="term-info.html" onclick="onGoto(this)">
                     终端管理
                 </button>
@@ -105,7 +107,7 @@
                 <button class="layui-btn layui-btn-small" data-url="mchnt-elec-info.html" onclick="onGoto(this)">
                     电子资料
                 </button>
-            </div>
+            </div> -->
             <div id="list">
             </div>
             <div id="page" style="text-align: right;"></div>
@@ -170,11 +172,11 @@
                                     <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="onView({{i}})">
                                         查看
                                     </button>
-                                    {{if hasNext(row.oper_in,row.proc_st,'update')}}
+                                    {{if operateType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
                                     <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
                                         编辑
                                     </button>
-                                    {{/if}}
+                                    {{/if}} {{/if}}
                                 </div>
                             </div>
                         </td>
@@ -203,23 +205,29 @@
     var pagination;
 
     function onAdd() {
-        $$.open('mchnt-base-info-detail.html?operateType=create', '新增商户信息');
+        var url = $$.url('mchnt-base-info-detail.html?operateType=create');
+        var title = '新增商户信息';
+        $$.openTab(url, title);
     }
 
     function onView(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        $$.open('mchnt-base-info-detail.html?operateType=view', '查看商户信息', {
+        var url = $$.url('mchnt-base-info-detail.html?operateType=view', {
             rec_id: row.rec_id
         });
+        var title = '查看商户信息';
+        $$.openTab(url, title);
     }
 
     function onEdit(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        $$.open('mchnt-base-info-detail.html?operateType=update', '编辑商户信息', {
+        var url = $$.url('mchnt-base-info-detail.html?operateType=update', {
             rec_id: row.rec_id
         });
+        var title = '编辑商户信息';
+        $$.openTab(url, title);
     }
 
     function onDelete(index) {
@@ -228,7 +236,7 @@
 
         $$.confirm('确认要删除?', function() {
             $$.request('/action/bm/mchnt-base-info/delete', row, function(data) {
-                $$.info('操作成功', {
+                $$.msg('操作成功', {
                     icon: 1
                 });
             });
@@ -238,7 +246,7 @@
     function onGoto(target) {
         var $selected = $$.getSelected('#list');
         if ($selected.length != 1) {
-            $$.info('请选择需要操作的记录');
+            $$.msg('请选择需要操作的记录');
             return;
         }
         var index = parseInt($selected.attr('data-index'));
@@ -247,19 +255,12 @@
         var row = data.rows[index];
         var url = $target.attr('data-url');
         var title = $target.text() + '-' + row.mchnt_abbr;
-        url += '?' + $.param({
+        url = $$.url(url, {
             operateType: operateType,
             mchnt_id: row.mchnt_id
         });
 
-        if (parent.addTab) {
-            url = 'pages/' + url;
-            parent.addTab(url, title, url);
-        } else {
-            $$.open(url, title, {
-                mchnt_id: row.mchnt_id
-            });
-        }
+        $$.openTab(url, title);
     }
 
     function onBatchCheck1Pass() {
@@ -269,7 +270,7 @@
     function onBatchCheck1Nopass() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请勾选需要操作的记录');
+            $$.msg('请勾选需要操作的记录');
             return;
         }
         $$.prompt('请输入驳回备注', function(value) {
@@ -284,7 +285,7 @@
     function onBatchDelete() {
         var $checkbox = $$.getChecked('#list');
         if ($checkbox.length == 0) {
-            $$.info('请勾选需要操作的记录');
+            $$.msg('请勾选需要操作的记录');
             return;
         }
 
@@ -332,6 +333,8 @@
         });
 
         $$.loadSelect('#province', districtData['province']);
+
+        $$.transformStatus('#list-panel', operateType);
         form.render('select');
     });
     </script>

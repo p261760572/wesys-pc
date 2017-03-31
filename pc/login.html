@@ -80,7 +80,7 @@
             $$.request('/action/user/login', data.field, function(data) {
                 window.location.href = 'index.html';
             }, function(data) {
-                $$.info($$.errmsg(data));
+                $$.msg($$.errmsg(data));
             });
 
             return false; //阻止表单跳转

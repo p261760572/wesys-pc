@@ -26,6 +26,10 @@ input[type="checkbox"][readonly] {
     display: none;
 }
 
+.invisible {
+    display: none;
+}
+
 .required {
     color: #ff4949;
 }
