@@ -264,10 +264,152 @@
                 </div>
             </div>
             <div class="layui-tab-item">
-                <iframe class="tab-iframe" data-src="term-param.html"></iframe>
+                <div class="container">
+                    <div id="search-panel" class="panel panel-padding hide">
+                        <form id="search" class="layui-form" action="" method="post">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">客户号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">终端标识</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="term_no" placeholder="请输入终端标识" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">商户号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="mchnt_cd" placeholder="请输入商户号" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">终端号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="term_id" placeholder="请输入终端号" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">创建日期</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="created_time" placeholder="请输入开始日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})" id="created_time">
+                                    </div>
+                                    <div class="layui-form-mid">-</div>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="created_time2" placeholder="请输入结束日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})" id="created_time2">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="search" id="submit-btn">查询</button>
+                                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel panel-padding" id="list-panel">
+                        <div class="layui-btn-group invisible visible-update">
+                            <button id="add-btn" class="layui-btn layui-btn-small hide" onclick="onAdd()">
+                                <i class="layui-icon">&#xe654;</i> 新增
+                            </button>
+                        </div>
+                        <div class="layui-btn-group invisible visible-check1">
+                            <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
+                                <i class="layui-icon">&#x1005;</i> 审核
+                            </button>
+                            <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchCheck1Nopass()">
+                                <i class="layui-icon">&#xe633;</i> 驳回
+                            </button>
+                            <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
+                    <i class="layui-icon">&#xe640;</i> 删除
+                </button> -->
+                        </div>
+                        <div id="list">
+                        </div>
+                        <div id="page" style="text-align: right;"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <script id="list-tpl" type="text/html">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
+                        </th>
+                        <th>客户号</th>
+                        <th>终端标识</th>
+                        <th>商户简称</th>
+                        <th>商户名称</th>
+                        <th>商户号</th>
+                        <th>终端号</th>
+                        <!-- <th>参数状态</th> -->
+                        <th>处理状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each rows as row i}}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
+                        </td>
+                        <td>
+                            {{row.mchnt_id}}
+                        </td>
+                        <td>
+                            {{row.term_no}}
+                        </td>
+                        <td>
+                            {{row.mchnt_abbr}}
+                        </td>
+                        <td>
+                            {{row.mchnt_name}}
+                        </td>
+                        <td>
+                            {{row.mchnt_cd}}
+                        </td>
+                        <td>
+                            {{row.term_id}}
+                        </td>
+                        <!-- <td>
+                            {{row.status}}
+                        </td> -->
+                        <td>
+                            {{row.proc_st_nm}}
+                        </td>
+                        <td>
+                            <div class="layui-btn-group">
+                                <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
+                                    查看
+                                </button>
+                                {{if displayType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
+                                <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
+                                    编辑
+                                </button>
+                                {{/if}} {{/if}}
+                                <!-- <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
+                                    删除
+                                </button> -->
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </script>
     <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
     <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
@@ -295,7 +437,7 @@
 
     function onSubmit(param) {
         $$.request('/action/bm/term-info/' + operateType, param, function(data) {
-            if(data.data) {
+            if (data.data) {
                 $$.loadData('#detail', data.data);
             }
             if (operateType == 'create') {
@@ -318,7 +460,7 @@
     }
 
     function onClose() {
-        if(window.top.closeTab) {
+        if (window.top.closeTab) {
             window.top.closeTab();
         } else {
             var index = parent.layer.getFrameIndex(window.name);
@@ -340,25 +482,25 @@
     }
 
     $(function() {
-        element.on('tab(term)', function(data) {
-            if (data.index == 0) return;
+        // element.on('tab(term)', function(data) {
+        //     if (data.index == 0) return;
 
-            var term_no = $('#term-no').val();
-            if (data.index > 0 && !term_no) {
-                element.tabChange('term', '0');
-                $$.msg('请先新增终端信息');
-                return;
-            }
+        //     var term_no = $('#term-no').val();
+        //     if (data.index > 0 && !term_no) {
+        //         element.tabChange('term', '0');
+        //         $$.msg('请先新增终端信息');
+        //         return;
+        //     }
 
-            var $item = data.elem.children('.layui-tab-content').children('.layui-tab-item');
-            var $iframe = $item.eq(data.index).children('.tab-iframe');
-            $iframe.attr('src', $$.url($iframe.attr('data-src'), {
-                displayType: displayType,
-                operateType: operateType,
-                term_no: term_no
-            }));
+        //     var $item = data.elem.children('.layui-tab-content').children('.layui-tab-item');
+        //     var $iframe = $item.eq(data.index).children('.tab-iframe');
+        //     $iframe.attr('src', $$.url($iframe.attr('data-src'), {
+        //         displayType: displayType,
+        //         operateType: operateType,
+        //         term_no: term_no
+        //     }));
 
-        });
+        // });
 
         form.on('submit(detail)', function(data) {
             onSubmit(data.field);
