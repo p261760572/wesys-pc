@@ -264,7 +264,7 @@
                 </div>
             </div>
             <div class="layui-tab-item">
-                <iframe class="tab-iframe" src="term-param.html"></iframe>
+                <iframe class="tab-iframe" data-src="term-param.html"></iframe>
             </div>
         </div>
     </div>
@@ -277,6 +277,7 @@
     <script type="text/javascript" src="../js/district.js"></script>
     <script type="text/javascript">
     var query = $$.parseQueryString();
+    var displayType = query.displayType;
     var operateType = query.operateType;
     var layer = layui.layer;
     var form = layui.form();
@@ -297,17 +298,32 @@
             if(data.data) {
                 $$.loadData('#detail', data.data);
             }
-            $$.msg('操作成功', {
-                icon: 1
-            }, function() {
-                onClose();
-            });
+            if (operateType == 'create') {
+                $$.confirm('操作成功,是否继续新增终端参数', function() {
+                    var url = $$.url('term-param-detail.html?operateType=create', {
+                        displayType: displayType,
+                        term_no: query.term_no
+                    });
+                    var title = '新增终端信息';
+                    $$.openTab(url, title);
+                });
+            } else {
+                $$.msg('操作成功', {
+                    icon: 1
+                }, function() {
+                    onClose();
+                });
+            }
         });
     }
 
     function onClose() {
-        var index = parent.layer.getFrameIndex(window.name);
-        parent.layer.close(index);
+        if(window.top.closeTab) {
+            window.top.closeTab();
+        } else {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        }
     }
 
     function onChangeProvince() {
@@ -329,14 +345,15 @@
 
             var term_no = $('#term-no').val();
             if (data.index > 0 && !term_no) {
-                element.tabChange('base', '0');
+                element.tabChange('term', '0');
                 $$.msg('请先新增终端信息');
                 return;
             }
 
             var $item = data.elem.children('.layui-tab-content').children('.layui-tab-item');
             var $iframe = $item.eq(data.index).children('.tab-iframe');
-            $iframe.attr('src', $$.url($iframe.attr('src'), {
+            $iframe.attr('src', $$.url($iframe.attr('data-src'), {
+                displayType: displayType,
                 operateType: operateType,
                 term_no: term_no
             }));

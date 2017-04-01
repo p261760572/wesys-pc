@@ -425,8 +425,12 @@
     }
 
     function onClose() {
-        var index = parent.layer.getFrameIndex(window.name);
-        parent.layer.close(index);
+        if(window.top.closeTab) {
+            window.top.closeTab();
+        } else {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        }
     }
 
     function onExpenseType() {
@@ -452,6 +456,7 @@
 
                 if ($$.errcode(res) == 0) {
                     renderImgbox(elem, res);
+                    $(elem).attr('data-value', res.serverid);
                 } else {
                     $$.msg($$.errmsg(res), {
                         icon: 2

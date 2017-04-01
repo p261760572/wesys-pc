@@ -156,7 +156,7 @@
                                 <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
                                     查看
                                 </button>
-                                {{if operateType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
+                                {{if displayType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
                                 <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
                                     编辑
                                 </button>
@@ -179,6 +179,7 @@
     <script type="text/javascript" src="../js/district.js"></script>
     <script type="text/javascript">
     var query = $$.parseQueryString();
+    var displayType = query.displayType;
     var operateType = query.operateType;
     var layer = layui.layer;
     var laypage = layui.laypage;
@@ -189,6 +190,7 @@
 
     function onAdd() {
         var url = $$.url('mchnt-param-detail.html?operateType=create', {
+            displayType: displayType,
             mchnt_id: query.mchnt_id
         });
         var title = '新增商户参数';
@@ -199,6 +201,7 @@
         var data = $('#list').data('data');
         var row = data.rows[index];
         var url = $$.url('mchnt-param-detail.html?operateType=view', {
+            displayType: displayType,
             rec_id: row.rec_id
         });
         var title = '查看商户参数';
@@ -209,6 +212,7 @@
         var data = $('#list').data('data');
         var row = data.rows[index];
         var url = $$.url('mchnt-param-detail.html?operateType=update', {
+            displayType: displayType,
             rec_id: row.rec_id
         });
         var title = '编辑商户参数';
@@ -268,9 +272,10 @@
         return $$.formatField($$.param['account_type'], value);
     }
 
+    template.helper('formatAccountType', formatAccountType);
     template.helper('hasNext', hasNextStatus);
     template.helper('operateType', operateType);
-    template.helper('formatAccountType', formatAccountType);
+    template.helper('displayType', displayType);    
 
     $(function() {
 
@@ -296,7 +301,13 @@
         });
 
         form.on('submit(search)', function(data) {
-            pagination = $$.search('/action/bm/mchnt-param/search', data.field);
+            var procStMap = {
+                'check1': '1'
+            };
+            var params = $.extend(data.field, {
+                proc_st: procStMap[displayType]
+            });
+            pagination = $$.search('/action/bm/mchnt-param/search', params);
             return false; //阻止表单跳转
         });
 
@@ -311,7 +322,7 @@
         });
 
         // $$.loadSelect('#busi-type', $$.param['busi_type']);
-        $$.transformStatus('#list-panel', operateType);
+        $$.transformDisplay('#list-panel', displayType);
         // form.render('select');
 
         if (query.mchnt_id) {

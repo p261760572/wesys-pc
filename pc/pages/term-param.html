@@ -138,7 +138,7 @@
                                 <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
                                     查看
                                 </button>
-                                {{if operateType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
+                                {{if displayType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
                                 <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
                                     编辑
                                 </button>
@@ -164,6 +164,7 @@
     <script type="text/javascript" src="../js/district.js"></script>
     <script type="text/javascript">
     var query = $$.parseQueryString();
+    var displayType = query.displayType;
     var operateType = query.operateType;
     var layer = layui.layer;
     var laypage = layui.laypage;
@@ -173,25 +174,34 @@
     var pagination;
 
     function onAdd() {
-        $$.open('term-param-detail.html?operateType=create', '新增终端信息', {
+        var url = $$.url('term-param-detail.html?operateType=create', {
+            displayType: displayType,
             term_no: query.term_no
         });
+        var title = '新增终端信息';
+        $$.openTab(url, title);
     }
 
     function onView(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        $$.open('term-param-detail.html?operateType=view', '查看终端信息', {
+        var url = $$.url('term-param-detail.html?operateType=view', {
+            displayType: displayType,
             rec_id: row.rec_id
         });
+        var title = '查看终端信息';
+        $$.openTab(url, title);
     }
 
     function onEdit(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        $$.open('term-param-detail.html?operateType=update', '编辑终端信息', {
+        var url = $$.url('term-param-detail.html?operateType=update', {
+            displayType: displayType,
             rec_id: row.rec_id
         });
+        var title = '编辑终端信息';
+        $$.openTab(url, title);
     }
 
     function onDelete(index) {
@@ -245,6 +255,7 @@
 
     template.helper('hasNext', hasNextStatus);
     template.helper('operateType', operateType);
+    template.helper('displayType', displayType);
 
     $(function() {
 
@@ -258,7 +269,13 @@
         });
 
         form.on('submit(search)', function(data) {
-            pagination = $$.search('/action/bm/term-param/search', data.field);
+            var procStMap = {
+                'check1': '1'
+            };
+            var params = $.extend(data.field, {
+                proc_st: procStMap[displayType]
+            });
+            pagination = $$.search('/action/bm/term-param/search', params);
             return false; //阻止表单跳转
         });
 
@@ -272,7 +289,7 @@
             form.render('select');
         });
 
-        $$.transformStatus('#list-panel', operateType);
+        $$.transformDisplay('#list-panel', displayType);
         if (query.term_no) {
             $('#search-panel').addClass('hide');
             $$.loadData('#search', query);

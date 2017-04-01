@@ -122,8 +122,12 @@
     }
 
     function onClose() {
-        var index = parent.layer.getFrameIndex(window.name);
-        parent.layer.close(index);
+        if(window.top.closeTab) {
+            window.top.closeTab();
+        } else {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        }
     }
 
     function formatMchntParam(row) {

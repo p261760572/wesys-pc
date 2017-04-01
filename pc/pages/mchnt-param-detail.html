@@ -132,7 +132,7 @@
                     <!-- <div class="layui-inline"> -->
                         <label class="layui-form-label"><span class="required">*</span>账户正面</label>
                         <div class="layui-input-block visible invisible-view">
-                            <input type="file" name="file" class="layui-upload-file" data-type="zhzm">
+                            <input type="file" name="file" lay-verify="required" class="layui-upload-file" data-type="zhzm">
                             <button type="button" class="layui-btn layui-btn-primary" onclick="cropper_zhzm(this)">
                             <i class="layui-icon">&#xe615;</i>
                         </button>
@@ -185,7 +185,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label"><span class="required">*</span>扫码手续费(‰)</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="fee" value="6" placeholder="请输入手续费(千分比)" autocomplete="off" class="layui-input">
+                            <input type="text" name="fee" value="5" placeholder="请输入手续费(千分比)" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
@@ -339,6 +339,7 @@
     <script type="text/javascript" src="../js/district.js"></script>
     <script type="text/javascript">
     var query = $$.parseQueryString();
+    var displayType = query.displayType;
     var operateType = query.operateType;
     var layer = layui.layer;
     var form = layui.form();
@@ -395,17 +396,32 @@
         param.images = images;
 
         $$.request('/action/bm/mchnt-param/' + operateType, param, function(data) {
-            $$.msg('操作成功', {
-                icon: 1
-            }, function() {
-                onClose();
-            });
+            if (operateType == 'create') {
+                $$.confirm('操作成功,是否继续新增终端信息', function() {
+                    var url = $$.url('term-info-detail.html?operateType=create', {
+                        displayType: displayType,
+                        mchnt_id: query.mchnt_id
+                    });
+                    var title = '新增终端信息';
+                    $$.openTab(url, title);
+                });
+            } else {
+                $$.msg('操作成功', {
+                    icon: 1
+                }, function() {
+                    onClose();
+                });
+            }
         });
     }
 
     function onClose() {
-        var index = parent.layer.getFrameIndex(window.name);
-        parent.layer.close(index);
+        if(window.top.closeTab) {
+            window.top.closeTab();
+        } else {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        }
     }
 
     function onChangeAcqInstId() {
@@ -472,6 +488,7 @@
 
                 if ($$.errcode(res) == 0) {
                     renderImgbox(elem, res);
+                    $(elem).attr('data-value', res.serverid);
                 } else if ($$.errmsg(res)) {
                     $$.msg($$.errmsg(res), {
                         icon: 2

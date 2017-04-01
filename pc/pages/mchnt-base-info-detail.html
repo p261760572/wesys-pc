@@ -120,7 +120,7 @@
                             <div class="layui-inline">
                                 <label class="layui-form-label"><span class="required">*</span>商户类型</label>
                                 <div class="layui-input-inline">
-                                    <select name="province" lay-verify="required" lay-filter="mchnt_type" id="mchnt-type">
+                                    <select name="mchnt_type" lay-verify="required" lay-filter="mchnt_type" id="mchnt-type">
                                         <option value=""></option>
                                     </select>
                                 </div>
@@ -150,9 +150,9 @@
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <label class="layui-form-label">营业执照号</label>
+                                <label class="layui-form-label"><span class="required">*</span>营业执照号</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="license_no" placeholder="请输入营业执照号" autocomplete="off" class="layui-input" id="license-no">
+                                    <input type="text" name="license_no" lay-verify="required" placeholder="请输入营业执照号" autocomplete="off" class="layui-input" id="license-no">
                                 </div>
                             </div>
                             <div class="layui-inline">
@@ -176,9 +176,9 @@
                         </div>
                         <div class="layui-form-item">
                             <!-- <div class="layui-inline"> -->
-                            <label class="layui-form-label">证件正面</label>
+                            <label class="layui-form-label"><span class="required">*</span>证件正面</label>
                             <div class="layui-input-block visible invisible-view">
-                                <input type="file" name="file" class="layui-upload-file" data-type="sfzzm">
+                                <input type="file" name="file" lay-verify="required" class="layui-upload-file" data-type="sfzzm">
                                 <button type="button" class="layui-btn layui-btn-primary" onclick="cropper_sfzzm(this)">
                                     <i class="layui-icon">&#xe615;</i>
                                 </button>
@@ -208,25 +208,25 @@
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <label class="layui-form-label">证件类型</label>
+                                <label class="layui-form-label"><span class="required">*</span>证件类型</label>
                                 <div class="layui-input-inline">
-                                    <select name="cert_type" id="cert-type">
+                                    <select name="cert_type" lay-verify="required" id="cert-type">
                                         <option value=""></option>
                                     </select>
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <label class="layui-form-label">证件姓名</label>
+                                <label class="layui-form-label"><span class="required">*</span>证件姓名</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="cert_name" placeholder="请输入证件姓名" autocomplete="off" class="layui-input" id="cert-name">
+                                    <input type="text" name="cert_name" lay-verify="required" placeholder="请输入证件姓名" autocomplete="off" class="layui-input" id="cert-name">
                                 </div>
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <label class="layui-form-label">证件号码</label>
+                                <label class="layui-form-label"><span class="required">*</span>证件号码</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="cert_id" placeholder="请输入证件号码" autocomplete="off" class="layui-input" id="cert-id">
+                                    <input type="text" name="cert_id" lay-verify="required" placeholder="请输入证件号码" autocomplete="off" class="layui-input" id="cert-id">
                                 </div>
                             </div>
                             <div class="layui-inline">
@@ -374,6 +374,7 @@
     <script type="text/javascript" src="../js/district.js"></script>
     <script type="text/javascript">
     var query = $$.parseQueryString();
+    var displayType = query.displayType;
     var operateType = query.operateType;
     var layer = layui.layer;
     var form = layui.form();
@@ -424,20 +425,37 @@
         param.images = images;
 
         $$.request('/action/bm/mchnt-base-info/' + operateType, param, function(data) {
-            if(data.data) {
+            $$.transformStatus('#detail', operateType);
+            if (data.data) {
                 $$.loadData('#detail', data.data);
             }
-            $$.msg('操作成功', {
-                icon: 1
-            }, function() {
-                onClose();
-            });
+            if (operateType == 'create') {
+                $$.confirm('操作成功,是否继续新增商户参数', function() {
+                    var mchnt_id = $('#mchnt-id').val();
+                    var url = $$.url('mchnt-param-detail.html?operateType=create', {
+                        displayType: displayType,
+                        mchnt_id: mchnt_id
+                    });
+                    var title = '新增商户参数';
+                    $$.openTab(url, title);
+                });
+            } else {
+                $$.msg('操作成功', {
+                    icon: 1
+                }, function() {
+                    onClose();
+                });
+            }
         });
     }
 
     function onClose() {
-        var index = parent.layer.getFrameIndex(window.name);
-        parent.layer.close(index);
+        if(window.top.closeTab) {
+            window.top.closeTab();
+        } else {
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        }
     }
 
     function onChangeProvince() {
@@ -545,6 +563,7 @@
 
                 if ($$.errcode(res) == 0) {
                     renderImgbox(elem, res);
+                    $(elem).attr('data-value', res.serverid);
                 } else {
                     $$.msg($$.errmsg(res), {
                         icon: 2
@@ -578,7 +597,7 @@
             var $item = data.elem.children('.layui-tab-content').children('.layui-tab-item');
             var $iframe = $item.eq(data.index).children('.tab-iframe');
             $iframe.attr('src', $$.url($iframe.attr('data-src'), {
-                operateType: operateType,
+                displayType: displayType,
                 mchnt_id: mchnt_id
             }));
 

@@ -12,56 +12,64 @@
 
 <body>
     <div class="container">
-        <div class="panel panel-padding">
-            <form id="search" class="layui-form" action="" method="post"><div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">费用单据号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="expense_no" placeholder="请输入费用单据号" autocomplete="off" class="layui-input">
+        <div class="panel panel-padding" id="search-panel">
+            <form id="search" class="layui-form" action="" method="post">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">费用单据号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="expense_no" placeholder="请输入费用单据号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">客户号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">客户号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">费用类型</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="expense_type" placeholder="请输入费用类型" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
-                </div></div><div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">费用类型</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="expense_type" placeholder="请输入费用类型" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">金额</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="amount" placeholder="请输入金额" autocomplete="off" class="layui-input">
-                    </div>
-                </div></div><div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">收费周期</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="expense_cycle" placeholder="请输入收费周期" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">金额</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="amount" placeholder="请输入金额" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">收费开始时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="start_date" placeholder="请输入收费开始时间" autocomplete="off" class="layui-input">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">收费周期</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="expense_cycle" placeholder="请输入收费周期" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
-                </div></div><div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">收费结束时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="end_date" placeholder="请输入收费结束时间" autocomplete="off" class="layui-input">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">收费开始时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="start_date" placeholder="请输入收费开始时间" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">领用人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="recipient_by" placeholder="请输入领用人" autocomplete="off" class="layui-input">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">收费结束时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="end_date" placeholder="请输入收费结束时间" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
-                </div></div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">领用人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="recipient_by" placeholder="请输入领用人" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit lay-filter="search" id="search-btn">查询</button>
@@ -70,8 +78,8 @@
                 </div>
             </form>
         </div>
-        <div class="panel panel-padding">
-            <div class="layui-btn-group">
+        <div class="panel panel-padding" id="list-panel">
+            <div class="layui-btn-group invisible visible-cancel">
                 <!-- <button class="layui-btn layui-btn-small" onclick="onAdd()">
                     <i class="layui-icon">&#xe654;</i> 新增
                 </button> -->
@@ -153,21 +161,19 @@
                                 <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
                                     <i class="layui-icon">&#xe60a;</i>查看
                                 </button>
-                                {{if hasNext(row.oper_in,row.proc_st,'receipt')}}
+                                {{if displayType=='receipt'}} {{if hasNext(row.oper_in,row.proc_st,'receipt')}}
                                 <button class="layui-btn layui-btn-mini" onclick="onReceipt({{i}})">
                                     收款
                                 </button>
-                                {{/if}}
-                                {{if hasNext(row.oper_in,row.proc_st,'refund')}}
+                                {{/if}} {{/if}} {{if displayType=='refund'}} {{if hasNext(row.oper_in,row.proc_st,'refund')}}
                                 <button class="layui-btn layui-btn-mini" onclick="onRefund({{i}})">
                                     退款
                                 </button>
-                                {{/if}}
-                                {{if hasNext(row.oper_in,row.proc_st,'refund-confirm')}}
+                                {{/if}} {{/if}} {{if displayType=='refund-confirm'}} {{if hasNext(row.oper_in,row.proc_st,'refund-confirm')}}
                                 <button class="layui-btn layui-btn-mini" onclick="onRefundConfirm({{i}})">
                                     退款确认
                                 </button>
-                                {{/if}}
+                                {{/if}} {{/if}}
                                 <!-- <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
                                     <i class="layui-icon">&#xe642;</i>编辑
                                 </button>
@@ -177,7 +183,7 @@
                             </div>
                         </td>
                     </tr>
-                    {{/each}}                    
+                    {{/each}}
                 </tbody>
             </table>
         </div>
@@ -192,6 +198,7 @@
     <script type="text/javascript" src="../js/district.js"></script>
     <script type="text/javascript">
     var query = $$.parseQueryString();
+    var displayType = query.displayType;
     var operateType = query.operateType;
     var layer = layui.layer;
     var laypage = layui.laypage;
@@ -201,23 +208,33 @@
     var pagination;
 
     function onAdd() {
-        $$.open('expense-info-detail.html?operateType=create', '新增费用信息');
+        var url = $$.url('expense-info-detail.html?operateType=create', {
+            displayType: displayType
+        });
+        var title = '新增费用信息';
+        $$.openTab(url, title);
     }
 
     function onView(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        $$.open('expense-info-detail.html?operateType=view', '查看费用信息', {
+        var url = $$.url('expense-info-detail.html?operateType=view', {
+            displayType: displayType,
             rec_id: row.rec_id
         });
+        var title = '查看费用信息';
+        $$.openTab(url, title);
     }
 
     function onEdit(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        $$.open('expense-info-detail.html?operateType=update', '编辑费用信息', {
+        var url = $$.url('expense-info-detail.html?operateType=update', {
+            displayType: displayType,
             rec_id: row.rec_id
         });
+        var title = '编辑费用信息';
+        $$.openTab(url, title);
     }
 
     function onDelete(index) {
@@ -236,25 +253,34 @@
     function onReceipt(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        $$.open('expense-info-detail.html?operateType=receipt', '收款费用信息', {
+        var url = $$.url('expense-info-detail.html?operateType=receipt', {
+            displayType: displayType,
             rec_id: row.rec_id
         });
+        var title = '收款费用信息';
+        $$.openTab(url, title);
     }
 
     function onRefund(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        $$.open('expense-info-detail.html?operateType=refund', '退款费用信息', {
+        var url = $$.url('expense-info-detail.html?operateType=refund', {
+            displayType: displayType,
             rec_id: row.rec_id
         });
+        var title = '退款费用信息';
+        $$.openTab(url, title);
     }
 
     function onRefundConfirm(index) {
         var data = $('#list').data('data');
         var row = data.rows[index];
-        $$.open('expense-info-detail.html?operateType=refund-confirm', '退款确认费用信息', {
+        var url = $$.url('expense-info-detail.html?operateType=refund-confirm', {
+            displayType: displayType,
             rec_id: row.rec_id
         });
+        var title = '退款确认费用信息';
+        $$.openTab(url, title);
     }
 
     function onGoto(target) {
@@ -344,6 +370,7 @@
     template.helper('formatExpenseType', formatExpenseType);
     template.helper('formatExpenseCycle', formatExpenseCycle);
     template.helper('operateType', operateType);
+    template.helper('displayType', displayType);
 
     $(function() {
         //全选
@@ -360,9 +387,21 @@
         });
 
         form.on('submit(search)', function(data) {
-            pagination = $$.search('/action/bm/expense-info/search', data.field);
+            var procStMap = {
+                'receipt': '1',
+                'refund': ['2','6'],
+                'refund-confirm': '5',
+                'cancel': '1'
+            };
+            var params = $.extend(data.field, {
+                proc_st: procStMap[displayType]
+            });
+            pagination = $$.search('/action/bm/expense-info/search', params);
             return false; //阻止表单跳转
         });
+
+        // $$.transformDisplay('#search-panel', operateType);
+        $$.transformDisplay('#list-panel', displayType);
     });
     </script>
 </body>

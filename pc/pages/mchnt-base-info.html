@@ -12,8 +12,8 @@
 
 <body>
     <div class="container">
-        <div class="panel panel-padding">
-            <form id="search" class="layui-form" action="" method="post">
+        <div class="panel panel-padding" id="search-panel">
+            <form id="search" class="layui-form editable" action="" method="post">
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">客户号</label>
@@ -172,7 +172,7 @@
                                     <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="onView({{i}})">
                                         查看
                                     </button>
-                                    {{if operateType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
+                                    {{if displayType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
                                     <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
                                         编辑
                                     </button>
@@ -196,6 +196,7 @@
     <script type="text/javascript" src="../js/district.js"></script>
     <script type="text/javascript">
     var query = $$.parseQueryString();
+    var displayType = query.displayType;
     var operateType = query.operateType;
     var layer = layui.layer;
     var laypage = layui.laypage;
@@ -205,7 +206,9 @@
     var pagination;
 
     function onAdd() {
-        var url = $$.url('mchnt-base-info-detail.html?operateType=create');
+        var url = $$.url('mchnt-base-info-detail.html?operateType=create', {
+            displayType: displayType
+        });
         var title = '新增商户信息';
         $$.openTab(url, title);
     }
@@ -214,6 +217,7 @@
         var data = $('#list').data('data');
         var row = data.rows[index];
         var url = $$.url('mchnt-base-info-detail.html?operateType=view', {
+            displayType: displayType,
             rec_id: row.rec_id
         });
         var title = '查看商户信息';
@@ -224,6 +228,7 @@
         var data = $('#list').data('data');
         var row = data.rows[index];
         var url = $$.url('mchnt-base-info-detail.html?operateType=update', {
+            displayType: displayType,
             rec_id: row.rec_id
         });
         var title = '编辑商户信息';
@@ -256,6 +261,7 @@
         var url = $target.attr('data-url');
         var title = $target.text() + '-' + row.mchnt_abbr;
         url = $$.url(url, {
+            displayType: displayType,
             operateType: operateType,
             mchnt_id: row.mchnt_id
         });
@@ -301,6 +307,7 @@
 
     template.helper('hasNext', hasNextStatus);
     template.helper('operateType', operateType);
+    template.helper('displayType', displayType);
 
     $(function() {
         //全选
@@ -317,7 +324,13 @@
         });
 
         form.on('submit(search)', function(data) {
-            pagination = $$.search('/action/bm/mchnt-base-info/search', data.field);
+            var procStMap = {
+                'check1': '1'
+            };
+            var params = $.extend(data.field, {
+                proc_st2: procStMap[displayType]
+            });
+            pagination = $$.search('/action/bm/mchnt-base-info/search', params);
             return false; //阻止表单跳转
         });
 
@@ -334,7 +347,8 @@
 
         $$.loadSelect('#province', districtData['province']);
 
-        $$.transformStatus('#list-panel', operateType);
+        // $$.transformStatus('#search-panel', operateType);
+        $$.transformDisplay('#list-panel', displayType);
         form.render('select');
     });
     </script>

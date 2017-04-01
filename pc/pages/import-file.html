@@ -207,6 +207,7 @@
                 if ($$.errcode(res) == 0) {
                     var $item = $(elem).closest('.layui-form-item');
                     $item.find('input[name=serverid]').val(res.serverid); //方便验证
+                    $(elem).attr('data-value', res.serverid);
                 } else {
                     $$.msg($$.errmsg(res), {
                         icon: 2

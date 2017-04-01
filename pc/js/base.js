@@ -117,7 +117,7 @@ window.$$ = (function() {
             options = error;
             error = function(data) {
                 if (window.layer) {
-                    $$.info($$.errmsg(data), {
+                    $$.msg($$.errmsg(data), {
                         icon: 2
                     });
                 }
@@ -219,7 +219,8 @@ window.$$ = (function() {
             selector: '#list',
             pageSelector: '#page',
             tpl: 'list-tpl',
-            checkbox: true
+            checkbox: true,
+            onClickRow: $.noop
         }, options || {})
 
         load();
@@ -237,6 +238,10 @@ window.$$ = (function() {
                     $this.find('input[type=checkbox]').prop('checked', true);;
                     $siblings.find('input[type=checkbox]:checked').prop('checked', false);
                     if (options.checkbox) form.render('checkbox');
+
+                    var index = parseInt($this.attr('data-index'));
+                    var row = $list.data('data')[index];
+                    options.onClickRow(index, row);
                 });
 
                 laypage({
@@ -349,7 +354,7 @@ window.$$ = (function() {
 
         var $checkbox = $$.getChecked(selector);
         if ($checkbox.length == 0) {
-            $$.info('请选择需要操作的记录');
+            $$.msg('请选择需要操作的记录');
             return;
         }
 
@@ -370,12 +375,21 @@ window.$$ = (function() {
         })
 
         $$.request(url, params, function(data) {
-            $$.info('操作成功', {
+            $$.msg('操作成功', {
                 icon: 1
             });
             if (options.success) options.success(data);
         });
     }
+
+    $$.transformDisplay = function(selector, type) {
+        var $target = $(selector);
+        type = type || 'search';
+
+        //显示/隐藏
+        $target.find('.visible').show().filter('.invisible-' + type).hide();
+        $target.find('.invisible').hide().filter('.visible-' + type).show();
+    };
 
     $$.transformStatus = function(selector, status) {
         var $target = $(selector);

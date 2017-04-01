@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="layui-body">
-            <div class="layui-tab layui-tab-card" lay-filter="tab">
+            <div class="layui-tab layui-tab-card" lay-filter="tab" id="main-tab">
                 <ul class="layui-tab-title">
                     <li class="layui-this">首页</li>
                 </ul>
@@ -156,6 +156,12 @@
         }
 
         element.tabChange('tab', id);
+    }
+
+    function closeTab() {
+        var $tab = $('#main-tab');
+        var layid = $tab.children('.layui-tab-title').children('.layui-this').attr('lay-id');
+        element.tabDelete('tab', layid);
     }
 
     var element;
