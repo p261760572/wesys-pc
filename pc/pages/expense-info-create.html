@@ -74,18 +74,18 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="search" id="submit-btn">查询</button>
+                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/mchnt-base-info/search'" id="search-btn">查询</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
             </form>
         </div>
         <div class="panel panel-padding">
-            <div class="layui-btn-group">
-                <button class="layui-btn layui-btn-small" data-url="expense-info-detail.html" onclick="onGoto(this)">
+            <!-- <div class="layui-btn-group">
+                <button class="layui-btn layui-btn-small" onclick="$$.goto(this)" data-options="url:$$.url('expense-info-detail.html?operateType=create',{}),title:'新增费用信息'">
                     生成费用单
-                </button>                
-            </div>            
+                </button>
+            </div> -->
             <div id="list">
             </div>
             <div id="page" style="text-align: right;"></div>
@@ -96,9 +96,9 @@
             <table class="layui-table">
                 <thead>
                     <tr>
-                        <th>
+                        <!-- <th>
                             <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
-                        </th>
+                        </th> -->
                         <th>客户号</th>
                         <th>联系人</th>
                         <th>手机</th>
@@ -114,9 +114,9 @@
                 <tbody>
                     {{each rows as row i}}
                     <tr data-index="{{i}}">
-                        <td>
+                        <!-- <td>
                             <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary" lay-filter="check">
-                        </td>
+                        </td> -->
                         <td>
                             {{row.mchnt_id}}
                         </td>
@@ -146,11 +146,9 @@
                         </td>
                         <td>
                             <div class="layui-btn-group">
-                                <div>
-                                    <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="onView({{i}})">
-                                        查看
-                                    </button>
-                                </div>
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'expense-info-detail.html?operateType=create',title:'生成费用信息'">
+                                    生成费用
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -170,75 +168,12 @@
     <script type="text/javascript">
     var query = $$.parseQueryString();
     var operateType = query.operateType;
-    var layer = layui.layer;
-    var laypage = layui.laypage;
+    var displayType = query.displayType;
     var form = layui.form();
     var element = layui.element();
 
-    var pagination;
-
-
-    function onView(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        $$.open('mchnt-base-info-detail.html?operateType=view', '查看商户信息', {
-            rec_id: row.rec_id
-        });
-    }
-
-
-    function onGoto(target) {
-        var $selected = $$.getSelected('#list');
-        if ($selected.length != 1) {
-            $$.msg('请选择需要操作的记录');
-            return;
-        }
-        var index = parseInt($selected.attr('data-index'));
-        var $target = $(target);
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        var url = $target.attr('data-url');
-        var title = $target.text() + '-' + row.mchnt_abbr;
-        url += '?' + $.param({
-            operateType: 'create',
-            mchnt_id: row.mchnt_id
-        });
-
-        if (parent.addTab) {
-            url = 'pages/' + url;
-            parent.addTab(url, title, url);
-        } else {
-            $$.open(url, title, {
-                mchnt_id: row.mchnt_id
-            });
-        }
-    }
-
-    function onBatchCheck1Nopass() {
-        var $checkbox = $$.getChecked('#list');
-        if ($checkbox.length == 0) {
-            $$.msg('请勾选需要操作的记录');
-            return;
-        }
-        $$.prompt('请输入驳回备注', function(value) {
-            $$.batchSubmit('#list', '/action/bm/mchnt-base-info/batch-check1-nopass', {
-                params: {
-                    checked_reason: value
-                }
-            });
-        });
-    }
-
-    function onBatchDelete() {
-        var $checkbox = $$.getChecked('#list');
-        if ($checkbox.length == 0) {
-            $$.msg('请勾选需要操作的记录');
-            return;
-        }
-
-        $$.confirm('确认要删除?', function() {
-            $$.batchSubmit('#list', '/action/bm/mchnt-base-info/batch-delete');
-        });
+    function reload() {
+        $$.datagrid('#list', 'reload');
     }
 
     function hasNextStatus(oper_in, proc_st, action) {
@@ -250,23 +185,20 @@
     template.helper('operateType', operateType);
 
     $(function() {
-        //全选
-        form.on('checkbox(allCheck)', function(data) {
-            var child = $(data.elem).parents('table').find('tbody input[type=checkbox]');
-            child.each(function(index, item) {
-                item.checked = data.elem.checked;
-            });
-            form.render('checkbox');
+        form.on('select(province)', function(data) {
+            $$.loadSelect('#city', districtData['city'][data.value]);
+            $$.loadSelect('#district', []);
+            form.render('select');
         });
 
-        form.on('checkbox(check)', function(data) {
-            return false;
+        form.on('select(city)', function(data) {
+            $$.loadSelect('#district', districtData['district'][$('#province').val() + data.value]);
+            form.render('select');
         });
 
-        form.on('submit(search)', function(data) {
-            pagination = $$.search('/action/bm/mchnt-base-info/search', data.field);
-            return false; //阻止表单跳转
-        });
+        $$.loadSelect('#province', districtData['province']);
+
+        form.render('select');
     });
     </script>
 </body>

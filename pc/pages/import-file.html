@@ -12,33 +12,31 @@
 
 <body>
     <div class="container">
-        <div id="detail">
-            <div class="panel panel-padding">
-                <form class="layui-form" action="" method="post">
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label"><span class="required">*</span>装载类型</label>
-                            <div class="layui-input-inline">
-                                <select name="file_type" lay-verify="required" id="file-type">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label"><span class="required">*</span>上传文件</label>
-                        <input type="text" name="serverid" lay-verify="required" class="hide">
+        <div class="panel panel-padding">
+            <form id="detail" class="layui-form" action="" method="post">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="required">*</span>装载类型</label>
                         <div class="layui-input-inline">
-                            <input type="file" name="file" class="layui-upload-file">
+                            <select name="file_type" lay-verify="required" id="file-type">
+                                <option value=""></option>
+                            </select>
                         </div>
                     </div>
-                    <div class="layui-form-item">
-                        <div class="layui-input-block">
-                            <button class="layui-btn" lay-submit="" lay-filter="detail">提交</button>
-                        </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span class="required">*</span>上传文件</label>
+                    <input type="text" name="serverid" lay-verify="required" class="hide">
+                    <div class="layui-input-inline">
+                        <input type="file" name="file" class="layui-upload-file">
                     </div>
-                </form>
-            </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn" onclick="$$.submit(this)" data-options="url:'/action/bm/import-file/create',success:submitSuccess">提交</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
     <div class="container">
@@ -58,7 +56,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="search" id="search-btn">查询</button>
+                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/import-file/search'" id="search-btn">查询</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -115,12 +113,10 @@
                                 <button class="layui-btn layui-btn-mini" onclick="onImport({{i}})">
                                     导入
                                 </button>
-                                {{/if}} 
-                                {{if row.result_url}}
+                                {{/if}} {{if row.result_url}}
                                 <a class="layui-btn layui-btn-mini" href="/p/{{row.result_url}}">
                                     下载
-                                </a> 
-                                {{/if}}
+                                </a> {{/if}}
                             </div>
                         </td>
                     </tr>
@@ -143,12 +139,12 @@
     <script type="text/javascript">
     var query = $$.parseQueryString();
     var operateType = query.operateType;
-    var layer = layui.layer;
-    var laypage = layui.laypage;
     var form = layui.form();
     var element = layui.element();
 
-    var pagination;
+    function reload() {
+        $$.datagrid('#list', 'reload');
+    }
 
     function renderFile(elem) {
         var $item = $(elem).closest('.layui-form-item');
@@ -161,8 +157,7 @@
     }
 
     function onImport(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
+        var row = $$.datagrid('#list', 'getRows')[index];
         $$.request('/action/bm/import-file/import', row, function(data) {
             $$.msg('操作成功', {
                 icon: 1
@@ -182,13 +177,11 @@
         });
     }
 
-    function onSubmit(param) {
-        $$.request('/action/bm/import-file/create', param, function(data) {
-            $$.msg('操作成功', {
-                icon: 1
-            });
-            $('#search-btn').click();
+    function submitSuccess(requestData, data) {
+        $$.msg('操作成功', {
+            icon: 1
         });
+        $('#search-btn').click();
     }
 
     function initUpload() {
@@ -222,16 +215,6 @@
 
     $(function() {
         initUpload();
-
-        form.on('submit(detail)', function(data) {
-            onSubmit(data.field);
-            return false; //阻止表单跳转
-        });
-
-        form.on('submit(search)', function(data) {
-            pagination = $$.search('/action/bm/import-file/search', data.field);
-            return false; //阻止表单跳转
-        });
 
         $$.request('/action/bm/parameter/list', {
             file_type: '1'

@@ -4,14 +4,33 @@ window.$$ = (function() {
     var $$ = {};
     var selectTpl = '{{each rows as row i}} <option value="{{row[valueField]}}">{{row[textField]}}</option> {{/each}}';
 
+    //解析属性data-options
+    $$.parseOptions = function(target) {
+        var $target = $(target);
+        var options = {};
+
+        var s = $.trim($target.attr('data-options'));
+        if (s) {
+            if (s.substring(0, 1) != '{') {
+                s = '{' + s + '}';
+            }
+            options = (new Function('return ' + s))();
+        }
+
+        return options;
+    };
+
+    //包裹url,解决根目录问题
     $$.wrapUrl = function(url) {
         return window.basedir ? window.basedir + url : url;
-    }
+    };
 
+    //获取错误代码
     $$.errcode = function(data) {
         return data.errcode;
     };
 
+    //获取错误原因
     $$.errmsg = function(data) {
         return data.errmsg;
     };
@@ -22,14 +41,17 @@ window.$$ = (function() {
         }
     };
 
+    //消息
     $$.msg = function(content, options, end) {
         layer.msg(content, options, end);
     };
 
+    //警告
     $$.alert = function(content, options, yes) {
         layer.alert(content, options, yes);
     };
 
+    //确认
     $$.confirm = function(content, yes) {
         layer.confirm(content, {
             icon: 3,
@@ -40,6 +62,7 @@ window.$$ = (function() {
         });
     };
 
+    //提示
     $$.prompt = function(title, yes) {
         layer.prompt({
             title: title,
@@ -49,7 +72,7 @@ window.$$ = (function() {
         });
     };
 
-    //解析查询
+    //解析查询字符串
     $$.parseQuery = function(queryString) {
         var query = {};
         if (queryString.length > 0) {
@@ -65,6 +88,7 @@ window.$$ = (function() {
         return query;
     };
 
+    //组装url
     $$.url = function(url, params) {
         var split = url.split('?');
         var key = split.shift();
@@ -79,37 +103,42 @@ window.$$ = (function() {
         return url;
     }
 
-    $$.open = function(url, title, params, options) {
-        options = $.extend({
-            type: 2,
-            title: title,
-            content: $$.url(url, params),
-            end: function() {
-                if (window.pagination) window.pagination.reload();
-            }
-        }, options || {});
-
-        var index = layer.open(options);
-        layer.full(index);
+    //关闭tab或layer
+    $$.close = function() {
+        if (window.top.closeTab) {
+            window.top.closeTab(window.top.getTab());
+        } else {
+            var index = window.parent.layer.getFrameIndex(window.name);
+            window.parent.layer.close(index);
+        }
     }
 
-    $$.openTab = function(url, title) {
+    //打开页面
+    $$.open = function(url, title) {
         if (window.top.addTab) {
             var id = url;
             url = 'pages/' + url;
             window.top.addTab(id, title, url);
         } else {
-            $$.open(url, title);
+            var index = layer.open({
+                type: 2,
+                title: title,
+                content: url,
+                end: function() {
+                    // if (window.reload) window.reload();
+                }
+            });
+            layer.full(index);
         }
     }
 
-    //解析查询字符串
+    //解析当前页面查询字符串
     $$.parseQueryString = function() {
         var queryString = window.location.search.substr(1);
         return $$.parseQuery(queryString);
     };
 
-    //POST请求
+    //请求
     $$.request = function(url, data, success, error, options) {
         var index;
 
@@ -157,20 +186,6 @@ window.$$ = (function() {
     };
 
 
-    //字符串去空白
-    $$.trim = function(str) {
-        return str.replace(/(^[\s]*)|([\s]*$)/g, '');
-    };
-
-    $$.ltrim = function(str) {
-        return str.replace(/(^[\s]*)/g, '');
-    };
-
-    $$.rtrim = function(str) {
-        return str.replace(/([\s]*$)/g, '');
-    };
-
-
     //格式化日期
     $$.formatDate = function(date, format) {
         var o = {
@@ -213,56 +228,232 @@ window.$$ = (function() {
         return date;
     };
 
-    $$.search = function(url, params, options) {
-        params.page = params.page || 1;
-        options = $.extend({
-            selector: '#list',
-            pageSelector: '#page',
-            tpl: 'list-tpl',
-            checkbox: true,
-            onClickRow: $.noop
-        }, options || {})
+    $$.datagrid = function(selector, options, param) {
+        if (typeof options == 'string') {
+            return $$.datagrid.methods[options](selector, param);
+        }
 
-        load();
+        var $list = $(selector);
+        var state = $list.data('datagrid');
+        var opts;
+        if (state) {
+            opts = $.extend(state.options, options);
+        } else {
+            opts = $.extend({
+                tpl: null,
+                url: null,
+                data: null,
+                checkbox: true,
+                pagination: true,
+                queryParams: {},
+                onClickRow: $.noop
+            }, $$.parseOptions($list), options);
 
-        function load() {
-            $$.request(url, params, function(data) {
-                var $list = $(options.selector).html(template(options.tpl, data)).data('data', data);
-                if (options.checkbox) form.render('checkbox');
+            state = {
+                options: opts,
+                data: {
+                    total: 0,
+                    rows: []
+                }
+            };
 
-                $list.on('click', 'tbody td:has(input[type=checkbox])', function() {
-                    return false
-                }).on('click', 'tbody tr', function() {
-                    var $this = $(this);
-                    var $siblings = $this.addClass('bg-gray').siblings().removeClass('bg-gray');
-                    $this.find('input[type=checkbox]').prop('checked', true);;
-                    $siblings.find('input[type=checkbox]:checked').prop('checked', false);
-                    if (options.checkbox) form.render('checkbox');
+            $list.data('datagrid', state);
 
-                    var index = parseInt($this.attr('data-index'));
-                    var row = $list.data('data')[index];
-                    options.onClickRow(index, row);
-                });
+            //初始化
+            init();
+            bindEvents();
+        }
 
+        if (opts.url) {
+            request();
+        } else {
+            loadData(opts.data);
+        }
+
+        function init() {
+            if (opts.pagination) {
+                state.$page = $('<div style="text-align: right;"></div>');
+                $list.after(state.$page);
+            }
+        }
+
+        function loadData(data) {
+            if (opts.tpl.indexOf('#') == 0) {
+                $list.html(template(opts.tpl.substr(1), data));
+            } else {
+                $list.html(template.render(opts.tpl, data));
+            }
+            if (opts.checkbox) form.render('checkbox');
+
+            state.data = data;
+            if (opts.pagination) {
                 laypage({
-                    cont: $(options.pageSelector),
+                    cont: state.$page,
                     pages: Math.ceil(data.total / 10),
-                    curr: params.page,
+                    curr: opts.queryParams.page || 1,
                     skip: true,
                     jump: function(obj, first) {
                         if (!first) {
-                            params.page = obj.curr;
-                            load();
+                            opts.queryParams.page = obj.curr;
+                            request();
                         }
                     }
                 });
+            }
+        }
+
+        function bindEvents() {
+            $list.on('click', 'tbody td:has(input[type=checkbox])', function() {
+                return false
+            }).on('click', 'tbody tr', function() {
+                var $this = $(this);
+                var $siblings = $this.addClass('bg-gray').siblings().removeClass('bg-gray');
+                $this.find('input[type=checkbox]').prop('checked', true);;
+                $siblings.find('input[type=checkbox]:checked').prop('checked', false);
+                if (opts.checkbox) form.render('checkbox');
+
+                var index = parseInt($this.attr('data-index'));
+                var row = state.data.rows[index];
+                opts.onClickRow(index, row);
+            });
+
+            //全选
+            form.on('checkbox(allCheck)', function(data) {
+                var child = $(data.elem).closest('table').find('tbody input[type=checkbox]');
+                child.each(function(index, item) {
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
             });
         }
 
-        return {
-            reload: load
+
+        function request() {
+            $$.request(opts.url, opts.queryParams, function(data) {
+                loadData(data);
+            });
         }
+
+        $$.datagrid.methods = {
+            'reload': function(selector) {
+                request();
+            },
+            'getData': function(selector) {
+                return state.data;
+            },
+            'getRows': function(selector) {
+                return state.data.rows;
+            },
+            'getChecked': function(selector) {
+                var $checked = $(selector).find('tbody tr:has(input[type=checkbox]:checked)');
+                var rows = $$.datagrid(selector, 'getRows');
+                var tmp = [];
+
+                $checked.each(function(i, item) {
+                    var index = parseInt($(item).attr('data-index'));
+                    tmp.push(rows[index]);
+                });
+
+                return tmp;
+            },
+            'getSelected': function(selector) {
+                var $selected = $(selector).find('tbody tr.bg-gray');
+                if ($selected.length) {
+                    var index = parseInt($selected.attr('data-index'));
+                    return $$.datagrid(selector, 'getRows')[index];
+                }
+                return null;
+            }
+        };
     }
+
+    $$.serializeForm = function(target) {
+        var $form = $(target);
+        var data = $form.serializeObject();
+        $form.each(function(i, element) {
+            var opts = $$.parseOptions(element);
+            if (opts.serialize) {
+                opts.serialize.call(element, data);
+            }
+        });
+        return data;
+    };
+
+    $$.search = function(target) {
+        var $form = $(target).closest('form');
+        var options = $.extend({
+            selector: '#list',
+            tpl: '#list-tpl',
+            queryParams: $$.serializeForm($form),
+            before: $.noop
+        }, $$.parseOptions(target));
+
+        if (options.before(options.queryParams) == false) return false;
+
+        $$.datagrid(options.selector, options);
+    };
+
+    $$.view = function(selector, url, params) {
+        var options = $.extend({}, $$.parseOptions(selector));
+
+        $$.request(url, params, function(data) {
+            if (options.load) {
+                options.load(data);
+            }
+            $$.loadData(selector, data.data);
+            form.render();
+        });
+    };
+
+    $$.submit = function(target) {
+        var $form = $(target).closest('form');
+        var options = $.extend({
+            before: $.noop,
+            success: function() {
+                $$.msg('操作成功', {
+                    icon: 1
+                });
+            }
+        }, $$.parseOptions(target));
+
+        var requestData = $$.serializeForm($form);
+
+        if (options.before(options.requestData) == false) return false;
+
+        if (form.validate($form) == false) return false;
+
+        $$.request(options.url, requestData, function(data) {
+            $$.transformStatus($form, true);
+            form.render('select');
+            options.success(requestData, data);
+        });
+    };
+
+
+    $$.goto = function(target) {
+        var options = $.extend({}, $$.parseOptions(target));
+
+        var url = $$.url(options.url, {
+            // displayType: displayType
+        });
+
+        $$.open(url, options.title);
+    };
+
+    $$.do = function(target, index) {
+        var options = $.extend({
+            datagrid: '#list',
+            keys: 'rec_id'
+        }, $$.parseOptions(target));
+
+        var row = $$.datagrid(options.datagrid, 'getRows')[index];
+        var params = $$.getKeys(row, options.keys)
+        params.displayType = displayType;
+
+        var url = $$.url(options.url, params);
+
+        $$.open(url, options.title);
+    };
 
     $$.loadSelect = function(selector, data, options) {
         options = $.extend({
@@ -334,70 +525,88 @@ window.$$ = (function() {
         return data;
     }
 
-    $$.getChecked = function(selector) {
-        return $(selector).find('tbody input[type=checkbox]:checked');
-    }
 
-    $$.getSelected = function(selector) {
-        return $(selector).find('tbody tr.bg-gray');
-    }
-
-    $$.batchSubmit = function(selector, url, options) {
-        options = $.extend({
-            params: {},
+    $$.batchSubmit = function(target) {
+        var options = $.extend({
+            datagrid: '#list',
+            keys: 'rec_id',
+            type: 'default', //default confirm prompt
+            promptKey: null,
             success: function() {
-                if (window.pagination) window.pagination.reload();
+                if (window.reload) window.reload();
             }
-        }, options || {});
+        }, $$.parseOptions(target));
 
-        params = options.params;
 
-        var $checkbox = $$.getChecked(selector);
-        if ($checkbox.length == 0) {
+        var rows = $$.datagrid(options.datagrid, 'getChecked');
+        if (rows.length == 0) {
             $$.msg('请选择需要操作的记录');
             return;
         }
 
-        var data = $(selector).data('data');
-        var rows = [];
+        if (options.keys) {
+            var tmp = [];
+            $.each(rows, function(index, value) {
+                tmp.push($$.getKeys(value, options.keys));
+            })
+            rows = tmp;
+        }
 
-        $checkbox.each(function(index, item) {
-            var i = parseInt($(item).val());
-            if (options.keys) {
-                rows.push($$.getKeys(data.rows[i], options.keys));
-            } else {
-                rows.push(data.rows[i]);
-            }
-        });
-
-        params = $.extend(params, {
+        var params = {
             rows: rows
-        })
+        };
 
-        $$.request(url, params, function(data) {
-            $$.msg('操作成功', {
-                icon: 1
+        var callback = {
+            'default': request,
+            'confirm': function() {
+                $$.confirm(options.title, function() {
+                    request();
+                });
+            },
+            'prompt': function() {
+                $$.prompt(options.title, function(value) {
+                    params[options.promptKey] = value;
+                    request();
+                });
+            }
+        };
+
+        callback[options.type]();
+
+        function request() {
+            $$.request(options.url, params, function(data) {
+                $$.msg('操作成功', {
+                    icon: 1
+                });
+                if (options.success) options.success(data);
             });
-            if (options.success) options.success(data);
-        });
+        }
     }
 
-    $$.transformDisplay = function(selector, type) {
+    $$.transformDisplay = function(selector, type, isSubmit) {
         var $target = $(selector);
+
         type = type || 'search';
 
         //显示/隐藏
-        $target.find('.visible').show().filter('.invisible-' + type).hide();
-        $target.find('.invisible').hide().filter('.visible-' + type).show();
+        var tag = isSubmit ? 'button' : '';
+        $target.find(tag + '.visible').show().filter('.invisible-' + type).hide();
+        $target.find(tag + '.invisible').hide().filter('.visible-' + type).show();
     };
 
-    $$.transformStatus = function(selector, status) {
+    $$.transformStatus = function(selector, status, isSubmit) {
         var $target = $(selector);
+
+        if (typeof status === 'boolean') {
+            isSubmit = status;
+            status = 'view';
+        }
+
         status = status || 'view';
 
         //显示/隐藏
-        $target.find('.visible').show().filter('.invisible-' + status).hide();
-        $target.find('.invisible').hide().filter('.visible-' + status).show();
+        $$.transformDisplay(selector, status, isSubmit);
+
 
         $target.find('input[type!="button"],textarea,select').each(function(index, element) {
             if ($.inArray(status, ['create', 'update']) < 0) {

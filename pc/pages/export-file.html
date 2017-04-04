@@ -26,7 +26,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="search" id="search-btn">查询</button>
+                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/export-file/search'" id="search-btn">查询</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -95,102 +95,11 @@
     <script type="text/javascript">
     var query = $$.parseQueryString();
     var operateType = query.operateType;
-    var layer = layui.layer;
-    var laypage = layui.laypage;
     var form = layui.form();
     var element = layui.element();
 
-    var pagination;
-
-    function onAdd() {
-        $$.open('export-file-detail.html?operateType=create', '新增导出文件');
-    }
-
-    function onView(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        $$.open('export-file-detail.html?operateType=view', '查看导出文件', {
-            rec_id: row.rec_id
-        });
-    }
-
-    function onEdit(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        $$.open('export-file-detail.html?operateType=update', '编辑导出文件', {
-            rec_id: row.rec_id
-        });
-    }
-
-    function onDelete(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-
-        $$.confirm('确认要删除?', function() {
-            $$.request('/action/bm/export-file/delete', row, function(data) {
-                $$.info('操作成功', {
-                    icon: 1
-                });
-            });
-        });
-    }
-
-    function onGoto(target) {
-        var $selected = $$.getSelected('#list');
-        if ($selected.length != 1) {
-            $$.info('请选择需要操作的记录');
-            return;
-        }
-        var index = parseInt($selected.attr('data-index'));
-        var $target = $(target);
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        var url = $target.attr('data-url');
-        var title = $target.text() + '-' + row.key;
-        url += '?' + $.param({
-            operateType: operateType,
-            key: row.key
-        });
-
-        if (parent.addTab) {
-            url = 'pages/' + url;
-            parent.addTab(url, title, url);
-        } else {
-            $$.open(url, title, {
-                key: row.key
-            });
-        }
-    }
-
-    function onBatchCheck1Pass() {
-        $$.batchSubmit('#list', '/action/bm/export-file/batch-check1-pass');
-    }
-
-    function onBatchCheck1Nopass() {
-        var $checkbox = $$.getChecked('#list');
-        if ($checkbox.length == 0) {
-            $$.info('请勾选需要操作的记录');
-            return;
-        }
-        $$.prompt('请输入驳回备注', function(value) {
-            $$.batchSubmit('#list', '/action/bm/export-file/batch-check1-nopass', {
-                params: {
-                    checked_reason: value
-                }
-            });
-        });
-    }
-
-    function onBatchDelete() {
-        var $checkbox = $$.getChecked('#list');
-        if ($checkbox.length == 0) {
-            $$.info('请勾选需要操作的记录');
-            return;
-        }
-
-        $$.confirm('确认要删除?', function() {
-            $$.batchSubmit('#list', '/action/bm/export-file/batch-delete');
-        });
+    function reload() {
+        $$.datagrid('#list', 'reload');
     }
 
     function hasNextStatus(oper_in, proc_st, action) {
@@ -202,25 +111,7 @@
     template.helper('operateType', operateType);
 
     $(function() {
-        //全选
-        // form.on('checkbox(allCheck)', function(data) {
-        //     var child = $(data.elem).parents('table').find('tbody input[type=checkbox]');
-        //     child.each(function(index, item) {
-        //         item.checked = data.elem.checked;
-        //     });
-        //     form.render('checkbox');
-        // });
-
-        // form.on('checkbox(check)', function(data) {
-        //     return false;
-        // });
-
-        form.on('submit(search)', function(data) {
-            pagination = $$.search('/action/bm/export-file/search', data.field);
-            return false; //阻止表单跳转
-        });
-
-        var d1 = $$.request('/action/bm/parameter/list', {
+        $$.request('/action/bm/parameter/list', {
             export_type: '1'
         }, function(data) {
             $$.loadSelect('#export-type', data.export_type, {
@@ -230,6 +121,8 @@
 
             form.render('select');
         });
+
+        $('#search-btn').click();
     });
     </script>
 </body>

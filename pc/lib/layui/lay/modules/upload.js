@@ -1,2 +1,164 @@
 /** layui-v1.0.10 MIT License By http://www.layui.com */
- ;layui.define("layer",function(e){"use strict";var t=layui.jquery,a=layui.layer,r=(layui.device(),"layui-upload-enter"),i="layui-upload-iframe",n={icon:2,shift:6},o={file:"文件",video:"视频",audio:"音频"},u=function(e){this.options=e};u.prototype.init=function(){var e=this,a=e.options,n=t("body"),u=t(a.elem||".layui-upload-file"),s=t('<iframe id="'+i+'" class="'+i+'" name="'+i+'"></iframe>');return t("#"+i)[0]||n.append(s),u.each(function(n,u){u=t(u);var s='<form target="'+i+'" method="'+(a.method||"post")+'" key="set-mine" enctype="multipart/form-data" action="'+(a.url||"")+'"></form>',l=u.attr("lay-type")||a.type;a.unwrap||(s='<div class="layui-box layui-upload-button">'+s+'<span class="layui-upload-icon"><i class="layui-icon">&#xe608;</i>'+(u.attr("lay-title")||a.title||"上传"+(o[l]||"图片"))+"</span></div>"),s=t(s),a.unwrap||s.on("dragover",function(e){e.preventDefault(),t(this).addClass(r)}).on("dragleave",function(){t(this).removeClass(r)}).on("drop",function(){t(this).removeClass(r)}),u.parent("form").attr("target")===i&&(a.unwrap?u.unwrap():(u.parent().next().remove(),u.unwrap().unwrap())),u.wrap(s),u.off("change").on("change",function(){e.action(this,l),u.closest(".layui-upload-button").removeClass("layui-form-danger")})})},u.prototype.action=function(e,r){var o=this,u=o.options,s=e.value,l=t(e),p=l.attr("lay-ext")||u.ext||"";if(s){switch(r){case"file":if(p&&!RegExp("\\w\\.("+p+")$","i").test(escape(s)))return a.msg("不支持该文件格式",n),e.value="";break;case"video":if(!RegExp("\\w\\.("+(p||"avi|mp4|wma|rmvb|rm|flash|3gp|flv")+")$","i").test(escape(s)))return a.msg("不支持该视频格式",n),e.value="";break;case"audio":if(!RegExp("\\w\\.("+(p||"mp3|wav|mid")+")$","i").test(escape(s)))return a.msg("不支持该音频格式",n),e.value="";break;default:if(!RegExp("\\w\\.("+(p||"jpg|png|gif|bmp|jpeg")+")$","i").test(escape(s)))return a.msg("不支持该图片格式",n),e.value=""}u.before&&u.before(e),l.parent().submit();var c=t("#"+i),f=setInterval(function(){var t;try{t=c.contents().find("body").text()}catch(r){return a.msg("上传接口存在跨域",n),clearInterval(f),void("function"==typeof u.error&&u.error(e))}if(t){clearInterval(f),c.contents().find("body").html("");try{t=JSON.parse(t)}catch(r){return t={},a.msg("请对上传接口返回JSON字符",n),void("function"==typeof u.error&&u.error(e))}"function"==typeof u.success&&u.success(t,e)}},30);e.value=""}},e("upload",function(e){var t=new u(e=e||{});t.init()})});
+ ;/*!
+
+ @Title: layui.upload 单文件上传 - 全浏览器兼容版
+ @Author: 贤心
+ @License：MIT
+
+ */
+ 
+layui.define('layer' , function(exports){
+  "use strict";
+  
+  var $ = layui.jquery;
+  var layer = layui.layer;
+  var device = layui.device();
+  
+  var elemDragEnter = 'layui-upload-enter';
+  var elemIframe = 'layui-upload-iframe';
+ 
+  var msgConf = {
+    icon: 2
+    ,shift: 6
+  }, fileType = {
+    file: '文件'
+    ,video: '视频'
+    ,audio: '音频'
+  };
+  
+  var Upload = function(options){
+    this.options = options;
+  };
+  
+  //初始化渲染
+  Upload.prototype.init = function(){
+    var that = this, options = that.options;
+    var body = $('body'), elem = $(options.elem || '.layui-upload-file');
+    var iframe = $('<iframe id="'+ elemIframe +'" class="'+ elemIframe +'" name="'+ elemIframe +'"></iframe>');
+    
+    //插入iframe    
+    $('#'+elemIframe)[0] || body.append(iframe);
+    
+    return elem.each(function(index, item){
+      item = $(item);
+      var form = '<form target="'+ elemIframe +'" method="'+ (options.method||'post') +'" key="set-mine" enctype="multipart/form-data" action="'+ (options.url||'') +'"></form>';
+      
+      var type = item.attr('lay-type') || options.type; //获取文件类型
+
+      //包裹ui元素
+      if(!options.unwrap){
+        form = '<div class="layui-box layui-upload-button">' + form + '<span class="layui-upload-icon"><i class="layui-icon">&#xe608;</i>'+ (
+          item.attr('lay-title') || options.title|| ('上传'+ (fileType[type]||'图片') )
+        ) +'</span></div>';
+      }
+      
+      form = $(form);
+      
+      //拖拽支持
+      if(!options.unwrap){
+        form.on('dragover', function(e){
+          e.preventDefault();
+          $(this).addClass(elemDragEnter);
+        }).on('dragleave', function(){
+          $(this).removeClass(elemDragEnter);
+        }).on('drop', function(){
+          $(this).removeClass(elemDragEnter);
+        });
+      }
+      
+      //如果已经实例化，则移除包裹元素
+      if(item.parent('form').attr('target') === elemIframe){
+        if(options.unwrap){
+          item.unwrap();
+        } else {
+          item.parent().next().remove();
+          item.unwrap().unwrap();
+        }
+      };
+      
+      //包裹元素
+      item.wrap(form);
+      
+      //触发上传
+      item.off('change').on('change', function(){
+        that.action(this, type);
+        item.closest('.layui-upload-button').removeClass('layui-form-danger');
+      });
+    });
+  };
+  
+  //提交上传
+  Upload.prototype.action = function(input, type){
+    var that = this, options = that.options, val = input.value;
+    var item = $(input), ext = item.attr('lay-ext') || options.ext || ''; //获取支持上传的文件扩展名;
+
+    if(!val){
+      return;
+    };
+    
+    //校验文件
+    switch(type){
+      case 'file': //一般文件
+        if(ext && !RegExp('\\w\\.('+ ext +')$', 'i').test(escape(val))){
+          layer.msg('不支持该文件格式', msgConf);
+          return input.value = '';
+        }
+      break;
+      case 'video': //视频文件
+        if(!RegExp('\\w\\.('+ (ext||'avi|mp4|wma|rmvb|rm|flash|3gp|flv') +')$', 'i').test(escape(val))){
+          layer.msg('不支持该视频格式', msgConf);
+          return input.value = '';
+        }
+      break;
+      case 'audio': //音频文件
+        if(!RegExp('\\w\\.('+ (ext||'mp3|wav|mid') +')$', 'i').test(escape(val))){
+          layer.msg('不支持该音频格式', msgConf);
+          return input.value = '';
+        }
+      break;
+      default: //图片文件
+        if(!RegExp('\\w\\.('+ (ext||'jpg|png|gif|bmp|jpeg') +')$', 'i').test(escape(val))){
+          layer.msg('不支持该图片格式', msgConf);
+          return input.value = '';
+        }
+      break;
+    }
+    
+    options.before && options.before(input);
+    item.parent().submit();
+
+    var iframe = $('#'+elemIframe), timer = setInterval(function() {
+      var res;
+      try {
+        res = iframe.contents().find('body').text();
+      } catch(e) {
+        layer.msg('上传接口存在跨域', msgConf);
+        clearInterval(timer);
+        typeof options.error === 'function' && options.error(input);
+        return;
+      }
+      if(res){
+        clearInterval(timer);
+        iframe.contents().find('body').html('');
+        try {
+          res = JSON.parse(res);
+        } catch(e){
+          res = {};
+          layer.msg('请对上传接口返回JSON字符', msgConf);
+          typeof options.error === 'function' && options.error(input);
+          return;
+        }
+        typeof options.success === 'function' && options.success(res, input);
+      }
+    }, 30); 
+    
+    input.value = '';
+  };
+  
+  //暴露接口
+  exports('upload', function(options){
+    var upload = new Upload(options = options || {});
+    upload.init();
+  });
+});
+

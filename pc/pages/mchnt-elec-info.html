@@ -44,7 +44,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="search" id="submit-btn">查询</button>
+                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/mchnt-elec-info/search'" id="search-btn">查询</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -52,15 +52,15 @@
         </div>
         <div class="panel panel-padding" id="list-panel">
             <div class="layui-btn-group invisible visible-update">
-                <button id="add-btn" class="layui-btn layui-btn-small hide" onclick="onAdd()">
+                <button class="layui-btn layui-btn-small" onclick="$$.goto(this)" data-options="url:$$.url('mchnt-elec-info-detail.html?operateType=create',{mchnt_id:query.mchnt_id}),title:'新增商户电子资料'">
                     <i class="layui-icon">&#xe654;</i> 上传
                 </button>
             </div>
             <div class="layui-btn-group invisible visible-check1">
-                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
+                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/mchnt-elec-info/batch-check1-pass'">
                     <i class="layui-icon">&#x1005;</i> 审核
                 </button>
-                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchCheck1Nopass()">
+                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/mchnt-elec-info/batch-check1-nopass',type:'prompt',title:'请输入驳回原因',promptKey:'checked_reason'">
                     <i class="layui-icon">&#xe633;</i> 驳回
                 </button>
                 <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
@@ -134,86 +134,11 @@
     var query = $$.parseQueryString();
     var displayType = query.displayType;
     var operateType = query.operateType;
-    var layer = layui.layer;
-    var laypage = layui.laypage;
     var form = layui.form();
     var element = layui.element();
 
-    var pagination;
-
-    function onAdd() {
-        var url = $$.url('mchnt-elec-info-detail.html?operateType=create', {
-            displayType: displayType,
-            mchnt_id: query.mchnt_id
-        });
-        var title = '新增商户电子资料';
-        $$.openTab(url, title);
-    }
-
-    function onView(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        var url = $$.url('mchnt-elec-info-detail.html?operateType=view', {
-            displayType: displayType,
-            rec_id: row.rec_id
-        });
-        var title = '查看商户电子资料';
-        $$.openTab(url, title);
-    }
-
-    function onEdit(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        var url = $$.url('mchnt-elec-info-detail.html?operateType=update', {
-            displayType: displayType,
-            rec_id: row.rec_id
-        });
-        var title = '编辑商户电子资料';
-        $$.openTab(url, title);
-    }
-
-    function onDelete(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-
-        $$.confirm('确认要删除?', function() {
-            $$.request('/action/bm/mchnt-elec-info/delete', row, function(data) {
-                $$.msg('操作成功', {
-                    icon: 1
-                });
-            });
-        });
-    }
-
-    function onBatchCheck1Pass() {
-        $$.batchSubmit('#list', '/action/bm/mchnt-elec-info/batch-check1-pass');
-    }
-
-    function onBatchCheck1Nopass() {
-        var $checkbox = $$.getChecked('#list');
-        if ($checkbox.length == 0) {
-            $$.msg('请勾选需要操作的记录');
-            return;
-        }
-        $$.prompt('请输入驳回备注', function(value) {
-            $$.batchSubmit('#list', '/action/bm/mchnt-elec-info/batch-check1-nopass', {
-                params: {
-                    checked_reason: value
-                }
-            });
-        });
-    }
-
-    function onBatchDelete() {
-        var $checkbox = $$.getChecked('#list');
-        if ($checkbox.length == 0) {
-            $$.msg('请勾选需要操作的记录');
-            return;
-        }
-
-        $$.confirm('确认要删除?', function() {
-            $$.batchSubmit('#list', '/action/bm/mchnt-elec-info/batch-delete');
-        });
+    function reload() {
+        $$.datagrid('#list', 'reload');
     }
 
     function hasNextStatus(oper_in, proc_st, action) {
@@ -230,48 +155,15 @@
     template.helper('operateType', operateType);
     template.helper('displayType', displayType);
 
-    $(function() {
-
-        //全选
-        form.on('checkbox(allCheck)', function(data) {
-            var child = $(data.elem).parents('table').find('tbody input[type=checkbox]');
-            child.each(function(index, item) {
-                item.checked = data.elem.checked;
-            });
-            form.render('checkbox');
-        });
-
-        form.on('submit(search)', function(data) {
-            var procStMap = {
-                'check1': '1'
-            };
-            var params = $.extend(data.field, {
-                proc_st: procStMap[displayType]
-            });
-            pagination = $$.search('/action/bm/mchnt-elec-info/search', params);
-            return false; //阻止表单跳转
-        });
-
-        form.on('select(province)', function(data) {
-            $$.loadSelect('#city', districtData['city'][data.value]);
-            $$.loadSelect('#district', []);
-            form.render('select');
-        });
-
-        form.on('select(city)', function(data) {
-            $$.loadSelect('#district', districtData['district'][$('#province').val() + data.value]);
-            form.render('select');
-        });
-
+    $(function() {    
         $$.loadSelect('#elec-info-type', $$.param['elec_info_type']);
-        $$.transformDisplay('#list-panel', displayType);
         form.render('select');
 
+        $$.transformDisplay('#list-panel', displayType);
+        
         if (query.mchnt_id) {
-            $('#search-panel').addClass('hide');
             $$.loadData('#search', query);
-            $('#submit-btn').click();
-            $('#add-btn').removeClass('hide');
+            $('#search-btn').click();
         }
     });
     </script>

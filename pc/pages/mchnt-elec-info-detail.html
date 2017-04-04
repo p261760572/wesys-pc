@@ -11,40 +11,38 @@
 </head>
 
 <body>
-    <div id="detail">
-        <div class="panel panel-padding">
-            <form class="layui-form" action="" method="post">
-                <div class="layui-form-item">
-                    <div class="layui-inline readonly">
-                        <label class="layui-form-label"><span class="required">*</span>客户号</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="mchnt_id" lay-verify="required" placeholder="请输入客户号" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>影印件类型</label>
-                        <div class="layui-input-inline">
-                            <select name="elec_info_type" lay-verify="required" id="elec-info-type">
-                                <option value=""></option>
-                            </select>
-                        </div>
+    <div class="panel panel-padding">
+        <form id="detail" class="layui-form" action="" method="post">
+            <div class="layui-form-item">
+                <div class="layui-inline readonly">
+                    <label class="layui-form-label"><span class="required">*</span>客户号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="mchnt_id" lay-verify="required" placeholder="请输入客户号" autocomplete="off" class="layui-input">
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="required">*</span>影印件</label>
-                    <input type="text" name="serverid" lay-verify="required" class="hide">
-                    <div class="layui-input-block">
-                        <input type="file" name="file" lay-verify="required" class="layui-upload-file">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>影印件类型</label>
+                    <div class="layui-input-inline">
+                        <select name="elec_info_type" lay-verify="required" id="elec-info-type">
+                            <option value=""></option>
+                        </select>
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit="" lay-filter="detail">提交</button>
-                        <button type="button" class="layui-btn layui-btn-primary" onclick="onClose()">关闭</button>
-                    </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="required">*</span>影印件</label>
+                <input type="text" name="serverid" lay-verify="required" class="hide">
+                <div class="layui-input-block">
+                    <input type="file" name="file" lay-verify="required" class="layui-upload-file">
                 </div>
-            </form>
-        </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn visible invisible-view" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-elec-info/' + operateType,success:submitSuccess">提交</button>
+                    <button type="button" class="layui-btn layui-btn-primary" onclick="$$.close()">关闭</button>
+                </div>
+            </div>
+        </form>
     </div>
     <script id="upload-tpl" type="text/html">
         <div class="img-box"><img src="/p/action/uploads/{{serverid}}" alt="..." class="img-thumbnail"></div>
@@ -82,25 +80,6 @@
         });
     }
 
-    function onSubmit(param) {
-        $$.request('/action/bm/mchnt-elec-info/' + operateType, param, function(data) {
-            $$.msg('操作成功', {
-                icon: 1
-            }, function() {
-                onClose();
-            });
-        });
-    }
-
-    function onClose() {
-        if(window.top.closeTab) {
-            window.top.closeTab();
-        } else {
-            var index = parent.layer.getFrameIndex(window.name);
-            parent.layer.close(index);
-        }
-    }
-
     function initUpload() {
         var index;
         layui.upload({
@@ -120,7 +99,7 @@
                     });
                 }
             },
-            error: function (elem) {
+            error: function(elem) {
                 if (index) layer.close(index);
             }
         });
@@ -128,12 +107,6 @@
 
     $(function() {
         initUpload();
-
-        form.on('submit(detail)', function(data) {
-            onSubmit(data.field);
-            return false; //阻止表单跳转
-        });
-
 
         $$.loadSelect('#elec-info-type', $$.param['elec_info_type']);
         form.render('select');

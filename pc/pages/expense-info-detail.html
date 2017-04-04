@@ -13,7 +13,7 @@
 
 <body>
     <div class="panel panel-padding">
-        <form id="detail" class="layui-form" action="" method="post">
+        <form id="detail" class="layui-form" action="" method="post" data-options="load:loadDetail,serialize:serializeDetail">
             <div class="layui-form-item readonly">
                 <div class="layui-inline visible invisible-create">
                     <label class="layui-form-label"><span class="required">*</span>费用单据号</label>
@@ -348,8 +348,8 @@
             </div> -->
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button class="layui-btn visible invisible-view" lay-submit="" lay-filter="detail">提交</button>
-                    <button type="button" class="layui-btn layui-btn-primary" onclick="onClose()">关闭</button>
+                    <button type="button" class="layui-btn visible invisible-view" onclick="$$.submit(this)" data-options="url:'/action/bm/expense-info/' + operateType">提交</button>
+                    <button type="button" class="layui-btn layui-btn-primary" onclick="$$.close()">关闭</button>
                 </div>
             </div>
         </form>
@@ -368,72 +368,23 @@
     <script type="text/javascript">
     var query = $$.parseQueryString();
     var operateType = query.operateType;
-    var layer = layui.layer;
     var form = layui.form();
     var element = layui.element();
 
-    function renderImgbox(elem, data) {
-        var $item = $(elem).closest('.layui-form-item');
-        var $wrap = $item.find('.img-box-wrap');
-        if (!$wrap.length) {
-            $wrap = $('<div class="layui-input-block img-box-wrap"></div>').appendTo($item);
-        }
-        var $box = $(template('upload-tpl', data)).data('data', {
-            elec_info_type: $(elem).attr('data-type'),
-            serverid: data.serverid
-        });
-        $wrap.html($box);
-        $item.find('input[name=serverid]').val(data.serverid); //方便验证
 
-        layer.photos({
-            photos: $wrap,
-            anim: 5
-        });
-    }
+    function loadDetail(data) {
+        $('#refund-amount-total').text(parseFloat(data.data.refund_amount_total || 0).toFixed(2));
 
-    function view() {
-        $$.request('/action/bm/expense-info/view', query, function(data) {
-            $$.loadData('#detail', data.data);
-
-            $('#refund-amount-total').text(parseFloat(data.data.refund_amount_total || 0).toFixed(2));
-
-            if (data.data.refund_account_bank_branch_cd) {
-                $('#refund-account-bank-branch-cd').html('<option value="' + data.data.refund_account_bank_branch_cd + '">' + data.data.refund_account_bank_branch_nm + '</option>').trigger('change');
-            }
-
-            form.render();
-        });
-    }
-
-    function onSubmit(param) {
-        // 照片
-        var images = [];
-        $('#detail').find('.img-box').each(function(index, elem) {
-            var data = $(elem).data('data');
-            images.push(data);
-        });
-
-        param.images = images;
-
-        $$.request('/action/bm/expense-info/' + operateType, param, function(data) {
-            $$.msg('操作成功', {
-                icon: 1
-            }, function() {
-                onClose();
-            });
-        });
-    }
-
-    function onClose() {
-        if(window.top.closeTab) {
-            window.top.closeTab();
-        } else {
-            var index = parent.layer.getFrameIndex(window.name);
-            parent.layer.close(index);
+        if (data.data.refund_account_bank_branch_cd) {
+            $('#refund-account-bank-branch-cd').html('<option value="' + data.data.refund_account_bank_branch_cd + '">' + data.data.bank_branch_nm + '</option>').trigger('change');
         }
     }
 
-    function onExpenseType() {
+    function serializeDetail(data) {
+        data.expense_cycle = $('#expense-cycle').val();
+    }
+
+    function onChangeExpenseType() {
         var value = $(this).val();
         if (value == '1' || value == '4') {
             $('#expense-cycle').val('1').attr('disabled', 'disabled');
@@ -443,40 +394,8 @@
         form.render('select');
     }
 
-
-    function initUpload() {
-        var index;
-        layui.upload({
-            url: $$.wrapUrl('/action/upload'),
-            before: function(input) {
-                index = layer.load(2);
-            },
-            success: function(res, elem) {
-                if (index) layer.close(index);
-
-                if ($$.errcode(res) == 0) {
-                    renderImgbox(elem, res);
-                    $(elem).attr('data-value', res.serverid);
-                } else {
-                    $$.msg($$.errmsg(res), {
-                        icon: 2
-                    });
-                }
-            }
-        });
-    }
-
     $(function() {
-        if (operateType != 'view') {
-            initUpload();
-        }
-
-        form.on('submit(detail)', function(data) {
-            onSubmit(data.field);
-            return false; //阻止表单跳转
-        });
-
-        $('#expense-type').on('change', onExpenseType);
+        $('#expense-type').on('change', onChangeExpenseType);
 
         form.on('select(expense_type)', function(data) {
             $(data.elem).change();
@@ -545,9 +464,9 @@
             form.render('select');
         });
 
-        $$.transformStatus('#detail', operateType);
         form.render();
 
+        $$.transformStatus('#detail', operateType);
         $.when(d1, d2).done(function() {
             if (query.operateType == 'create') {
                 $$.loadData('#detail', query);
@@ -557,7 +476,7 @@
                     form.render();
                 });
             } else {
-                view();
+                $$.view('#detail', '/action/bm/expense-info/view', query);
             }
         });
     });

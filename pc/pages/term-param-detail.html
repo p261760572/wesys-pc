@@ -12,79 +12,77 @@
 </head>
 
 <body>
-    <div id="detail">
-        <div class="panel panel-padding">
-            <form class="layui-form" action="" method="post">
-                <div class="layui-form-item">
-                    <div class="layui-inline readonly">
-                        <label class="layui-form-label"><span class="required">*</span>终端标识</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="term_no" placeholder="" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline visible invisible-create">
-                        <label class="layui-form-label"><span class="required">*</span>终端参数ID</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="term_param_id" placeholder="请输入终端参数ID" autocomplete="off" class="layui-input">
-                        </div>
+    <div class="panel panel-padding">
+        <form id="detail" class="layui-form" action="" method="post" data-options="load:loadDetail">
+            <div class="layui-form-item">
+                <div class="layui-inline readonly">
+                    <label class="layui-form-label"><span class="required">*</span>终端标识</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="term_no" placeholder="" autocomplete="off" class="layui-input">
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="required">*</span>门店名称</label>
-                    <div class="layui-input-block readonly">
-                        <input type="text" name="shop_name" placeholder="" autocomplete="off" class="layui-input">
+                <div class="layui-inline visible invisible-create">
+                    <label class="layui-form-label"><span class="required">*</span>终端参数ID</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="term_param_id" placeholder="请输入终端参数ID" autocomplete="off" class="layui-input">
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="required">*</span>商户参数</label>
-                    <div class="layui-input-block">
-                        <select name="mchnt_param_id" style="width: 100%;" lay-verify="required" lay-ignore id="mchnt-param-id">
-                            <option value=""></option>
-                        </select>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="required">*</span>门店名称</label>
+                <div class="layui-input-block readonly">
+                    <input type="text" name="shop_name" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="required">*</span>商户参数</label>
+                <div class="layui-input-block">
+                    <select name="mchnt_param_id" style="width: 100%;" lay-verify="required" lay-ignore id="mchnt-param-id">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">终端号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="term_id" placeholder="请输入终端号" autocomplete="off" class="layui-input">
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">终端号</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="term_id" placeholder="请输入终端号" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <!-- <div class="layui-inline">
+                <!-- <div class="layui-inline">
                         <label class="layui-form-label">参数状态</label>
                         <div class="layui-input-inline">
                             <input type="text" name="status" placeholder="请输入参数状态" autocomplete="off" class="layui-input">
                         </div>
                     </div> -->
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>拓展方</label>
-                        <div class="layui-input-inline">
-                            <select name="expand_inst_id" lay-verify="required" lay-search id="expand-inst-id">
-                                <option value=""></option>
-                            </select>
-                        </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>拓展方</label>
+                    <div class="layui-input-inline">
+                        <select name="expand_inst_id" lay-verify="required" lay-search id="expand-inst-id">
+                            <option value=""></option>
+                        </select>
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>拓展人</label>
-                        <div class="layui-input-inline">
-                            <select name="expand_id" lay-verify="required" lay-search id="expand-id">
-                                <option value=""></option>
-                            </select>
-                        </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>拓展人</label>
+                    <div class="layui-input-inline">
+                        <select name="expand_id" lay-verify="required" lay-search id="expand-id">
+                            <option value=""></option>
+                        </select>
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn visible invisible-view" lay-submit="" lay-filter="detail">提交</button>
-                        <button type="button" class="layui-btn layui-btn-primary" onclick="onClose()">关闭</button>
-                    </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn visible invisible-view" onclick="$$.submit(this)" data-options="url:'/action/bm/term-param/' + operateType">提交</button>
+                    <button type="button" class="layui-btn layui-btn-primary" onclick="$$.close()">关闭</button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
     <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
@@ -101,32 +99,9 @@
     var form = layui.form();
     var element = layui.element();
 
-    function view() {
-        $$.request('/action/bm/term-param/view', query, function(data) {
-            $$.loadData('#detail', data.data);
-            if (data.data.mchnt_param_id) {
-                $('#mchnt-param-id').html('<option value="' + data.data.mchnt_param_id + '">' + formatMchntParam(data.data) + '</option>').trigger('change');
-            }
-            form.render();
-        });
-    }
-
-    function onSubmit(param) {
-        $$.request('/action/bm/term-param/' + operateType, param, function(data) {
-            $$.msg('操作成功', {
-                icon: 1
-            }, function() {
-                onClose();
-            });
-        });
-    }
-
-    function onClose() {
-        if(window.top.closeTab) {
-            window.top.closeTab();
-        } else {
-            var index = parent.layer.getFrameIndex(window.name);
-            parent.layer.close(index);
+    function loadDetail(data) {
+        if (data.data.mchnt_param_id) {
+            $('#mchnt-param-id').html('<option value="' + data.data.mchnt_param_id + '">' + formatMchntParam(data.data) + '</option>').trigger('change');
         }
     }
 
@@ -209,7 +184,7 @@
                     form.render();
                 });
             } else {
-                view();
+                $$.view('#detail', '/action/bm/term-param/view', query);
             }
         });
     });

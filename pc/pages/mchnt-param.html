@@ -12,10 +12,10 @@
 
 <body>
     <div class="container">
-        <div id="search-panel" class="panel panel-padding hide">
-            <form id="search" class="layui-form" action="" method="post">
+        <div id="search-panel" class="panel panel-padding">
+            <form id="search" class="layui-form" action="" method="post" data-options="serialize:serializeSearch">
                 <div class="layui-form-item">
-                    <div class="layui-inline">
+                    <div class="layui-inline hide">
                         <label class="layui-form-label">客户号</label>
                         <div class="layui-input-inline">
                             <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
@@ -27,9 +27,9 @@
                             <input type="text" name="mchnt_cd" placeholder="请输入商户号" autocomplete="off" class="layui-input">
                         </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
+                <!-- </div> -->
+                <!-- <div class="layui-form-item"> -->
+                    <!-- <div class="layui-inline">
                         <label class="layui-form-label">收单机构</label>
                         <div class="layui-input-inline">
                             <select name="acq_inst_id" lay-filter="acq_inst_id" lay-search id="acq-inst-id">
@@ -44,16 +44,18 @@
                                 <option value=""></option>
                             </select>
                         </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
+                    </div> -->
+                <!-- </div>
+                <div class="layui-form-item"> -->
+                    <div class="layui-inline">
                     <label class="layui-form-label">商户名称</label>
-                    <div class="layui-input-block">
+                    <div class="layui-input-inline">
                         <input type="text" name="mchnt_name" placeholder="请输入商户名称" autocomplete="off" class="layui-input">
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
+                    </div>
+                <!-- </div>
+                <div class="layui-form-item"> -->
+                    <!-- <div class="layui-inline">
                         <label class="layui-form-label">创建日期</label>
                         <div class="layui-input-inline">
                             <input type="text" name="created_time" placeholder="请输入开始日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})" id="created_time">
@@ -62,27 +64,27 @@
                         <div class="layui-input-inline">
                             <input type="text" name="created_time2" placeholder="请输入结束日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})" id="created_time2">
                         </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button id="submit-btn" class="layui-btn" lay-submit lay-filter="search">查询</button>
-                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div> -->
+                <!-- </div>
+                <div class="layui-form-item"> -->
+                    <div class="layui-inline">
+                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/mchnt-param/search'" id="search-btn">查询</button>
+                        <!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
                     </div>
                 </div>
             </form>
         </div>
         <div class="panel panel-padding" id="list-panel">
             <div class="layui-btn-group invisible visible-update">
-                <button id="add-btn" class="layui-btn layui-btn-small hide" onclick="onAdd()">
+                <button class="layui-btn layui-btn-small" onclick="$$.goto(this)" data-options="url:$$.url('mchnt-param-detail.html?operateType=create',{mchnt_id:query.mchnt_id}),title:'新增商户参数'">
                     <i class="layui-icon">&#xe654;</i> 新增
                 </button>
             </div>
             <div class="layui-btn-group invisible visible-check1">
-                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
+                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/mchnt-param/batch-check1-pass'">
                     <i class="layui-icon">&#x1005;</i> 审核
                 </button>
-                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchCheck1Nopass()">
+                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/mchnt-param/batch-check1-nopass',type:'prompt',title:'请输入驳回原因',promptKey:'checked_reason'">
                     <i class="layui-icon">&#xe633;</i> 驳回
                 </button>
                 <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
@@ -153,11 +155,11 @@
                         </td>
                         <td>
                             <div class="layui-btn-group">
-                                <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
+                                <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="$$.do(this,{{i}})" data-options="url:'mchnt-param-detail.html?operateType=view',title:'查看商户参数'">
                                     查看
                                 </button>
                                 {{if displayType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
-                                <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'mchnt-param-detail.html?operateType=update',title:'编辑商户参数'">
                                     编辑
                                 </button>
                                 {{/if}} {{/if}}
@@ -181,90 +183,22 @@
     var query = $$.parseQueryString();
     var displayType = query.displayType;
     var operateType = query.operateType;
-    var layer = layui.layer;
-    var laypage = layui.laypage;
     var form = layui.form();
     var element = layui.element();
 
-    var pagination;
-
-    function onAdd() {
-        var url = $$.url('mchnt-param-detail.html?operateType=create', {
-            displayType: displayType,
-            mchnt_id: query.mchnt_id
-        });
-        var title = '新增商户参数';
-        $$.openTab(url, title);
+    function serializeSearch(data) {
+        var procStMap = {
+            'check1': '1'
+        };
+        data.proc_st = procStMap[displayType];
     }
 
-    function onView(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        var url = $$.url('mchnt-param-detail.html?operateType=view', {
-            displayType: displayType,
-            rec_id: row.rec_id
-        });
-        var title = '查看商户参数';
-        $$.openTab(url, title);
-    }
-
-    function onEdit(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        var url = $$.url('mchnt-param-detail.html?operateType=update', {
-            displayType: displayType,
-            rec_id: row.rec_id
-        });
-        var title = '编辑商户参数';
-        $$.openTab(url, title);
-    }
-
-    function onDelete(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-
-        $$.confirm('确认要删除?', function() {
-            $$.request('/action/bm/mchnt-param/delete', row, function(data) {
-                $$.msg('操作成功', {
-                    icon: 1
-                });
-            });
-        });
-    }
-
-    function onBatchCheck1Pass() {
-        $$.batchSubmit('#list', '/action/bm/mchnt-param/batch-check1-pass');
-    }
-
-    function onBatchCheck1Nopass() {
-        var $checkbox = $$.getChecked('#list');
-        if ($checkbox.length == 0) {
-            $$.msg('请勾选需要操作的记录');
-            return;
-        }
-        $$.prompt('请输入驳回备注', function(value) {
-            $$.batchSubmit('#list', '/action/bm/mchnt-param/batch-check1-nopass', {
-                params: {
-                    checked_reason: value
-                }
-            });
-        });
-    }
-
-    function onBatchDelete() {
-        var $checkbox = $$.getChecked('#list');
-        if ($checkbox.length == 0) {
-            $$.msg('请勾选需要操作的记录');
-            return;
-        }
-
-        $$.confirm('确认要删除?', function() {
-            $$.batchSubmit('#list', '/action/bm/mchnt-param/batch-delete');
-        });
+    function reload() {
+        $$.datagrid('#list', 'reload');
     }
 
     function hasNextStatus(oper_in, proc_st, action) {
-        var rows = $$.st.transition[$$.st.alias['mchnt_base_info']]
+        var rows = $$.st.transition[$$.st.alias['mchnt_param']]
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
 
@@ -275,19 +209,9 @@
     template.helper('formatAccountType', formatAccountType);
     template.helper('hasNext', hasNextStatus);
     template.helper('operateType', operateType);
-    template.helper('displayType', displayType);    
+    template.helper('displayType', displayType);
 
     $(function() {
-
-        //全选
-        form.on('checkbox(allCheck)', function(data) {
-            var child = $(data.elem).parents('table').find('tbody input[type=checkbox]');
-            child.each(function(index, item) {
-                item.checked = data.elem.checked;
-            });
-            form.render('checkbox');
-        });
-
         form.on('select(acq_inst_id)', function(data) {
             $$.request('/action/bm/acq-inst-busi/list', {
                 acq_inst_id: data.value
@@ -298,17 +222,6 @@
                 });
                 form.render('select');
             });
-        });
-
-        form.on('submit(search)', function(data) {
-            var procStMap = {
-                'check1': '1'
-            };
-            var params = $.extend(data.field, {
-                proc_st: procStMap[displayType]
-            });
-            pagination = $$.search('/action/bm/mchnt-param/search', params);
-            return false; //阻止表单跳转
         });
 
         $$.request('/action/bm/parameter/list', {
@@ -326,10 +239,8 @@
         // form.render('select');
 
         if (query.mchnt_id) {
-            $('#search-panel').addClass('hide');
             $$.loadData('#search', query);
-            $('#submit-btn').click();
-            $('#add-btn').removeClass('hide');
+            $('#search-btn').click();
         }
     });
     </script>

@@ -137,8 +137,21 @@
         }
     });
 
+    //获取当前选中tab的id
+    function getTab() {
+        var $tab = $('#main-tab');
+        var layid = $tab.children('.layui-tab-title').children('.layui-this').attr('lay-id');
+        return layid;
+    }
+
+    function closeTab(layid) {
+        // var $tab = $('#main-tab');
+        // var layid = $tab.children('.layui-tab-title').children('.layui-this').attr('lay-id');
+        element.tabDelete('tab', layid);
+    }
+
     function addTab(id, title, url) {
-        var $tab = $('.layui-tab[lay-filter=tab]');
+        var $tab = $('#main-tab');
         var $title = $tab.children('.layui-tab-title')
 
         var $li = $title.find('li[lay-id="' + id + '"]');
@@ -151,17 +164,11 @@
             });
 
             $title.find('li[lay-id="' + id + '"] .layui-tab-close').on('click', function() {
-                element.tabDelete('tab', $(this).parent('li').attr('lay-id'));
+               closeTab($(this).parent('li').attr('lay-id'));
             })
         }
 
         element.tabChange('tab', id);
-    }
-
-    function closeTab() {
-        var $tab = $('#main-tab');
-        var layid = $tab.children('.layui-tab-title').children('.layui-this').attr('lay-id');
-        element.tabDelete('tab', layid);
     }
 
     var element;

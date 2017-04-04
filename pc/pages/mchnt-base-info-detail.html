@@ -44,12 +44,12 @@
             <li class="layui-this" lay-id="0">基本资料</li>
             <li>商户参数</li>
             <li>终端信息</li>
-            <li>电子资料</li>
+            <!-- <li>电子资料</li> -->
         </ul>
         <div class="layui-tab-content">
             <div class="layui-tab-item layui-show" style="overflow-y: auto;">
                 <div class="panel panel-padding">
-                    <form id="detail" class="layui-form" action="" method="post">
+                    <form id="detail" class="layui-form" action="" method="post" data-options="load:loadDetail,serialize:serializeDetail">
                         <div class="layui-form-item readonly visible invisible-create">
                             <div class="layui-inline">
                                 <label class="layui-form-label"><span class="required">*</span>客户号</label>
@@ -343,8 +343,8 @@
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-block">
-                                <button class="layui-btn visible invisible-view" lay-submit="" lay-filter="detail">提交</button>
-                                <button type="button" class="layui-btn layui-btn-primary" onclick="onClose()">关闭</button>
+                                <button type="button" class="layui-btn visible invisible-view" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-base-info/' + operateType,success:submitSuccess">提交</button>
+                                <button type="button" class="layui-btn layui-btn-primary" onclick="$$.close()">关闭</button>
                             </div>
                         </div>
                     </form>
@@ -356,9 +356,9 @@
             <div class="layui-tab-item">
                 <iframe class="tab-iframe" data-src="term-info.html"></iframe>
             </div>
-            <div class="layui-tab-item">
+            <!-- <div class="layui-tab-item">
                 <iframe class="tab-iframe" data-src="mchnt-elec-info.html"></iframe>
-            </div>
+            </div> -->
         </div>
     </div>
     <script id="upload-tpl" type="text/html">
@@ -376,7 +376,6 @@
     var query = $$.parseQueryString();
     var displayType = query.displayType;
     var operateType = query.operateType;
-    var layer = layui.layer;
     var form = layui.form();
     var element = layui.element();
 
@@ -399,62 +398,48 @@
         });
     }
 
-    function view() {
-        $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
-            $$.loadData('#detail', data.data);
-            $('#province').change();
-            $('#city').val(data.data.city).change();
-            $('#district').val(data.data.district);
+    function loadDetail(data) {
+        $('#province').change();
+        $('#city').val(data.data.city).change();
+        $('#district').val(data.data.district);
 
-            $.each(data.images, function(index, value) {
-                var $elem = $('#detail').find('input[type=file][data-type=' + value.elec_info_type + ']');
-                renderImgbox($elem, value);
-            });
-            form.render();
+        $.each(data.images, function(index, value) {
+            var $elem = $('#detail').find('input[type=file][data-type=' + value.elec_info_type + ']');
+            renderImgbox($elem, value);
+            $elem.attr('data-value', value.serverid);
         });
     }
 
-    function onSubmit(param) {
+    function serializeDetail(data) {
         // 照片
         var images = [];
         $('#detail').find('.img-box').each(function(index, elem) {
-            var data = $(elem).data('data');
-            images.push(data);
+            var tmp = $(elem).data('data');
+            images.push(tmp);
         });
 
-        param.images = images;
-
-        $$.request('/action/bm/mchnt-base-info/' + operateType, param, function(data) {
-            $$.transformStatus('#detail', operateType);
-            if (data.data) {
-                $$.loadData('#detail', data.data);
-            }
-            if (operateType == 'create') {
-                $$.confirm('操作成功,是否继续新增商户参数', function() {
-                    var mchnt_id = $('#mchnt-id').val();
-                    var url = $$.url('mchnt-param-detail.html?operateType=create', {
-                        displayType: displayType,
-                        mchnt_id: mchnt_id
-                    });
-                    var title = '新增商户参数';
-                    $$.openTab(url, title);
-                });
-            } else {
-                $$.msg('操作成功', {
-                    icon: 1
-                }, function() {
-                    onClose();
-                });
-            }
-        });
+        data.images = images;
     }
 
-    function onClose() {
-        if(window.top.closeTab) {
-            window.top.closeTab();
+    function submitSuccess(requestData, data) {
+        if (data.data) {
+            $$.loadData('#detail', data.data);
+        }
+
+        if (operateType == 'create') {
+            $$.loadData('#detail', data.data);
+            $$.confirm('操作成功,是否继续新增商户参数', function() {
+                var mchnt_id = $('#mchnt-id').val();
+                var url = $$.url('mchnt-param-detail.html?operateType=create', {
+                    displayType: displayType,
+                    mchnt_id: mchnt_id
+                });
+                window.location.href = url;
+            });
         } else {
-            var index = parent.layer.getFrameIndex(window.name);
-            parent.layer.close(index);
+            $$.msg('操作成功', {
+                icon: 1
+            });
         }
     }
 
@@ -582,9 +567,6 @@
         }
 
         element.on('tab(base)', function(data) {
-            console.log(this); //当前Tab标题所在的原始DOM元素
-            console.log(data.index); //得到当前Tab的所在下标
-            console.log(data.elem); //得到当前的Tab大容器
             if (data.index == 0) return;
 
             var mchnt_id = $('#mchnt-id').val();
@@ -600,12 +582,6 @@
                 displayType: displayType,
                 mchnt_id: mchnt_id
             }));
-
-        });
-
-        form.on('submit(detail)', function(data) {
-            onSubmit(data.field);
-            return false; //阻止表单跳转
         });
 
         $('#province').on('change', onChangeProvince);
@@ -624,20 +600,28 @@
         $$.loadSelect('#province', districtData['province']);
         $$.loadSelect('#cert-type', $$.param['cert_type']);
         $$.loadSelect('#mchnt-type', $$.param['mchnt_type']);
+
+        $$.loadData('#detail', {
+            province: '43',
+            cert_type: '01'
+        });
+
         form.render('select');
 
-        $$.request('/action/bm/expand-inst/list', {}, function(data) {
+        var d1 = $$.request('/action/bm/expand-inst/list', {}, function(data) {
             $$.loadSelect('#expand-inst-id', data.rows);
             form.render('select');
         });
 
-        $$.request('/action/bm/expand/list', {}, function(data) {
+        var d2 = $$.request('/action/bm/expand/list', {}, function(data) {
             $$.loadSelect('#expand-id', data.rows);
             form.render('select');
         });
 
         $$.transformStatus('#detail', operateType);
-        view();
+        $.when(d1, d2).done(function() {
+            $$.view('#detail', '/action/bm/mchnt-base-info/view', query);
+        });
     });
     </script>
 </body>

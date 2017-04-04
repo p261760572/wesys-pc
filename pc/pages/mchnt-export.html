@@ -74,13 +74,11 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button type="button" class="layui-btn layui-btn-normal" lay-submit lay-filter="export" id="export-btn">导出</button>
-                        <!--  <button class="layui-btn" lay-submit lay-filter="search" id="submit-btn">查询</button> -->
+                        <button type="button" class="layui-btn" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-export/export',success:exportSuccess" id="export-btn">导出</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                         <a style="float: right; color: #01AAED;" href="export-file.html" target="_blank">
                         查看导出记录
                         </a>
-                         
                     </div>
                 </div>
             </form>
@@ -102,33 +100,25 @@
     <script type="text/javascript">
     var query = $$.parseQueryString();
     var operateType = query.operateType;
-    var layer = layui.layer;
-    var laypage = layui.laypage;
     var form = layui.form();
     var element = layui.element();
 
-    var pagination;
-
-    function onExport(param) {
-        $$.request('/action/bm/mchnt-export/export', param, function(data) {
-            $$.msg('操作成功', {
-                icon: 1
-            });
-
-            var index = layer.open({
-                type: 2,
-                title: false,
-                content: $$.wrapUrl(data.url)
-            });
-
-            layer.close(index);
-        });
+    function reload() {
+        $$.datagrid('#list', 'reload');
     }
 
-    function onAdd() {
-        $$.open('term-param-detail.html?operateType=create', '新增终端信息', {
-            term_no: query.term_no
+    function exportSuccess(requestData, data) {
+        $$.msg('操作成功', {
+            icon: 1
         });
+
+        var index = layer.open({
+            type: 2,
+            title: false,
+            content: $$.wrapUrl(data.url)
+        });
+
+        layer.close(index);
     }
 
     function onChangeAcqInstId() {
@@ -154,28 +144,7 @@
             $(data.elem).change();
         });
 
-        form.on('submit(search)', function(data) {
-            pagination = $$.search('/action/bm/term-param/search', data.field);
-            return false; //阻止表单跳转
-        });
 
-        form.on('submit(export)', function(data) {
-            onExport(data.field);
-            return false; //阻止表单跳转
-        });
-
-        // $$.request('/action/bm/expand/list', {}, function(data) {
-        //     $$.loadSelect('#expand-id', data.rows);
-        //     form.render('select');
-        // });
-
-        // $$.request('/action/bm/parameter/list', {
-        //     expand_inst: '1'
-        // }, function(data) {
-        //     $$.loadSelect('#expand-inst-id', data.expand_inst);
-        //     form.render('select');
-        // });
-        // 
         $$.request('/action/bm/parameter/list', {
             acq_inst: '1'
         }, function(data) {

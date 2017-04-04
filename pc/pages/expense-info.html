@@ -13,7 +13,7 @@
 <body>
     <div class="container">
         <div class="panel panel-padding" id="search-panel">
-            <form id="search" class="layui-form" action="" method="post">
+            <form id="search" class="layui-form" action="" method="post" data-options="serialize:serializeSearch">
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">费用单据号</label>
@@ -72,7 +72,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="search" id="search-btn">查询</button>
+                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/expense-info/search'" id="search-btn">查询</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -80,24 +80,10 @@
         </div>
         <div class="panel panel-padding" id="list-panel">
             <div class="layui-btn-group invisible visible-cancel">
-                <!-- <button class="layui-btn layui-btn-small" onclick="onAdd()">
-                    <i class="layui-icon">&#xe654;</i> 新增
-                </button> -->
-                <!-- <button class="layui-btn layui-btn-small layui-btn-normal" onclick="onBatchCheck1Pass()">
-                    <i class="layui-icon">&#x1005;</i> 收款
-                </button>
-                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchCheck1Nopass()">
-                    <i class="layui-icon">&#xe633;</i> 退款
-                </button> -->
-                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchCancel()">
-                    <i class="layui-icon">&#xe640;</i> 作废
+                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/expense-info/batch-cancel',type:'confirm',title:'确认要作废?'">
+                    <i class="layui-icon">&#xe633;</i> 作废
                 </button>
             </div>
-            <!-- <div class="layui-btn-group">
-                <button class="layui-btn layui-btn-small layui-btn-normal" data-url="other.html" onclick="onGoto(this)">
-                    跳转
-                </button>                
-            </div> -->
             <div id="list">
             </div>
             <div id="page" style="text-align: right;"></div>
@@ -158,28 +144,22 @@
                         </td>
                         <td>
                             <div class="layui-btn-group">
-                                <button class="layui-btn layui-btn-primary layui-btn-mini" onclick="onView({{i}})">
-                                    <i class="layui-icon">&#xe60a;</i>查看
+                                <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="$$.do(this,{{i}})" data-options="url:'expense-info-detail.html?operateType=view',title:'查看费用信息'">
+                                    查看
                                 </button>
                                 {{if displayType=='receipt'}} {{if hasNext(row.oper_in,row.proc_st,'receipt')}}
-                                <button class="layui-btn layui-btn-mini" onclick="onReceipt({{i}})">
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'expense-info-detail.html?operateType=receipt',title:'收款费用信息'">
                                     收款
                                 </button>
                                 {{/if}} {{/if}} {{if displayType=='refund'}} {{if hasNext(row.oper_in,row.proc_st,'refund')}}
-                                <button class="layui-btn layui-btn-mini" onclick="onRefund({{i}})">
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'expense-info-detail.html?operateType=refund',title:'退款费用信息'">
                                     退款
                                 </button>
                                 {{/if}} {{/if}} {{if displayType=='refund-confirm'}} {{if hasNext(row.oper_in,row.proc_st,'refund-confirm')}}
-                                <button class="layui-btn layui-btn-mini" onclick="onRefundConfirm({{i}})">
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'expense-info-detail.html?operateType=refund-confirm',title:'退款确认费用信息'">
                                     退款确认
                                 </button>
                                 {{/if}} {{/if}}
-                                <!-- <button class="layui-btn layui-btn-mini" onclick="onEdit({{i}})">
-                                    <i class="layui-icon">&#xe642;</i>编辑
-                                </button>
-                                <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
-                                    <i class="layui-icon">&#xe640;</i>删除
-                                </button> -->
                             </div>
                         </td>
                     </tr>
@@ -200,157 +180,21 @@
     var query = $$.parseQueryString();
     var displayType = query.displayType;
     var operateType = query.operateType;
-    var layer = layui.layer;
-    var laypage = layui.laypage;
     var form = layui.form();
     var element = layui.element();
 
-    var pagination;
-
-    function onAdd() {
-        var url = $$.url('expense-info-detail.html?operateType=create', {
-            displayType: displayType
-        });
-        var title = '新增费用信息';
-        $$.openTab(url, title);
+    function serializeSearch(data) {
+        var procStMap = {
+            'receipt': '1',
+            'refund': ['2', '6'],
+            'refund-confirm': '5',
+            'cancel': '1'
+        };
+        data.proc_st = procStMap[displayType];
     }
 
-    function onView(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        var url = $$.url('expense-info-detail.html?operateType=view', {
-            displayType: displayType,
-            rec_id: row.rec_id
-        });
-        var title = '查看费用信息';
-        $$.openTab(url, title);
-    }
-
-    function onEdit(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        var url = $$.url('expense-info-detail.html?operateType=update', {
-            displayType: displayType,
-            rec_id: row.rec_id
-        });
-        var title = '编辑费用信息';
-        $$.openTab(url, title);
-    }
-
-    function onDelete(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-
-        $$.confirm('确认要删除?', function() {
-            $$.request('/action/bm/expense-info/delete', row, function(data) {
-                $$.msg('操作成功', {
-                    icon: 1
-                });
-            });
-        });
-    }
-
-    function onReceipt(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        var url = $$.url('expense-info-detail.html?operateType=receipt', {
-            displayType: displayType,
-            rec_id: row.rec_id
-        });
-        var title = '收款费用信息';
-        $$.openTab(url, title);
-    }
-
-    function onRefund(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        var url = $$.url('expense-info-detail.html?operateType=refund', {
-            displayType: displayType,
-            rec_id: row.rec_id
-        });
-        var title = '退款费用信息';
-        $$.openTab(url, title);
-    }
-
-    function onRefundConfirm(index) {
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        var url = $$.url('expense-info-detail.html?operateType=refund-confirm', {
-            displayType: displayType,
-            rec_id: row.rec_id
-        });
-        var title = '退款确认费用信息';
-        $$.openTab(url, title);
-    }
-
-    function onGoto(target) {
-        var $selected = $$.getSelected('#list');
-        if ($selected.length != 1) {
-            $$.msg('请选择需要操作的记录');
-            return;
-        }
-        var index = parseInt($selected.attr('data-index'));
-        var $target = $(target);
-        var data = $('#list').data('data');
-        var row = data.rows[index];
-        var url = $target.attr('data-url');
-        var title = $target.text() + '-' + row.key;
-        url += '?' + $.param({
-            operateType: operateType,
-            key: row.key
-        });
-
-        if (parent.addTab) {
-            url = 'pages/' + url;
-            parent.addTab(url, title, url);
-        } else {
-            $$.open(url, title, {
-                key: row.key
-            });
-        }
-    }
-
-    function onBatchCheck1Pass() {
-        $$.batchSubmit('#list', '/action/bm/expense-info/batch-check1-pass');
-    }
-
-    function onBatchCheck1Nopass() {
-        var $checkbox = $$.getChecked('#list');
-        if ($checkbox.length == 0) {
-            $$.msg('请勾选需要操作的记录');
-            return;
-        }
-        $$.prompt('请输入驳回备注', function(value) {
-            $$.batchSubmit('#list', '/action/bm/expense-info/batch-check1-nopass', {
-                params: {
-                    checked_reason: value
-                }
-            });
-        });
-    }
-
-    function onBatchDelete() {
-        var $checkbox = $$.getChecked('#list');
-        if ($checkbox.length == 0) {
-            $$.msg('请勾选需要操作的记录');
-            return;
-        }
-
-        $$.confirm('确认要删除?', function() {
-            $$.batchSubmit('#list', '/action/bm/expense-info/batch-delete');
-        });
-    }
-
-    function onBatchCancel() {
-        var $checkbox = $$.getChecked('#list');
-        if ($checkbox.length == 0) {
-            $$.msg('请勾选需要操作的记录');
-            return;
-        }
-
-        $$.confirm('确认要作废?', function() {
-            $$.batchSubmit('#list', '/action/bm/expense-info/batch-cancel');
-        });
+    function reload() {
+        $$.datagrid('#list', 'reload');
     }
 
     function hasNextStatus(oper_in, proc_st, action) {
@@ -366,41 +210,13 @@
         return $$.formatField($$.param['expense_cycle'], value);
     }
 
-    template.helper('hasNext', hasNextStatus);
     template.helper('formatExpenseType', formatExpenseType);
     template.helper('formatExpenseCycle', formatExpenseCycle);
     template.helper('operateType', operateType);
+    template.helper('hasNext', hasNextStatus);
     template.helper('displayType', displayType);
 
     $(function() {
-        //全选
-        form.on('checkbox(allCheck)', function(data) {
-            var child = $(data.elem).parents('table').find('tbody input[type=checkbox]');
-            child.each(function(index, item) {
-                item.checked = data.elem.checked;
-            });
-            form.render('checkbox');
-        });
-
-        form.on('checkbox(check)', function(data) {
-            return false;
-        });
-
-        form.on('submit(search)', function(data) {
-            var procStMap = {
-                'receipt': '1',
-                'refund': ['2','6'],
-                'refund-confirm': '5',
-                'cancel': '1'
-            };
-            var params = $.extend(data.field, {
-                proc_st: procStMap[displayType]
-            });
-            pagination = $$.search('/action/bm/expense-info/search', params);
-            return false; //阻止表单跳转
-        });
-
-        // $$.transformDisplay('#search-panel', operateType);
         $$.transformDisplay('#list-panel', displayType);
     });
     </script>
