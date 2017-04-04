@@ -228,56 +228,24 @@ window.$$ = (function() {
         return date;
     };
 
-    $$.datagrid = function(selector, options, param) {
-        if (typeof options == 'string') {
-            return $$.datagrid.methods[options](selector, param);
-        }
+    //数据网格
+    (function($$) {
+        function init(selector) {
+            var $list = $(selector);
+            var state = $list.data('datagrid');
+            var opts = state.options;
 
-        var $list = $(selector);
-        var state = $list.data('datagrid');
-        var opts;
-        if (state) {
-            opts = $.extend(state.options, options);
-        } else {
-            opts = $.extend({
-                tpl: null,
-                url: null,
-                data: null,
-                checkbox: true,
-                pagination: true,
-                queryParams: {},
-                onClickRow: $.noop
-            }, $$.parseOptions($list), options);
-
-            state = {
-                options: opts,
-                data: {
-                    total: 0,
-                    rows: []
-                }
-            };
-
-            $list.data('datagrid', state);
-
-            //初始化
-            init();
-            bindEvents();
-        }
-
-        if (opts.url) {
-            request();
-        } else {
-            loadData(opts.data);
-        }
-
-        function init() {
             if (opts.pagination) {
                 state.$page = $('<div style="text-align: right;"></div>');
                 $list.after(state.$page);
             }
         }
 
-        function loadData(data) {
+        function loadData(selector, data) {
+            var $list = $(selector);
+            var state = $list.data('datagrid');
+            var opts = state.options;
+
             if (opts.tpl.indexOf('#') == 0) {
                 $list.html(template(opts.tpl.substr(1), data));
             } else {
@@ -302,7 +270,11 @@ window.$$ = (function() {
             }
         }
 
-        function bindEvents() {
+        function bindEvents(selector) {
+            var $list = $(selector);
+            var state = $list.data('datagrid');
+            var opts = state.options;
+
             $list.on('click', 'tbody td:has(input[type=checkbox])', function() {
                 return false
             }).on('click', 'tbody tr', function() {
@@ -316,32 +288,84 @@ window.$$ = (function() {
                 var row = state.data.rows[index];
                 opts.onClickRow(index, row);
             });
+        }
 
-            //全选
+        function request(selector) {
+            var $list = $(selector);
+            var state = $list.data('datagrid');
+            var opts = state.options;
+
+            $$.request(opts.url, opts.queryParams, function(data) {
+                loadData(data);
+            });
+        }
+
+        //全选
+        if (window.form) {
             form.on('checkbox(allCheck)', function(data) {
                 var child = $(data.elem).closest('table').find('tbody input[type=checkbox]');
                 child.each(function(index, item) {
                     item.checked = data.elem.checked;
                 });
                 form.render('checkbox');
-            });
+            });    
         }
 
+        $$.datagrid = function(selector, options, param) {
+            if (typeof options == 'string') {
+                return $$.datagrid.methods[options](selector, param);
+            }
 
-        function request() {
-            $$.request(opts.url, opts.queryParams, function(data) {
-                loadData(data);
-            });
-        }
+            var $list = $(selector);
+            var state = $list.data('datagrid');
+            var opts;
+            if (state) {
+                opts = $.extend(state.options, options);
+            } else {
+                opts = $.extend({
+                    tpl: null,
+                    url: null,
+                    data: null,
+                    checkbox: true,
+                    pagination: true,
+                    queryParams: {},
+                    onClickRow: $.noop
+                }, $$.parseOptions($list), options);
+
+                state = {
+                    options: opts,
+                    data: {
+                        total: 0,
+                        rows: []
+                    }
+                };
+
+                $list.data('datagrid', state);
+
+                //初始化
+                init(selector);
+                bindEvents(selector);
+            }
+
+            if (opts.url) {
+                request(selector);
+            } else {
+                loadData(selector, opts.data);
+            }
+        };
 
         $$.datagrid.methods = {
             'reload': function(selector) {
-                request();
+                request(selector);
             },
             'getData': function(selector) {
+                var $list = $(selector);
+                var state = $list.data('datagrid');
                 return state.data;
             },
             'getRows': function(selector) {
+                var $list = $(selector);
+                var state = $list.data('datagrid');
                 return state.data.rows;
             },
             'getChecked': function(selector) {
@@ -365,7 +389,7 @@ window.$$ = (function() {
                 return null;
             }
         };
-    }
+    })($$);
 
     $$.serializeForm = function(target) {
         var $form = $(target);
