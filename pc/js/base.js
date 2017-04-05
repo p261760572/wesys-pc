@@ -263,7 +263,7 @@ window.$$ = (function() {
                     jump: function(obj, first) {
                         if (!first) {
                             opts.queryParams.page = obj.curr;
-                            request();
+                            request(selector);
                         }
                     }
                 });
@@ -296,7 +296,7 @@ window.$$ = (function() {
             var opts = state.options;
 
             $$.request(opts.url, opts.queryParams, function(data) {
-                loadData(data);
+                loadData(selector, data);
             });
         }
 
