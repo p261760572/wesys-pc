@@ -13,7 +13,7 @@
 <body>
     <div class="container">
         <div id="search-panel" class="panel panel-padding hide">
-            <form id="search" class="layui-form" action="" method="post">
+            <form id="search" class="layui-form" action="" method="post" data-options="serialize:serializeSearch">
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">客户号</label>
@@ -90,7 +90,7 @@
                 </thead>
                 <tbody>
                     {{each rows as row i}}
-                    <tr>
+                    <tr data-index="{{i}}">
                         <td>
                             <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
                         </td>
@@ -136,6 +136,13 @@
     var operateType = query.operateType;
     var form = layui.form();
     var element = layui.element();
+
+    function serializeSearch(data) {
+        var procStMap = {
+            'check1': '1'
+        };
+        data.proc_st = procStMap[displayType];
+    }
 
     function reload() {
         $$.datagrid('#list', 'reload');

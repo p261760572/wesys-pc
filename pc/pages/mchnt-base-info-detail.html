@@ -399,7 +399,7 @@
     }
 
     function loadDetail(data) {
-        $('#province').change();
+        $('#province').val(data.data.province).change();
         $('#city').val(data.data.city).change();
         $('#district').val(data.data.district);
 

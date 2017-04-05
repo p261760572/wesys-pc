@@ -281,16 +281,12 @@
     var element = layui.element();
 
     function loadDetail(data) {
-
-
-        $('#province').change();
+        $('#province').val(data.data.province).change();
         $('#city').val(data.data.city).change();
         $('#district').val(data.data.district);
-
     }
 
     function submitSuccess(requestData, data) {
-
         if (data.data) {
             $$.loadData('#detail', data.data);
         }
@@ -312,7 +308,6 @@
                 $$.close();
             });
         }
-
     }
 
     function onChangeProvince() {
@@ -389,10 +384,11 @@
                 $$.loadData('#detail', query);
                 $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
                     data.data.shop_name = data.data.mchnt_abbr;
-                    $$.loadData('#detail', data.data);
-                    $('#province').change();
+                    
+                    $('#province').val(data.data.province).change();
                     $('#city').val(data.data.city).change();
                     $('#district').val(data.data.district);
+                    $$.loadData('#detail', data.data);
                     form.render();
                 });
             } else {

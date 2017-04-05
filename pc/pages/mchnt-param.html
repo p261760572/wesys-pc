@@ -119,7 +119,7 @@
                 </thead>
                 <tbody>
                     {{each rows as row i}}
-                    <tr>
+                    <tr data-index="{{i}}">
                         <td>
                             <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
                         </td>

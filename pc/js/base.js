@@ -230,6 +230,8 @@ window.$$ = (function() {
 
     //数据网格
     (function($$) {
+        var allCheck = true; //是否需要监听
+
         function init(selector) {
             var $list = $(selector);
             var state = $list.data('datagrid');
@@ -288,6 +290,18 @@ window.$$ = (function() {
                 var row = state.data.rows[index];
                 opts.onClickRow(index, row);
             });
+
+            //全选
+            if (allCheck) {
+                allCheck = false;
+                form.on('checkbox(allCheck)', function(data) {
+                    var child = $(data.elem).closest('table').find('tbody input[type=checkbox]');
+                    child.each(function(index, item) {
+                        item.checked = data.elem.checked;
+                    });
+                    form.render('checkbox');
+                });
+            }            
         }
 
         function request(selector) {
@@ -300,16 +314,7 @@ window.$$ = (function() {
             });
         }
 
-        //全选
-        if (window.form) {
-            form.on('checkbox(allCheck)', function(data) {
-                var child = $(data.elem).closest('table').find('tbody input[type=checkbox]');
-                child.each(function(index, item) {
-                    item.checked = data.elem.checked;
-                });
-                form.render('checkbox');
-            });    
-        }
+        
 
         $$.datagrid = function(selector, options, param) {
             if (typeof options == 'string') {

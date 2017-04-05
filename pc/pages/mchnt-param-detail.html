@@ -364,8 +364,8 @@
     function loadDetail(data) {
         $('#acq-inst-id').change();
         $('#busi-type').attr('data-value', data.data.busi_type);
-        $('#province').change();
-        $('#city').val(data.data.city).change();
+        $('#province').val(data.data.account_province).change();
+        $('#city').val(data.data.account_city).change();
         // $('#district').val(data.data.district);
         if (data.data.account_bank_branch_cd) {
             $('#account-bank-branch-cd').html('<option value="' + data.data.account_bank_branch_cd + '">' + data.data.account_bank_branch_nm + '</option>').trigger('change');
@@ -615,10 +615,11 @@
                 $$.loadData('#detail', query);
                 $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
                     // data.data.shop_name = data.data.mchnt_abbr;
-                    $$.loadData('#detail', data.data);
-                    $('#province').change();
-                    $('#city').val(data.data.city);
+                    
+                    $('#province').val(data.data.account_province).change();
+                    $('#city').val(data.data.account_city);
                     // $('#district').val(data.data.district);
+                    $$.loadData('#detail', data.data);
                     form.render();
                 });
             } else {

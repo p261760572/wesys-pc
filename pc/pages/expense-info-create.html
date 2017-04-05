@@ -13,7 +13,7 @@
 <body>
     <div class="container">
         <div class="panel panel-padding">
-            <form id="search" class="layui-form" action="" method="post">
+            <form id="search" class="layui-form" action="" method="post" data-options="serialize:serializeSearch">
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">客户号</label>
@@ -171,6 +171,13 @@
     var displayType = query.displayType;
     var form = layui.form();
     var element = layui.element();
+
+    function serializeSearch(data) {
+        // var procStMap = {
+        //     'check1': '1'
+        // };
+        // data.proc_st = procStMap[displayType];
+    }
 
     function reload() {
         $$.datagrid('#list', 'reload');
