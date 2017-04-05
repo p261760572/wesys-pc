@@ -5,178 +5,119 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>终端参数</title>
+    <title>采购入库</title>
     <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
-    <link rel="stylesheet" type="text/css" href="../lib/select2/css/select2.min.css">
     <link rel="stylesheet" type="text/css" href="../css/base.css">
 </head>
 
 <body>
-    <div id="detail">
-        <div class="panel panel-padding">
-            <form class="layui-form" action="" method="post">
-                <div class="layui-form-item">
-                    <div class="layui-inline readonly">
-                        <label class="layui-form-label"><span class="required">*</span>终端标识</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="term_no" placeholder="" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline visible invisible-create">
-                        <label class="layui-form-label"><span class="required">*</span>终端参数ID</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="term_param_id" placeholder="请输入终端参数ID" autocomplete="off" class="layui-input">
-                        </div>
+    <div class="panel panel-padding">
+        <form class="layui-form" action="" method="post">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>生产厂家</label>
+                    <div class="layui-input-inline">
+                        <select name="manufacturer" lay-verify="required" id="manufacturer">
+                            <option value=""></option>
+                        </select>
                     </div>
                 </div>
-                
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>拓展方</label>
-                        <div class="layui-input-inline">
-                            <select name="expand_inst_id" lay-verify="required" lay-search id="expand-inst-id">
-                                <option value=""></option>
-                            </select>
-                        </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>设备型号</label>
+                    <div class="layui-input-inline">
+                        <select name="device_type" lay-verify="required" id="device-type">
+                            <option value=""></option>
+                        </select>
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label"><span class="required">*</span>拓展人</label>
-                        <div class="layui-input-inline">
-                            <select name="expand_id" lay-verify="required" lay-search id="expand-id">
-                                <option value=""></option>
-                            </select>
-                        </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">生产日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="production_date" placeholder="请输入生产日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker()" id="production-date">
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn visible invisible-view" lay-submit="" lay-filter="detail">提交</button>
-                        <button type="button" class="layui-btn layui-btn-primary" onclick="$$.close()">关闭</button>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>终端投资方</label>
+                    <div class="layui-input-inline">
+                        <select name="term_inves" lay-verify="required" id="term-inves">
+                            <option value=""></option>
+                        </select>
                     </div>
                 </div>
-            </form>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>开始设备编号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="device_no" lay-verify="required" placeholder="请输入设备编号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>间隔</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="inc" value="1" lay-verify="required" placeholder="请输入间隔" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>数量</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="count" value="1" lay-verify="required" placeholder="请输入数量" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn">批量增加</button>
+                    <button type="button" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="panel panel-padding">
+        <form class="layui-form" action="" method="post">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>仓库</label>
+                    <div class="layui-input-inline">
+                        <select name="depot_id" lay-verify="required" id="depot-id">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>经手人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="hand_id" lay-verify="required" placeholder="请输入间隔" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="note" value="1" placeholder="请输入数量" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="panel panel-padding">
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small layui-btn-danger">
+                <i class="layui-icon">&#xe640;</i> 删除
+            </button>
+        </div>
+        <div id="list">
         </div>
     </div>
     <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
     <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
-    <script type="text/javascript" src="../lib/select2/js/select2.min.js"></script>
     <script type="text/javascript" src="../js/template.js"></script>
     <script type="text/javascript" src="../js/base.js"></script>
     <script type="text/javascript" src="../js/param.js"></script>
-    <script type="text/javascript" src="../js/district.js"></script>
     <script type="text/javascript">
     var query = $$.parseQueryString();
     var operateType = query.operateType;
-    var layer = layui.layer;
     var form = layui.form();
     var element = layui.element();
-
-    function view() {
-        $$.request('/action/bm/term-param/view', query, function(data) {
-            $$.loadData('#detail', data.data);
-            if (data.data.mchnt_param_id) {
-                $('#mchnt-param-id').html('<option value="' + data.data.mchnt_param_id + '">' + formatMchntParam(data.data) + '</option>').trigger('change');
-            }
-            form.render();
-        });
-    }
-
-    function onSubmit(param) {
-        $$.request('/action/bm/term-param/' + operateType, param, function(data) {
-            $$.msg('操作成功', {
-                icon: 1
-            });
-        });
-    }
-
-    
-
-    function formatMchntParam(row) {
-        return row.busi_type_nm + '/' + row.mchnt_name + '/' + (row.mchnt_cd || '');
-    }
-
-    $(function() {
-        form.on('submit(detail)', function(data) {
-            onSubmit(data.field);
-            return false; //阻止表单跳转
-        });
-
-        $('#mchnt-param-id').select2({
-            language: 'zh-CN',
-            placeholder: '业务类型/商户名称/商户号',
-            ajax: {
-                url: $$.wrapUrl('/action/bm/mchnt-param/search'),
-                type: 'POST',
-                contentType: 'application/json',
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    return $.toJSON({
-                        term_no2: query.term_no,
-                        q: params.term,
-                        page: params.page,
-                        size: 20
-                    });
-                },
-                processResults: function(data, params) {
-                    params.page = params.page || 1;
-
-                    if ($$.errcode(data) == 0) {
-                        for (var i = 0; i < data.rows.length; i++) {
-                            data.rows[i].id = data.rows[i].mchnt_param_id;
-                            data.rows[i].text = formatMchntParam(data.rows[i]);
-                        }
-                        return {
-                            results: data.rows,
-                            pagination: {
-                                more: (params.page * 20) < data.total
-                            }
-                        };
-                    }
-
-                    return {};
-                },
-                cache: true
-            }
-        });
-
-
-        var d1 = $$.request('/action/bm/expand/list', {}, function(data) {
-            $$.loadSelect('#expand-id', data.rows);
-            form.render('select');
-        });
-
-        var d2 = $$.request('/action/bm/parameter/list', {
-            expand_inst: '1',
-            term_inves: '1',
-            equi_type: '1'
-        }, function(data) {
-            $$.loadSelect('#expand-inst-id', data.expand_inst);
-            $$.loadSelect('#term-inves', data.term_inves);
-            $$.loadSelect('#equi-type', data.equi_type);
-            form.render('select');
-        });
-
-        $$.transformStatus('#detail', operateType);
-
-        $.when(d1, d2).done(function() {
-            if (query.operateType == 'create') {
-                $$.loadData('#detail', query);
-                $$.request('/action/bm/term-info/view', query, function(data) {
-                    $$.loadData('#detail', data.data);
-                    // $('#province').change();
-                    // $('#city').val(data.data.city).change();
-                    // $('#district').val(data.data.district);
-                    form.render();
-                });
-            } else {
-                view();
-            }
-        });
-    });
     </script>
 </body>
 
