@@ -367,6 +367,10 @@ window.$$ = (function() {
         };
 
         $$.datagrid.methods = {
+            'options': function(selector) {
+                var state = $(selector).data('datagrid');
+                return state.options;
+            },
             'reload': function(selector) {
                 request(selector);
             },
@@ -429,7 +433,7 @@ window.$$ = (function() {
             },
             'deleteRow': function(selector, index) {
                 var data = $$.datagrid(selector, 'getData');
-                data.rows.splice(index,1);
+                data.rows.splice(index, 1);
                 data.total -= 1;
                 $$.datagrid(selector, 'loadData', data);
             }
@@ -477,6 +481,7 @@ window.$$ = (function() {
     $$.submit = function(target) {
         var $form = $(target).closest('form');
         var options = $.extend({
+            transform: true,
             before: $.noop,
             success: function() {
                 $$.msg('操作成功', {
@@ -487,13 +492,15 @@ window.$$ = (function() {
 
         var requestData = $$.serializeForm($form);
 
-        if (options.before(options.requestData) == false) return false;
+        if (options.before(requestData) == false) return false;
 
         if (form.validate($form) == false) return false;
 
         $$.request(options.url, requestData, function(data) {
-            $$.transformStatus($form, true);
-            form.render('select');
+            if(options.transform) {
+                $$.transformStatus($form, true);
+                form.render('select');
+            }
             options.success(requestData, data);
         });
     };
@@ -600,21 +607,14 @@ window.$$ = (function() {
             datagrid: '#list',
             type: 'default', //default confirm prompt
             promptKey: null,
-            mode: 'checked', //checked all
             success: function() {
                 if (window.reload) window.reload();
             }
         }, $$.parseOptions(target));
 
-
-        var rows;
-        if (options.mode == 'checked') {
-            rows = $$.datagrid(options.datagrid, 'getChecked');
-        } else {
-            rows = $$.datagrid(options.datagrid, 'getRows');
-        }
+        var rows = $$.datagrid(options.datagrid, 'getChecked');
         if (rows.length == 0) {
-            $$.msg(options.mode == 'checked' ? '请选择需要操作的记录' : '没有需要操作的记录');
+            $$.msg('请选择需要操作的记录');
             return;
         }
 

@@ -17,7 +17,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>生产厂家</label>
                     <div class="layui-input-inline">
-                        <select name="manufacturer" lay-verify="required" id="manufacturer">
+                        <select name="manufacturer" lay-verify="required" lay-search lay-filter="manufacturer" id="manufacturer">
                             <option value=""></option>
                         </select>
                     </div>
@@ -25,7 +25,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>设备型号</label>
                     <div class="layui-input-inline">
-                        <select name="device_type" lay-verify="required" id="device-type">
+                        <select name="device_type" lay-verify="required" lay-search id="device-type">
                             <option value=""></option>
                         </select>
                     </div>
@@ -75,7 +75,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>仓库</label>
                     <div class="layui-input-inline">
-                        <select name="depot_id" lay-verify="required" id="<depot-id></depot-id>">
+                        <select name="depot_id" lay-verify="required" id="depot-id">
                             <option value=""></option>
                         </select>
                     </div>
@@ -89,11 +89,11 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">备注</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="note" value="1" placeholder="请输入备注" autocomplete="off" class="layui-input">
+                        <input type="text" name="note" placeholder="请输入备注" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <button type="button" class="layui-btn" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/device-info/purch',keys:null,mode:'all',success:submitSuccess">提交</button>
+                    <button type="button" class="layui-btn" onclick="$$.submit(this)" data-options="url:'/action/bm/device-info/purch',transform:false,before:beforeSubmit,success:submitSuccess">提交</button>
                 </div>
             </div>
         </form>
@@ -104,9 +104,47 @@
                 <i class="layui-icon">&#xe640;</i> 删除
             </button>
         </div>
-        <div id="list">
+        <div id="list" data-options="idField:'device_no'">
         </div>
     </div>
+        <script id="list-tpl" type="text/html">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
+                        </th>
+                        <th>设备编号</th>
+                        <th>生产厂家</th>
+                        <th>设备型号</th>
+                        <th>终端投资方</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each rows as row i}}
+                    <tr data-index="{{i}}">
+                        <td>
+                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="check">
+                        </td>
+                        <td>
+                            {{row.device_no}}
+                        </td>
+                        <td>
+                            {{row.manufacturer}}
+                        </td>
+                        <td>
+                            {{row.device_type}}
+                        </td>
+                        <td>
+                            {{row.term_inves | formatTermInves}}
+                        </td>                        
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </script>
     <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
     <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
@@ -118,11 +156,12 @@
     var operateType = query.operateType;
     var form = layui.form();
     var element = layui.element();
+    var cache = {};
 
     function onChangeManufacturer() {
         var value = $(this).val();
         $$.request('/action/bm/device-type/list', {
-            acq_inst_id: value
+            manufacturer: value
         }, function(data) {
             $$.loadSelect('#device-type', data.rows, {
                 valueField: 'device_type',
@@ -170,7 +209,7 @@
         for (i = 0; i < count; i++) {
             //重复检查
             if($$.datagrid('#list', 'getRowIndex', device_no) > 0) {
-                $$.msg('设备不能重复添加');
+                $$.msg('设备编号不能重复增加');
                 return false;
             }
 
@@ -179,12 +218,23 @@
             });
             $$.datagrid('#list', 'appendRow', row);
 
-            var tmp = string_add_num(tmp.device_no, inc);
+            var tmp = string_add_num(device_no, inc);
             device_no = tmp.str;
         }
     }
 
+    function beforeSubmit(data) {
+        data.rows = $$.datagrid('#list', 'getRows');
+        if(data.rows.length == 0) {
+            $$.msg('请先增加设备');
+            return false;
+        }
+    }
+
     function submitSuccess(requestData, data) {
+        $$.msg('操作成功', {
+            icon: 1
+        });
         $$.datagrid('#list', 'loadData', []);
     }
 
@@ -196,6 +246,12 @@
             $$.datagrid('#list', 'deleteRow', index);
         }
     }
+
+    function formatTermInves(value) {
+        return $$.formatField(cache['term_inves'], value);
+    }
+
+    template.helper('formatTermInves', formatTermInves);
 
     $(function() {
 
@@ -211,6 +267,8 @@
             $$.loadSelect('#manufacturer', data.manufacturer);
             $$.loadSelect('#term-inves', data.term_inves);
             form.render('select');
+
+            cache['term_inves'] = data.term_inves;
         });
 
         $$.request('/action/bm/depot-info/list', {}, function(data) {
@@ -220,6 +278,12 @@
             });
             form.render('select');
         });
+
+
+        $$.datagrid('#list', {
+            tpl: '#list-tpl',
+            data: []
+        })
     });
     </script>
 </body>
