@@ -248,6 +248,14 @@ window.$$ = (function() {
             var state = $list.data('datagrid');
             var opts = state.options;
 
+            //数组支持
+            if ($.isArray(data)) {
+                data = {
+                    total: data.length,
+                    rows: data
+                };
+            }
+
             if (opts.tpl.indexOf('#') == 0) {
                 $list.html(template(opts.tpl.substr(1), data));
             } else {
@@ -301,7 +309,7 @@ window.$$ = (function() {
                     });
                     form.render('checkbox');
                 });
-            }            
+            }
         }
 
         function request(selector) {
@@ -313,8 +321,6 @@ window.$$ = (function() {
                 loadData(selector, data);
             });
         }
-
-        
 
         $$.datagrid = function(selector, options, param) {
             if (typeof options == 'string') {
@@ -329,6 +335,7 @@ window.$$ = (function() {
             } else {
                 opts = $.extend({
                     tpl: null,
+                    idField: 'rec_id',
                     url: null,
                     data: null,
                     checkbox: true,
@@ -363,14 +370,15 @@ window.$$ = (function() {
             'reload': function(selector) {
                 request(selector);
             },
+            'loadData': function(selector, data) {
+                loadData(selector, data);
+            },
             'getData': function(selector) {
-                var $list = $(selector);
-                var state = $list.data('datagrid');
+                var state = $(selector).data('datagrid');
                 return state.data;
             },
             'getRows': function(selector) {
-                var $list = $(selector);
-                var state = $list.data('datagrid');
+                var state = $(selector).data('datagrid');
                 return state.data.rows;
             },
             'getChecked': function(selector) {
@@ -392,6 +400,38 @@ window.$$ = (function() {
                     return $$.datagrid(selector, 'getRows')[index];
                 }
                 return null;
+            },
+            'appendRow': function(selector, row) {
+                var data = $$.datagrid(selector, 'getData');
+                data.rows.push(row);
+                data.total += 1;
+                $$.datagrid(selector, 'loadData', data);
+            },
+            'getRowIndex': function(selector, row) {
+                var state = $(selector).data('datagrid');
+                var opts = state.options;
+                var rows = state.data.rows;
+                var i;
+                if (typeof row == 'object') {
+                    for (i = 0; i < rows.length; i++) {
+                        if (rows[i] == row) {
+                            return i;
+                        }
+                    }
+                } else {
+                    for (i = 0; i < rows.length; i++) {
+                        if (rows[i][opts.idField] == row) {
+                            return i;
+                        }
+                    }
+                }
+                return -1;
+            },
+            'deleteRow': function(selector, index) {
+                var data = $$.datagrid(selector, 'getData');
+                data.rows.splice(index,1);
+                data.total -= 1;
+                $$.datagrid(selector, 'loadData', data);
             }
         };
     })($$);
@@ -558,30 +598,37 @@ window.$$ = (function() {
     $$.batchSubmit = function(target) {
         var options = $.extend({
             datagrid: '#list',
-            keys: 'rec_id',
             type: 'default', //default confirm prompt
             promptKey: null,
+            mode: 'checked', //checked all
             success: function() {
                 if (window.reload) window.reload();
             }
         }, $$.parseOptions(target));
 
 
-        var rows = $$.datagrid(options.datagrid, 'getChecked');
+        var rows;
+        if (options.mode == 'checked') {
+            rows = $$.datagrid(options.datagrid, 'getChecked');
+        } else {
+            rows = $$.datagrid(options.datagrid, 'getRows');
+        }
         if (rows.length == 0) {
-            $$.msg('请选择需要操作的记录');
+            $$.msg(options.mode == 'checked' ? '请选择需要操作的记录' : '没有需要操作的记录');
             return;
         }
 
-        if (options.keys) {
+        var dgOptions = $$.datagrid(options.datagrid, 'options');
+
+        if (dgOptions.idField) {
             var tmp = [];
             $.each(rows, function(index, value) {
-                tmp.push($$.getKeys(value, options.keys));
+                tmp.push($$.getKeys(value, dgOptions.idField));
             })
             rows = tmp;
         }
 
-        var params = {
+        var requestData = {
             rows: rows
         };
 
@@ -594,7 +641,7 @@ window.$$ = (function() {
             },
             'prompt': function() {
                 $$.prompt(options.title, function(value) {
-                    params[options.promptKey] = value;
+                    requestData[options.promptKey] = value;
                     request();
                 });
             }
@@ -603,11 +650,11 @@ window.$$ = (function() {
         callback[options.type]();
 
         function request() {
-            $$.request(options.url, params, function(data) {
+            $$.request(options.url, requestData, function(data) {
                 $$.msg('操作成功', {
                     icon: 1
                 });
-                if (options.success) options.success(data);
+                options.success(requestData, data);
             });
         }
     }

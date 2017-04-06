@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <button type="button" class="layui-btn">批量增加</button>
+                    <button type="button" class="layui-btn" onclick="batchAdd(this)">批量增加</button>
                     <button type="button" class="layui-btn layui-btn-primary">重置</button>
                 </div>
             </div>
@@ -75,7 +75,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>仓库</label>
                     <div class="layui-input-inline">
-                        <select name="depot_id" lay-verify="required" id="depot-id">
+                        <select name="depot_id" lay-verify="required" id="<depot-id></depot-id>">
                             <option value=""></option>
                         </select>
                     </div>
@@ -83,24 +83,24 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>经手人</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="hand_id" lay-verify="required" placeholder="请输入间隔" autocomplete="off" class="layui-input">
+                        <input type="text" name="hand_id" lay-verify="required" placeholder="请输入经手人" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">备注</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="note" value="1" placeholder="请输入数量" autocomplete="off" class="layui-input">
+                        <input type="text" name="note" value="1" placeholder="请输入备注" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <button type="button" class="layui-btn">提交</button>
+                    <button type="button" class="layui-btn" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/device-info/purch',keys:null,mode:'all',success:submitSuccess">提交</button>
                 </div>
             </div>
         </form>
     </div>
     <div class="panel panel-padding">
         <div class="layui-btn-group">
-            <button class="layui-btn layui-btn-small layui-btn-danger">
+            <button class="layui-btn layui-btn-small layui-btn-danger" onclick="deleteChecked(this)">
                 <i class="layui-icon">&#xe640;</i> 删除
             </button>
         </div>
@@ -118,6 +118,109 @@
     var operateType = query.operateType;
     var form = layui.form();
     var element = layui.element();
+
+    function onChangeManufacturer() {
+        var value = $(this).val();
+        $$.request('/action/bm/device-type/list', {
+            acq_inst_id: value
+        }, function(data) {
+            $$.loadSelect('#device-type', data.rows, {
+                valueField: 'device_type',
+                textField: 'device_name'
+            });
+            form.render('select');
+        });
+    }
+
+    function string_add_num(str, n) {
+        var str_add = "";
+        for (var i = str.length - 1; i >= 0; i--) {
+            if (str.charAt(i) < '0' || str.charAt(i) > '9') {
+                str_add = str.charAt(i) + str_add;
+                continue;
+            }
+            n = parseInt(str.charAt(i)) + n;
+            if (n > 9) {
+                str_add = String(n - 10) + str_add;
+                n = 1;
+            } else if (n < 0) {
+                str_add = String(n + 10) + str_add;
+                n = -1;
+            } else {
+                str_add = String(n) + str_add;
+                n = 0;
+            }
+        }
+        return {
+            str: str_add,
+            carry: n
+        };
+    }
+
+    function batchAdd(target) {
+        var $form = $(target).closest('form');
+        var data = $$.serializeForm($form);
+        if (form.validate($form) == false) return false;
+
+        data.device_no = data.device_no.toUpperCase();
+        var device_no = data.device_no;
+        var count = parseInt(data.count);
+        var inc = parseInt(data.inc);
+
+        for (i = 0; i < count; i++) {
+            //重复检查
+            if($$.datagrid('#list', 'getRowIndex', device_no) > 0) {
+                $$.msg('设备不能重复添加');
+                return false;
+            }
+
+            var row = $.extend({}, data, {
+                device_no: device_no
+            });
+            $$.datagrid('#list', 'appendRow', row);
+
+            var tmp = string_add_num(tmp.device_no, inc);
+            device_no = tmp.str;
+        }
+    }
+
+    function submitSuccess(requestData, data) {
+        $$.datagrid('#list', 'loadData', []);
+    }
+
+    function deleteChecked(target) {
+        var rows = $$.datagrid('#list', 'getChecked');
+        var i, index;
+        for (i = 0; i < rows.length; i++) {
+            index = $$.datagrid('#list', 'getRowIndex', rows[i]);
+            $$.datagrid('#list', 'deleteRow', index);
+        }
+    }
+
+    $(function() {
+
+        $('#manufacturer').on('change', onChangeManufacturer);
+        form.on('select(manufacturer)', function(data) {
+            $(data.elem).change();
+        });
+
+        $$.request('/action/bm/parameter/list', {
+            manufacturer: '1',
+            term_inves: '1'
+        }, function(data) {
+            $$.loadSelect('#manufacturer', data.manufacturer);
+            $$.loadSelect('#term-inves', data.term_inves);
+            form.render('select');
+        });
+
+        $$.request('/action/bm/depot-info/list', {}, function(data) {
+            $$.loadSelect('#depot-id', data.rows, {
+                valueField: 'depot_id',
+                textField: 'depot_name'
+            });
+            form.render('select');
+        });
+    });
     </script>
 </body>
 
