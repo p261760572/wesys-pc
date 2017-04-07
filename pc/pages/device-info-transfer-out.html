@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>采购入库</title>
+    <title>调拨出库</title>
     <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
     <link rel="stylesheet" type="text/css" href="../css/base.css">
 </head>
@@ -15,37 +15,7 @@
         <form class="layui-form" action="" method="post">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>生产厂家</label>
-                    <div class="layui-input-inline">
-                        <select name="manufacturer" lay-verify="required" lay-search lay-filter="manufacturer" id="manufacturer">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>设备型号</label>
-                    <div class="layui-input-inline">
-                        <select name="device_type" lay-verify="required" lay-search id="device-type">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">生产日期</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="production_date" placeholder="请输入生产日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker()" id="production-date">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>终端投资方</label>
-                    <div class="layui-input-inline">
-                        <select name="term_inves" lay-verify="required" id="term-inves">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>开始设备编号</label>
+                    <label class="layui-form-label"><span class="required">*</span>设备编号</label>
                     <div class="layui-input-inline">
                         <input type="text" name="device_no" lay-verify="required" placeholder="请输入设备编号" autocomplete="off" class="layui-input">
                     </div>
@@ -73,17 +43,17 @@
         <form class="layui-form" action="" method="post">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>仓库</label>
-                    <div class="layui-input-inline">
-                        <select name="depot_id" lay-verify="required" id="depot-id">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
                     <label class="layui-form-label"><span class="required">*</span>经手人</label>
                     <div class="layui-input-inline">
                         <input type="text" name="hand_by" lay-verify="required" placeholder="请输入经手人" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>目的仓库</label>
+                    <div class="layui-input-inline">
+                        <select name="dest_depot_id" lay-verify="required" id="depot-id">
+                            <option value=""></option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -93,7 +63,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <button type="button" class="layui-btn" onclick="$$.submit(this)" data-options="url:'/action/bm/device-info/purch',transform:false,before:beforeSubmit,success:submitSuccess">提交</button>
+                    <button type="button" class="layui-btn" onclick="$$.submit(this)" data-options="url:'/action/bm/device-info/transfer-out',transform:false,before:beforeSubmit,success:submitSuccess">提交</button>
                 </div>
             </div>
         </form>
@@ -116,6 +86,7 @@
                             <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
                         </th>
                         <th>设备编号</th>
+                        <th>仓库</th>
                         <th>生产厂家</th>
                         <th>设备型号</th>
                         <th>终端投资方</th>
@@ -129,6 +100,9 @@
                         </td>
                         <td>
                             {{row.device_no}}
+                        </td>
+                        <td>
+                            {{row.depot_name}}
                         </td>
                         <td>
                             {{row.manufacturer}}
@@ -164,19 +138,6 @@
         $$.loadData($form, {
             inc: '1',
             count: '1'
-        });
-    }
-
-    function onChangeManufacturer() {
-        var value = $(this).val();
-        $$.request('/action/bm/device-type/list', {
-            manufacturer: value
-        }, function(data) {
-            $$.loadSelect('#device-type', data.rows, {
-                valueField: 'device_type',
-                textField: 'device_name'
-            });
-            form.render('select');
         });
     }
 
@@ -216,16 +177,29 @@
         var inc = parseInt(data.inc);
 
         for (i = 0; i < count; i++) {
-            //重复检查
-            if ($$.datagrid('#list', 'getRowIndex', device_no) >= 0) {
-                $$.msg('设备编号不能重复增加');
-                return false;
-            }
-
-            var row = $.extend({}, data, {
+            var requestData = $.extend({}, data, {
                 device_no: device_no
             });
-            $$.datagrid('#list', 'appendRow', row);
+            $$.request('/action/bm/device-info/view', requestData, function(data) {
+                var device_no = data.data.device_no;
+                if (device_no) {
+                    if (data.data.proc_st != '1') {
+                        $$.msg('设备不在库', {
+                            icon: 2
+                        });
+                    } else {
+                        //重复检查
+                        if ($$.datagrid('#list', 'getRowIndex', device_no) >= 0) {
+                            $$.msg('设备编号不能重复增加');
+                            return false;
+                        }
+
+                        $$.datagrid('#list', 'appendRow', data.data);
+                    }
+                } else {
+                    $$.msg('设备不存在');
+                }
+            });
 
             var tmp = string_add_num(device_no, inc);
             device_no = tmp.str;
@@ -263,20 +237,9 @@
     template.helper('formatTermInves', formatTermInves);
 
     $(function() {
-
-        $('#manufacturer').on('change', onChangeManufacturer);
-        form.on('select(manufacturer)', function(data) {
-            $(data.elem).change();
-        });
-
         $$.request('/action/bm/parameter/list', {
-            manufacturer: '1',
             term_inves: '1'
         }, function(data) {
-            $$.loadSelect('#manufacturer', data.manufacturer);
-            $$.loadSelect('#term-inves', data.term_inves);
-            form.render('select');
-
             cache['term_inves'] = data.term_inves;
         });
 
@@ -287,7 +250,6 @@
             });
             form.render('select');
         });
-
 
         $$.datagrid('#list', {
             tpl: '#list-tpl',

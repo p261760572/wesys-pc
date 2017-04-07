@@ -101,12 +101,12 @@
         $$.datagrid('#list', 'reload');
     }
 
-    function hasNextStatus(oper_in, proc_st, action) {
+    function hasNext(oper_in, proc_st, action) {
         var rows = $$.st.transition[$$.st.alias['']]
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
 
-    template.helper('hasNext', hasNextStatus);
+    template.helper('hasNext', hasNext);
     template.helper('operateType', operateType);
 
     $(function() {

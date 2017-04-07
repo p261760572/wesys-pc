@@ -147,7 +147,7 @@
         $$.datagrid('#list', 'reload');
     }
 
-    function hasNextStatus(oper_in, proc_st, action) {
+    function hasNext(oper_in, proc_st, action) {
         var rows = $$.st.transition[$$.st.alias['mchnt_base_info']]
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
@@ -157,7 +157,7 @@
     }
 
     template.helper('formatElecInfoType', formatElecInfoType);
-    template.helper('hasNext', hasNextStatus);
+    template.helper('hasNext', hasNext);
     template.helper('operateType', operateType);
     template.helper('displayType', displayType);
 

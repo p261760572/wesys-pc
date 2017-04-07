@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>其它出库</title>
+    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+</head>
+
+<body>
+    <div class="panel panel-padding">
+        <form class="layui-form" action="" method="post">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>设备编号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="device_no" lay-verify="required" placeholder="请输入设备编号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn" onclick="add(this)">增加</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="panel panel-padding">
+        <form class="layui-form" action="" method="post">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>经手人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="hand_by" lay-verify="required" placeholder="请输入经手人" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="note" placeholder="请输入备注" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn" onclick="$$.submit(this)" data-options="url:'/action/bm/device-info/other-out',transform:false,before:beforeSubmit,success:submitSuccess">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="panel panel-padding">
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-small layui-btn-danger" onclick="deleteChecked(this)">
+                <i class="layui-icon">&#xe640;</i> 删除
+            </button>
+        </div>
+        <div id="list" data-options="idField:'device_no'">
+        </div>
+    </div>
+    <script id="list-tpl" type="text/html">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
+                        </th>
+                        <th>设备编号</th>
+                        <th>仓库</th>
+                        <th>生产厂家</th>
+                        <th>设备型号</th>
+                        <th>终端投资方</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each rows as row i}}
+                    <tr data-index="{{i}}">
+                        <td>
+                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="check">
+                        </td>
+                        <td>
+                            {{row.device_no}}
+                        </td>
+                        <td>
+                            {{row.depot_name}}
+                        </td>
+                        <td>
+                            {{row.manufacturer}}
+                        </td>
+                        <td>
+                            {{row.device_type}}
+                        </td>
+                        <td>
+                            {{row.term_inves | formatTermInves}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </script>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
+    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../js/template.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/param.js"></script>
+    <script type="text/javascript">
+    var query = $$.parseQueryString();
+    var operateType = query.operateType;
+    var form = layui.form();
+    var element = layui.element();
+    var cache = {};
+
+
+    function add(target) {
+        var $form = $(target).closest('form');
+        var requestData = $$.serializeForm($form);
+        if (form.validate($form) == false) return false;
+
+        requestData.device_no = requestData.device_no.toUpperCase();
+
+        $$.request('/action/bm/device-info/view', requestData, function(data) {
+            var device_no = data.data.device_no;
+            if (device_no) {
+                if (data.data.proc_st != '1') {
+                    $$.msg('设备不在库', {
+                        icon: 2
+                    });
+                } else {
+                    //重复检查
+                    if ($$.datagrid('#list', 'getRowIndex', device_no) >= 0) {
+                        $$.msg('设备编号不能重复增加');
+                        return false;
+                    }
+
+                    $$.datagrid('#list', 'appendRow', data.data);
+                }
+            } else {
+                $$.msg('设备不存在');
+            }
+        });
+    }
+
+    function beforeSubmit(data) {
+        data.rows = $$.datagrid('#list', 'getRows');
+        if (data.rows.length == 0) {
+            $$.msg('请先增加设备');
+            return false;
+        }
+    }
+
+    function submitSuccess(requestData, data) {
+        $$.msg('操作成功', {
+            icon: 1
+        });
+        $$.datagrid('#list', 'loadData', []);
+    }
+
+    function deleteChecked(target) {
+        var rows = $$.datagrid('#list', 'getChecked');
+        var i, index;
+        for (i = 0; i < rows.length; i++) {
+            index = $$.datagrid('#list', 'getRowIndex', rows[i]);
+            $$.datagrid('#list', 'deleteRow', index);
+        }
+    }
+
+    function formatTermInves(value) {
+        return $$.formatField(cache['term_inves'], value);
+    }
+
+    template.helper('formatTermInves', formatTermInves);
+
+    $(function() {
+        $$.request('/action/bm/parameter/list', {
+            term_inves: '1'
+        }, function(data) {
+            cache['term_inves'] = data.term_inves;
+        });
+
+        $$.datagrid('#list', {
+            tpl: '#list-tpl',
+            data: []
+        })
+    });
+    </script>
+</body>
+
+</html>

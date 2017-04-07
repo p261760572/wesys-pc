@@ -278,6 +278,8 @@ window.$$ = (function() {
                     }
                 });
             }
+
+            opts.loadSuccess(data);
         }
 
         function bindEvents(selector) {
@@ -296,7 +298,7 @@ window.$$ = (function() {
 
                 var index = parseInt($this.attr('data-index'));
                 var row = state.data.rows[index];
-                opts.onClickRow(index, row);
+                opts.clickRow(index, row);
             });
 
             //全选
@@ -341,7 +343,8 @@ window.$$ = (function() {
                     checkbox: true,
                     pagination: true,
                     queryParams: {},
-                    onClickRow: $.noop
+                    loadSuccess: $.noop,
+                    clickRow: $.noop
                 }, $$.parseOptions($list), options);
 
                 state = {
@@ -455,10 +458,10 @@ window.$$ = (function() {
     $$.search = function(target) {
         var $form = $(target).closest('form');
         var options = $.extend({
-            selector: '#list',
+            selector: '#list', //add
             tpl: '#list-tpl',
             queryParams: $$.serializeForm($form),
-            before: $.noop
+            before: $.noop //add
         }, $$.parseOptions(target));
 
         if (options.before(options.queryParams) == false) return false;
@@ -524,7 +527,7 @@ window.$$ = (function() {
 
         var row = $$.datagrid(options.datagrid, 'getRows')[index];
         var params = $$.getKeys(row, options.keys)
-        params.displayType = displayType;
+        if (window.displayType) params.displayType = displayType;
 
         var url = $$.url(options.url, params);
 

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>设备信息</title>
+    <title>出入库查询</title>
     <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
     <link rel="stylesheet" type="text/css" href="../css/base.css">
 </head>
@@ -16,25 +16,15 @@
             <form id="search" class="layui-form" action="" method="post" data-options="serialize:serializeSearch">
                 <div class="layui-form-item">
                     <div class="layui-inline">
+                        <label class="layui-form-label">操作单号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="depot_oper_no" placeholder="请输入设备编号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
                         <label class="layui-form-label">设备编号</label>
                         <div class="layui-input-inline">
                             <input type="text" name="device_no" placeholder="请输入设备编号" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">生产厂家</label>
-                        <div class="layui-input-inline">
-                            <select name="manufacturer" lay-search lay-filter="manufacturer" id="manufacturer">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">设备型号</label>
-                        <div class="layui-input-inline">
-                            <select name="device_type" lay-search id="device-type">
-                                <option value=""></option>
-                            </select>
                         </div>
                     </div>
                     <div class="layui-inline">
@@ -52,7 +42,35 @@
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/device-info/search'" id="search-btn">查询</button>
+                        <label class="layui-form-label">商户号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mchnt_cd" placeholder="请输入商户号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">终端号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="term_id" placeholder="请输入终端号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">经手人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="hand_by" placeholder="请输入经手人" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">操作日期</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="created_time" placeholder="请输入开始日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})" id="created_time">
+                        </div>
+                        <div class="layui-form-mid">-</div>
+                        <div class="layui-input-inline">
+                            <input type="text" name="created_time2" placeholder="请输入结束日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})" id="created_time2">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/depot-oper-no/search'" id="search-btn">查询</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -75,7 +93,9 @@
                     <i class="layui-icon">&#xe640;</i> 删除
                 </button>
             </div> -->
-            <div id="list">
+            <div id="list" data-options="loadSuccess:loadSuccess,clickRow:clickRow">
+            </div>
+            <div id="device-list">
             </div>
         </div>
     </div>
@@ -84,27 +104,72 @@
             <table class="layui-table">
                 <thead>
                     <tr>
-                        <!-- <th>
-                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
-                        </th> -->
-                        <th>设备编号</th>
-                        <th>设备型号</th>
-                        <th>仓库</th>
-                        <th>终端投资方</th>
-                        <th>终端标识码</th>
-                        <th>商户名称</th>
-                        <th>最后修改时间</th>
+                        <th>操作单号</th>
+                        <th>仓库名称</th>
+                        <th>经手人</th>
+                        <th>设备数量</th>
+                        <th>工作单号</th>
+                        <th>备注</th>
+                        <th>操作日期</th>
+                        <th>操作人</th>
                         <th>操作标志</th>
-                        <th>处理状态</th>
-                        <!-- <th>操作</th> -->
+                        <!-- <th>处理状态</th> -->
                     </tr>
                 </thead>
                 <tbody>
                     {{each rows as row i}}
                     <tr data-index="{{i}}">
+                        <td>
+                            {{row.depot_oper_no}}
+                        </td>
+                        <td>
+                            {{row.depot_name}}
+                        </td>
+                        <td>
+                            {{row.hand_by}}
+                        </td>
+                        <td>
+                            {{row.device_count}}
+                        </td>
+                        <td>
+                            {{row.work_order_no}}
+                        </td>
+                        <td>
+                            {{row.note}}
+                        </td>
+                        <td>
+                            {{row.created_time}}
+                        </td>
+                        <td>
+                            {{row.created_by}}
+                        </td>
+                        <td>
+                            {{row.oper_in | formatOperIn}}
+                        </td>
                         <!-- <td>
-                            <input type="checkbox" name="checkbox" lay-skin="primary">
+                            {{row.proc_st | formatProcSt}}
                         </td> -->
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </script>
+    <script id="device-list-tpl" type="text/html">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>设备编号</th>
+                        <th>设备型号</th>
+                        <th>设备名称</th>
+                        <th>设备类型</th>
+                        <th>终端投资方</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each rows as row i}}
+                    <tr data-index="{{i}}">
                         <td>
                             {{row.device_no}}
                         </td>
@@ -112,38 +177,14 @@
                             {{row.device_type}}
                         </td>
                         <td>
-                            {{row.depot_name}}
+                            {{row.device_name}}
+                        </td>
+                        <td>
+                            {{row.device_flag | formatDeviceFlag}}
                         </td>
                         <td>
                             {{row.term_inves | formatTermInves}}
                         </td>
-                        <td>
-                            {{row.term_no}}
-                        </td>
-                        <td>
-                            {{row.mchnt_name}}
-                        </td>
-                        <td>
-                            {{row.last_modified_time}}
-                        </td>
-                        <td>
-                            {{row.oper_in | formatOperIn}}
-                        </td>
-                        <td>
-                            {{row.proc_st | formatProcSt}}
-                        </td>
-                        <!-- <td>
-                            <div class="layui-btn-group">
-                                <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="$$.do(this,{{i}})" data-options="url:'device-info-detail.html?operateType=view',title:'查看设备信息'">
-                                    查看
-                                </button>
-                                {{if displayType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
-                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'device-info-detail.html?operateType=update',title:'编辑设备信息'">
-                                    编辑
-                                </button>
-                                {{/if}} {{/if}}
-                            </div>
-                        </td> -->
                     </tr>
                     {{/each}}
                 </tbody>
@@ -195,11 +236,15 @@
         });
     }
 
+    function formatDeviceFlag(value) {
+        return $$.formatField($$.param['device_flag'], value);
+    }
+
     function formatTermInves(value) {
         return $$.formatField(cache['term_inves'], value);
     }
 
-    function formatOperIn(value) {        
+    function formatOperIn(value) {
         return $$.formatField($$.st.operIn[$$.st.alias['device_info']], value);
     }
 
@@ -207,6 +252,25 @@
         return $$.formatField($$.st.procSt[$$.st.alias['device_info']], value);
     }
 
+    function loadSuccess(data) {
+        $$.datagrid('#device-list', {
+            tpl: '#device-list-tpl',
+            url: null,
+            data: []
+        });
+    }
+
+    function clickRow(index, row) {
+        var options = {
+            url: '/action/bm/depot-oper-list/search',
+            queryParams: {
+                depot_oper_no: row.depot_oper_no
+            }
+        };
+        $$.datagrid('#device-list', options);
+    }
+
+    template.helper('formatDeviceFlag', formatDeviceFlag);
     template.helper('formatTermInves', formatTermInves);
     template.helper('formatOperIn', formatOperIn);
     template.helper('formatProcSt', formatProcSt);
