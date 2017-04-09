@@ -79,7 +79,7 @@
             </form>
         </div>
         <div class="panel panel-padding" id="list-panel">
-            <div class="layui-btn-group invisible visible-cancel">
+            <div class="layui-btn-group hide invisible visible-cancel">
                 <button class="layui-btn layui-btn-small layui-btn-danger" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/expense-info/batch-cancel',type:'confirm',title:'确认要作废?'">
                     <i class="layui-icon">&#xe633;</i> 作废
                 </button>
@@ -211,8 +211,8 @@
 
     template.helper('formatExpenseType', formatExpenseType);
     template.helper('formatExpenseCycle', formatExpenseCycle);
-    template.helper('operateType', operateType);
     template.helper('hasNext', hasNext);
+    template.helper('operateType', operateType);
     template.helper('displayType', displayType);
 
     $(function() {

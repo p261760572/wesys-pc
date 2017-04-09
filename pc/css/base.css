@@ -27,7 +27,7 @@ input[type="checkbox"][readonly] {
 }
 
 .invisible {
-    display: none;
+    /*display: none;*/
 }
 
 .required {

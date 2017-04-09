@@ -5,34 +5,20 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>终端信息</title>
+    <title>派单</title>
     <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
     <link rel="stylesheet" type="text/css" href="../css/base.css">
 </head>
 
 <body>
     <div class="container">
-        <div id="search-panel" class="panel panel-padding">
+        <div class="panel panel-padding">
             <form id="search" class="layui-form" action="" method="post" data-options="serialize:serializeSearch">
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">客户号</label>
                         <div class="layui-input-inline">
                             <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">终端标识</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="term_no" placeholder="请输入终端标识" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">门店名称</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="shop_name" placeholder="请输入门店名称" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-inline">
@@ -44,22 +30,34 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">所在地区</label>
+                        <label class="layui-form-label">手机</label>
                         <div class="layui-input-inline">
-                            <select name="province" lay-filter="province" id="province">
-                                <option value="">请选择省</option>
-                            </select>
+                            <input type="text" name="mobile" placeholder="请输入手机" autocomplete="off" class="layui-input">
                         </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">商户简称</label>
                         <div class="layui-input-inline">
-                            <select name="city" lay-filter="city" id="city">
-                                <option value="">请选择市</option>
-                            </select>
+                            <input type="text" name="mchnt_abbr" placeholder="请输入商户简称" autocomplete="off" class="layui-input">
                         </div>
-                        <div class="layui-input-inline">
-                            <select name="district" lay-filter="district" id="district">
-                                <option value="">请选择县/区</option>
-                            </select>
-                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">所在地区</label>
+                    <div class="layui-input-inline">
+                        <select name="province" lay-filter="province" id="province">
+                            <option value="">请选择省</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="city" lay-filter="city" id="city">
+                            <option value="">请选择市</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="district" lay-filter="district" id="district">
+                            <option value="">请选择县/区</option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -76,29 +74,18 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/term-info/search'" id="search-btn">查询</button>
-                        <!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
+                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/mchnt-base-info/search'" id="search-btn">查询</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
             </form>
         </div>
-        <div class="panel panel-padding" id="list-panel">
-            <div class="layui-btn-group invisible visible-update">
-                <button class="layui-btn layui-btn-small" onclick="$$.goto(this)" data-options="url:$$.url('term-info-detail.html?operateType=create',{mchnt_id:query.mchnt_id}),title:'新增终端信息'">
-                    <i class="layui-icon">&#xe654;</i> 新增
+        <div class="panel panel-padding">
+            <!-- <div class="layui-btn-group">
+                <button class="layui-btn layui-btn-small" onclick="$$.goto(this)" data-options="url:$$.url('expense-info-detail.html?operateType=create',{}),title:'新增费用信息'">
+                    生成费用单
                 </button>
-            </div>
-            <div class="layui-btn-group invisible visible-check1">
-                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/term-info/batch-check1-pass'">
-                    <i class="layui-icon">&#x1005;</i> 审核
-                </button>
-                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/term-info/batch-check1-nopass',type:'prompt',title:'请输入驳回原因',promptKey:'checked_reason'">
-                    <i class="layui-icon">&#xe633;</i> 驳回
-                </button>
-                <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
-                    <i class="layui-icon">&#xe640;</i> 删除
-                </button> -->
-            </div>
+            </div> -->
             <div id="list">
             </div>
         </div>
@@ -108,15 +95,16 @@
             <table class="layui-table">
                 <thead>
                     <tr>
-                        <th>
+                        <!-- <th>
                             <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
-                        </th>
+                        </th> -->
                         <th>客户号</th>
-                        <th>终端标识</th>
                         <th>联系人</th>
-                        <th>手机号</th>
-                        <th>门店名称</th>
+                        <th>手机</th>
+                        <th>商户简称</th>
+                        <th>联系电话</th>
                         <th>所在地区</th>
+                        <th>营业执照号</th>
                         <!-- <th>操作标志</th> -->
                         <th>处理状态</th>
                         <th>操作</th>
@@ -125,14 +113,11 @@
                 <tbody>
                     {{each rows as row i}}
                     <tr data-index="{{i}}">
-                        <td>
-                            <input type="checkbox" name="checkbox" lay-skin="primary">
-                        </td>
+                        <!-- <td>
+                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="check">
+                        </td> -->
                         <td>
                             {{row.mchnt_id}}
-                        </td>
-                        <td>
-                            {{row.term_no}}
                         </td>
                         <td>
                             {{row.linkman}}
@@ -141,10 +126,16 @@
                             {{row.mobile}}
                         </td>
                         <td>
-                            {{row.shop_name}}
+                            {{row.mchnt_abbr}}
+                        </td>
+                        <td>
+                            {{row.telno}}
                         </td>
                         <td>
                             {{row.district_name}}
+                        </td>
+                        <td>
+                            {{row.license_no}}
                         </td>
                         <!-- <td>
                             {{row.oper_in_nm}}
@@ -154,9 +145,16 @@
                         </td>
                         <td>
                             <div class="layui-btn-group">
-                                <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="$$.do(this,{{i}})" data-options="url:'workorder-detail.html?operateType=create-install',title:'装机派单'">
-                                    派单
+                                {{if displayType=='create-install'}}
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'workorder-create.html?operateType=create-install',title:'生成装机单',keys:'mchnt_id'">
+                                    装机
                                 </button>
+                                {{/if}}
+                                {{if displayType=='create-other'}}
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'workorder-create.html?operateType=create-other',title:'生成维护单',keys:'mchnt_id'">
+                                    维护
+                                </button>
+                                {{/if}}
                             </div>
                         </td>
                     </tr>
@@ -181,10 +179,10 @@
     var element = layui.element();
 
     function serializeSearch(data) {
-        var procStMap = {
-            'check1': '1'
-        };
-        data.proc_st2 = procStMap[displayType];
+        // var procStMap = {
+        //     'check1': '1'
+        // };
+        // data.proc_st = procStMap[displayType];
     }
 
     function reload() {
@@ -213,13 +211,8 @@
         });
 
         $$.loadSelect('#province', districtData['province']);
-        $$.transformDisplay('#list-panel', displayType);
-        form.render('select');
 
-        if (query.mchnt_id) {
-            $$.loadData('#search', query);
-            $('#search-btn').click();
-        }
+        form.render('select');
     });
     </script>
 </body>

@@ -63,12 +63,12 @@
             </form>
         </div>
         <div class="panel panel-padding" id="list-panel">
-            <div class="layui-btn-group invisible visible-update">
+            <div class="layui-btn-group hide invisible visible-update">
                 <button class="layui-btn layui-btn-small" onclick="$$.goto(this)" data-options="url:$$.url('term-param-detail.html?operateType=create',{term_no:query.term_no}),title:'新增终端参数'">
                     <i class="layui-icon">&#xe654;</i> 新增
                 </button>
             </div>
-            <div class="layui-btn-group invisible visible-check1">
+            <div class="layui-btn-group hide invisible visible-check1">
                 <button class="layui-btn layui-btn-small layui-btn-normal" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/term-param/batch-check1-pass'">
                     <i class="layui-icon">&#x1005;</i> 审核
                 </button>

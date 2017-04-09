@@ -502,7 +502,7 @@ window.$$ = (function() {
         $$.request(options.url, requestData, function(data) {
             if(options.transform) {
                 $$.transformStatus($form, true);
-                form.render('select');
+                form.render();
             }
             options.success(requestData, data);
         });
@@ -669,8 +669,11 @@ window.$$ = (function() {
 
         //显示/隐藏
         var tag = isSubmit ? 'button' : '';
-        $target.find(tag + '.visible').show().filter('.invisible-' + type).hide();
-        $target.find(tag + '.invisible').hide().filter('.visible-' + type).show();
+        // $target.find(tag + '.visible').show().filter('.invisible-' + type).hide();
+        // $target.find(tag + '.invisible').hide().filter('.visible-' + type).show();
+
+        $target.find(tag + '.visible').removeClass('hide').filter('.invisible-' + type).addClass('hide');
+        $target.find(tag + '.invisible').addClass('hide').filter('.visible-' + type).removeClass('hide');
     };
 
     $$.transformStatus = function(selector, status, isSubmit) {
