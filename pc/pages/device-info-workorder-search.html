@@ -70,12 +70,36 @@
         </form>
     </div>
     <div class="panel panel-padding" id="list-panel">
-        <div class="layui-btn-group hide invisible visible-cancel">
-            <button class="layui-btn layui-btn-small layui-btn-danger" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/workorder/batch-cancel',type:'confirm',title:'确认要作废?'">
-                <i class="layui-icon">&#xe633;</i> 作废
-            </button>
+        <div id="list" data-options="loadSuccess:loadSuccess,clickRow:clickRow">
         </div>
-        <div id="list">
+    </div>
+    <div class="panel panel-padding hide" id="search-term-panel">
+        <form class="layui-form" action="" method="post" data-options="serialize:serializeSearchTerm">
+            <div class="layui-form-item">
+                <div class="layui-inline hide">
+                    <label class="layui-form-label">客户号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">终端标识</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="term_no" placeholder="请输入终端标识" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">门店名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="shop_name" placeholder="请输入门店名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/workorder-term-list/search',datagrid:'#term-list',tpl:'#term-list-tpl',before:beforeSearchTerm" id="search-term-btn">查询</button>
+                </div>
+            </div>
+        </form>
+        <div id="term-list">
         </div>
     </div>
     <script id="list-tpl" type="text/html">
@@ -83,9 +107,6 @@
             <table class="layui-table">
                 <thead>
                     <tr>
-                        <th>
-                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
-                        </th>
                         <th>工单号</th>
                         <th>客户号</th>
                         <!-- <th>联系人</th>
@@ -98,15 +119,11 @@
                         <th>执行结果</th>
                         <th>执行日期</th>
                         <th>处理状态</th>
-                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
                     {{each rows as row i}}
                     <tr data-index="{{i}}">
-                        <td>
-                            <input type="checkbox" name="checkbox" lay-skin="primary">
-                        </td>
                         <td>
                             {{row.work_order_no}}
                         </td>
@@ -143,16 +160,62 @@
                         <td>
                             {{row.proc_st | formatProcSt}}
                         </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </script>
+    <script id="term-list-tpl" type="text/html">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>终端标识</th>
+                        <th>联系人</th>
+                        <th>手机号</th>
+                        <th>门店名称</th>
+                        <th>所在地区</th>
+                        <!-- <th>操作标志</th> -->
+                        <th>处理状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each rows as row i}}
+                    <tr data-index="{{i}}">
+                        <td>
+                            {{row.term_no}}
+                        </td>
+                        <td>
+                            {{row.linkman}}
+                        </td>
+                        <td>
+                            {{row.mobile}}
+                        </td>
+                        <td>
+                            {{row.shop_name}}
+                        </td>
+                        <td>
+                            {{row.district_name}}
+                        </td>
+                        <!-- <td>
+                            {{row.oper_in_nm}}
+                        </td> -->
+                        <td>
+                            {{row.proc_st_nm}}
+                        </td>
                         <td>
                             <div class="layui-btn-group">
-                                <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="$$.do(this,{{i}})" data-options="url:'workorder-detail.html?operateType=view',title:'查看工单'">
-                                    查看
+                                {{if displayType=='workorder-out'}}
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'device-info-workorder-out.html',title:'出库',keys:'work_order_no,term_no',datagrid:'#term-list'">
+                                    出库
                                 </button>
-                                {{if displayType=='sign'}} {{if hasNext(row.oper_in,row.proc_st,'sign')}}
-                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'workorder-detail.html?operateType=sign',title:'提交工单'">
-                                    提交
+                                {{/if}} {{if displayType=='workorder-in'}}
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'device-info-workorder-in.html',title:'入库',keys:'work_order_no,term_no',datagrid:'#term-list'">
+                                    入库
                                 </button>
-                                {{/if}} {{/if}}
+                                {{/if}}
                             </div>
                         </td>
                     </tr>
@@ -177,11 +240,26 @@
     var element = layui.element();
 
     function serializeSearch(data) {
-        var procStMap = {
-            'sign': '1',
-            'cancel': '1'
-        };
-        data.proc_st = procStMap[displayType];
+        data.proc_st = '1';
+    }
+
+    function beforeSearchTerm(data) {
+        var selected = $$.datagrid('#list', 'getSelected');
+        if (!selected) {
+            $$.msg('请先选择工单');
+            return false;
+        }
+    }
+
+    function serializeSearchTerm(data) {
+        var selected = $$.datagrid('#list', 'getSelected');
+        if (selected) {
+            data.work_order_no = selected.work_order_no;
+        }
+
+        if (displayType == 'workorder-out') {
+        } else if (displayType == 'workorder-in') {
+        }
     }
 
     function reload() {
@@ -227,6 +305,19 @@
 
     function formatProcSt(value) {
         return $$.formatField($$.st.procSt[$$.st.alias['workorder']], value);
+    }
+
+    function loadSuccess(data) {
+        $$.datagrid('#term-list', {
+            tpl: '#term-list-tpl',
+            url: null,
+            data: []
+        });
+        $('#search-term-panel').removeClass('hide');
+    }
+
+    function clickRow(index, row) {
+        $("#search-term-btn").click();
     }
 
     template.helper('formatWorkOrderType', formatWorkOrderType);

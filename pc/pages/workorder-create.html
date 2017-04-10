@@ -311,7 +311,7 @@
 
         $.when(d1, d2, d3).done(function() {
             $$.request('/action/bm/term-info/list', {
-                term_no: query.term_no
+                term_no: query.term_no.split(',')
             }, function(data) {
                 $$.datagrid('#term-list', {
                     tpl: '#term-list-tpl',
