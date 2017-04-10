@@ -145,41 +145,52 @@
                 </div>
             </div>
         </form>
+        <div id="term-list">
+        </div>
     </div>
-    <script id="list-tpl" type="text/html">
+    <script id="term-list-tpl" type="text/html">
         <div class="layui-form">
             <table class="layui-table">
                 <thead>
                     <tr>
-                        <th>商户简称</th>
-                        <th>商户名称</th>
-                        <th>商户号</th>
-                        <th>终端号</th>
-                        <!-- <th>参数状态</th> -->
+                        <th>终端标识</th>
+                        <th>联系人</th>
+                        <th>手机号</th>
+                        <th>门店名称</th>
+                        <th>所在地区</th>
+                        <!-- <th>操作标志</th> -->
                         <th>处理状态</th>
+                        <!-- <th>操作</th> -->
                     </tr>
                 </thead>
                 <tbody>
                     {{each rows as row i}}
                     <tr data-index="{{i}}">
                         <td>
-                            {{row.mchnt_abbr}}
+                            {{row.term_no}}
                         </td>
                         <td>
-                            {{row.mchnt_name}}
+                            {{row.linkman}}
                         </td>
                         <td>
-                            {{row.mchnt_cd}}
+                            {{row.mobile}}
                         </td>
                         <td>
-                            {{row.term_id}}
+                            {{row.shop_name}}
+                        </td>
+                        <td>
+                            {{row.district_name}}
                         </td>
                         <!-- <td>
-                            {{row.status}}
+                            {{row.oper_in_nm}}
                         </td> -->
                         <td>
                             {{row.proc_st_nm}}
                         </td>
+                        <!-- <td>
+                            <div class="layui-btn-group">
+                            </div>
+                        </td> -->
                     </tr>
                     {{/each}}
                 </tbody>
@@ -217,13 +228,15 @@
             work_content.push($('#work_content' + i).is(":checked") ? '1' : '0');
         }
         data.work_content = work_content.join('');
-        
+
         if (operateType == 'create-install') {
             data.work_order_type = '1';
             data.depot_flag = '1';
         } else if (operateType == 'create-other') {
             data.work_order_type = '2';
         }
+
+        data.term = $$.datagrid('#term-list', 'getRows');
     }
 
 
@@ -292,23 +305,19 @@
             form.render('select');
         });
 
+        var d3 = $$.view('#detail', '/action/bm/mchnt-base-info/view', query);
+
         $$.transformStatus('#detail', operateType);
 
-        $.when(d1, d2).done(function() {
-            if (query.operateType == 'create') {
-                $$.loadData('#detail', query);
-                $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
-                    data.data.shop_name = data.data.mchnt_abbr;
-
-                    $('#province').val(data.data.province).change();
-                    $('#city').val(data.data.city).change();
-                    $('#district').val(data.data.district);
-                    $$.loadData('#detail', data.data);
-                    form.render();
+        $.when(d1, d2, d3).done(function() {
+            $$.request('/action/bm/term-info/list', {
+                term_no: query.term_no
+            }, function(data) {
+                $$.datagrid('#term-list', {
+                    tpl: '#term-list-tpl',
+                    data: data.term
                 });
-            } else {
-                $$.view('#detail', '/action/bm/mchnt-base-info/view', query);
-            }
+            });
         });
     });
     </script>

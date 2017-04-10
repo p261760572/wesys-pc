@@ -200,9 +200,57 @@
                 </div>
             </div>
         </form>
+        <div id="term-list">
+        </div>
     </div>
-    <script id="upload-tpl" type="text/html">
-        <div class="img-box"><img src="/p/action/uploads/" alt="..." class="img-thumbnail"></div>
+    <script id="term-list-tpl" type="text/html">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>终端标识</th>
+                        <th>联系人</th>
+                        <th>手机号</th>
+                        <th>门店名称</th>
+                        <th>所在地区</th>
+                        <!-- <th>操作标志</th> -->
+                        <!-- <th>处理状态</th> -->
+                        <!-- <th>操作</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each rows as row i}}
+                    <tr data-index="{{i}}">
+                        <td>
+                            {{row.term_no}}
+                        </td>
+                        <td>
+                            {{row.linkman}}
+                        </td>
+                        <td>
+                            {{row.mobile}}
+                        </td>
+                        <td>
+                            {{row.shop_name}}
+                        </td>
+                        <td>
+                            {{row.district_name}}
+                        </td>
+                        <!-- <td>
+                            {{row.oper_in_nm}}
+                        </td> -->
+                        <!-- <td>
+                            {{row.proc_st}}
+                        </td> -->
+                        <!-- <td>
+                            <div class="layui-btn-group">
+                            </div>
+                        </td> -->
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
     </script>
     <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
@@ -211,7 +259,8 @@
     <script type="text/javascript" src="../js/template.js"></script>
     <script type="text/javascript" src="../js/base.js"></script>
     <script type="text/javascript" src="../js/param.js"></script>
-    <script type="text/javascript" src="../js/district.js"></script>
+    <!-- <script type="text/javascript" src="../js/district.js"></script> -->
+    <script type="text/javascript" src="../js/st.js"></script>
     <script type="text/javascript">
     var query = $$.parseQueryString();
     var displayType = query.displayType;
@@ -232,6 +281,11 @@
                 $('#work_content' + i).prop("checked", true);
             }
         }
+
+        $$.datagrid('#term-list', {
+            tpl: '#term-list-tpl',
+            data: data.term
+        });
     }
 
     function serializeDetail(data) {
@@ -246,6 +300,12 @@
     function formatDate(value) {
         return value ? value.substr(0, 10) : value;
     }
+
+    // function formatTermProcSt(value) {
+    //     return $$.formatField($$.st.procSt[$$.st.alias['term_info']], value);
+    // }
+
+    // template.helper('formatTermProcSt', formatTermProcSt);
 
     $(function() {
 

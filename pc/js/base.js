@@ -458,7 +458,7 @@ window.$$ = (function() {
     $$.search = function(target) {
         var $form = $(target).closest('form');
         var options = $.extend({
-            selector: '#list', //add
+            datagrid: '#list', //add
             tpl: '#list-tpl',
             queryParams: $$.serializeForm($form),
             before: $.noop //add
@@ -466,13 +466,15 @@ window.$$ = (function() {
 
         if (options.before(options.queryParams) == false) return false;
 
-        $$.datagrid(options.selector, options);
+        if (form.validate($form) == false) return false;
+
+        $$.datagrid(options.datagrid, options);
     };
 
     $$.view = function(selector, url, params) {
         var options = $.extend({}, $$.parseOptions(selector));
 
-        $$.request(url, params, function(data) {
+        return $$.request(url, params, function(data) {
             if (options.load) {
                 options.load(data);
             }

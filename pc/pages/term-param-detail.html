@@ -76,6 +76,71 @@
                     </div>
                 </div>
             </div>
+            <div class="layui-form-item hide invisible visible-view">
+                <div class="layui-inline">
+                    <label class="layui-form-label">记录编号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="rec_id" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">处理状态</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="oper_in" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="proc_st" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item hide invisible visible-view">
+                <div class="layui-inline">
+                    <label class="layui-form-label">创建人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="created_by" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">创建时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="created_time" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item hide invisible visible-view">
+                <div class="layui-inline">
+                    <label class="layui-form-label">最后修改人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="last_modified_by" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">最后修改时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="last_modified_time" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item hide invisible visible-view">
+                <div class="layui-inline">
+                    <label class="layui-form-label">最后审核人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="last_checked_by" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">最后审核时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="last_checked_time" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item hide invisible visible-view">
+                <label class="layui-form-label">审核备注</label>
+                <div class="layui-input-block">
+                    <input type="text" name="checked_reason" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button type="button" class="layui-btn visible invisible-view" onclick="$$.submit(this)" data-options="url:'/action/bm/term-param/' + operateType">提交</button>
