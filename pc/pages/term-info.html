@@ -27,7 +27,7 @@
                             <input type="text" name="term_no" placeholder="请输入终端标识" autocomplete="off" class="layui-input">
                         </div>
                     </div>
-                <!-- </div>
+                    <!-- </div>
                 <div class="layui-form-item"> -->
                     <div class="layui-inline">
                         <label class="layui-form-label">门店名称</label>
@@ -35,13 +35,13 @@
                             <input type="text" name="shop_name" placeholder="请输入门店名称" autocomplete="off" class="layui-input">
                         </div>
                     </div>
-                   <!--  <div class="layui-inline">
+                    <!--  <div class="layui-inline">
                         <label class="layui-form-label">联系人</label>
                         <div class="layui-input-inline">
                             <input type="text" name="linkman" placeholder="请输入联系人" autocomplete="off" class="layui-input">
                         </div>
                     </div> -->
-                <!-- </div>
+                    <!-- </div>
                 <div class="layui-form-item"> -->
                     <!-- <div class="layui-inline">
                     <label class="layui-form-label">所在地区</label>
@@ -61,7 +61,7 @@
                         </select>
                     </div>
                     </div> -->
-                <!-- </div>
+                    <!-- </div>
                 <div class="layui-form-item"> -->
                     <!-- <div class="layui-inline">
                         <label class="layui-form-label">创建日期</label>
@@ -73,7 +73,7 @@
                             <input type="text" name="created_time2" placeholder="请输入结束日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})" id="created_time2">
                         </div>
                     </div> -->
-                <!-- </div>
+                    <!-- </div>
                 <div class="layui-form-item"> -->
                     <div class="layui-inline">
                         <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/term-info/search'" id="search-btn">查询</button>
@@ -90,10 +90,10 @@
             </div>
             <div class="layui-btn-group hide invisible visible-check1">
                 <button class="layui-btn layui-btn-small layui-btn-normal" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/term-info/batch-check1-pass'">
-                    <i class="layui-icon">&#x1005;</i> 审核
+                    <i class="layui-icon">&#x1005;</i> 审核通过
                 </button>
                 <button class="layui-btn layui-btn-small layui-btn-danger" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/term-info/batch-check1-nopass',type:'prompt',title:'请输入驳回原因',promptKey:'checked_reason'">
-                    <i class="layui-icon">&#xe633;</i> 驳回
+                    <i class="layui-icon">&#xe633;</i> 审核驳回
                 </button>
                 <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
                     <i class="layui-icon">&#xe640;</i> 删除
@@ -165,8 +165,12 @@
                                 <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'term-info-detail.html?operateType=update',title:'编辑终端信息'">
                                     编辑
                                 </button>
+                                {{/if}} {{/if}} {{if displayType=='check1'}} {{if hasNext(row.oper_in,row.proc_st,'check1-pass')}}
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'term-info-detail.html?operateType=check1',title:'审核终端信息'">
+                                    审核
+                                </button>
                                 {{/if}} {{/if}}
-                            </div>   
+                            </div>
                         </td>
                     </tr>
                     {{/each}}

@@ -70,10 +70,11 @@
             </div>
             <div class="layui-btn-group hide invisible visible-check1">
                 <button class="layui-btn layui-btn-small layui-btn-normal" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/term-param/batch-check1-pass'">
-                    <i class="layui-icon">&#x1005;</i> 审核
+                    <i class="layui-icon">&#x1005;</i> 审核通过
+
                 </button>
                 <button class="layui-btn layui-btn-small layui-btn-danger" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/term-param/batch-check1-nopass',type:'prompt',title:'请输入驳回原因',promptKey:'checked_reason'">
-                    <i class="layui-icon">&#xe633;</i> 驳回
+                    <i class="layui-icon">&#xe633;</i> 审核驳回
                 </button>
                 <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
                     <i class="layui-icon">&#xe640;</i> 删除
@@ -141,6 +142,10 @@
                                 {{if displayType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
                                 <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'term-param-detail.html?operateType=update',title:'编辑终端参数'">
                                     编辑
+                                </button>
+                                {{/if}} {{/if}} {{if displayType=='check1'}} {{if hasNext(row.oper_in,row.proc_st,'check1-pass')}}
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'term-param-detail.html?operateType=check1',title:'审核终端参数'">
+                                    审核
                                 </button>
                                 {{/if}} {{/if}}
                             </div>     

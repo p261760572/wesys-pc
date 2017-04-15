@@ -128,7 +128,7 @@
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">营业执照正面</label>
-                            <div class="layui-input-block visible invisible-view">
+                            <div class="layui-input-block hide invisible visible-create invisible-update">
                                 <input type="file" name="file" class="layui-upload-file" data-type="yyzzzm">
                                 <button type="button" class="layui-btn layui-btn-primary" onclick="cropper_yyzzzm(this)">
                                     <i class="layui-icon">&#xe615;</i>
@@ -170,7 +170,7 @@
                         <div class="layui-form-item">
                             <!-- <div class="layui-inline"> -->
                             <label class="layui-form-label"><span class="required">*</span>证件正面</label>
-                            <div class="layui-input-block visible invisible-view">
+                            <div class="layui-input-block hide invisible visible-create invisible-update">
                                 <input type="file" name="file" lay-verify="required" class="layui-upload-file" data-type="sfzzm">
                                 <button type="button" class="layui-btn layui-btn-primary" onclick="cropper_sfzzm(this)">
                                     <i class="layui-icon">&#xe615;</i>
@@ -179,7 +179,7 @@
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">证件反面</label>
-                            <div class="layui-input-block visible invisible-view">
+                            <div class="layui-input-block hide invisible visible-create invisible-update">
                                 <input type="file" name="file" class="layui-upload-file" data-type="sfzfm">
                                 <button type="button" class="layui-btn layui-btn-primary" onclick="cropper_sfzfm(this)">
                                     <i class="layui-icon">&#xe615;</i>
@@ -307,7 +307,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="layui-form-item hide invisible visible-view">
+                        <div class="layui-form-item hide invisible visible-view visible-check1 editable-check1">
                             <label class="layui-form-label">审核备注</label>
                             <div class="layui-input-block">
                                 <input type="text" name="checked_reason" placeholder="" autocomplete="off" class="layui-input">
@@ -315,7 +315,9 @@
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-block">
-                                <button type="button" class="layui-btn visible invisible-view" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-base-info/' + operateType,success:submitSuccess">提交</button>
+                                <button type="button" class="layui-btn hide invisible visible-create visible-update" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-base-info/' + operateType,success:submitSuccess">提交</button>
+                                <button type="button" class="layui-btn layui-btn-normal hide invisible visible-check1" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-base-info/check1-pass',success:submitSuccess">审核通过</button>
+                                <button type="button" class="layui-btn layui-btn-danger hide invisible visible-check1" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-base-info/check1-nopass',success:submitSuccess">审核驳回</button>
                                 <button type="button" class="layui-btn layui-btn-primary" onclick="$$.close()">关闭</button>
                             </div>
                         </div>
@@ -534,7 +536,7 @@
     }
 
     $(function() {
-        if (operateType != 'view') {
+        if ($.inArray(operateType, ['view', 'check1']) == -1) {
             initUpload();
         }
 

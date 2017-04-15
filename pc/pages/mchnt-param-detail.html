@@ -48,7 +48,7 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <div class="layui-inline">
+                <div class="layui-inline editable-check1">
                     <label class="layui-form-label"><span class="required">*</span>MCC</label>
                     <div class="layui-input-inline">
                         <select name="mcc" lay-verify="required" lay-search id="mcc">
@@ -75,12 +75,6 @@
                 <label class="layui-form-label"><span class="required">*</span>商户名称</label>
                 <div class="layui-input-block">
                     <input type="text" name="mchnt_name" lay-verify="required" placeholder="请输入商户名称" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label"><span class="required">*</span>开户名称</label>
-                <div class="layui-input-block">
-                    <input type="text" name="account_name" lay-verify="required" placeholder="请输入开户名称" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -130,7 +124,7 @@
             <div class="layui-form-item">
                 <!-- <div class="layui-inline"> -->
                 <label class="layui-form-label"><span class="required">*</span>账户正面</label>
-                <div class="layui-input-block visible invisible-view">
+                <div class="layui-input-block hide invisible visible-create invisible-update">
                     <input type="file" name="file" lay-verify="required" class="layui-upload-file" data-type="zhzm">
                     <button type="button" class="layui-btn layui-btn-primary" onclick="cropper_zhzm(this)">
                         <i class="layui-icon">&#xe615;</i>
@@ -143,23 +137,55 @@
                         </div>
                     </div> -->
             </div>
-            <div class="layui-form-item">
-                <!-- <div class="layui-inline"> -->
+            <!-- <div class="layui-form-item">
+                <div class="layui-inline">
                 <label class="layui-form-label">账户反面</label>
                 <div class="layui-input-block visible invisible-view">
                     <input type="file" name="file" class="layui-upload-file" data-type="zhfm">
                 </div>
-                <!-- </div> -->
-                <!-- <div class="layui-inline">
+                </div>
+                <div class="layui-inline">
                         <div class="layui-input-inline readonly">
                             <input type="text" name="serverid" placeholder="请上传账户反面" autocomplete="off" class="layui-input">
                         </div>
-                    </div> -->
+                    </div>
+            </div> -->
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="required">*</span>开户名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="account_name" lay-verify="required" placeholder="请输入开户名称" autocomplete="off" class="layui-input">
+                </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><span class="required">*</span>银行账号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="account_no" lay-verify="required" placeholder="请输入银行账号" autocomplete="off" class="layui-input" id="account-no">
+                <div class="layui-input-inline" style="width: 300px;">
+                    <input type="text" name="account_no" lay-verify="required|number" placeholder="请输入银行账号" autocomplete="off" class="layui-input" id="account-no">
+                </div>
+                <div class="layui-form-mid" style="font-size: 30px;" id="account-no2"></div>
+            </div>
+            <div class="layui-form-item">
+                <!-- <div class="layui-inline"> -->
+                <label class="layui-form-label">身份证正面</label>
+                <div class="layui-input-block hide invisible visible-create invisible-update">
+                    <input type="file" name="file" class="layui-upload-file" data-type="sfzzm">
+                    <button type="button" class="layui-btn layui-btn-primary" onclick="cropper_sfzzm(this)">
+                        <i class="layui-icon">&#xe615;</i>
+                    </button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">身份证反面</label>
+                <div class="layui-input-block hide invisible visible-create invisible-update">
+                    <input type="file" name="file" class="layui-upload-file" data-type="sfzfm">
+                    <button type="button" class="layui-btn layui-btn-primary" onclick="cropper_sfzfm(this)">
+                        <i class="layui-icon">&#xe615;</i>
+                    </button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">入账授权书</label>
+                <div class="layui-input-block visible invisible-view">
+                    <input type="file" name="file" class="layui-upload-file" data-type="rzsqs">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -309,7 +335,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item hide invisible visible-view">
+            <div class="layui-form-item hide invisible visible-view visible-check1 editable-check1">
                 <label class="layui-form-label">审核备注</label>
                 <div class="layui-input-block">
                     <input type="text" name="checked_reason" placeholder="" autocomplete="off" class="layui-input">
@@ -317,7 +343,9 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button type="button" class="layui-btn visible invisible-view" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-param/' + operateType,success:submitSuccess">提交</button>
+                    <button type="button" class="layui-btn hide invisible visible-create visible-update" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-param/' + operateType,success:submitSuccess">提交</button>
+                    <button type="button" class="layui-btn layui-btn-normal hide invisible visible-check1" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-param/check1-pass',before:beforeCheck1Nopass,success:submitSuccess">审核通过</button>
+                    <button type="button" class="layui-btn layui-btn-danger hide invisible visible-check1" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-param/check1-nopass',success:submitSuccess">审核驳回</button>
                     <button type="button" class="layui-btn layui-btn-primary" onclick="$$.close()">关闭</button>
                 </div>
             </div>
@@ -361,12 +389,25 @@
         });
     }
 
+    function formatAccountNo(v) {
+        var nv = '';
+        var i;
+        for (i = 0; i < v.length; i++) {
+            if (i > 0 && i % 4 == 0) {
+                nv += '-';
+            }
+            nv += v.charAt(i);
+        }
+        return nv;
+    }
+
     function loadDetail(data) {
         $('#acq-inst-id').change();
         $('#busi-type').attr('data-value', data.data.busi_type);
         $('#province').val(data.data.account_province).change();
         $('#city').val(data.data.account_city).change();
         // $('#district').val(data.data.district);
+        $('#account-no2').text(formatAccountNo(data.data.account_no));
         if (data.data.account_bank_branch_cd) {
             $('#account-bank-branch-cd').html('<option value="' + data.data.account_bank_branch_cd + '">' + data.data.account_bank_branch_nm + '</option>').trigger('change');
         }
@@ -387,6 +428,10 @@
         });
 
         data.images = images;
+    }
+
+    function beforeCheck1Nopass(requestData) {
+        $('#mcc').attr('lay-verify', 'required');
     }
 
     function submitSuccess(requestData, data) {
@@ -463,6 +508,46 @@
         });
     }
 
+    function cropper_sfzzm(target) {
+        var $box = $(target).closest('.layui-form-item').find('.img-box');
+        var $img = $box.find('img');
+
+        if ($img.length == 0) {
+            $$.msg('未找到可裁剪的图片');
+            return;
+        }
+
+        var index = $$.cropperImage($img, function(imageData) {
+            $$.request('/gateway/ocr/idcard', {
+                image: imageData
+            }, function(data) {
+                layer.close(index);
+                fill_blank('#cert-id', data.data.id);
+                fill_blank('#cert-name', data.data.name);
+            });
+        });
+    }
+
+    function cropper_sfzfm(target) {
+        var $box = $(target).closest('.layui-form-item').find('.img-box');
+        var $img = $box.find('img');
+
+        if ($img.length == 0) {
+            $$.msg('未找到可裁剪的图片');
+            return;
+        }
+
+        var index = $$.cropperImage($img, function(imageData) {
+            $$.request('/gateway/ocr/idcard', {
+                image: imageData,
+                id_card_side: 'back'
+            }, function(data) {
+                layer.close(index);
+                fill_blank('#cert-date', data.data.valid_date);
+            });
+        });
+    }
+
     function initUpload() {
         var index;
         layui.upload({
@@ -489,7 +574,7 @@
     }
 
     $(function() {
-        if (operateType != 'view') {
+        if ($.inArray(operateType, ['view', 'check1']) == -1) {
             initUpload();
         }
 
@@ -509,6 +594,11 @@
         form.on('select(city)', function(data) {
             console.log(this, arguments);
             $(data.elem).change();
+        });
+
+        $('#account-no').keyup(function(e) {
+            var v = $(this).val();
+            $('#account-no2').text(formatAccountNo(v));
         });
 
         $$.loadSelect('#province', districtData['province']);
@@ -615,10 +705,11 @@
                 $$.loadData('#detail', query);
                 $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
                     // data.data.shop_name = data.data.mchnt_abbr;
-                    
+
                     $('#province').val(data.data.account_province).change();
                     $('#city').val(data.data.account_city);
                     // $('#district').val(data.data.district);
+                    data.data.account_name = data.data.cert_name;
                     $$.loadData('#detail', data.data);
                     form.render();
                 });

@@ -305,11 +305,11 @@
             form.render('select');
         });
 
-        var d3 = $$.view('#detail', '/action/bm/mchnt-base-info/view', query);
-
         $$.transformStatus('#detail', operateType);
 
-        $.when(d1, d2, d3).done(function() {
+        $.when(d1, d2).done(function() {
+            $$.view('#detail', '/action/bm/mchnt-base-info/view', query);
+
             $$.request('/action/bm/term-info/list', {
                 term_no: query.term_no.split(',')
             }, function(data) {

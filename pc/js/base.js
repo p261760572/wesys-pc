@@ -497,7 +497,7 @@ window.$$ = (function() {
 
         var requestData = $$.serializeForm($form);
 
-        if (options.before(requestData) == false) return false;
+        if (options.before.call(target, requestData) == false) return false;
 
         if (form.validate($form) == false) return false;
 

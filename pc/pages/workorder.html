@@ -62,6 +62,18 @@
                 </div>
             </div>
             <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">创建日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="created_time" placeholder="请输入开始日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})" id="created_time">
+                    </div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-input-inline">
+                        <input type="text" name="created_time2" placeholder="请输入结束日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})" id="created_time2">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/workorder/search'" id="search-btn">查询</button>
                     <button type="reset" class="layui-btn layui-btn-primary">重置</button>
@@ -98,6 +110,7 @@
                         <th>执行结果</th>
                         <th>执行日期</th>
                         <th>处理状态</th>
+                        <th>创建日期</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -142,6 +155,9 @@
                         </td>
                         <td>
                             {{row.proc_st | formatProcSt}}
+                        </td>
+                        <td>
+                            {{row.created_time}}
                         </td>
                         <td>
                             <div class="layui-btn-group">

@@ -143,7 +143,9 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button type="button" class="layui-btn visible invisible-view" onclick="$$.submit(this)" data-options="url:'/action/bm/term-param/' + operateType">提交</button>
+                    <button type="button" class="layui-btn hide invisible visible-create visible-update" onclick="$$.submit(this)" data-options="url:'/action/bm/term-param/' + operateType">提交</button>
+                    <button type="button" class="layui-btn layui-btn-normal hide invisible visible-check1" onclick="$$.submit(this)" data-options="url:'/action/bm/term-param/check1-pass',success:submitSuccess">审核通过</button>
+                    <button type="button" class="layui-btn layui-btn-danger hide invisible visible-check1" onclick="$$.submit(this)" data-options="url:'/action/bm/term-param/check1-nopass',success:submitSuccess">审核驳回</button>
                     <button type="button" class="layui-btn layui-btn-primary" onclick="$$.close()">关闭</button>
                 </div>
             </div>
@@ -168,6 +170,14 @@
         if (data.data.mchnt_param_id) {
             $('#mchnt-param-id').html('<option value="' + data.data.mchnt_param_id + '">' + formatMchntParam(data.data) + '</option>').trigger('change');
         }
+    }
+
+    function submitSuccess(requestData, data) {
+        $$.msg('操作成功', {
+            icon: 1
+        }, function() {
+            $$.close();
+        });
     }
 
     function formatMchntParam(row) {

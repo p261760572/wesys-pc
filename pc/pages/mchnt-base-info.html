@@ -88,10 +88,10 @@
             </div>
             <div class="layui-btn-group hide invisible visible-check1">
                 <button class="layui-btn layui-btn-small layui-btn-normal" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/mchnt-base-info/batch-check1-pass'">
-                    <i class="layui-icon">&#x1005;</i> 审核
+                    <i class="layui-icon">&#x1005;</i> 审核通过
                 </button>
                 <button class="layui-btn layui-btn-small layui-btn-danger" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/mchnt-base-info/batch-check1-nopass',type:'prompt',title:'请输入驳回原因',promptKey:'checked_reason'">
-                    <i class="layui-icon">&#xe633;</i> 驳回
+                    <i class="layui-icon">&#xe633;</i> 审核驳回
                 </button>
                 <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
                     <i class="layui-icon">&#xe640;</i> 删除
@@ -118,6 +118,7 @@
                         <th>营业执照号</th>
                         <!-- <th>操作标志</th> -->
                         <th>处理状态</th>
+                        <th>创建日期</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -155,6 +156,9 @@
                             {{row.proc_st_nm}}
                         </td>
                         <td>
+                            {{row.created_time}}
+                        </td>
+                        <td>
                             <div class="layui-btn-group">
                                 <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="$$.do(this,{{i}})" data-options="url:'mchnt-base-info-detail.html?operateType=view',title:'查看商户信息'">
                                     查看
@@ -162,6 +166,11 @@
                                 {{if displayType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
                                 <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'mchnt-base-info-detail.html?operateType=update',title:'编辑商户信息'">
                                     编辑
+                                </button>
+                                {{/if}} {{/if}}
+                                {{if displayType=='check1'}} {{if hasNext(row.oper_in,row.proc_st,'check1-pass')}}
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'mchnt-base-info-detail.html?operateType=check1',title:'审核商户信息'">
+                                    审核
                                 </button>
                                 {{/if}} {{/if}}
                             </div>
