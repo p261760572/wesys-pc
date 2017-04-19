@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>客户-费用</title>
+    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+</head>
+
+<body>
+    <div class="panel" style="padding-top: 20px; padding-bottom: 70px; margin-bottom: 0px;">
+        <form id="detail" class="layui-form" action="" method="post" data-options="serialize:serializeDetail">
+            <div class="layui-form-item">
+                <div class="layui-inline readonly">
+                    <label class="layui-form-label"><span class="required">*</span>客户号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="mchnt_id" lay-verify="required" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>费用类型</label>
+                    <div class="layui-input-inline">
+                        <select name="expense_type" lay-verify="required" lay-filter="expense_type" id="expense-type">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>金额</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="amount" lay-verify="required" placeholder="请输入金额" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>收费周期</label>
+                    <div class="layui-input-inline">
+                        <select name="expense_cycle" lay-verify="required" id="expense-cycle">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>收费开始时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="start_date" lay-verify="required" placeholder="请输入收费开始时间" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({onpicked:function(){$dp.$('end_date').focus();},maxDate:'#F{$dp.$D(\'end_date\')}'})" id="start_date">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">收费结束时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="end_date" placeholder="请输入收费结束时间" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'start_date\')}'})" id="end_date">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="remark" placeholder="请输入备注" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item invisible visible-view">
+                <div class="layui-inline">
+                    <label class="layui-form-label">创建人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="created_by" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">创建时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="created_time" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item invisible visible-view">
+                <div class="layui-inline">
+                    <label class="layui-form-label">最后修改人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="last_modified_by" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">最后修改时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="last_modified_time" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item invisible visible-view">
+                <div class="layui-inline">
+                    <label class="layui-form-label">最后审核人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="last_checked_by" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">最后审核时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="last_checked_time" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item invisible visible-view">
+                <label class="layui-form-label">审核备注</label>
+                <div class="layui-input-block">
+                    <input type="text" name="checked_reason" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn hide invisible visible-create visible-update" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-expense/' + operateType,success:submitSuccess">提交</button>
+                    <button type="button" class="layui-btn layui-btn-normal hide invisible visible-check1" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-expense/check1-pass',before:beforeCheck1Nopass,success:submitSuccess">审核通过</button>
+                    <button type="button" class="layui-btn layui-btn-danger hide invisible visible-check1" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-expense/check1-nopass',success:submitSuccess">审核驳回</button>
+                    <button type="button" class="layui-btn layui-btn-primary" onclick="closeLayer()">关闭</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script id="upload-tpl" type="text/html">
+        <div class="img-box"><img src="/p/action/uploads/" alt="..." class="img-thumbnail"></div>
+    </script>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
+    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../js/template.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/param.js"></script>
+    <script type="text/javascript" src="../js/district.js"></script>
+    <script type="text/javascript">
+    var query = $$.parseQueryString();
+    var operateType = query.operateType;
+    var form = layui.form();
+    var element = layui.element();
+
+
+    function loadDetail(data) {}
+
+    function serializeDetail(data) {
+        data.expense_cycle = $('#expense-cycle').val();
+    }
+
+    function onChangeExpenseType() {
+        var value = $(this).val();
+        if (value == '1' || value == '4') {
+            $('#expense-cycle').val('1').attr('disabled', 'disabled');
+        } else {
+            $('#expense-cycle').removeAttr('disabled');
+        }
+        form.render('select');
+    }
+
+    function closeLayer() {
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+
+    function submitSuccess(requestData, data) {
+        $$.msg('操作成功', {
+            icon: 1
+        }, function() {
+            closeLayer();
+            parent.reload();
+        });
+    }
+
+    $(function() {
+        $('#expense-type').on('change', onChangeExpenseType);
+
+        form.on('select(expense_type)', function(data) {
+            $(data.elem).change();
+        });
+
+        $$.loadSelect('#expense-type', $$.param['expense_type']);
+        $$.loadSelect('#expense-cycle', $$.param['expense_cycle']);
+
+
+        form.render();
+
+        $$.transformStatus('#detail', operateType);
+        if (query.operateType == 'create') {
+                $$.loadData('#detail', query);
+                $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
+                    // data.data.shop_name = data.data.mchnt_abbr;
+                    $$.loadData('#detail', data.data);
+                    form.render();
+                });
+            } else {
+                $$.view('#detail', '/action/bm/mchnt-expense/view', query);
+            }
+    });
+    </script>
+</body>
+
+</html>

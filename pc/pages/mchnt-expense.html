@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>客户-费用</title>
+    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+</head>
+
+<body>
+    <div class="container">
+        <div id="search-panel" class="panel panel-padding">
+            <form id="search" class="layui-form" action="" method="post" data-options="serialize:serializeSearch">
+                <div class="layui-form-item">
+                    <div class="layui-inline hide">
+                        <label class="layui-form-label">客户号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">费用类型</label>
+                        <div class="layui-input-inline">
+                            <select name="expense_type" id="expense-type">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/mchnt-expense/search'" id="search-btn">查询</button>
+                        <!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="panel panel-padding" id="list-panel">
+            <div class="layui-btn-group hide invisible visible-update">
+                <button class="layui-btn layui-btn-small" onclick="add(this)" data-options="url:$$.url('mchnt-expense-detail.html?operateType=create',{mchnt_id:query.mchnt_id}),title:'新增费用'">
+                    <i class="layui-icon">&#xe654;</i> 新增
+                </button>
+            </div>
+            <div class="layui-btn-group hide invisible visible-check1">
+                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/mchnt-expense/batch-check1-pass'">
+                    <i class="layui-icon">&#x1005;</i> 审核通过
+                </button>
+                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/mchnt-expense/batch-check1-nopass',type:'prompt',title:'请输入驳回原因',promptKey:'checked_reason'">
+                    <i class="layui-icon">&#xe633;</i> 审核驳回
+                </button>
+                <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
+                    <i class="layui-icon">&#xe640;</i> 删除
+                </button> -->
+            </div>
+            <div id="list">
+            </div>
+        </div>
+    </div>
+    <script id="list-tpl" type="text/html">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
+                        </th>
+                        <th>客户号</th>
+                        <th>费用类型</th>
+                        <th>金额</th>
+                        <th>收费周期</th>
+                        <th>收费开始时间</th>
+                        <th>收费结束时间</th>
+                        <th>处理状态</th>
+                        <th>创建日期</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each rows as row i}}
+                    <tr data-index="{{i}}">
+                        <td>
+                            <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
+                        </td>
+                        <td>
+                            {{row.mchnt_id}}
+                        </td>
+                        <td>
+                            {{row.expense_type | formatExpenseType}}
+                        </td>
+                        <td>
+                            {{row.amount}}
+                        </td>
+                        <td>
+                            {{row.expense_cycle | formatExpenseCycle}}
+                        </td>
+                        <td>
+                            {{row.start_date}}
+                        </td>
+                        <td>
+                            {{row.end_date}}
+                        </td>
+                        <td>
+                            {{row.proc_st_nm}}
+                        </td>
+                        <td>
+                            {{row.created_time}}
+                        </td>
+                        <td>
+                            <div class="layui-btn-group">
+                                <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="doit(this,{{i}})" data-options="url:'mchnt-expense-detail.html?operateType=view',title:'查看费用'">
+                                    查看
+                                </button>
+                                {{if displayType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
+                                <button class="layui-btn layui-btn-mini" onclick="doit(this,{{i}})" data-options="url:'mchnt-expense-detail.html?operateType=update',title:'编辑费用'">
+                                    编辑
+                                </button>
+                                {{/if}} {{/if}} {{if displayType=='check1'}} {{if hasNext(row.oper_in,row.proc_st,'check1-pass')}}
+                                <button class="layui-btn layui-btn-mini" onclick="doit(this,{{i}})" data-options="url:'mchnt-expense-detail.html?operateType=check1',title:'审核费用'">
+                                    审核
+                                </button>
+                                {{/if}} {{/if}}
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </script>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
+    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../js/template.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/st.js"></script>
+    <script type="text/javascript" src="../js/param.js"></script>
+    <script type="text/javascript" src="../js/district.js"></script>
+    <script type="text/javascript">
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+    var form = layui.form();
+    var element = layui.element();
+
+    function serializeSearch(data) {
+        var procStMap = {
+            'check1': '1'
+        };
+        data.proc_st = procStMap[displayType];
+    }
+
+    function reload() {
+        $$.datagrid('#list', 'reload');
+    }
+
+    function hasNext(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['mchnt_expense']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
+
+    function formatExpenseType(value) {
+        return $$.formatField($$.param['expense_type'], value);
+    }
+
+    function formatExpenseCycle(value) {
+        return $$.formatField($$.param['expense_cycle'], value);
+    }
+
+    function add(target) {
+        var options = $.extend({}, $$.parseOptions(target));
+
+        var url = $$.url(options.url, {
+            // displayType: displayType
+        });
+
+        layer.open({
+            type: 2,
+            title: options.title,
+            area: ['700px', '420px'],
+            // fixed: false, //不固定
+            // maxmin: true,
+            content: url
+        });
+    };
+
+    function doit(target, index) {
+        var options = $.extend({
+            datagrid: '#list',
+            keys: 'rec_id'
+        }, $$.parseOptions(target));
+
+        var row = $$.datagrid(options.datagrid, 'getRows')[index];
+        var params = $$.getKeys(row, options.keys)
+        if (window.displayType) params.displayType = displayType;
+
+        var url = $$.url(options.url, params);
+
+        layer.open({
+            type: 2,
+            title: options.title,
+            area: ['700px', '420px'],
+            // fixed: false, //不固定
+            // maxmin: true,
+            content: url
+        });
+    };
+
+    template.helper('formatExpenseType', formatExpenseType);
+    template.helper('formatExpenseCycle', formatExpenseCycle);
+    template.helper('hasNext', hasNext);
+    template.helper('operateType', operateType);
+    template.helper('displayType', displayType);
+
+    $(function() {
+        $$.loadSelect('#expense-type', $$.param['expense_type']);
+
+        // $$.loadSelect('#busi-type', $$.param['busi_type']);
+        $$.transformDisplay('#list-panel', displayType);
+        // form.render('select');
+        // 
+        form.render();
+
+        if (query.mchnt_id) {
+            $$.loadData('#search', query);
+            $('#search-btn').click();
+        }
+    });
+    </script>
+</body>
+
+</html>
