@@ -131,13 +131,13 @@
                             {{row.expense_cycle | formatExpenseCycle}}
                         </td>
                         <td>
-                            {{row.start_date}}
+                            {{row.start_date | formatDate}}
                         </td>
                         <td>
-                            {{row.end_date}}
+                            {{row.end_date | formatDate}}
                         </td>
                         <td>
-                            {{row.recipient_by}}
+                            {{row.recipient_by_nm}}
                         </td>
                         <td>
                             {{row.proc_st_nm}}
@@ -213,8 +213,13 @@
         return $$.formatField($$.param['expense_cycle'], value);
     }
 
+    function formatDate(value) {
+        return value ? value.substr(0, 10) : value;
+    }
+
     template.helper('formatExpenseType', formatExpenseType);
     template.helper('formatExpenseCycle', formatExpenseCycle);
+    template.helper('formatDate', formatDate);
     template.helper('hasNext', hasNext);
     template.helper('operateType', operateType);
     template.helper('displayType', displayType);

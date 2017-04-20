@@ -74,7 +74,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/mchnt-base-info/search'" id="search-btn">查询</button>
+                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/mchnt-expense/search'" id="search-btn">查询</button>
                         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
@@ -90,22 +90,21 @@
             </div>
         </div>
     </div>
-    <script id="list-tpl" type="text/html">
+        <script id="list-tpl" type="text/html">
         <div class="layui-form">
             <table class="layui-table">
                 <thead>
                     <tr>
-                        <!-- <th>
+                        <th>
                             <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
-                        </th> -->
+                        </th>
                         <th>客户号</th>
-                        <th>联系人</th>
-                        <th>手机</th>
                         <th>商户简称</th>
-                        <th>联系电话</th>
-                        <th>所在地区</th>
-                        <th>营业执照号</th>
-                        <!-- <th>操作标志</th> -->
+                        <th>费用类型</th>
+                        <th>金额</th>
+                        <th>收费周期</th>
+                        <th>收费开始时间</th>
+                        <th>收费结束时间</th>
                         <th>处理状态</th>
                         <th>创建日期</th>
                         <th>操作</th>
@@ -114,33 +113,30 @@
                 <tbody>
                     {{each rows as row i}}
                     <tr data-index="{{i}}">
-                        <!-- <td>
-                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="check">
-                        </td> -->
+                        <td>
+                            <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
+                        </td>
                         <td>
                             {{row.mchnt_id}}
-                        </td>
-                        <td>
-                            {{row.linkman}}
-                        </td>
-                        <td>
-                            {{row.mobile}}
                         </td>
                         <td>
                             {{row.mchnt_abbr}}
                         </td>
                         <td>
-                            {{row.telno}}
+                            {{row.expense_type | formatExpenseType}}
                         </td>
                         <td>
-                            {{row.district_name}}
+                            {{row.amount}}
                         </td>
                         <td>
-                            {{row.license_no}}
+                            {{row.expense_cycle | formatExpenseCycle}}
                         </td>
-                        <!-- <td>
-                            {{row.oper_in_nm}}
-                        </td> -->
+                        <td>
+                            {{row.start_date | formatDate}}
+                        </td>
+                        <td>
+                            {{row.end_date | formatDate}}
+                        </td>
                         <td>
                             {{row.proc_st_nm}}
                         </td>
@@ -191,6 +187,21 @@
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
 
+    function formatExpenseType(value) {
+        return $$.formatField($$.param['expense_type'], value);
+    }
+
+    function formatExpenseCycle(value) {
+        return $$.formatField($$.param['expense_cycle'], value);
+    }
+
+    function formatDate(value) {
+        return value ? value.substr(0, 10) : value;
+    }
+
+    template.helper('formatExpenseType', formatExpenseType);
+    template.helper('formatExpenseCycle', formatExpenseCycle);
+    template.helper('formatDate', formatDate);
     template.helper('hasNext', hasNext);
     template.helper('operateType', operateType);
 

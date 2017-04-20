@@ -384,6 +384,10 @@
         data.expense_cycle = $('#expense-cycle').val();
     }
 
+    function formatDate(value) {
+        return value ? value.substr(0, 10) : value;
+    }
+
     function onChangeExpenseType() {
         var value = $(this).val();
         if (value == '1' || value == '4') {
@@ -470,8 +474,10 @@
         $.when(d1, d2).done(function() {
             if (query.operateType == 'create') {
                 $$.loadData('#detail', query);
-                $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
-                    // data.data.shop_name = data.data.mchnt_abbr;
+                $$.request('/action/bm/mchnt-expense/view', query, function(data) {
+                    data.data.start_date = formatDate(data.data.start_date);
+                    data.data.end_date = formatDate(data.data.end_date);
+                    
                     $$.loadData('#detail', data.data);
                     form.render();
                 });
