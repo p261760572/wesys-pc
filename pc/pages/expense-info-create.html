@@ -14,6 +14,7 @@
     <div class="container">
         <div class="panel panel-padding">
             <form id="search" class="layui-form" action="" method="post" data-options="serialize:serializeSearch">
+                <input type="hidden" name="mchnt_expense_id">
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">客户号</label>
@@ -176,6 +177,8 @@
         //     'check1': '1'
         // };
         // data.proc_st = procStMap[displayType];
+        data.status='0';
+        data.proc_st='8';
     }
 
     function reload() {

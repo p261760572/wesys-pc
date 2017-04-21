@@ -174,14 +174,16 @@
             // displayType: displayType
         });
 
-        layer.open({
+        var index = layer.open({
             type: 2,
             title: options.title,
-            area: ['700px', '420px'],
+            area: ['700px', '80%'],
             // fixed: false, //不固定
             // maxmin: true,
             content: url
         });
+
+        layer.iframeAuto(index);
     };
 
     function doit(target, index) {
@@ -196,14 +198,16 @@
 
         var url = $$.url(options.url, params);
 
-        layer.open({
+        var layerIndex = layer.open({
             type: 2,
             title: options.title,
-            area: ['700px', '420px'],
+            area: ['700px', '80%'],
             // fixed: false, //不固定
             // maxmin: true,
             content: url
         });
+
+        layer.iframeAuto(layerIndex);
     };
 
     template.helper('formatExpenseType', formatExpenseType);

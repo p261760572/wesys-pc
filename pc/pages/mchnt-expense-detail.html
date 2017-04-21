@@ -11,8 +11,9 @@
 </head>
 
 <body>
-    <div class="panel" style="padding-top: 20px; padding-bottom: 70px; margin-bottom: 0px;">
+    <div class="panel" style="padding-top: 20px; margin-bottom: 0px;">
         <form id="detail" class="layui-form" action="" method="post" data-options="serialize:serializeDetail">
+            <input type="hidden" name="mchnt_expense_id">
             <div class="layui-form-item">
                 <div class="layui-inline readonly">
                     <label class="layui-form-label"><span class="required">*</span>客户号</label>
@@ -67,7 +68,24 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible visible-view">
+            <div class="layui-form-item hide invisible visible-view">
+                <div class="layui-inline">
+                    <label class="layui-form-label">记录编号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="rec_id" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">处理状态</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="oper_in" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="proc_st" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item hide invisible visible-view">
                 <div class="layui-inline">
                     <label class="layui-form-label">创建人</label>
                     <div class="layui-input-inline">
@@ -81,7 +99,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible visible-view">
+            <div class="layui-form-item hide invisible visible-view">
                 <div class="layui-inline">
                     <label class="layui-form-label">最后修改人</label>
                     <div class="layui-input-inline">
@@ -95,7 +113,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible visible-view">
+            <div class="layui-form-item hide invisible visible-view">
                 <div class="layui-inline">
                     <label class="layui-form-label">最后审核人</label>
                     <div class="layui-input-inline">
@@ -109,7 +127,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item invisible visible-view">
+            <div class="layui-form-item hide invisible visible-view visible-check1 editable-check1">
                 <label class="layui-form-label">审核备注</label>
                 <div class="layui-input-block">
                     <input type="text" name="checked_reason" placeholder="" autocomplete="off" class="layui-input">
@@ -118,7 +136,7 @@
             <div class="layui-form-item">
                 <div class="layui-input-block">
                     <button type="button" class="layui-btn hide invisible visible-create visible-update" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-expense/' + operateType,success:submitSuccess">提交</button>
-                    <button type="button" class="layui-btn layui-btn-normal hide invisible visible-check1" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-expense/check1-pass',before:beforeCheck1Nopass,success:submitSuccess">审核通过</button>
+                    <button type="button" class="layui-btn layui-btn-normal hide invisible visible-check1" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-expense/check1-pass',success:submitSuccess">审核通过</button>
                     <button type="button" class="layui-btn layui-btn-danger hide invisible visible-check1" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-expense/check1-nopass',success:submitSuccess">审核驳回</button>
                     <button type="button" class="layui-btn layui-btn-primary" onclick="closeLayer()">关闭</button>
                 </div>
