@@ -352,7 +352,9 @@
         </div>
     </div>
     <script id="upload-tpl" type="text/html">
-        <div class="img-box"><img src="/p/action/uploads/{{serverid}}" alt="..." class="img-thumbnail"></div>
+        <div class="img-box"><img src="/p/action/uploads/{{serverid}}" alt="..." class="img-thumbnail">
+		<button type="button" class="layui-btn layui-btn-small layui-btn-danger img-delete-btn hide" onclick="deleteImgBox(this)">删除</button>
+        </div>
     </script>
     <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
@@ -379,12 +381,22 @@
             elec_info_type: $(elem).attr('data-type'),
             serverid: data.serverid
         });
-        $wrap.html($box);
+        $wrap.append($box);
         $item.find('input[name=serverid]').val(data.serverid); //方便验证
+
+        if ($.inArray(operateType, ['view', 'check1']) == -1) {
+            $box.find('.img-delete-btn').removeClass('hide');
+        }
 
         layer.photos({
             photos: $wrap,
             anim: 5
+        });
+    }
+
+    function deleteImgBox(target) {
+        $$.confirm('确认要删除图片?', function () {
+            $(target).closest('.img-box').remove();
         });
     }
 
