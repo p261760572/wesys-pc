@@ -30,6 +30,14 @@
                         </div>
                     </div>
                     <div class="layui-inline">
+                        <label class="layui-form-label">处理状态</label>
+                        <div class="layui-input-inline">
+                            <select name="proc_st" id="proc_st">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
                         <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/mchnt-expense/search'" id="search-btn">查询</button>
                         <!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
                     </div>
@@ -147,7 +155,7 @@
         var procStMap = {
             'check1': '1'
         };
-        data.proc_st = procStMap[displayType];
+        data.proc_st2 = procStMap[displayType];
     }
 
     function reload() {
@@ -218,6 +226,7 @@
 
     $(function() {
         $$.loadSelect('#expense-type', $$.param['expense_type']);
+        $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['mchnt_expense']]);
 
         // $$.loadSelect('#busi-type', $$.param['busi_type']);
         $$.transformDisplay('#list-panel', displayType);

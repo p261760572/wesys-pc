@@ -53,6 +53,14 @@
                             <input type="text" name="mchnt_name" placeholder="请输入商户名称" autocomplete="off" class="layui-input">
                         </div>
                     </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">处理状态</label>
+                        <div class="layui-input-inline">
+                            <select name="proc_st" id="proc_st">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
                     <!-- </div>
                 <div class="layui-form-item"> -->
                     <!-- <div class="layui-inline">
@@ -193,7 +201,7 @@
         var procStMap = {
             'check1': '1'
         };
-        data.proc_st = procStMap[displayType];
+        data.proc_st2 = procStMap[displayType];
     }
 
     function reload() {
@@ -237,9 +245,11 @@
             form.render('select');
         });
 
+        $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['mchnt_param']]);
+
         // $$.loadSelect('#busi-type', $$.param['busi_type']);
         $$.transformDisplay('#list-panel', displayType);
-        // form.render('select');
+        form.render('select');
 
         if (query.mchnt_id) {
             $$.loadData('#search', query);

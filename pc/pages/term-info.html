@@ -35,6 +35,14 @@
                             <input type="text" name="shop_name" placeholder="请输入门店名称" autocomplete="off" class="layui-input">
                         </div>
                     </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">处理状态</label>
+                        <div class="layui-input-inline">
+                            <select name="proc_st" id="proc_st">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
                     <!--  <div class="layui-inline">
                         <label class="layui-form-label">联系人</label>
                         <div class="layui-input-inline">
@@ -231,6 +239,8 @@
         });
 
         $$.loadSelect('#province', districtData['province']);
+        $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['term_info']]);
+
         $$.transformDisplay('#list-panel', displayType);
         form.render('select');
 
