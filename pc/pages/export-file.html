@@ -13,7 +13,7 @@
 <body>
     <div class="container">
         <div class="panel panel-padding">
-            <form id="search" class="layui-form" action="" method="post">
+            <form id="search" class="layui-form" action="" method="post" data-options="serialize:onSerializeSearch">
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <label class="layui-form-label">导出类型</label>
@@ -75,6 +75,9 @@
                                     下载
                                 </a>
                                 {{/if}}
+                                <button class="layui-btn layui-btn-mini" onclick="exportElecInfo({{row.rec_id}})">
+                                    导出影印件
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -99,6 +102,23 @@
 
     function reload() {
         $$.datagrid('#list', 'reload');
+    }
+
+    function onSerializeSearch(data) {
+        data.remark = $('#export-type').find('option:selected').text();
+    }
+
+    function exportElecInfo(batch_no) {
+        $$.request('/action/bm/', {
+            export_type: '1'
+        }, function(data) {
+            $$.loadSelect('#export-type', data.export_type, {
+                // valueField: 'fee_cd',
+                // textField: 'fee_nm'
+            });
+
+            form.render('select');
+        });
     }
 
     function hasNext(oper_in, proc_st, action) {
