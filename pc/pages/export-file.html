@@ -69,16 +69,18 @@
                             {{row.created_time}}
                         </td>
                         <td>
-                            <div class="layui-btn-group">
+                            <!-- <div class="layui-btn-group"> -->
                                 {{if row.export_url}}
                                 <a class="layui-btn layui-btn-mini" href="/p/{{row.export_url}}">
                                     下载
                                 </a>
                                 {{/if}}
-                                <button class="layui-btn layui-btn-mini" onclick="exportElecInfo({{row.rec_id}})">
+                                {{if row.export_type=='2'}}
+                                <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="exportElecInfo({{row.rec_id}})">
                                     导出影印件
                                 </button>
-                            </div>
+                                {{/if}}
+                            <!-- </div> -->
                         </td>
                     </tr>
                     {{/each}}
@@ -109,15 +111,20 @@
     }
 
     function exportElecInfo(batch_no) {
-        $$.request('/action/bm/', {
-            export_type: '1'
+        $$.request('/action/bm/mchnt-export/export-elec', {            
+            batch_no: batch_no
         }, function(data) {
-            $$.loadSelect('#export-type', data.export_type, {
-                // valueField: 'fee_cd',
-                // textField: 'fee_nm'
+            $$.msg('操作成功', {
+                icon: 1
             });
 
-            form.render('select');
+            var index = layer.open({
+                type: 2,
+                title: false,
+                content: $$.wrapUrl(data.url)
+            });
+
+            layer.close(index);
         });
     }
 
