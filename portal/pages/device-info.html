@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>设备信息</title>
+    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+</head>
+
+<body>
+    <div class="container">
+        <div id="search-panel" class="panel panel-padding">
+            <form id="search" class="layui-form" action="" method="post" data-options="serialize:serializeSearch">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">设备编号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="device_no" placeholder="请输入设备编号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">生产厂家</label>
+                        <div class="layui-input-inline">
+                            <select name="manufacturer" lay-search lay-filter="manufacturer" id="manufacturer">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">设备型号</label>
+                        <div class="layui-input-inline">
+                            <select name="device_type" lay-search id="device-type">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">仓库</label>
+                        <div class="layui-input-inline">
+                            <select name="depot_id" id="depot-id">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">终端标识码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="term_no" placeholder="请输入终端标识码" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/device-info/search'" id="search-btn">查询</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="panel panel-padding" id="list-panel">
+            <!-- <div class="layui-btn-group hide invisible visible-update">
+                <button class="layui-btn layui-btn-small" onclick="$$.goto(this)" data-options="url:$$.url('device-info-detail.html?operateType=create',{mchnt_id:query.mchnt_id}),title:'新增设备信息'">
+                    <i class="layui-icon">&#xe654;</i> 新增
+                </button>
+            </div>
+            <div class="layui-btn-group hide invisible visible-check1">
+                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/device-info/batch-check1-pass'">
+                    <i class="layui-icon">&#x1005;</i> 审核通过
+
+                </button>
+                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/device-info/batch-check1-nopass',type:'prompt',title:'请输入驳回原因',promptKey:'checked_reason'">
+                    <i class="layui-icon">&#xe633;</i> 审核驳回
+                </button>
+                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/device-info/batch-delete',type:'confirm',title:'确认要删除勾选的记录?'">
+                    <i class="layui-icon">&#xe640;</i> 删除
+                </button>
+            </div> -->
+            <div id="list">
+            </div>
+        </div>
+    </div>
+    <script id="list-tpl" type="text/html">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <!-- <th>
+                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
+                        </th> -->
+                        <th>设备编号</th>
+                        <th>设备型号</th>
+                        <th>仓库</th>
+                        <th>终端投资方</th>
+                        <th>终端标识码</th>
+                        <th>商户名称</th>
+                        <th>最后修改时间</th>
+                        <th>操作标志</th>
+                        <th>处理状态</th>
+                        <!-- <th>操作</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each rows as row i}}
+                    <tr data-index="{{i}}">
+                        <!-- <td>
+                            <input type="checkbox" name="checkbox" lay-skin="primary">
+                        </td> -->
+                        <td>
+                            {{row.device_no}}
+                        </td>
+                        <td>
+                            {{row.device_type}}
+                        </td>
+                        <td>
+                            {{row.depot_name}}
+                        </td>
+                        <td>
+                            {{row.term_inves | formatTermInves}}
+                        </td>
+                        <td>
+                            {{row.term_no}}
+                        </td>
+                        <td>
+                            {{row.mchnt_name}}
+                        </td>
+                        <td>
+                            {{row.last_modified_time}}
+                        </td>
+                        <td>
+                            {{row.oper_in | formatOperIn}}
+                        </td>
+                        <td>
+                            {{row.proc_st | formatProcSt}}
+                        </td>
+                        <!-- <td>
+                            <div class="layui-btn-group">
+                                <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="$$.do(this,{{i}})" data-options="url:'device-info-detail.html?operateType=view',title:'查看设备信息'">
+                                    查看
+                                </button>
+                                {{if displayType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'device-info-detail.html?operateType=update',title:'编辑设备信息'">
+                                    编辑
+                                </button>
+                                {{/if}} {{/if}}
+                            </div>
+                        </td> -->
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </script>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
+    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../js/template.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/st.js"></script>
+    <script type="text/javascript" src="../js/param.js"></script>
+    <script type="text/javascript" src="../js/district.js"></script>
+    <script type="text/javascript">
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+    var form = layui.form();
+    var element = layui.element();
+    var cache = {};
+
+    function serializeSearch(data) {
+        var procStMap = {
+            'check1': '1'
+        };
+        data.proc_st2 = procStMap[displayType];
+    }
+
+    function reload() {
+        $$.datagrid('#list', 'reload');
+    }
+
+    function hasNext(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['device_info']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
+
+    function onChangeManufacturer() {
+        var value = $(this).val();
+        $$.request('/action/bm/device-type/list', {
+            manufacturer: value
+        }, function(data) {
+            $$.loadSelect('#device-type', data.rows, {
+                valueField: 'device_type',
+                textField: 'device_name'
+            });
+            form.render('select');
+        });
+    }
+
+    function formatTermInves(value) {
+        return $$.formatField(cache['term_inves'], value);
+    }
+
+    function formatOperIn(value) {        
+        return $$.formatField($$.st.operIn[$$.st.alias['device_info']], value);
+    }
+
+    function formatProcSt(value) {
+        return $$.formatField($$.st.procSt[$$.st.alias['device_info']], value);
+    }
+
+    template.helper('formatTermInves', formatTermInves);
+    template.helper('formatOperIn', formatOperIn);
+    template.helper('formatProcSt', formatProcSt);
+    template.helper('hasNext', hasNext);
+    template.helper('operateType', operateType);
+    template.helper('displayType', displayType);
+
+    $(function() {
+        $('#manufacturer').on('change', onChangeManufacturer);
+        form.on('select(manufacturer)', function(data) {
+            $(data.elem).change();
+        });
+
+        $$.request('/action/bm/parameter/list', {
+            manufacturer: '1',
+            term_inves: '1'
+        }, function(data) {
+            $$.loadSelect('#manufacturer', data.manufacturer);
+            $$.loadSelect('#term-inves', data.term_inves);
+            form.render('select');
+
+            cache['term_inves'] = data.term_inves;
+        });
+
+        $$.request('/action/bm/depot-info/list', {}, function(data) {
+            $$.loadSelect('#depot-id', data.rows, {
+                valueField: 'depot_id',
+                textField: 'depot_name'
+            });
+            form.render('select');
+        });
+    });
+    </script>
+</body>
+
+</html>

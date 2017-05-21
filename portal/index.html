@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>app</title>
+    <link rel="stylesheet" type="text/css" href="lib/easyui/easyui.css">
+    <link rel="stylesheet" type="text/css" href="lib/easyui/custom.css">
+    <link rel="stylesheet" type="text/css" href="lib/iconfont/iconfont.css">
+    <!-- <style type="text/css">
+    .tab-body-overflow {
+        overflow: hidden;
+    }
+    </style> -->
+    <script type="text/javascript" src="lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/base.js"></script>
+</head>
+
+<body class="easyui-layout">
+    <!-- <div data-options="region:'north',border:false" style="height:60px;background:#B3DFDA;padding:10px">north region</div> -->
+    <div data-options="region:'west',split:true,title:'导航菜单'" style="width:200px;">
+        <div style="margin:5px;"></div>
+        <ul id="tt" class="easyui-tree" data-options="onClick:onClickNode">
+        </ul>
+    </div>
+    <!-- <div data-options="region:'south',border:false" style="height:50px;background:#A9FACD;padding:10px;">south region</div> -->
+    <div data-options="region:'center'">
+        <div id="main-tabs" class="easyui-tabs" data-options="tools:'#tab-tools',fit:true,border:false" style="overflow:hidden;">
+            <div title="首页" style="padding:20px; font-size:14px; line-height:20px;"></div>
+        </div>
+        <div id="tab-tools">
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-login-out'" onclick="logout()"></a>
+    </div>
+    </div>
+    <script type="text/javascript">
+    function onClickNode(node) {
+        if ($(this).tree('isLeaf', node.target)) {
+            addTab(node.text, node.attributes.url, node.iconCls)
+        } else {
+            $(this).tree('toggle', node.target);
+        }
+    }
+
+    function addTab(title, url, icon) {
+        if (!$('#main-tabs').tabs('exists', title)) {
+            $('#main-tabs').tabs('add', {
+                title: title,
+                content: '<iframe  src="' + url + '" frameborder="0" style="width:100%; height:100%; border: 0; overflow: hidden;"></iframe>',
+                closable: true,
+                icon: icon,
+                bodyCls: 'tab-body-overflow'
+            });
+        } else {
+            $('#main-tabs').tabs('select', title);
+        }
+
+        $('#main-tabs').find('.tabs-inner').unbind('.main-tabs').bind(
+            'dblclick.main-tabs',
+            function() {
+                var title = $(this).find('.tabs-title.tabs-closable')
+                    .text();
+                if (title) {
+                    $('#main-tabs').tabs('close', title);
+                }
+            });
+    }
+
+    function logout() {
+    	$$.request('/action/user/logout', {}, function () {
+            window.top.location.href = $$.wrapUrl('/portal/login.html');
+        });
+    }
+
+    $(function() {
+        $$.request('/action/user/menu', {}, function(data) {
+
+            var treeData = $$.generateTreeData(data.rows, {
+                id: 'menu_id',
+                pid: 'menu_pid',
+                text: 'menu_name',
+                icon: 'icon',
+                attributes: ['url']
+            });
+            $('#tt').tree({
+                data: treeData,
+                formatter: function(node) {
+                    if (node.attributes && node.attributes.url) {
+                        return '<a href="' + node.attributes.url + '" style="text-decoration: none; color:#000;" onclick="return false;">' + node.text + '</a>';;
+                    }
+                    return node.text;
+                }
+            });
+
+        });
+    });
+    </script>
+</body>
+
+</html>

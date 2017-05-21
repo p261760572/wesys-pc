@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>工作单</title>
+    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../lib/select2/css/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+</head>
+
+<body>
+    <div class="panel panel-padding">
+        <form id="detail" class="layui-form" action="" method="post" data-options="load:loadDetail,serialize:serializeDetail">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>工单号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="work_order_no" lay-verify="required" placeholder="请输入工单号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>客户号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="mchnt_id" lay-verify="required" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>工作单类型</label>
+                    <div class="layui-input-inline">
+                        <select name="work_order_type" lay-verify="required" id="work-order-type">
+                            <option></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">工作单内容</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" name="work_content" title="换机" lay-skin="primary" id="work_content0">
+                        <input type="checkbox" name="work_content" title="送纸" lay-skin="primary" id="work_content1">
+                        <input type="checkbox" name="work_content" title="调单" lay-skin="primary" id="work_content2">
+                        <input type="checkbox" name="work_content" title="移机" lay-skin="primary" id="work_content3">
+                        <input type="checkbox" name="work_content" title="其它" lay-skin="primary" id="work_content4">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>执行人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="work_nm" lay-verify="required" placeholder="请输入执行人" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">计划执行日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="plan_date" placeholder="请输入计划执行日期" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item hide invisible visible-view">
+                <label class="layui-form-label">注释</label>
+                <div class="layui-input-block">
+                    <input type="text" name="remark" placeholder="请输入注释" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item editable-sign">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>执行结果</label>
+                    <div class="layui-input-inline">
+                        <select name="work_result" lay-verify="required">
+                            <option></option>
+                            <option value="1">成功</option>
+                            <option value="0">失败</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><span class="required">*</span>执行日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="work_date" lay-verify="required" placeholder="请输入执行日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker()" id="work-date">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item editable-sign">
+                <label class="layui-form-label">提交备注</label>
+                <div class="layui-input-block">
+                    <input type="text" name="sign_remark" placeholder="请输入提交备注" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item hide invisible visible-view">
+                <div class="layui-inline">
+                    <label class="layui-form-label">签收人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="sign_by" placeholder="请输入签收人" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">签收日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="sign_time" placeholder="请输入签收日期" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item invisible">
+                <div class="layui-inline">
+                    <label class="layui-form-label">打印标识</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="print_flag" placeholder="请输入打印标识" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">调试标志</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="debug_flag" placeholder="请输入调试标志" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item invisible">
+                <div class="layui-inline">
+                    <label class="layui-form-label">调试人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="debug_by" placeholder="请输入调试人" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">调试时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="debug_time" placeholder="请输入调试时间" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item invisible">
+                <div class="layui-inline">
+                    <label class="layui-form-label">出库标志</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="depot_flag" placeholder="请输入出库标志" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">押金标志</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="deposit_flag" placeholder="请输入押金标志" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item hide invisible visible-view">
+                <div class="layui-inline">
+                    <label class="layui-form-label">记录编号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="rec_id" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">处理状态</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="oper_in" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="text" name="proc_st" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item hide invisible visible-view">
+                <div class="layui-inline">
+                    <label class="layui-form-label">创建人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="created_by" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">创建时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="created_time" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item hide invisible visible-view visible-refund-confirm">
+                <div class="layui-inline">
+                    <label class="layui-form-label">最后修改人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="last_modified_by" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">最后修改时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="last_modified_time" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn visible invisible-view" onclick="$$.submit(this)" data-options="url:'/action/bm/workorder/' + operateType">提交</button>
+                    <button type="button" class="layui-btn layui-btn-primary" onclick="$$.close()">关闭</button>
+                </div>
+            </div>
+        </form>
+        <div id="term-list">
+        </div>
+    </div>
+    <script id="term-list-tpl" type="text/html">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>终端标识</th>
+                        <th>联系人</th>
+                        <th>手机号</th>
+                        <th>门店名称</th>
+                        <th>所在地区</th>
+                        <!-- <th>操作标志</th> -->
+                        <!-- <th>处理状态</th> -->
+                        <!-- <th>操作</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each rows as row i}}
+                    <tr data-index="{{i}}">
+                        <td>
+                            {{row.term_no}}
+                        </td>
+                        <td>
+                            {{row.linkman}}
+                        </td>
+                        <td>
+                            {{row.mobile}}
+                        </td>
+                        <td>
+                            {{row.shop_name}}
+                        </td>
+                        <td>
+                            {{row.district_name}}
+                        </td>
+                        <!-- <td>
+                            {{row.oper_in_nm}}
+                        </td> -->
+                        <!-- <td>
+                            {{row.proc_st}}
+                        </td> -->
+                        <!-- <td>
+                            <div class="layui-btn-group">
+                            </div>
+                        </td> -->
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </script>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
+    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../lib/select2/js/select2.min.js"></script>
+    <script type="text/javascript" src="../js/template.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/param.js"></script>
+    <!-- <script type="text/javascript" src="../js/district.js"></script> -->
+    <script type="text/javascript" src="../js/st.js"></script>
+    <script type="text/javascript">
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+    var form = layui.form();
+    var element = layui.element();
+
+
+    function loadDetail(data) {
+        if (operateType == 'sign') {
+            data.data.work_result = '1';
+            data.data.work_date = $$.formatDate(new Date(), 'yyyy-MM-dd');
+        }
+        data.data.work_date = formatDate(data.data.work_date);
+
+        for (var i = 0; i < data.data.work_content.length; i++) {
+            if (data.data.work_content.charAt(i) == '1') {
+                $('#work_content' + i).prop("checked", true);
+            }
+        }
+
+        $$.datagrid('#term-list', {
+            tpl: '#term-list-tpl',
+            data: data.term
+        });
+    }
+
+    function serializeDetail(data) {
+
+        var work_content = [];
+        for (var i = 0; i < 9; i++) {
+            work_content.push($('#work_content' + i).is(":checked") ? '1' : '0');
+        }
+        data.work_content = work_content.join('');
+    }
+
+    function formatDate(value) {
+        return value ? value.substr(0, 10) : value;
+    }
+
+    // function formatTermProcSt(value) {
+    //     return $$.formatField($$.st.procSt[$$.st.alias['term_info']], value);
+    // }
+
+    // template.helper('formatTermProcSt', formatTermProcSt);
+
+    $(function() {
+
+        $$.loadSelect('#work-order-type', $$.param['work_order_type']);
+
+        var d1 = $$.request('/action/bm/recipient/list', {}, function(data) {
+            $$.loadSelect('#recipient-by', data.rows);
+            form.render('select');
+        });
+
+        var d2 = $$.request('/action/bm/parameter/list', {
+            bank: '1'
+        }, function(data) {
+            $$.loadSelect('#refund-account-bank', data.bank, {
+                valueField: 'bank_cd',
+                textField: 'bank_nm'
+            });
+            form.render('select');
+        });
+
+        form.render();
+
+        $$.transformStatus('#detail', operateType);
+        $.when(d1, d2).done(function() {
+            if (query.operateType == 'create') {
+                $$.loadData('#detail', query);
+                $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
+                    // data.data.shop_name = data.data.mchnt_abbr;
+                    $$.loadData('#detail', data.data);
+                    form.render();
+                });
+            } else {
+                $$.view('#detail', '/action/bm/workorder/view', query);
+            }
+        });
+    });
+    </script>
+</body>
+
+</html>

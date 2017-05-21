@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>工作单</title>
+    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+</head>
+
+<body>
+    <div class="panel panel-padding">
+        <form id="search" class="layui-form" action="" method="post" data-options="serialize:serializeSearch">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">工单号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="work_order_no" placeholder="请输入工单号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">客户号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">工作单类型</label>
+                    <div class="layui-input-inline">
+                        <select name="work_order_type" id="work-order-type">
+                            <option></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">执行人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="work_nm" placeholder="请输入执行人" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">执行结果</label>
+                    <div class="layui-input-inline">
+                        <select name="work_result">
+                            <option></option>
+                            <option value="1">成功</option>
+                            <option value="0">失败</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">执行日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="work_date" placeholder="请输入执行日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker()" id="work-date">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/workorder/search'" id="search-btn">查询</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="panel panel-padding" id="list-panel">
+        <div id="list" data-options="loadSuccess:loadSuccess,clickRow:clickRow">
+        </div>
+    </div>
+    <div class="panel panel-padding hide" id="search-term-panel">
+        <form class="layui-form" action="" method="post" data-options="serialize:serializeSearchTerm">
+            <div class="layui-form-item">
+                <div class="layui-inline hide">
+                    <label class="layui-form-label">客户号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">终端标识</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="term_no" placeholder="请输入终端标识" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">门店名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="shop_name" placeholder="请输入门店名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/workorder-term-list/search',datagrid:'#term-list',tpl:'#term-list-tpl',before:beforeSearchTerm" id="search-term-btn">查询</button>
+                </div>
+            </div>
+        </form>
+        <div id="term-list">
+        </div>
+    </div>
+    <script id="list-tpl" type="text/html">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>工单号</th>
+                        <th>客户号</th>
+                        <!-- <th>联系人</th>
+                        <th>手机</th> -->
+                        <th>商户简称</th>
+                        <th>工作单类型</th>
+                        <th>工作单内容</th>
+                        <th>执行人</th>
+                        <th>计划执行日期</th>
+                        <th>执行结果</th>
+                        <th>执行日期</th>
+                        <th>处理状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each rows as row i}}
+                    <tr data-index="{{i}}">
+                        <td>
+                            {{row.work_order_no}}
+                        </td>
+                        <td>
+                            {{row.mchnt_id}}
+                        </td>
+                        <!-- <td>
+                            {{row.linkman}}
+                        </td>
+                        <td>
+                            {{row.mobile}}
+                        </td> -->
+                        <td>
+                            {{row.mchnt_abbr}}
+                        </td>
+                        <td>
+                            {{row.work_order_type | formatWorkOrderType}}
+                        </td>
+                        <td>
+                            {{row.work_content | formatWorkContent}}
+                        </td>
+                        <td>
+                            {{row.work_nm}}
+                        </td>
+                        <td>
+                            {{row.plan_date}}
+                        </td>
+                        <td>
+                            {{row.work_result | formatWorkResult}}
+                        </td>
+                        <td>
+                            {{row.work_date | formatDate}}
+                        </td>
+                        <td>
+                            {{row.proc_st | formatProcSt}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </script>
+    <script id="term-list-tpl" type="text/html">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>终端标识</th>
+                        <th>联系人</th>
+                        <th>手机号</th>
+                        <th>门店名称</th>
+                        <th>所在地区</th>
+                        <!-- <th>操作标志</th> -->
+                        <th>处理状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each rows as row i}}
+                    <tr data-index="{{i}}">
+                        <td>
+                            {{row.term_no}}
+                        </td>
+                        <td>
+                            {{row.linkman}}
+                        </td>
+                        <td>
+                            {{row.mobile}}
+                        </td>
+                        <td>
+                            {{row.shop_name}}
+                        </td>
+                        <td>
+                            {{row.district_name}}
+                        </td>
+                        <!-- <td>
+                            {{row.oper_in_nm}}
+                        </td> -->
+                        <td>
+                            {{row.proc_st_nm}}
+                        </td>
+                        <td>
+                            <div class="layui-btn-group">
+                                {{if displayType=='workorder-out'}}
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'device-info-workorder-out.html',title:'出库',keys:'work_order_no,term_no',datagrid:'#term-list'">
+                                    出库
+                                </button>
+                                {{/if}} {{if displayType=='workorder-in'}}
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'device-info-workorder-in.html',title:'入库',keys:'work_order_no,term_no',datagrid:'#term-list'">
+                                    入库
+                                </button>
+                                {{/if}}
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </script>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
+    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../js/template.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/st.js"></script>
+    <script type="text/javascript" src="../js/param.js"></script>
+    <script type="text/javascript" src="../js/district.js"></script>
+    <script type="text/javascript">
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+    var form = layui.form();
+    var element = layui.element();
+
+    function serializeSearch(data) {
+        data.proc_st = '1';
+    }
+
+    function beforeSearchTerm(data) {
+        var selected = $$.datagrid('#list', 'getSelected');
+        if (!selected) {
+            $$.msg('请先选择工单');
+            return false;
+        }
+    }
+
+    function serializeSearchTerm(data) {
+        var selected = $$.datagrid('#list', 'getSelected');
+        if (selected) {
+            data.work_order_no = selected.work_order_no;
+        }
+
+        if (displayType == 'workorder-out') {
+        } else if (displayType == 'workorder-in') {
+        }
+    }
+
+    function reload() {
+        $$.datagrid('#list', 'reload');
+    }
+
+    function hasNext(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['workorder']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
+
+    function formatWorkOrderType(value) {
+        return $$.formatField($$.param['work_order_type'], value);
+    }
+
+    function formatWorkResult(value) {
+        return $$.formatField($$.param['work_result'], value);
+    }
+
+    function formatWorkContent(value) {
+        value = value || '';
+
+        var flag = ['换机', '送纸', '调单', '调单', '其它'];
+        var content = [];
+
+        for (var i = 0; i < value.length; i++) {
+            if (value.charAt(i) == '1') {
+                content.push(flag[i]);
+            }
+        }
+
+        return content.join(',');
+    }
+
+
+    function formatDate(value) {
+        return value ? value.substr(0, 10) : value;
+    }
+
+    function formatOperIn(value) {
+        return $$.formatField($$.st.operIn[$$.st.alias['workorder']], value);
+    }
+
+    function formatProcSt(value) {
+        return $$.formatField($$.st.procSt[$$.st.alias['workorder']], value);
+    }
+
+    function loadSuccess(data) {
+        $$.datagrid('#term-list', {
+            tpl: '#term-list-tpl',
+            url: null,
+            data: []
+        });
+        $('#search-term-panel').removeClass('hide');
+    }
+
+    function clickRow(index, row) {
+        $("#search-term-btn").click();
+    }
+
+    template.helper('formatWorkOrderType', formatWorkOrderType);
+    template.helper('formatWorkResult', formatWorkResult);
+    template.helper('formatWorkContent', formatWorkContent);
+    template.helper('formatDate', formatDate);
+    template.helper('formatOperIn', formatOperIn);
+    template.helper('formatProcSt', formatProcSt);
+    template.helper('hasNext', hasNext);
+    template.helper('operateType', operateType);
+    template.helper('displayType', displayType);
+
+    $(function() {
+        $$.loadSelect('#work-order-type', $$.param['work_order_type']);
+
+        form.render();
+
+        $$.transformDisplay('#list-panel', displayType);
+    });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>费用信息</title>
+    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="panel panel-padding" id="search-panel">
+            <form id="search" class="layui-form" action="" method="post" data-options="serialize:serializeSearch">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">费用单据号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="expense_no" placeholder="请输入费用单据号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">客户号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">费用类型</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="expense_type" placeholder="请输入费用类型" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">金额</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="amount" placeholder="请输入金额" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">收费周期</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="expense_cycle" placeholder="请输入收费周期" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">收费开始时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="start_date" placeholder="请输入收费开始时间" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">收费结束时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="end_date" placeholder="请输入收费结束时间" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">领用人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="recipient_by" placeholder="请输入领用人" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/expense-info/search'" id="search-btn">查询</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="panel panel-padding" id="list-panel">
+            <div class="layui-btn-group hide invisible visible-cancel">
+                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/expense-info/batch-cancel',type:'confirm',title:'确认要作废?'">
+                    <i class="layui-icon">&#xe633;</i> 作废
+                </button>
+            </div>
+            <div id="list">
+            </div>
+        </div>
+    </div>
+    <script id="list-tpl" type="text/html">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
+                        </th>
+                        <th>费用单据号</th>
+                        <th>客户号</th>
+                        <th>费用类型</th>
+                        <th>金额</th>
+                        <th>收费周期</th>
+                        <th>收费开始时间</th>
+                        <th>收费结束时间</th>
+                        <th>领用人</th>
+                        <th>处理状态</th>
+                        <th>创建日期</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each rows as row i}}
+                    <tr data-index="{{i}}">
+                        <td>
+                            <input type="checkbox" name="checkbox" lay-skin="primary">
+                        </td>
+                        <td>
+                            {{row.expense_no}}
+                        </td>
+                        <td>
+                            {{row.mchnt_id}}
+                        </td>
+                        <td>
+                            {{row.expense_type | formatExpenseType}}
+                        </td>
+                        <td>
+                            {{row.amount}}
+                        </td>
+                        <td>
+                            {{row.expense_cycle | formatExpenseCycle}}
+                        </td>
+                        <td>
+                            {{row.start_date | formatDate}}
+                        </td>
+                        <td>
+                            {{row.end_date | formatDate}}
+                        </td>
+                        <td>
+                            {{row.recipient_by_nm}}
+                        </td>
+                        <td>
+                            {{row.proc_st_nm}}
+                        </td>
+                        <td>
+                            {{row.created_time}}
+                        </td>
+                        <td>
+                            <div class="layui-btn-group">
+                                <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="$$.do(this,{{i}})" data-options="url:'expense-info-detail.html?operateType=view',title:'查看费用信息'">
+                                    查看
+                                </button>
+                                {{if displayType=='receipt'}} {{if hasNext(row.oper_in,row.proc_st,'receipt')}}
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'expense-info-detail.html?operateType=receipt',title:'收款费用信息'">
+                                    收款
+                                </button>
+                                {{/if}} {{/if}} {{if displayType=='refund'}} {{if hasNext(row.oper_in,row.proc_st,'refund')}}
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'expense-info-detail.html?operateType=refund',title:'退款费用信息'">
+                                    退款
+                                </button>
+                                {{/if}} {{/if}} {{if displayType=='refund-confirm'}} {{if hasNext(row.oper_in,row.proc_st,'refund-confirm')}}
+                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'expense-info-detail.html?operateType=refund-confirm',title:'退款确认费用信息'">
+                                    退款确认
+                                </button>
+                                {{/if}} {{/if}}
+                            </div>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </script>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
+    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../js/template.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/st.js"></script>
+    <script type="text/javascript" src="../js/param.js"></script>
+    <script type="text/javascript" src="../js/district.js"></script>
+    <script type="text/javascript">
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+    var form = layui.form();
+    var element = layui.element();
+
+    function serializeSearch(data) {
+        var procStMap = {
+            'receipt': '1',
+            'refund': ['2', '6'],
+            'refund-confirm': '5',
+            'cancel': '1'
+        };
+        data.proc_st2 = procStMap[displayType];
+    }
+
+    function reload() {
+        $$.datagrid('#list', 'reload');
+    }
+
+    function hasNext(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['expense_info']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
+
+    function formatExpenseType(value) {
+        return $$.formatField($$.param['expense_type'], value);
+    }
+
+    function formatExpenseCycle(value) {
+        return $$.formatField($$.param['expense_cycle'], value);
+    }
+
+    function formatDate(value) {
+        return value ? value.substr(0, 10) : value;
+    }
+
+    template.helper('formatExpenseType', formatExpenseType);
+    template.helper('formatExpenseCycle', formatExpenseCycle);
+    template.helper('formatDate', formatDate);
+    template.helper('hasNext', hasNext);
+    template.helper('operateType', operateType);
+    template.helper('displayType', displayType);
+
+    $(function() {
+        $$.transformDisplay('#list-panel', displayType);
+    });
+    </script>
+</body>
+
+</html>

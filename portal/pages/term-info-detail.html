@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>终端信息</title>
+    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+    <style type="text/css">
+    body {
+        overflow-y: hidden;
+    }
+    
+    .layui-tab-content {
+        height: 100%;
+        padding: 0;
+    }
+    
+    .layui-tab-content .layui-tab-item {
+        position: absolute;
+        top: 51px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0;
+        margin: 0;
+        background-color: #fff;
+    }
+    
+    .tab-iframe {
+        width: 100%;
+        border: 0;
+        height: 100%;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="layui-tab layui-tab-brief" lay-filter="term">
+        <ul class="layui-tab-title">
+            <li class="layui-this" lay-id="0">终端资料</li>
+            <li>终端参数</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show" style="overflow-y: auto;">
+                <div class="panel panel-padding">
+                    <form id="detail" class="layui-form" action="" method="post" data-options="load:loadDetail">
+                        <div class="layui-form-item readonly">
+                            <div class="layui-inline">
+                                <label class="layui-form-label"><span class="required">*</span>客户号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="mchnt_id" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline visible invisible-create">
+                                <label class="layui-form-label"><span class="required">*</span>终端标识</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="term_no" placeholder="" autocomplete="off" class="layui-input" id="term-no">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label"><span class="required">*</span>联系人</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="linkman" lay-verify="required" placeholder="请输入联系人" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label"><span class="required">*</span>手机号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="mobile" lay-verify="required" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label"><span class="required">*</span>门店名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="shop_name" lay-verify="required" placeholder="请输入门店名称" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">联系电话</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="telno" placeholder="请输入联系电话" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"><span class="required">*</span>所在地区</label>
+                            <div class="layui-input-inline">
+                                <select name="province" lay-verify="required" lay-filter="province" id="province">
+                                    <option value="">请选择省</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select name="city" lay-verify="required" lay-filter="city" id="city">
+                                    <option value="">请选择市</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select name="district" lay-verify="required" lay-filter="district" id="district">
+                                    <option value="">请选择县/区</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"><span class="required">*</span>详细地址</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="addr" lay-verify="required" placeholder="请输入详细地址" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label"><span class="required">*</span>终端投资方</label>
+                                <div class="layui-input-inline">
+                                    <select name="term_inves" lay-verify="required" id="term-inves">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label"><span class="required">*</span>机具类型</label>
+                                <div class="layui-input-inline">
+                                    <select name="equi_type" lay-verify="required" id="equi-type">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label"><span class="required">*</span>拓展方</label>
+                                <div class="layui-input-inline">
+                                    <select name="expand_inst_id" lay-verify="required" lay-search id="expand-inst-id">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label"><span class="required">*</span>拓展人</label>
+                                <div class="layui-input-inline">
+                                    <select name="expand_id" lay-verify="required" lay-search id="expand-id">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item hide invisible visible-view">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">装机日期</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="installed_date" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">撤机日期</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="removed_date" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item hide invisible visible-view">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">装机人</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="installed_by" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">维护人</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="maintained_by" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item hide invisible visible-view">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">终端状态</label>
+                                <div class="layui-input-inline">
+                                    <select name="term_status" id="term-status">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item hide invisible visible-view">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">记录编号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="rec_id" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">处理状态</label>
+                                <div class="layui-input-inline" style="width: 100px;">
+                                    <input type="text" name="oper_in" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline" style="width: 100px;">
+                                    <input type="text" name="proc_st" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item hide invisible visible-view">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">创建人</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="created_by" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">创建时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="created_time" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item hide invisible visible-view">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">最后修改人</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="last_modified_by" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">最后修改时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="last_modified_time" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item hide invisible visible-view">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">最后审核人</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="last_checked_by" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">最后审核时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="last_checked_time" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item hide invisible visible-view">
+                            <label class="layui-form-label">审核备注</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="checked_reason" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="button" class="layui-btn hide invisible visible-create visible-update" onclick="$$.submit(this)" data-options="url:'/action/bm/term-info/' + operateType,success:submitSuccess">提交</button>
+                                <button type="button" class="layui-btn layui-btn-normal hide invisible visible-check1" onclick="$$.submit(this)" data-options="url:'/action/bm/term-info/check1-pass',success:submitSuccess">审核通过</button>
+                                <button type="button" class="layui-btn layui-btn-danger hide invisible visible-check1" onclick="$$.submit(this)" data-options="url:'/action/bm/term-info/check1-nopass',success:submitSuccess">审核驳回</button>
+                                <button type="button" class="layui-btn layui-btn-primary" onclick="$$.close()">关闭</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <iframe class="tab-iframe" data-src="term-param.html"></iframe>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
+    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../js/template.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/param.js"></script>
+    <script type="text/javascript" src="../js/district.js"></script>
+    <script type="text/javascript">
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+    var form = layui.form();
+    var element = layui.element();
+
+    function loadDetail(data) {
+        $('#province').val(data.data.province).change();
+        $('#city').val(data.data.city).change();
+        $('#district').val(data.data.district);
+    }
+
+    function submitSuccess(requestData, data) {
+        if (data.data) {
+            $$.loadData('#detail', data.data);
+        }
+        if (operateType == 'create') {
+            $$.confirm('操作成功,是否继续新增终端参数', function() {
+                var term_no = $('#term-no').val();
+                var url = $$.url('term-param-detail.html?operateType=create', {
+                    displayType: displayType,
+                    term_no: term_no
+                });
+                // var title = '新增终端信息';
+                // $$.openTab(url, title);
+                window.location.href = url;
+            });
+        } else {
+            $$.msg('操作成功', {
+                icon: 1
+            }, function() {
+                $$.close();
+            });
+        }
+    }
+
+    function onChangeProvince() {
+        var value = $(this).val();
+        $$.loadSelect('#city', districtData['city'][value]);
+        $$.loadSelect('#district', []);
+        form.render('select');
+    }
+
+    function onChangeCity() {
+        var value = $(this).val();
+        $$.loadSelect('#district', districtData['district'][$('#province').val() + value]);
+        form.render('select');
+    }
+
+    $(function() {
+        element.on('tab(term)', function(data) {
+            if (data.index == 0) return;
+
+            var term_no = $('#term-no').val();
+            if (data.index > 0 && !term_no) {
+                element.tabChange('term', '0');
+                $$.msg('请先新增终端信息');
+                return;
+            }
+
+            var $item = data.elem.children('.layui-tab-content').children('.layui-tab-item');
+            var $iframe = $item.eq(data.index).children('.tab-iframe');
+            $iframe.attr('src', $$.url($iframe.attr('data-src'), {
+                displayType: displayType,
+                operateType: operateType,
+                term_no: term_no
+            }));
+
+        });
+
+        $('#province').on('change', onChangeProvince);
+        $('#city').on('change', onChangeCity);
+
+        form.on('select(province)', function(data) {
+            console.log(this, arguments);
+            $(data.elem).change();
+        });
+
+        form.on('select(city)', function(data) {
+            console.log(this, arguments);
+            $(data.elem).change();
+        });
+
+        $$.loadSelect('#province', districtData['province']);
+        $$.loadSelect('#term-status', $$.param['term_status']);
+        form.render('select');
+
+        var d1 = $$.request('/action/bm/expand/list', {}, function(data) {
+            $$.loadSelect('#expand-id', data.rows);
+            form.render('select');
+        });
+
+        var d2 = $$.request('/action/bm/parameter/list', {
+            expand_inst: '1',
+            term_inves: '1',
+            equi_type: '1'
+        }, function(data) {
+            $$.loadSelect('#expand-inst-id', data.expand_inst);
+            $$.loadSelect('#term-inves', data.term_inves);
+            $$.loadSelect('#equi-type', data.equi_type);
+            form.render('select');
+        });
+
+        $$.transformStatus('#detail', operateType);
+
+        $.when(d1, d2).done(function() {
+            if (query.operateType == 'create') {
+                $$.loadData('#detail', query);
+                $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
+                    data.data.shop_name = data.data.mchnt_abbr;
+
+                    $('#province').val(data.data.province).change();
+                    $('#city').val(data.data.city).change();
+                    $('#district').val(data.data.district);
+                    $$.loadData('#detail', data.data);
+                    form.render();
+                });
+            } else {
+                $$.view('#detail', '/action/bm/term-info/view', query);
+            }
+        });
+    });
+    </script>
+</body>
+
+</html>

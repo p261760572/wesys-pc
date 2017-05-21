@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>商户电子资料</title>
+    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../css/base.css">
+</head>
+
+<body>
+    <div class="container">
+        <div id="search-panel" class="panel panel-padding hide">
+            <form id="search" class="layui-form" action="" method="post" data-options="serialize:serializeSearch">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">客户号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">影印件类型</label>
+                        <div class="layui-input-inline">
+                            <select name="elec_info_type" id="elec-info-type">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">创建日期</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="created_time" placeholder="请输入开始日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})" id="created_time">
+                        </div>
+                        <div class="layui-form-mid">-</div>
+                        <div class="layui-input-inline">
+                            <input type="text" name="created_time2" placeholder="请输入结束日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})" id="created_time2">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/mchnt-elec-info/search'" id="search-btn">查询</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="panel panel-padding" id="list-panel">
+            <div class="layui-btn-group hide invisible visible-update">
+                <button class="layui-btn layui-btn-small" onclick="$$.goto(this)" data-options="url:$$.url('mchnt-elec-info-detail.html?operateType=create',{mchnt_id:query.mchnt_id}),title:'新增商户电子资料'">
+                    <i class="layui-icon">&#xe654;</i> 上传
+                </button>
+            </div>
+            <div class="layui-btn-group hide invisible visible-check1">
+                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/mchnt-elec-info/batch-check1-pass'">
+                    <i class="layui-icon">&#x1005;</i> 审核通过
+
+                </button>
+                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/mchnt-elec-info/batch-check1-nopass',type:'prompt',title:'请输入驳回原因',promptKey:'checked_reason'">
+                    <i class="layui-icon">&#xe633;</i> 审核驳回
+                </button>
+                <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
+                    <i class="layui-icon">&#xe640;</i> 删除
+                </button> -->
+            </div>
+            <div id="list">
+            </div>
+        </div>
+    </div>
+    <script id="list-tpl" type="text/html">
+        <div class="layui-form">
+            <table class="layui-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
+                        </th>
+                        <th>客户号</th>
+                        <th>商户简称</th>
+                        <th>文件名</th>
+                        <th>影印件类型</th>
+                        <th>处理状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each rows as row i}}
+                    <tr data-index="{{i}}">
+                        <td>
+                            <input type="checkbox" name="checkbox" lay-skin="primary">
+                        </td>
+                        <td>
+                            {{row.mchnt_id}}
+                        </td>
+                        <td>
+                            {{row.mchnt_abbr}}
+                        </td>
+                        <td>
+                            <a href="/p/action/uploads/{{row.serverid}}" target="_blank" style="color: #01AAED;">{{row.filename}}</a>
+                        </td>
+                        <td>
+                            {{row.elec_info_type | formatElecInfoType}}
+                        </td>
+                        <td>
+                            {{row.proc_st_nm}}
+                        </td>
+                        <td>
+                            <!-- <div class="layui-btn-group">
+                                <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="onDelete({{i}})">
+                                    <i class="layui-icon">&#xe640;</i>删除
+                                </button>
+                            </div> -->
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </script>
+    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
+    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../js/template.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/st.js"></script>
+    <script type="text/javascript" src="../js/param.js"></script>
+    <script type="text/javascript" src="../js/district.js"></script>
+    <script type="text/javascript">
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+    var form = layui.form();
+    var element = layui.element();
+
+    function serializeSearch(data) {
+        var procStMap = {
+            'check1': '1'
+        };
+        data.proc_st2 = procStMap[displayType];
+    }
+
+    function reload() {
+        $$.datagrid('#list', 'reload');
+    }
+
+    function hasNext(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['mchnt_base_info']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
+
+    function formatElecInfoType(value) {
+        return $$.formatField($$.param['elec_info_type'], value);
+    }
+
+    template.helper('formatElecInfoType', formatElecInfoType);
+    template.helper('hasNext', hasNext);
+    template.helper('operateType', operateType);
+    template.helper('displayType', displayType);
+
+    $(function() {    
+        $$.loadSelect('#elec-info-type', $$.param['elec_info_type']);
+        form.render('select');
+
+        $$.transformDisplay('#list-panel', displayType);
+        
+        if (query.mchnt_id) {
+            $$.loadData('#search', query);
+            $('#search-btn').click();
+        }
+    });
+    </script>
+</body>
+
+</html>
