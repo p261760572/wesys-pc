@@ -14,12 +14,11 @@
     <link href="../lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
     <link href="../lib/formvalidation/css/formValidation.min.css" rel="stylesheet">
-    <link href="../lib/easyui/easyui.css" rel="stylesheet">
-    <link href="../lib/easyui/custom.css" rel="stylesheet">
+    <link href="../lib/datatables/css/dataTables.bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
-    body {
+    /*body {
         padding: 20px;
-    }
+    }*/
     
     label {
         font-weight: 400;
@@ -37,78 +36,117 @@
 </head>
 
 <body>
-    <form class="form-horizontal">
-        <div class="row">
-            <div class="form-group col-sm-6 col-md-4">
-                <label class="col-sm-4 control-label">字段</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" name="name" placeholder="字段" autocomplete="off">
+    <div class="panel">
+        <div class="panel-body container-fluid">
+            <form class="form-horizontal">
+                <div class="row">
+                    <div class="form-group col-sm-6 col-md-4">
+                        <label class="col-sm-4 control-label">字段</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="name" placeholder="字段" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4">
+                        <label class="col-sm-4 control-label">字段</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="name" placeholder="字段" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4">
+                        <label class="col-sm-4 control-label">字段</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="name" placeholder="字段" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4">
+                        <label class="col-sm-4 control-label">字段</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="name" placeholder="字段" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-4">
+                        <label class="col-sm-4 control-label">字段</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="name" placeholder="字段" autocomplete="off">
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group col-sm-6 col-md-4">
-                <label class="col-sm-4 control-label">字段</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" name="name" placeholder="字段" autocomplete="off">
+                <div class="row">
+                    <div class="form-group col-sm-6 col-md-4">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            <button type="button" class="btn btn-primary">查询</button>
+                            <button type="reset" class="btn btn-default btn-outline">重置</button>
+                            <button type="button" class="btn btn-success">导出</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group col-sm-6 col-md-4">
-                <label class="col-sm-4 control-label">字段</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" name="name" placeholder="字段" autocomplete="off">
-                </div>
-            </div>
-            <div class="form-group col-sm-6 col-md-4">
-                <label class="col-sm-4 control-label">字段</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" name="name" placeholder="字段" autocomplete="off">
-                </div>
-            </div>
-            <div class="form-group col-sm-6 col-md-4">
-                <label class="col-sm-4 control-label">字段</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" name="name" placeholder="字段" autocomplete="off">
-                </div>
-            </div>
+            </form>
+            <br>
+            <table class="table table-bordered table-hover dataTable table-striped width-full" id="dataTableExample" data-plugin="dataTable">
+                <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>职位</th>
+                        <th>工作地点</th>
+                        <th>分机号</th>
+                        <th>入职时间</th>
+                        <th>年薪</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>姓名</th>
+                        <th>职位</th>
+                        <th>工作地点</th>
+                        <th>分机号</th>
+                        <th>入职时间</th>
+                        <th>年薪</th>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
-        <div class="row">
-            <div class="form-group col-sm-6 col-md-4">
-                <div class="col-sm-8 col-sm-offset-4">
-                    <button type="button" class="btn btn-primary">查询</button>
-                    <button type="reset" class="btn btn-default btn-outline">重置</button>
-                    <button type="button" class="btn btn-success">导出</button>
-                </div>
-            </div>
-        </div>
-    </form>
-    <br>
-    <table class="easyui-datagrid" title="列表" data-options="fitColumns:true,singleSelect:true,pagination:true">
-        <thead>
-            <tr>
-                <th data-options="field:'f1',width:100">字段1</th>
-                <th data-options="field:'f2',width:100">字段2</th>
-                <th data-options="field:'f3',width:100">字段3</th>
-                <th data-options="field:'f4',width:100">字段4</th>
-                <th data-options="field:'f5',width:100">字段5</th>
-                <th data-options="field:'f6',width:100">字段6</th>
-                <th data-options="field:'f7',width:100">字段7</th>
-                <th data-options="field:'f8',width:100">字段8</th>
-                <th data-options="field:'f9',width:100">字段9</th>
-                <th data-options="field:'op',width:100">操作</th>
-            </tr>
-        </thead>
-    </table>
+    </div>
     <script src="../lib/jquery/jquery.min.js"></script>
     <script src="../lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="../lib/toastr/toastr.min.js"></script>
     <script src="../lib/formvalidation/js/formValidation.min.js"></script>
     <script src="../lib/formvalidation/js/framework/bootstrap.min.js"></script>
     <script src="../lib/formvalidation/js/language/zh_CN.js"></script>
+    <script src="../lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="../lib/datatables/js/dataTables.bootstrap.min.js"></script>
     <script src="../lib/My97DatePicker/WdatePicker.js"></script>
-    <script src="../lib/easyui/jquery.easyui.min.js"></script>
     <script src="../js/base.js"></script>
     <!-- <script src="../js/st.js"></script>
     <script src="../js/param.js"></script>
     <script src="../js/district.js"></script> -->
+    <script type="text/javascript">
+    $(function() {
+        $.fn.dataTable.ext.errMode = 'throw';
+        $('#dataTableExample').DataTable({
+            // "paging":   false,
+        "ordering": false,
+        // "info":     false,
+        searching: false,
+            "language": {
+                "url":"../lib/datatables-plugins/i18n/Chinese.lang"
+            },
+            // "ajax": "data.json",
+            "columns": [{
+                "data": "name"
+            }, {
+                "data": "position"
+            }, {
+                "data": "office"
+            }, {
+                "data": "extn"
+            }, {
+                "data": "start_date"
+            }, {
+                "data": "salary"
+            }]
+        });
+    });
+    </script>
 </body>
 
 </html>
