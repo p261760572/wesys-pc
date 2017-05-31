@@ -11,70 +11,102 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <link href="../lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../lib/formvalidation/css/formValidation.min.css" rel="stylesheet">
     <link href="../lib/easyui/easyui.css" rel="stylesheet">
     <link href="../lib/easyui/custom.css" rel="stylesheet">
-    <link href="../lib/iconfont/iconfont.css" rel="stylesheet">
     <style type="text/css">
+    body {
+        padding: 20px;
+    }
+    
     label {
         font-weight: 400;
+        margin-bottom: 5px;
+    }
+    
+    .example-wrap {
+        margin-bottom: 20px;
+    }
+    
+    .example-title {
+        font-size: 14px;
     }
     </style>
 </head>
 
 <body>
     <form class="form-horizontal">
-        
-        <div class="form-group col-sm-6">
-            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-            <!-- <div class="col-sm-10"> -->
-                <input type="email" class="form-control col-sm-10" id="inputEmail3" placeholder="Email">
-            <!-- </div> -->
-        </div>
-        <div class="form-group col-sm-6">
-            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-            <div class="col-sm-10">
-                <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+        <div class="row">
+            <div class="form-group col-sm-6 col-md-4">
+                <label class="col-sm-4 control-label">字段</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="name" placeholder="字段" autocomplete="off">
+                </div>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+                <label class="col-sm-4 control-label">字段</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="name" placeholder="字段" autocomplete="off">
+                </div>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+                <label class="col-sm-4 control-label">字段</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="name" placeholder="字段" autocomplete="off">
+                </div>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+                <label class="col-sm-4 control-label">字段</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="name" placeholder="字段" autocomplete="off">
+                </div>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+                <label class="col-sm-4 control-label">字段</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="name" placeholder="字段" autocomplete="off">
+                </div>
             </div>
         </div>
-        
-
-        <div class="form-group">
-            <label class="col-sm-3 control-label">客户号</label>
-            <input type="text" class="form-control" name="mchnt_id" placeholder="">
+        <div class="row">
+            <div class="form-group col-sm-6 col-md-4">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <button type="button" class="btn btn-primary">查询</button>
+                    <button type="reset" class="btn btn-default btn-outline">重置</button>
+                    <button type="button" class="btn btn-success">导出</button>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">联系人</label>
-            <input type="text" class="form-control" name="linkman" placeholder="">
-        </div>
-        <div class="form-group">
-            <label>手机</label>
-            <input type="text" class="form-control" name="mobile" placeholder="">
-        </div>
-        <button type="submit" class="btn btn-default">查询</button>
     </form>
-    <table class="easyui-datagrid" data-options="fitColumns:true,singleSelect:true,pagination:true">
+    <br>
+    <table class="easyui-datagrid" title="列表" data-options="fitColumns:true,singleSelect:true,pagination:true">
         <thead>
             <tr>
-                <th data-options="field:'mchnt_id',width:100">客户号</th>
-                <th data-options="field:'linkman',width:100">联系人</th>
-                <th data-options="field:'mobile',width:100">手机</th>
-                <th data-options="field:'mchnt_abbr',width:100">商户简称</th>
-                <th data-options="field:'telno',width:100">联系电话</th>
-                <th data-options="field:'district_name',width:100">所在地区</th>
-                <th data-options="field:'license_no',width:100">营业执照号</th>
-                <th data-options="field:'oper_in_nm',width:100">操作标志</th>
-                <th data-options="field:'proc_st_nm',width:100">处理状态</th>
-                <th data-options="field:'created_time',width:100">创建日期</th>
+                <th data-options="field:'f1',width:100">字段1</th>
+                <th data-options="field:'f2',width:100">字段2</th>
+                <th data-options="field:'f3',width:100">字段3</th>
+                <th data-options="field:'f4',width:100">字段4</th>
+                <th data-options="field:'f5',width:100">字段5</th>
+                <th data-options="field:'f6',width:100">字段6</th>
+                <th data-options="field:'f7',width:100">字段7</th>
+                <th data-options="field:'f8',width:100">字段8</th>
+                <th data-options="field:'f9',width:100">字段9</th>
                 <th data-options="field:'op',width:100">操作</th>
             </tr>
         </thead>
     </table>
     <script src="../lib/jquery/jquery.min.js"></script>
     <script src="../lib/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../lib/easyui/jquery.easyui.min.js"></script>
+    <script src="../lib/toastr/toastr.min.js"></script>
+    <script src="../lib/formvalidation/js/formValidation.min.js"></script>
+    <script src="../lib/formvalidation/js/framework/bootstrap.min.js"></script>
+    <script src="../lib/formvalidation/js/language/zh_CN.js"></script>
     <script src="../lib/My97DatePicker/WdatePicker.js"></script>
-    <!-- <script src="../js/base.js"></script>
-    <script src="../js/st.js"></script>
+    <script src="../lib/easyui/jquery.easyui.min.js"></script>
+    <script src="../js/base.js"></script>
+    <!-- <script src="../js/st.js"></script>
     <script src="../js/param.js"></script>
     <script src="../js/district.js"></script> -->
 </body>
