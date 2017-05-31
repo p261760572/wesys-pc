@@ -11,6 +11,8 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <link href="lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="lib/formvalidation/css/formValidation.min.css" rel="stylesheet">
     <style type="text/css">
     body {
         padding-top: 40px;
@@ -59,7 +61,8 @@
 
 <body>
     <div class="container">
-        <form class="form-signin">
+        <form class="form-signin" id="signin-form">
+            <input type="hidden" name="pubkey" id="pubkey" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwpSBCzntA06ceIathHYbN/RsrXey/L5nhhJmrT5z+qrfjz0+zKE/XwmerNnOMYKDt1YRXzmwD/ma+6mQN0yXMnqCIpNGy/QvOqHlQbVy7DJLHXVP7kHl1T4tkxzUbMmA9y7/B0cp1yorfF8oJbe3M2/p0qQ8zF74kXpGaum5FJkqoLTzl+v10qso2PQxp4TP5U1qPioLF1uJAJzlv1lb5Z0RBesOPj+FgG0oh/+bPvL0rJ4QCYnFqDsMcvi4jd9wD6+hyZVG4j+R92YhJHWNy+sgXboLXZTwdTE8sglfAtRK1+ITGKdcYo94Jlo65Kdlxrn0vEPrYSN4/nBwsfq7BQIDAQAB">
             <h2 class="form-signin-heading">登录</h2>
             <div class="form-group">
                 <label class="">用户名</label>
@@ -78,13 +81,13 @@
                     </a>
                 </div>
             </div>
-            <div class="form-group clearfix">
+            <!-- <div class="form-group clearfix">
                 <div class="checkbox-custom pull-left">
                     <input type="checkbox" id="remember" name="remember">
                     <label for="remember">自动登录</label>
                 </div>
                 <a class="pull-right" href="#">忘记密码了？</a>
-            </div>
+            </div> -->
             <button class="btn btn-lg btn-primary btn-block" type="submit">登录
             </button>
         </form>
@@ -92,7 +95,12 @@
     <!-- /container -->
     <script src="lib/jquery/jquery.min.js"></script>
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/toastr/toastr.min.js"></script>
+    <script src="lib/formvalidation/js/formValidation.min.js"></script>
+    <script src="lib/formvalidation/js/framework/bootstrap.min.js"></script>
+    <script src="lib/formvalidation/js/language/zh_CN.js"></script>
     <script src="lib/jsencrypt/jsencrypt.min.js"></script>
+    <script src="js/base.js"></script>
     <script type="text/javascript">
     function encryptPassword(password) {
         //加密密码
@@ -101,15 +109,58 @@
         return crypt.encrypt(password);
     }
 
-    function login(data) {
+    function login(target) {
+        var $form = $(target);
+        var data = $form.serializeObject();
+
+        // var fv = $form.data('formValidation');
+        // if (fv.validate().isValid() != true) return;
+
         data.login_pwd = encryptPassword(data.login_pwd);
 
         $$.request('/action/user/login', data, function(data) {
             window.location.href = 'index.html';
         }, function(data) {
-            $$.msg($$.errmsg(data));
+            $$.error($$.errmsg(data));
         });
     }
+
+    $(function() {
+        $('#signin-form').formValidation({
+            framework: 'bootstrap',
+            icon: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            locale: 'zh_CN',
+            fields: {
+                login_name: {
+                    validators: {
+                        notEmpty: {}
+                    }
+                },
+                login_pwd: {
+                    validators: {
+                        notEmpty: {}
+                    }
+                },
+                captcha: {
+                    validators: {
+                        notEmpty: {},
+                        stringLength: {
+                            min: 4
+                        }
+                    }
+                }
+            }
+        }).on('success.form.fv', function(e) {
+            // Prevent form submission
+            e.preventDefault();
+
+            login(e.target);
+        });
+    });
     </script>
 </body>
 

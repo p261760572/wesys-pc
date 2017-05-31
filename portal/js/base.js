@@ -2,7 +2,7 @@ window.basedir = '/p';
 
 window.$$ = (function() {
     var $$ = {};
-    var selectTpl = '{{each rows as row i}} <option value="{{row[valueField]}}">{{row[textField]}}</option> {{/each}}';
+    // var selectTpl = '{{each rows as row i}} <option value="{{row[valueField]}}">{{row[textField]}}</option> {{/each}}';
 
     //解析属性data-options
     $$.parseOptions = function(target) {
@@ -41,14 +41,29 @@ window.$$ = (function() {
         }
     };
 
-    //消息
-    $$.msg = function(content, options, end) {
-        layer.msg(content, options, end);
+    //toastr
+    $$.error = function(message, title, onclick) {
+        toastr.options = {
+            'positionClass': 'toast-top-center',
+            onclick: onclick
+        };
+        toastr.error(message, title);
     };
 
-    //警告
-    $$.alert = function(content, options, yes) {
-        layer.alert(content, options, yes);
+    $$.info = function(message, title, onclick) {
+        toastr.options = {
+            'positionClass': 'toast-top-center',
+            onclick: onclick
+        };
+        toastr.info(message, title);
+    };
+
+    $$.success = function(message, title, onclick) {
+        toastr.options = {
+            'positionClass': 'toast-top-center',
+            onclick: onclick
+        };
+        toastr.success(message, title);
     };
 
     //确认
@@ -274,9 +289,7 @@ window.$$ = (function() {
             transform: true,
             before: $.noop,
             success: function() {
-                $$.msg('操作成功', {
-                    icon: 1
-                });
+                $$.success('操作成功');
             }
         }, $$.parseOptions(target));
 
@@ -404,7 +417,7 @@ window.$$ = (function() {
 
         var rows = $$.datagrid(options.datagrid, 'getChecked');
         if (rows.length == 0) {
-            $$.msg('请选择需要操作的记录');
+            $$.info('请选择需要操作的记录');
             return;
         }
 
@@ -441,9 +454,7 @@ window.$$ = (function() {
 
         function request() {
             $$.request(options.url, requestData, function(data) {
-                $$.msg('操作成功', {
-                    icon: 1
-                });
+                $$.success('操作成功');
                 options.success(requestData, data);
             });
         }
