@@ -256,20 +256,35 @@ window.$$ = (function() {
     };
 
     $$.search = function(target) {
-        var $form = $(target).closest('form');
-        var options = $.extend({
-            datagrid: '#list', //add
-            tpl: '#list-tpl',
-            queryParams: $$.serializeForm($form),
-            before: $.noop //add
-        }, $$.parseOptions(target));
+        var opts = $.parser.parseOptions(target);
+        var f = $(target).closest('form');
+        var url = opts.url || f.attr('action');
+        var params = $$.serializeForm(f);
 
-        if (options.before(options.queryParams) == false) return false;
+        if (opts.onBefore && opts.onBefore.call(target, params) == false) {
+            return false;
+        }
 
-        if (form.validate($form) == false) return false;
+        // $(target).linkbutton('disable');
+        $(opts.datagrid).datagrid('clearSelections').datagrid({
+            url: $$.wrapUrl(url),
+            pageNumber: 1,
+            queryParams: params,
+            onLoadSuccess: function(data) {
+                // $(target).linkbutton('enable');
+                if (opts.dialog) {
+                    $(opts.dialog).dialog('close');
+                }
 
-        $$.datagrid(options.datagrid, options);
-    };
+                if (opts.onSuccess) {
+                    opts.onSuccess.call(target, data);
+                }
+            },
+            onLoadError: function() {
+                // $(target).linkbutton('enable');
+            }
+        });
+    }
 
     $$.view = function(selector, url, params) {
         var options = $.extend({}, $$.parseOptions(selector));
