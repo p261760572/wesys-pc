@@ -255,13 +255,18 @@ window.$$ = (function() {
         return data;
     };
 
+    $$.reset = function (target) {
+        var $form = $(target).closest('form');
+        $form.form('reset');
+    }
+
     $$.search = function(target) {
         var opts = $.parser.parseOptions(target);
         var f = $(target).closest('form');
         var url = opts.url || f.attr('action');
         var params = $$.serializeForm(f);
 
-        if (opts.onBefore && opts.onBefore.call(target, params) == false) {
+        if (opts.before && opts.before.call(target, params) == false) {
             return false;
         }
 
@@ -272,12 +277,8 @@ window.$$ = (function() {
             queryParams: params,
             onLoadSuccess: function(data) {
                 // $(target).linkbutton('enable');
-                if (opts.dialog) {
-                    $(opts.dialog).dialog('close');
-                }
-
-                if (opts.onSuccess) {
-                    opts.onSuccess.call(target, data);
+                if (opts.success) {
+                    opts.success.call(target, data);
                 }
             },
             onLoadError: function() {
@@ -285,6 +286,25 @@ window.$$ = (function() {
             }
         });
     }
+
+
+    $$.export = function exportData(target) {
+        var opts = $.parser.parseOptions(target);
+        var f = $(target).closest('form');
+        var url = opts.url;
+        var params = $$.serializeForm(f);
+
+        if (opts.before && opts.before.call(target, params) == false) {
+            return false;
+        }
+
+        // $(target).linkbutton('disable');
+        $$.request(url, params, function(data) {
+            // $(target).linkbutton('enable');
+            window.open($$.wrapUrl(data.url), '下载', 'status=yes,toolbar=no,menubar=yes,location=no,resizable=yes,scrollbars=yes');
+        });
+    }
+
 
     $$.view = function(selector, url, params) {
         var options = $.extend({}, $$.parseOptions(selector));
