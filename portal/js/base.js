@@ -280,6 +280,9 @@ window.$$ = (function() {
                 if (opts.success) {
                     opts.success.call(target, data);
                 }
+
+                //解决滚动条引起的panel宽度问题
+                $(opts.datagrid).datagrid('getPanel').panel('resize');
             },
             onLoadError: function() {
                 // $(target).linkbutton('enable');

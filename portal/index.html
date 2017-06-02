@@ -3,15 +3,23 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>app</title>    
+    <title>app</title>
     <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="lib/toastr/toastr.min.css" rel="stylesheet">
-    <link href="lib/easyui/themes/gray/easyui.min.css" rel="stylesheet">
-    <!-- <style type="text/css">
+    <link href="lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+    <style type="text/css">
     .tab-body-overflow {
         overflow: hidden;
     }
-    </style> -->    
+    
+    .l-btn-large .fa {
+        font-size: 18px;
+    }
+    
+    .l-btn-large .l-btn-text {
+        line-height: 36px
+    }
+    </style>
 </head>
 
 <body class="easyui-layout">
@@ -23,12 +31,12 @@
     </div>
     <!-- <div data-options="region:'south',border:false" style="height:50px;background:#A9FACD;padding:10px;">south region</div> -->
     <div data-options="region:'center'">
-        <div id="main-tabs" class="easyui-tabs" data-options="tools:'#tab-tools',fit:true,border:false" style="overflow:hidden;">
+        <div id="main-tabs" class="easyui-tabs" data-options="tools:'#tab-tools',fit:true,border:false,tabHeight:40" style="overflow:hidden;">
             <div title="首页" style="padding:20px; font-size:14px; line-height:20px;"></div>
         </div>
         <div id="tab-tools">
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'fa fa-sign-out'" onclick="logout()"></a>
-    </div>
+            <a href="javascript:void(0)" class="easyui-linkbutton easyui-tooltip" style="font-size: 14px;" data-options="plain:true,iconCls:'fa fa-sign-out',size:'large',content:'退出'" onclick="logout()"></a>
+        </div>
     </div>
     <script src="lib/jquery/jquery.min.js"></script>
     <script src="lib/toastr/toastr.min.js"></script>
@@ -68,7 +76,7 @@
     }
 
     function logout() {
-    	$$.request('/action/user/logout', {}, function () {
+        $$.request('/action/user/logout', {}, function() {
             window.top.location.href = $$.wrapUrl('/portal/login.html');
         });
     }
@@ -93,6 +101,10 @@
                 }
             });
 
+        }, function(data) {
+            if ($$.errcode(data) == 5) {
+                window.location.href = 'login.html';
+            }
         });
     });
     </script>
