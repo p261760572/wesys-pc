@@ -14,10 +14,10 @@
     <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
     <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
     <style type="text/css">
-    body{
+    body {
         padding: 5px;
     }
-
+    
     label {
         font-weight: 400;
     }
@@ -32,17 +32,18 @@
                 <tbody>
                     <tr>
                         <td class="text-right col-sm-2">
+                            <label>清算日期</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input id="settle_date" type="text" class="easyui-validatebox Wdate" name="settle_date" data-options="required:true" style="width: 120px;" onfocus="WdatePicker({onpicked:function(){$dp.$('settle_date2').focus();},maxDate:'#F{$dp.$D(\'settle_date2\')}'})">
+                            <input id="settle_date2" type="text" class="easyui-validatebox Wdate" name="settle_date2" data-options="required:true" style="width: 120px;" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'settle_date\')}'})">
+                            <span style="color: red;">*</span>
+                        </td>
+                        <td class="text-right col-sm-2">
                             <label>收单机构</label>
                         </td>
                         <td class="col-sm-4">
                             <input id="acq_inst_id" type="text" class="easyui-combobox" name="acq_inst_id" data-options="valueField:'acq_inst_id',textField:'acq_inst_nm',editable:false">
-                        </td>
-                        <td class="text-right col-sm-2">
-                            <label>清算日期</label>
-                        </td>
-                        <td class="col-sm-4">
-                            <input id="settle_date" type="text" class="Wdate" name="settle_date" style="width: 120px;" onfocus="WdatePicker({onpicked:function(){$dp.$('settle_date2').focus();},maxDate:'#F{$dp.$D(\'settle_date2\')}'})">
-                            <input id="settle_date2" type="text" class="Wdate" name="settle_date2" style="width: 120px;" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'settle_date\')}'})">
                         </td>
                     </tr>
                     <tr>
@@ -110,7 +111,7 @@
                 </tr>
             </thead>
         </table>
-    </div>    
+    </div>
     <script src="../lib/jquery/jquery.min.js"></script>
     <script src="../lib/toastr/toastr.min.js"></script>
     <script src="../lib/My97DatePicker/WdatePicker.js"></script>

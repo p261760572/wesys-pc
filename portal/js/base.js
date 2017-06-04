@@ -2,23 +2,10 @@ window.basedir = '/p';
 
 window.$$ = (function() {
     var $$ = {};
-    // var selectTpl = '{{each rows as row i}} <option value="{{row[valueField]}}">{{row[textField]}}</option> {{/each}}';
 
-    //解析属性data-options
-    $$.parseOptions = function(target) {
-        var $target = $(target);
-        var options = {};
-
-        var s = $.trim($target.attr('data-options'));
-        if (s) {
-            if (s.substring(0, 1) != '{') {
-                s = '{' + s + '}';
-            }
-            options = (new Function('return ' + s))();
-        }
-
-        return options;
-    };
+    $$.parseOptions = function function_name(target) {
+        return $.parser.parseOptions(target);
+    }
 
     //包裹url,解决根目录问题
     $$.wrapUrl = function(url) {
@@ -160,18 +147,14 @@ window.$$ = (function() {
         if (typeof error !== 'function') {
             options = error;
             error = function(data) {
-                // if (window.layer) {
-                //     $$.msg($$.errmsg(data), {
-                //         icon: 2
-                //     });
-                // }
+                $$.error($$.errmsg(data));
             };
         }
 
         options = options || {};
         options = $.extend({
             async: true,
-            loading: true
+            loading: true //自定义
         }, options, {
             url: $$.wrapUrl(url),
             type: 'POST',
@@ -179,7 +162,7 @@ window.$$ = (function() {
             dataType: 'json',
             data: $.toJSON(data),
             success: function(data) {
-                if (index !== undefined) layer.close(index);
+                $.mask.hide();
                 if ($$.errcode(data) == 0) {
                     success(data)
                 } else {
@@ -187,7 +170,7 @@ window.$$ = (function() {
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                if (index !== undefined) layer.close(index);
+                $.mask.hide();
                 error({
                     errcode: -1,
                     errmsg: textStatus
@@ -195,8 +178,7 @@ window.$$ = (function() {
             }
         });
 
-
-        // if (window.layer && options.loading) index = layer.load(2);
+        if (options.loading) $.mask.show();
         return $.ajax(options);
     };
 
@@ -255,9 +237,9 @@ window.$$ = (function() {
         return data;
     };
 
-    $$.reset = function (target) {
+    $$.reset = function(target) {
         var $form = $(target).closest('form');
-        $form.form('reset');
+        $form.form('disableValidation').form('reset');
     }
 
     $$.search = function(target) {
@@ -270,13 +252,17 @@ window.$$ = (function() {
             return false;
         }
 
-        // $(target).linkbutton('disable');
+        if(f.form('enableValidation').form('validate') != true) {
+            return false;
+        }
+
+        $.mask.show();
         $(opts.datagrid).datagrid('clearSelections').datagrid({
             url: $$.wrapUrl(url),
             pageNumber: 1,
             queryParams: params,
             onLoadSuccess: function(data) {
-                // $(target).linkbutton('enable');
+                $.mask.hide();
                 if (opts.success) {
                     opts.success.call(target, data);
                 }
@@ -285,7 +271,7 @@ window.$$ = (function() {
                 $(opts.datagrid).datagrid('getPanel').panel('resize');
             },
             onLoadError: function() {
-                // $(target).linkbutton('enable');
+                $.mask.hide();
             }
         });
     }
@@ -301,10 +287,16 @@ window.$$ = (function() {
             return false;
         }
 
-        // $(target).linkbutton('disable');
+        if(f.form('enableValidation').form('validate') != true) {
+            return false;
+        }
+
         $$.request(url, params, function(data) {
-            // $(target).linkbutton('enable');
-            window.open($$.wrapUrl(data.url), '下载', 'status=yes,toolbar=no,menubar=yes,location=no,resizable=yes,scrollbars=yes');
+            // window.open($$.wrapUrl(data.url), '下载', 'status=yes,toolbar=no,menubar=yes,location=no,resizable=yes,scrollbars=yes');
+            var iframe = $('<iframe src="' + $$.wrapUrl(data.url) + '" style="display:none;"></iframe>').appendTo('body');
+            setTimeout(function() {
+                iframe.remove();
+            }, 1000);
         });
     }
 

@@ -9624,6 +9624,45 @@ return $(this).form("validate");
 })(jQuery);
 
 
+(function($) {
+    //单例
+    var mask, maskMsg;
+
+    $.mask = {
+        show: function show(options) {
+            if (mask) return;
+
+            options = $.extend({
+                msg: '正在处理，请稍候。。。'
+            }, options);
+
+            mask = $('<div class="mask"></div>').appendTo('body');
+            maskMsg = $('<div class="mask-msg"></div>').html(options.msg).appendTo('body');
+
+            mask.css({
+                width: Math.max(document.body.clientWidth, document.documentElement.clientWidth),
+                height: Math.max(document.body.clientHeight, document.documentElement.clientHeight)
+            });
+
+            maskMsg.outerHeight(40); //box-sizing问题
+            maskMsg.css({
+                left: (mask.outerWidth() - maskMsg.outerWidth()) / 2,
+                top: (mask.outerHeight() - maskMsg.outerHeight()) / 2
+            });
+        },
+        hide: function hide(target) {
+            if (mask) {
+                mask.remove();
+                maskMsg.remove();
+                mask = null;
+            }
+        }
+    };
+})(jQuery);
+
+// $.fn.validatebox.defaults.novalidate = true;
+$.fn.validatebox.defaults.validateOnCreate = false;
+$.fn.validatebox.defaults.validateOnBlur = true;
 if ($.fn.pagination){
 	$.fn.pagination.defaults.beforePageText = '第';
 	$.fn.pagination.defaults.afterPageText = '共{pages}页';
