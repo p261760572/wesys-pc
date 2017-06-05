@@ -118,19 +118,8 @@ window.$$ = (function() {
     //打开页面
     $$.open = function(url, title) {
         if (window.top.addTab) {
-            var id = url;
             url = 'pages/' + url;
-            window.top.addTab(id, title, url);
-        } else {
-            var index = layer.open({
-                type: 2,
-                title: title,
-                content: url,
-                end: function() {
-                    // if (window.reload) window.reload();
-                }
-            });
-            layer.full(index);
+            window.top.addTab(title, url, true);
         }
     }
 
@@ -243,7 +232,7 @@ window.$$ = (function() {
     }
 
     $$.search = function(target) {
-        var opts = $.parser.parseOptions(target);
+        var opts = $$.parseOptions(target);
         var f = $(target).closest('form');
         var url = opts.url || f.attr('action');
         var params = $$.serializeForm(f);
@@ -278,7 +267,7 @@ window.$$ = (function() {
 
 
     $$.export = function exportData(target) {
-        var opts = $.parser.parseOptions(target);
+        var opts = $$.parseOptions(target);
         var f = $(target).closest('form');
         var url = opts.url;
         var params = $$.serializeForm(f);

@@ -45,34 +45,40 @@
     <script type="text/javascript">
     function onClickNode(node) {
         if ($(this).tree('isLeaf', node.target)) {
-            addTab(node.text, node.attributes.url, node.iconCls)
+            addTab(node.text, node.attributes.url);
         } else {
             $(this).tree('toggle', node.target);
         }
     }
 
-    function addTab(title, url, icon) {
-        if (!$('#main-tabs').tabs('exists', title)) {
+    function addTab(title, url, isNew) {
+        if (isNew || !$('#main-tabs').tabs('exists', title)) {
             $('#main-tabs').tabs('add', {
                 title: title,
                 content: '<iframe  src="' + url + '" frameborder="0" style="width:100%; height:100%; border: 0; overflow: hidden;"></iframe>',
                 closable: true,
-                icon: icon,
+                // icon: icon,
                 bodyCls: 'tab-body-overflow'
             });
         } else {
             $('#main-tabs').tabs('select', title);
         }
 
-        $('#main-tabs').find('.tabs-inner').unbind('.main-tabs').bind(
-            'dblclick.main-tabs',
-            function() {
-                var title = $(this).find('.tabs-title.tabs-closable')
-                    .text();
-                if (title) {
-                    $('#main-tabs').tabs('close', title);
-                }
-            });
+        $('#main-tabs').find('.tabs-inner').unbind('.main-tabs').bind('dblclick.main-tabs', function() {
+            var title = $(this).find('.tabs-title.tabs-closable').text();
+            if (title) {
+                closeTab(title);
+            }
+        });
+    }
+
+    function closeTab(which) {
+        if (which == undefined) {
+            var tab = $('#main-tabs').tabs('getSelected');
+            which = $('#main-tabs').tabs('getTabIndex',tab);
+        }
+        
+        $('#main-tabs').tabs('close', which);
     }
 
     function logout() {

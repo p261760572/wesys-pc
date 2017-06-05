@@ -1893,6 +1893,7 @@
 	opacity: 0.3;
 	filter: alpha(opacity=30);  /*IE6、IE7、IE8*/
 	display: block;
+	z-index: 9999000;
 }
 .mask-msg {	
 	position: absolute;
@@ -1908,6 +1909,7 @@
 	border-style: solid;
 	border-color: #D4D4D4;
 	display: block;
+	z-index: 9999001;
 }
 
 label {
@@ -1954,6 +1956,7 @@ label {
 .datagrid-header-rownumber {
     font-size: 14px;
 }
+
 
 /*.pagination table {
     height: 32px;
@@ -2020,4 +2023,10 @@ label {
 
 .validatebox-invalid {
     border-color: #ffa8a8 !important;
+}
+
+.combobox-group,
+.combobox-item,
+.combobox-stick {
+    font-size: 14px;
 }

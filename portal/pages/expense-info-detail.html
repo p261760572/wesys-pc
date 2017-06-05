@@ -12,351 +12,113 @@
 </head>
 
 <body>
-    <div class="panel panel-padding">
-        <form id="detail" class="layui-form" action="" method="post" data-options="load:loadDetail,serialize:serializeDetail">
-            <input type="hidden" name="mchnt_expense_id">
-            <div class="layui-form-item readonly">
-                <div class="layui-inline visible invisible-create">
-                    <label class="layui-form-label"><span class="required">*</span>费用单据号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="expense_no" placeholder="请输入费用单据号" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>客户号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="mchnt_id" lay-verify="required" placeholder="请输入客户号" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item readonly">
-                <label class="layui-form-label"><span class="required">*</span>商户简称</label>
-                <div class="layui-input-block">
-                    <input type="text" name="mchnt_abbr" placeholder="" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item readonly">
-                <label class="layui-form-label"><span class="required">*</span>商户名称</label>
-                <div class="layui-input-block">
-                    <input type="text" name="mchnt_name" placeholder="" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>费用类型</label>
-                    <div class="layui-input-inline">
-                        <select name="expense_type" lay-verify="required" lay-filter="expense_type" id="expense-type">
+    <form id="detail" class="layui-form" action="" method="post" data-options="load:loadDetail,serialize:serializeDetail">
+        <input type="hidden" name="mchnt_expense_id"> 费用单据号
+        <input type="text" name="expense_no"> 客户号
+        <input type="text" name="mchnt_id" > 商户简称
+        <input type="text" name="mchnt_abbr"> 商户名称
+        <input type="text" name="mchnt_name"> 费用类型
+        <select name="expense_type"  lay-filter="expense_type" id="expense-type">
+            <option value=""></option>
+        </select>
+        金额
+        <input type="text" name="amount" > 收费周期
+        <select name="expense_cycle"  id="expense-cycle">
+            <option value=""></option>
+        </select>
+        收费开始时间
+        <input type="text" name="start_date"   class="layui-input Wdate" onfocus="WdatePicker({onpicked:function(){$dp.$('end_date').focus();},maxDate:'#F{$dp.$D(\'end_date\')}'})" id="start_date"> 收费结束时间
+        <input type="text" name="end_date"   class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'start_date\')}'})" id="end_date"> 领用人
+        <select name="recipient_by"  lay-search id="recipient-by">
+            <option value=""></option>
+        </select>
+        备注
+        <input type="text" name="remark">
+ 发票号
+        <input type="text" name="invoice_no"> 收款方式
+        <select name="receipt_type"  id="receipt-type">
+            <option value=""></option>
+        </select>
+        收款日期
+        <input type="text" name="receipt_date"    class="layui-input Wdate" onfocus="WdatePicker()"> 收款备注
+        <input type="text" name="receipt_remark"> 收款人
+        <input type="text" name="receipt_by"> 收款时间
+        <input type="text" name="receipt_time"> 作废备注
+        <input type="text" name="cancel_remark"> 作废人
+        <input type="text" name="cancel_by"> 作废时间
+        <input type="text" name="cancel_time"> 退款原因
+        <select name="refund_reason_flag"  id="refund-reason-flag">
+            <option value=""></option>
+        </select>
+        退款方式
+        <select name="refund_type"  id="refund-type">
+            <option value=""></option>
+        </select>
+        退款金额
+        <input type="text" name="refund_amount" > 退款开户名称
+        <input type="text" name="refund_account_name" > 退款开户银行
+        <select name="refund_account_bank"  lay-search id="refund-account-bank">
+            <option value=""></option>
+        </select>
+        退款开户支行
+        <select name="refund_account_bank_branch_cd" style="width: 100%;"  lay-ignore id="refund-account-bank-branch-cd">
+            <option value=""></option>
+        </select>
+        <!-- 
+                    退款开户支行
+                    
+                        <select name="refund_account_bank_branch_cd" style="width: 100%;"  lay-ignore id="refund-account-bank-branch-cd">
                             <option value=""></option>
                         </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>金额</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="amount" lay-verify="required" placeholder="请输入金额" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>收费周期</label>
-                    <div class="layui-input-inline">
-                        <select name="expense_cycle" lay-verify="required" id="expense-cycle">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>收费开始时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="start_date" lay-verify="required" placeholder="请输入收费开始时间" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({onpicked:function(){$dp.$('end_date').focus();},maxDate:'#F{$dp.$D(\'end_date\')}'})" id="start_date">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">收费结束时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="end_date" placeholder="请输入收费结束时间" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'start_date\')}'})" id="end_date">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>领用人</label>
-                    <div class="layui-input-inline">
-                        <select name="recipient_by" lay-verify="required" lay-search id="recipient-by">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">备注</label>
-                <div class="layui-input-block">
-                    <input type="text" name="remark" placeholder="请输入备注" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item visible invisible-create editable-receipt">
-                <div class="layui-inline">
-                    <label class="layui-form-label">发票号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="invoice_no" placeholder="请输入发票号" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>收款方式</label>
-                    <div class="layui-input-inline">
-                        <select name="receipt_type" lay-verify="required" id="receipt-type">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item visible invisible-create editable-receipt">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>收款日期</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="receipt_date" lay-verify="required" placeholder="请输入收款日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker()">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">收款备注</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="receipt_remark" placeholder="请输入收款备注" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view visible-refund visible-refund-confirm">
-                <div class="layui-inline">
-                    <label class="layui-form-label">收款人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="receipt_by" placeholder="请输入收款人" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">收款时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="receipt_time" placeholder="请输入收款时间" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline hide invisible visible-view visible-cancel editable-cancel">
-                    <label class="layui-form-label">作废备注</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="cancel_remark" placeholder="请输入作废备注" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline hide invisible visible-view">
-                    <label class="layui-form-label">作废人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="cancel_by" placeholder="请输入作废人" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline hide invisible visible-view">
-                    <label class="layui-form-label">作废时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="cancel_time" placeholder="请输入作废时间" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view visible-refund visible-refund-confirm editable-refund">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>退款原因</label>
-                    <div class="layui-input-inline">
-                        <select name="refund_reason_flag" lay-verify="required" id="refund-reason-flag">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>退款方式</label>
-                    <div class="layui-input-inline">
-                        <select name="refund_type" lay-verify="required" id="refund-type">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view visible-refund visible-refund-confirm editable-refund">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>退款金额</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="refund_amount" lay-verify="required" placeholder="请输入退款金额" autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">退款金额累计<span id="refund-amount-total"></span></div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view visible-refund visible-refund-confirm editable-refund">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>退款开户名称</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="refund_account_name" lay-verify="required" placeholder="请输入退款开户名称" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>退款开户银行</label>
-                    <div class="layui-input-inline">
-                        <select name="refund_account_bank" lay-verify="required" lay-search id="refund-account-bank">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view visible-refund visible-refund-confirm editable-refund">
-                <label class="layui-form-label"><span class="required">*</span>退款开户支行</label>
-                <div class="layui-input-block">
-                    <select name="refund_account_bank_branch_cd" style="width: 100%;" lay-verify="required" lay-ignore id="refund-account-bank-branch-cd">
-                        <option value=""></option>
-                    </select>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view visible-refund visible-refund-confirm editable-refund">
-                <!-- <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>退款开户支行</label>
-                    <div class="layui-input-inline">
-                        <select name="refund_account_bank_branch_cd" style="width: 100%;" lay-verify="required" lay-ignore id="refund-account-bank-branch-cd">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div> -->
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>退款银行账号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="refund_account_no" lay-verify="required" placeholder="请输入退款银行账号" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>可退付日期</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="refund_date" placeholder="请输入可退付日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker()">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view visible-refund visible-refund-confirm editable-refund">
-                <label class="layui-form-label">退款备注</label>
-                <div class="layui-input-block">
-                    <input type="text" name="refund_remark" placeholder="请输入退款备注" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view visible-refund-confirm">
-                <div class="layui-inline">
-                    <label class="layui-form-label">退款人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="refund_by" placeholder="请输入退款人" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">退款时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="refund_time" placeholder="请输入退款时间" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>打印标志</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="print_flag" placeholder="请输入打印标志" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">打印人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="print_by" placeholder="请输入打印人" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view">
-                <div class="layui-inline">
-                    <label class="layui-form-label">打印时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="print_time" placeholder="请输入打印时间" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <!-- <div class="layui-inline">
-                    <label class="layui-form-label">验证随机数</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="rand_num" placeholder="请输入验证随机数" autocomplete="off" class="layui-input">
-                    </div>
-                </div> -->
-            </div>
-            <div class="layui-form-item hide invisible visible-view">
-                <div class="layui-inline">
-                    <label class="layui-form-label">记录编号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="rec_id" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">处理状态</label>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" name="oper_in" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" name="proc_st" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view">
-                <div class="layui-inline">
-                    <label class="layui-form-label">创建人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="created_by" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">创建时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="created_time" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view visible-refund-confirm">
-                <div class="layui-inline">
-                    <label class="layui-form-label">最后修改人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="last_modified_by" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">最后修改时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="last_modified_time" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <!-- <div class="layui-form-item hide invisible visible-view">
-                <div class="layui-inline">
-                    <label class="layui-form-label">最后审核人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="last_checked_by" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">最后审核时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="last_checked_time" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view">
-                <label class="layui-form-label">审核备注</label>
-                <div class="layui-input-block">
-                    <input type="text" name="checked_reason" placeholder="" autocomplete="off" class="layui-input">
-                </div>
-            </div> -->
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button type="button" class="layui-btn visible invisible-view" onclick="$$.submit(this)" data-options="url:'/action/bm/expense-info/' + operateType">提交</button>
-                    <button type="button" class="layui-btn layui-btn-primary" onclick="$$.close()">关闭</button>
-                </div>
-            </div>
-        </form>
-    </div>
+                    
+                 -->
+        退款银行账号
+        <input type="text" name="refund_account_no" > 可退付日期
+        <input type="text" name="refund_date"   class="layui-input Wdate" onfocus="WdatePicker()"> 退款备注
+        <input type="text" name="refund_remark"> 退款人
+        <input type="text" name="refund_by"> 退款时间
+        <input type="text" name="refund_time"> 打印标志
+        <input type="text" name="print_flag"> 打印人
+        <input type="text" name="print_by"> 打印时间
+        <input type="text" name="print_time">
+        <!-- 
+                    验证随机数
+                    
+                        <input type="text" name="rand_num">
+                    
+                 -->
+        记录编号
+        <input type="text" name="rec_id"> 处理状态
+        <input type="text" name="oper_in">
+        <input type="text" name="proc_st"> 创建人
+        <input type="text" name="created_by"> 创建时间
+        <input type="text" name="created_time"> 最后修改人
+        <input type="text" name="last_modified_by"> 最后修改时间
+        <input type="text" name="last_modified_time">
+        <!-- 
+                
+                    最后审核人
+                    
+                        <input type="text" name="last_checked_by">
+                    
+                
+                
+                    最后审核时间
+                    
+                        <input type="text" name="last_checked_time">
+                    
+                
+            
+            
+                审核备注
+                
+                    <input type="text" name="checked_reason">
+                
+             -->
+        <button type="button" class="layui-btn visible invisible-view" onclick="$$.submit(this)" data-options="url:'/action/bm/expense-info/' + operateType">提交</button>
+        <button type="button" class="layui-btn layui-btn-primary" onclick="$$.close()">关闭</button>
+    </form>
     <script id="upload-tpl" type="text/html">
-        <div class="img-box"><img src="/p/action/uploads/" alt="..." class="img-thumbnail"></div>
     </script>
     <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
@@ -478,7 +240,7 @@
                 $$.request('/action/bm/mchnt-expense/view', query, function(data) {
                     data.data.start_date = formatDate(data.data.start_date);
                     data.data.end_date = formatDate(data.data.end_date);
-                    
+
                     $$.loadData('#detail', data.data);
                     form.render();
                 });
