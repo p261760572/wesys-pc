@@ -122,6 +122,8 @@
             window.location.href = 'index.html';
         }, function(data) {
             $$.error($$.errmsg(data));
+        }, {
+            loading: false
         });
     }
 

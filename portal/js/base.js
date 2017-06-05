@@ -162,7 +162,7 @@ window.$$ = (function() {
             dataType: 'json',
             data: $.toJSON(data),
             success: function(data) {
-                $.mask.hide();
+                if (options.loading) $.mask.hide();
                 if ($$.errcode(data) == 0) {
                     success(data)
                 } else {
@@ -170,7 +170,7 @@ window.$$ = (function() {
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                $.mask.hide();
+                if (options.loading) $.mask.hide();
                 error({
                     errcode: -1,
                     errmsg: textStatus
