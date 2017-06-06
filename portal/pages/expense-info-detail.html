@@ -1,253 +1,434 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>费用信息</title>
-    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
-    <link rel="stylesheet" type="text/css" href="../lib/select2/css/select2.min.css">
-    <link rel="stylesheet" type="text/css" href="../css/base.css">
+    <link href="../lib/bootstrap-custom/css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+    <link href="../lib/easyui/themes/icon.css" rel="stylesheet">
 </head>
 
 <body>
-    <form id="detail" class="layui-form" action="" method="post" data-options="load:loadDetail,serialize:serializeDetail">
-        <input type="hidden" name="mchnt_expense_id"> 费用单据号
-        <input type="text" name="expense_no"> 客户号
-        <input type="text" name="mchnt_id" > 商户简称
-        <input type="text" name="mchnt_abbr"> 商户名称
-        <input type="text" name="mchnt_name"> 费用类型
-        <select name="expense_type"  lay-filter="expense_type" id="expense-type">
-            <option value=""></option>
-        </select>
-        金额
-        <input type="text" name="amount" > 收费周期
-        <select name="expense_cycle"  id="expense-cycle">
-            <option value=""></option>
-        </select>
-        收费开始时间
-        <input type="text" name="start_date"   class="layui-input Wdate" onfocus="WdatePicker({onpicked:function(){$dp.$('end_date').focus();},maxDate:'#F{$dp.$D(\'end_date\')}'})" id="start_date"> 收费结束时间
-        <input type="text" name="end_date"   class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'start_date\')}'})" id="end_date"> 领用人
-        <select name="recipient_by"  lay-search id="recipient-by">
-            <option value=""></option>
-        </select>
-        备注
-        <input type="text" name="remark">
- 发票号
-        <input type="text" name="invoice_no"> 收款方式
-        <select name="receipt_type"  id="receipt-type">
-            <option value=""></option>
-        </select>
-        收款日期
-        <input type="text" name="receipt_date"    class="layui-input Wdate" onfocus="WdatePicker()"> 收款备注
-        <input type="text" name="receipt_remark"> 收款人
-        <input type="text" name="receipt_by"> 收款时间
-        <input type="text" name="receipt_time"> 作废备注
-        <input type="text" name="cancel_remark"> 作废人
-        <input type="text" name="cancel_by"> 作废时间
-        <input type="text" name="cancel_time"> 退款原因
-        <select name="refund_reason_flag"  id="refund-reason-flag">
-            <option value=""></option>
-        </select>
-        退款方式
-        <select name="refund_type"  id="refund-type">
-            <option value=""></option>
-        </select>
-        退款金额
-        <input type="text" name="refund_amount" > 退款开户名称
-        <input type="text" name="refund_account_name" > 退款开户银行
-        <select name="refund_account_bank"  lay-search id="refund-account-bank">
-            <option value=""></option>
-        </select>
-        退款开户支行
-        <select name="refund_account_bank_branch_cd" style="width: 100%;"  lay-ignore id="refund-account-bank-branch-cd">
-            <option value=""></option>
-        </select>
-        <!-- 
-                    退款开户支行
+    <div class="page">
+        <form action="/action/bm/expense-info/view" data-options="serialize:$.noop,load:$.noop">
+            <table class="table" style="width: 970px;">
+                <caption>费用信息</caption>
+                <tbody>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>费用单据号</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="expense_no" class="easyui-validatebox" data-options="required:true">
+                            <span style="color: red;">*</span>                            
+                        </td>
                     
-                        <select name="refund_account_bank_branch_cd" style="width: 100%;"  lay-ignore id="refund-account-bank-branch-cd">
-                            <option value=""></option>
-                        </select>
+                        <td class="text-right col-sm-2">
+                            <label>客户号</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="required:true">
+                            <span style="color: red;">*</span>                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>费用类型</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="expense_type" class="easyui-validatebox" data-options="required:true">
+                            <select name="expense_type" class="easyui-validatebox" data-options="required:true">
+                                <option value="">--请选择--</option>
+                            </select>
+                            <span style="color: red;">*</span>                            
+                        </td>
                     
-                 -->
-        退款银行账号
-        <input type="text" name="refund_account_no" > 可退付日期
-        <input type="text" name="refund_date"   class="layui-input Wdate" onfocus="WdatePicker()"> 退款备注
-        <input type="text" name="refund_remark"> 退款人
-        <input type="text" name="refund_by"> 退款时间
-        <input type="text" name="refund_time"> 打印标志
-        <input type="text" name="print_flag"> 打印人
-        <input type="text" name="print_by"> 打印时间
-        <input type="text" name="print_time">
-        <!-- 
-                    验证随机数
+                        <td class="text-right col-sm-2">
+                            <label>金额</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="amount" class="easyui-validatebox" data-options="required:true">
+                            <span style="color: red;">*</span>                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>收费周期</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="expense_cycle" class="easyui-validatebox" data-options="required:true">
+                            <select name="expense_cycle" class="easyui-validatebox" data-options="required:true">
+                                <option value="">--请选择--</option>
+                            </select>
+                            <span style="color: red;">*</span>                            
+                        </td>
                     
-                        <input type="text" name="rand_num">
+                        <td class="text-right col-sm-2">
+                            <label>收费开始时间</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="start_date" class="easyui-validatebox Wdate" data-options="required:true" onfocus="WdatePicker()">
+                            <span style="color: red;">*</span>                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>收费结束时间</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="end_date" class="easyui-validatebox Wdate" data-options="" onfocus="WdatePicker()">                            
+                        </td>
                     
-                 -->
-        记录编号
-        <input type="text" name="rec_id"> 处理状态
-        <input type="text" name="oper_in">
-        <input type="text" name="proc_st"> 创建人
-        <input type="text" name="created_by"> 创建时间
-        <input type="text" name="created_time"> 最后修改人
-        <input type="text" name="last_modified_by"> 最后修改时间
-        <input type="text" name="last_modified_time">
-        <!-- 
-                
-                    最后审核人
+                        <td class="text-right col-sm-2">
+                            <label>领用人</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="recipient_by" class="easyui-validatebox" data-options="">                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>发票号</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="invoice_no" class="easyui-validatebox" data-options="">                            
+                        </td>
                     
-                        <input type="text" name="last_checked_by">
+                        <td class="text-right col-sm-2">
+                            <label>收款方式</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="receipt_type" class="easyui-validatebox" data-options="">
+                            <select name="receipt_type" class="easyui-validatebox" data-options="">
+                                <option value="">--请选择--</option>
+                            </select>                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>收款日期</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="receipt_date" class="easyui-validatebox Wdate" data-options="" onfocus="WdatePicker()">                            
+                        </td>
                     
-                
-                
-                    最后审核时间
+                        <td class="text-right col-sm-2">
+                            <label>收款备注</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="receipt_remark" class="easyui-validatebox" data-options="">                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>收款人</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="receipt_by" class="easyui-validatebox" data-options="">                            
+                        </td>
                     
-                        <input type="text" name="last_checked_time">
+                        <td class="text-right col-sm-2">
+                            <label>收款时间</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="receipt_time" class="easyui-validatebox Wdate" data-options="" onfocus="WdatePicker()">                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>作废备注</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="cancel_remark" class="easyui-validatebox" data-options="">                            
+                        </td>
                     
-                
-            
-            
-                审核备注
-                
-                    <input type="text" name="checked_reason">
-                
-             -->
-        <button type="button" class="layui-btn visible invisible-view" onclick="$$.submit(this)" data-options="url:'/action/bm/expense-info/' + operateType">提交</button>
-        <button type="button" class="layui-btn layui-btn-primary" onclick="$$.close()">关闭</button>
-    </form>
-    <script id="upload-tpl" type="text/html">
-    </script>
-    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
-    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
-    <script type="text/javascript" src="../lib/select2/js/select2.min.js"></script>
-    <script type="text/javascript" src="../js/template.js"></script>
-    <script type="text/javascript" src="../js/base.js"></script>
-    <script type="text/javascript" src="../js/param.js"></script>
-    <script type="text/javascript" src="../js/district.js"></script>
-    <script type="text/javascript">
+                        <td class="text-right col-sm-2">
+                            <label>作废人</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="cancel_by" class="easyui-validatebox" data-options="">                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>作废时间</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="cancel_time" class="easyui-validatebox Wdate" data-options="" onfocus="WdatePicker()">                            
+                        </td>
+                    
+                        <td class="text-right col-sm-2">
+                            <label>退款原因</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="refund_reason_flag" class="easyui-validatebox" data-options="">
+                            <select name="refund_reason_flag" class="easyui-validatebox" data-options="">
+                                <option value="">--请选择--</option>
+                            </select>                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>退款方式</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="refund_type" class="easyui-validatebox" data-options="">
+                            <select name="refund_type" class="easyui-validatebox" data-options="">
+                                <option value="">--请选择--</option>
+                            </select>                            
+                        </td>
+                    
+                        <td class="text-right col-sm-2">
+                            <label>退款金额累计</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="refund_amount_total" class="easyui-validatebox" data-options="required:true">
+                            <span style="color: red;">*</span>                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>退款金额</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="refund_amount" class="easyui-validatebox" data-options="">                            
+                        </td>
+                    
+                        <td class="text-right col-sm-2">
+                            <label>退款开户名称</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="refund_account_name" class="easyui-validatebox" data-options="">                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>退款开户银行</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="refund_account_bank" class="easyui-validatebox" data-options="">                            
+                        </td>
+                    
+                        <td class="text-right col-sm-2">
+                            <label>退款开户支行</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="refund_account_bank_branch_cd" class="easyui-validatebox" data-options="">                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>退款银行账号</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="refund_account_no" class="easyui-validatebox" data-options="">                            
+                        </td>
+                    
+                        <td class="text-right col-sm-2">
+                            <label>可退付日期</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="refund_date" class="easyui-validatebox Wdate" data-options="" onfocus="WdatePicker()">                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>退款备注</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="refund_remark" class="easyui-validatebox" data-options="">                            
+                        </td>
+                    
+                        <td class="text-right col-sm-2">
+                            <label>退款人</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="refund_by" class="easyui-validatebox" data-options="">                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>退款时间</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="refund_time" class="easyui-validatebox Wdate" data-options="" onfocus="WdatePicker()">                            
+                        </td>
+                    
+                        <td class="text-right col-sm-2">
+                            <label>打印标志</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="print_flag" class="easyui-validatebox" data-options="required:true">
+                            <select name="print_flag" class="easyui-validatebox" data-options="required:true">
+                                <option value="">--请选择--</option>
+                            </select>
+                            <span style="color: red;">*</span>                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>打印人</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="print_by" class="easyui-validatebox" data-options="">                            
+                        </td>
+                    
+                        <td class="text-right col-sm-2">
+                            <label>打印时间</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="print_time" class="easyui-validatebox Wdate" data-options="" onfocus="WdatePicker()">                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>验证随机数</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="rand_num" class="easyui-validatebox" data-options="">                            
+                        </td>
+                    
+                        <td class="text-right col-sm-2">
+                            <label>备注</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="remark" class="easyui-validatebox" data-options="">                            
+                        </td></tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>客户费用ID</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="mchnt_expense_id" class="easyui-validatebox" data-options="required:true">
+                            <span style="color: red;">*</span>                            
+                        </td>
+                        <td>
+                            &nbsp;
+                        </td>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                     
+                    <tr class="readonly invisible visible-view visible-check1">
+                        <td class="text-right col-sm-2">
+                            <label>记录编号</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="rec_id">
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>操作标志/处理状态</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="oper_in" style="width: 100px;">
+                            <input type="text" name="proc_st" style="width: 100px;">
+                            <!-- <select name="oper_in">
+                            </select>
+                            <select name="proc_st">
+                            </select> -->
+                        </td>
+                    </tr>
+                    <tr class="readonly readonly invisible visible-view visible-check1">
+                        <td class="text-right col-sm-2">
+                            <label>创建人</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="created_by">
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>创建时间</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="created_time">
+                        </td>
+                    </tr>
+                    <tr class="readonly invisible visible-view visible-check1">
+                        <td class="text-right col-sm-2">
+                            <label>最后修改人</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="last_modified_by">
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>最后修改时间</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="last_modified_time">
+                        </td>
+                    </tr>
+                    <tr class="readonly invisible visible-view visible-check1">
+                        <td class="text-right col-sm-2">
+                            <label>最后审核人</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="last_checked_by">
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>最后审核时间</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="last_checked_time">
+                        </td>
+                    </tr>
+                    <tr class="readonly invisible visible-view visible-check1">
+                        <td class="text-right col-sm-2">
+                            <label>审核通过或不通过原因</label>
+                        </td>
+                        <td colspan="3" class="col-sm-10 editable-check1">
+                            <input type="text" name="checked_reason" class="easyui-validatebox" style="width:100%;" data-options="">
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td colspan="3">
+                            <button type="button" class="btn btn-primary" data-options="datagrid:'#dg',url:'/action/bm/expense-info/create',success:$.noop" onclick="$$.search(this)">新增提交</button>
+                            <button type="button" class="btn btn-primary" data-options="datagrid:'#dg',url:'/action/bm/expense-info/update',success:$.noop" onclick="$$.search(this)">编辑提交</button>
+                            <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+    </div>
+    <script src="../lib/jquery/jquery.min.js"></script>
+    <script src="../lib/toastr/toastr.min.js"></script>
+    <script src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script src="../lib/easyui/jquery.easyui.min.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/st.js"></script>
+    <script src="../js/param.js"></script>
+    <!-- <script src="../js/district.js"></script> -->
+    <script>
     var query = $$.parseQueryString();
+    var displayType = query.displayType;
     var operateType = query.operateType;
-    var form = layui.form();
-    var element = layui.element();
 
-
-    function loadDetail(data) {
-        $('#refund-amount-total').text(parseFloat(data.data.refund_amount_total || 0).toFixed(2));
-
-        if (data.data.refund_account_bank_branch_cd) {
-            $('#refund-account-bank-branch-cd').html('<option value="' + data.data.refund_account_bank_branch_cd + '">' + data.data.bank_branch_nm + '</option>').trigger('change');
-        }
+    function serializeSearch(data) {
+        var procStMap = {
+            'receipt': '1',
+            'refund': ['2', '6'],
+            'refund-confirm': '5',
+            'cancel': '1'
+        };
+        data.proc_st2 = procStMap[displayType];
     }
 
-    function serializeDetail(data) {
-        data.expense_cycle = $('#expense-cycle').val();
+    function hasNext(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['expense_info']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
+
+    function formatExpenseType(value) {
+        return $$.formatField($$.param['expense_type'], value);
+    }
+
+    function formatExpenseCycle(value) {
+        return $$.formatField($$.param['expense_cycle'], value);
     }
 
     function formatDate(value) {
         return value ? value.substr(0, 10) : value;
     }
 
-    function onChangeExpenseType() {
-        var value = $(this).val();
-        if (value == '1' || value == '4') {
-            $('#expense-cycle').val('1').attr('disabled', 'disabled');
-        } else {
-            $('#expense-cycle').removeAttr('disabled');
-        }
-        form.render('select');
-    }
-
     $(function() {
-        $('#expense-type').on('change', onChangeExpenseType);
+        $$.transformStatus('body>.page', operateType);
 
-        form.on('select(expense_type)', function(data) {
-            $(data.elem).change();
-        });
-
-        $$.loadSelect('#expense-type', $$.param['expense_type']);
-        $$.loadSelect('#expense-cycle', $$.param['expense_cycle']);
-        $$.loadSelect('#receipt-type', $$.param['receipt_type']);
-        $$.loadSelect('#refund-reason-flag', $$.param['refund_reason_flag']);
-        $$.loadSelect('#refund-type', $$.param['refund_type']);
-
-        $('#refund-account-bank-branch-cd').select2({
-            language: 'zh-CN',
-            placeholder: '请选择',
-            ajax: {
-                url: $$.wrapUrl('/action/bm/bank-branch/search'),
-                type: 'POST',
-                contentType: 'application/json',
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    console.log(arguments);
-                    return $.toJSON({
-                        q: params.term,
-                        bank_cd: $('#refund-account-bank').val(),
-                        page: params.page,
-                        size: 20
-                    });
-                },
-                processResults: function(data, params) {
-                    console.log(arguments);
-                    params.page = params.page || 1;
-
-                    if ($$.errcode(data) == 0) {
-                        for (var i = 0; i < data.rows.length; i++) {
-                            data.rows[i].id = data.rows[i].bank_branch_cd;
-                            data.rows[i].text = data.rows[i].bank_branch_nm;
-                        }
-                        return {
-                            results: data.rows,
-                            pagination: {
-                                more: (params.page * 20) < data.total
-                            }
-                        };
-                    }
-
-                    return {};
-                },
-                cache: true
-            },
-            minimumInputLength: 1
-        });
-
-        var d1 = $$.request('/action/bm/recipient/list', {}, function(data) {
-            $$.loadSelect('#recipient-by', data.rows);
-            form.render('select');
-        });
-
-        var d2 = $$.request('/action/bm/parameter/list', {
-            bank: '1'
-        }, function(data) {
-            $$.loadSelect('#refund-account-bank', data.bank, {
-                valueField: 'bank_cd',
-                textField: 'bank_nm'
-            });
-            form.render('select');
-        });
-
-        form.render();
-
-        $$.transformStatus('#detail', operateType);
-        $.when(d1, d2).done(function() {
-            if (query.operateType == 'create') {
-                $$.loadData('#detail', query);
-                $$.request('/action/bm/mchnt-expense/view', query, function(data) {
-                    data.data.start_date = formatDate(data.data.start_date);
-                    data.data.end_date = formatDate(data.data.end_date);
-
-                    $$.loadData('#detail', data.data);
-                    form.render();
-                });
-            } else {
-                $$.view('#detail', '/action/bm/expense-info/view', query);
-            }
-        });
+        $('#expense_type').combobox('loadData', $$.param['expense_type']);
+        $('#expense_cycle').combobox('loadData', $$.param['expense_cycle']);
+        $('#proc_st').combobox('loadData', $$.st.procSt[$$.st.alias['expense_info']]);
     });
     </script>
 </body>

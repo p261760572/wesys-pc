@@ -108,10 +108,7 @@ window.$$ = (function() {
     //关闭tab或layer
     $$.close = function() {
         if (window.top.closeTab) {
-            window.top.closeTab(window.top.getTab());
-        } else {
-            var index = window.parent.layer.getFrameIndex(window.name);
-            window.parent.layer.close(index);
+            window.top.closeTab();
         }
     }
 
