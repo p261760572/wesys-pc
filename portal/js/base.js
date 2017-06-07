@@ -54,15 +54,14 @@ window.$$ = (function() {
     };
 
     //确认
-    $$.confirm = function(content, yes) {
-        layer.confirm(content, {
-            icon: 3,
-            title: '提示'
-        }, function(index) {
-            layer.close(index);
-            if (yes) yes();
-        });
-    };
+    $$.confirm = function(msg, callback) {
+        function fn(r) {
+            if (r) {
+                if (callback) callback();
+            }
+        }
+        $.messager.confirm('确认', msg, callback);
+    }
 
     //提示
     $$.prompt = function(title, yes) {
@@ -105,14 +104,14 @@ window.$$ = (function() {
         return url;
     }
 
-    //关闭tab或layer
+    //关闭tab
     $$.close = function() {
         if (window.top.closeTab) {
             window.top.closeTab();
         }
     }
 
-    //打开页面
+    //打开tab
     $$.open = function(url, title) {
         if (window.top.addTab) {
             url = 'pages/' + url;
@@ -238,7 +237,7 @@ window.$$ = (function() {
             return false;
         }
 
-        if(f.form('enableValidation').form('validate') != true) {
+        if (f.form('enableValidation').form('validate') != true) {
             return false;
         }
 
@@ -273,7 +272,7 @@ window.$$ = (function() {
             return false;
         }
 
-        if(f.form('enableValidation').form('validate') != true) {
+        if (f.form('enableValidation').form('validate') != true) {
             return false;
         }
 
@@ -286,18 +285,44 @@ window.$$ = (function() {
         });
     }
 
-
-    $$.view = function(selector, url, params) {
-        var options = $.extend({}, $$.parseOptions(selector));
-
-        return $$.request(url, params, function(data) {
-            if (options.load) {
-                options.load(data);
+    $$.view = function(target, url, title) {
+        var opts = $$.parseOptions(target);
+        var $dg = $(target).closest('.datagrid-toolbar').next('.datagrid-view').children('.datagrid-f');
+        var dgOpts = $dg.datagrid('options');
+        var row = $dg.datagrid('getSelected');
+        row = {};
+        if (row) {
+            if (!dgOpts.idField) {
+                $$.info('没有记录ID！');
+                return false;
             }
-            $$.loadData(selector, data.data);
-            form.render();
-        });
-    };
+
+            if (opts.before && opts.before.call(target, row) == false) {
+                return false;
+            }
+
+            var params = {};
+            params[dgOpts.idField] = row[dgOpts.idField];
+
+            $$.open($$.url(url, params), title);
+        } else {
+            $$.info('请选择记录！');
+            return false;
+        }
+    }
+
+
+    // $$.view = function(selector, url, params) {
+    //     var options = $.extend({}, $$.parseOptions(selector));
+
+    //     return $$.request(url, params, function(data) {
+    //         if (options.load) {
+    //             options.load(data);
+    //         }
+    //         $$.loadData(selector, data.data);
+    //         form.render();
+    //     });
+    // };
 
     $$.submit = function(target) {
         var $form = $(target).closest('form');
@@ -420,61 +445,94 @@ window.$$ = (function() {
         return data;
     }
 
-
+    //批量提交
     $$.batchSubmit = function(target) {
-        var options = $.extend({
-            datagrid: '#list',
-            type: 'default', //default confirm prompt
-            promptKey: null,
-            success: function() {
-                if (window.reload) window.reload();
+        var opts = $$.parseOptions(target);
+        var $dg = $(target).closest('.datagrid-toolbar').next('.datagrid-view').children('.datagrid-f');
+        var dgOpts = $dg.datagrid('options');
+        var rows = $dg.datagrid('getChecked');
+        if (rows.length) {
+            var keyRows = [];
+            for (var i = 0; i < rows.length; i++) {
+                keyRows.push($$.getKeys([dgOpts.idField], rows[i]));
             }
-        }, $$.parseOptions(target));
 
-        var rows = $$.datagrid(options.datagrid, 'getChecked');
-        if (rows.length == 0) {
-            $$.info('请选择需要操作的记录');
-            return;
-        }
+            var data = {
+                rows: keyRows
+            };
 
-        var dgOptions = $$.datagrid(options.datagrid, 'options');
+            if (opts.before && opts.before.call(target, data) == false) {
+                return false;
+            }
 
-        if (dgOptions.idField) {
-            var tmp = [];
-            $.each(rows, function(index, value) {
-                tmp.push($$.getKeys(value, dgOptions.idField));
-            })
-            rows = tmp;
-        }
-
-        var requestData = {
-            rows: rows
-        };
-
-        var callback = {
-            'default': request,
-            'confirm': function() {
-                $$.confirm(options.title, function() {
-                    request();
-                });
-            },
-            'prompt': function() {
-                $$.prompt(options.title, function(value) {
-                    requestData[options.promptKey] = value;
-                    request();
+            if ($$.confirm('确认要' + opts.msg + '选中的记录？')) {
+                $$.request(opts.url, data, function(result) {
+                    if (opts.success) {
+                        opts.success.call(data, request, result);
+                    }
                 });
             }
-        };
-
-        callback[options.type]();
-
-        function request() {
-            $$.request(options.url, requestData, function(data) {
-                $$.success('操作成功');
-                options.success(requestData, data);
-            });
+        } else {
+            $$.info('请选择记录！');
+            return false;
         }
     }
+
+
+    // $$.batchSubmit = function(target) {
+    //     var options = $.extend({
+    //         datagrid: '#list',
+    //         type: 'default', //default confirm prompt
+    //         promptKey: null,
+    //         success: function() {
+    //             if (window.reload) window.reload();
+    //         }
+    //     }, $$.parseOptions(target));
+
+    //     var rows = $$.datagrid(options.datagrid, 'getChecked');
+    //     if (rows.length == 0) {
+    //         $$.info('请选择需要操作的记录');
+    //         return;
+    //     }
+
+    //     var dgOptions = $$.datagrid(options.datagrid, 'options');
+
+    //     if (dgOptions.idField) {
+    //         var tmp = [];
+    //         $.each(rows, function(index, value) {
+    //             tmp.push($$.getKeys(value, dgOptions.idField));
+    //         })
+    //         rows = tmp;
+    //     }
+
+    //     var requestData = {
+    //         rows: rows
+    //     };
+
+    //     var callback = {
+    //         'default': request,
+    //         'confirm': function() {
+    //             $$.confirm(options.title, function() {
+    //                 request();
+    //             });
+    //         },
+    //         'prompt': function() {
+    //             $$.prompt(options.title, function(value) {
+    //                 requestData[options.promptKey] = value;
+    //                 request();
+    //             });
+    //         }
+    //     };
+
+    //     callback[options.type]();
+
+    //     function request() {
+    //         $$.request(options.url, requestData, function(data) {
+    //             $$.success('操作成功');
+    //             options.success(requestData, data);
+    //         });
+    //     }
+    // }
 
     $$.transformDisplay = function(selector, type, isSubmit) {
         var $target = $(selector);
