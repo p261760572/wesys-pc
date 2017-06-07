@@ -4,7 +4,7 @@ window.$$ = (function() {
     var $$ = {};
 
     $$.parseOptions = function function_name(target) {
-        return $.parser.parseOptions(target);
+        return $.parser.parseOptions($(target)[0]);
     }
 
     //包裹url,解决根目录问题
@@ -290,7 +290,6 @@ window.$$ = (function() {
         var $dg = $(target).closest('.datagrid-toolbar').next('.datagrid-view').children('.datagrid-f');
         var dgOpts = $dg.datagrid('options');
         var row = $dg.datagrid('getSelected');
-        row = {};
         if (row) {
             if (!dgOpts.idField) {
                 $$.info('没有记录ID！');
@@ -375,60 +374,33 @@ window.$$ = (function() {
         $$.open(url, options.title);
     };
 
-    $$.loadSelect = function(selector, data, options) {
+    $$.loadSelect = function(selector, rows, options) {
         options = $.extend({
             valueField: 'value',
-            textField: 'text',
-            rows: data
+            textField: 'text'
         }, options || {});
         var $select = $(selector);
         $select.children().slice(1).remove();
-        $(selector).append(template.render(selectTpl, options));
+
+        var html = [],
+            row;
+        for (var i = 0; i < rows.length; i++) {
+            row = rows[i]
+            html.push('<option value="' + row[options['valueField']] + '">' + row[options['textField']] + '</option>')
+        }
+        $(selector).append(html);
     }
 
-    $$.loadData = function(selector, data) {
-        var $eles = $(selector);
+    $$.loadData = function(selector, url, params) {
+        var options = $$.parseOptions(selector);
 
-        function _load($form, data) {
-            for (var name in data) {
-                var val = data[name];
-                if (!_checkField($form, name, val)) {
-                    $form.find('input[name="' + name + '"]').val(val);
-                    $form.find('textarea[name="' + name + '"]').val(val);
-                    $form.find('select[name="' + name + '"]').val(val);
-                }
+        return $$.request(url, params, function(data) {
+            if (options.load) {
+                options.load(data);
             }
-        }
-
-        function _checkField($form, name, val) {
-            var $cc = $form.find('input[name="' + name + '"][type=radio], input[name="' + name + '"][type=checkbox]');
-            if ($cc.length) {
-                $cc.each(function(i, ele) {
-                    $ele = $(ele);
-                    if (_isChecked($ele.val(), val)) {
-                        $ele.prop('checked', true);
-                    }
-                });
-                return true;
-            }
-            return false;
-        }
-
-        function _isChecked(v, val) {
-            if (v == String(val) || $.inArray(v, $.isArray(val) ? val : [val]) >= 0) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        $eles.each(function(i, ele) {
-            var $form = $(ele);
-            _load($form, data);
+            $(selector).form('load', data.data);
         });
-
-        return this;
-    }
+    };
 
     $$.getKeys = function(row, keys) {
         var data = {};
@@ -544,8 +516,8 @@ window.$$ = (function() {
         // $target.find(tag + '.visible').show().filter('.invisible-' + type).hide();
         // $target.find(tag + '.invisible').hide().filter('.visible-' + type).show();
 
-        $target.find(tag + '.visible').removeClass('hide').filter('.invisible-' + type).addClass('hide');
-        $target.find(tag + '.invisible').addClass('hide').filter('.visible-' + type).removeClass('hide');
+        $target.find(tag + '.tf-v').removeClass('hide').filter('.tf-iv-' + type).addClass('hide');
+        $target.find(tag + '.tf-iv').addClass('hide').filter('.tf-v-' + type).removeClass('hide');
     };
 
     $$.transformStatus = function(selector, status, isSubmit) {
@@ -570,8 +542,8 @@ window.$$ = (function() {
             }
         });
 
-        $target.find('.readonly,.readonly-' + status).find('input[type!="button"],textarea,select').each(readonly);
-        $target.find('.editable,.editable-' + status).find('input[type!="button"],textarea,select').each(editable);
+        $target.find('.tf-ro,.tf-ro-' + status).find('input[type!="button"],textarea,select').each(readonly);
+        $target.find('.tf-e,.tf-e-' + status).find('input[type!="button"],textarea,select').each(editable);
 
         function readonly(index, element) {
             var $tmp = $(element);
@@ -732,3 +704,18 @@ $$.generateTreeData = function(rows, options) {
         return node;
     }
 }
+
+$.fn.combobox.defaults.loader = function(param, success, error) {
+    var q = param.q || '';
+    if (q.length <= 2) {
+        return false
+    }
+
+    var url = $(this).combobox('options').url;
+
+    $$.request(url, param, function (data) {
+        success(data.rows)
+    }, function () {
+        error.apply(this, arguments);
+    })    
+};

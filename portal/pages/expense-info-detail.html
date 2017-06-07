@@ -11,12 +11,11 @@
     <![endif]-->
     <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
     <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
-    <link href="../lib/easyui/themes/icon.css" rel="stylesheet">
 </head>
 
 <body>
     <div class="page">
-        <form action="/action/bm/expense-info/view" data-options="serialize:$.noop,load:$.noop">
+        <form id="ff" action="/action/bm/expense-info/view" data-options="serialize:$.noop,load:$.noop">
             <table class="table" style="width: 970px;">
                 <caption>费用信息</caption>
                 <tbody>
@@ -41,11 +40,7 @@
                             <label>费用类型</label>
                         </td>
                         <td class="col-sm-4">
-                            <input type="text" name="expense_type" class="easyui-validatebox" data-options="required:true">
-                            <select name="expense_type" class="easyui-validatebox" data-options="required:true">
-                                <option value="">--请选择--</option>
-                                <option value="">--请选择--</option>
-                                <option value="">--请选择--</option>
+                            <select id="expense_type" name="expense_type" class="easyui-validatebox" data-options="required:true">
                                 <option value="">--请选择--</option>
                             </select>
                             <span style="color: red;">*</span>
@@ -63,8 +58,7 @@
                             <label>收费周期</label>
                         </td>
                         <td class="col-sm-4">
-                            <input type="text" name="expense_cycle" class="easyui-validatebox" data-options="required:true">
-                            <select name="expense_cycle" class="easyui-validatebox" data-options="required:true">
+                            <select id="expense_cycle" name="expense_cycle" class="easyui-validatebox" data-options="required:true">
                                 <option value="">--请选择--</option>
                             </select>
                             <span style="color: red;">*</span>
@@ -88,7 +82,7 @@
                             <label>领用人</label>
                         </td>
                         <td class="col-sm-4">
-                            <input type="text" name="recipient_by" class="easyui-validatebox" data-options="">
+                            <input type="text" id="recipient_by" name="recipient_by" class="easyui-combobox" data-options="">
                         </td>
                     </tr>
                     <tr>
@@ -102,8 +96,7 @@
                             <label>收款方式</label>
                         </td>
                         <td class="col-sm-4">
-                            <input type="text" name="receipt_type" class="easyui-validatebox" data-options="">
-                            <select name="receipt_type" class="easyui-validatebox" data-options="">
+                            <select id="receipt_type" name="receipt_type" class="easyui-validatebox" data-options="">
                                 <option value="">--请选择--</option>
                             </select>
                         </td>
@@ -161,8 +154,7 @@
                             <label>退款原因</label>
                         </td>
                         <td class="col-sm-4">
-                            <input type="text" name="refund_reason_flag" class="easyui-validatebox" data-options="">
-                            <select name="refund_reason_flag" class="easyui-validatebox" data-options="">
+                            <select id="refund_reason_flag" name="refund_reason_flag" class="easyui-validatebox" data-options="">
                                 <option value="">--请选择--</option>
                             </select>
                         </td>
@@ -172,8 +164,7 @@
                             <label>退款方式</label>
                         </td>
                         <td class="col-sm-4">
-                            <input type="text" name="refund_type" class="easyui-validatebox" data-options="">
-                            <select name="refund_type" class="easyui-validatebox" data-options="">
+                            <select id="refund_type" name="refund_type" class="easyui-validatebox" data-options="">
                                 <option value="">--请选择--</option>
                             </select>
                         </td>
@@ -204,7 +195,7 @@
                             <label>退款开户银行</label>
                         </td>
                         <td class="col-sm-4">
-                            <input type="text" name="refund_account_bank" class="easyui-validatebox" data-options="">
+                            <input type="text" id="refund_account_bank" name="refund_account_bank" class="easyui-combobox" data-options="valueField:'bank_cd', textField:'bank_nm'">
                         </td>
                         <td class="text-right col-sm-2">
                             <label>退款开户支行</label>
@@ -246,16 +237,13 @@
                             <label>退款时间</label>
                         </td>
                         <td class="col-sm-4">
-                            <input type="text" name="refund_time" class="easyui-validatebox Wdate" data-options="" onfocus="WdatePicker()">
+                            <input type="text" name="refund_time" class="easyui-validatebox" data-options="">
                         </td>
                         <td class="text-right col-sm-2">
                             <label>打印标志</label>
                         </td>
                         <td class="col-sm-4">
                             <input type="text" name="print_flag" class="easyui-validatebox" data-options="required:true">
-                            <select name="print_flag" class="easyui-validatebox" data-options="required:true">
-                                <option value="">--请选择--</option>
-                            </select>
                             <span style="color: red;">*</span>
                         </td>
                     </tr>
@@ -270,7 +258,7 @@
                             <label>打印时间</label>
                         </td>
                         <td class="col-sm-4">
-                            <input type="text" name="print_time" class="easyui-validatebox Wdate" data-options="" onfocus="WdatePicker()">
+                            <input type="text" name="print_time" class="easyui-validatebox" data-options="">
                         </td>
                     </tr>
                     <tr>
@@ -302,7 +290,7 @@
                             &nbsp;
                         </td>
                     </tr>
-                    <tr class="readonly invisible visible-view visible-check1">
+                    <tr class="tf-ro tf-iv tf-v-view tf-v-check1">
                         <td class="text-right col-sm-2">
                             <label>记录编号</label>
                         </td>
@@ -321,7 +309,7 @@
                             </select> -->
                         </td>
                     </tr>
-                    <tr class="readonly readonly invisible visible-view visible-check1">
+                    <tr class="tf-ro tf-iv tf-v-view tf-v-check1">
                         <td class="text-right col-sm-2">
                             <label>创建人</label>
                         </td>
@@ -335,7 +323,7 @@
                             <input type="text" name="created_time">
                         </td>
                     </tr>
-                    <tr class="readonly invisible visible-view visible-check1">
+                    <tr class="tf-ro tf-iv tf-v-view tf-v-check1">
                         <td class="text-right col-sm-2">
                             <label>最后修改人</label>
                         </td>
@@ -349,7 +337,7 @@
                             <input type="text" name="last_modified_time">
                         </td>
                     </tr>
-                    <tr class="readonly invisible visible-view visible-check1">
+                    <tr class="tf-ro tf-iv tf-v-view tf-v-check1">
                         <td class="text-right col-sm-2">
                             <label>最后审核人</label>
                         </td>
@@ -363,7 +351,7 @@
                             <input type="text" name="last_checked_time">
                         </td>
                     </tr>
-                    <tr class="readonly invisible visible-view visible-check1">
+                    <tr class="tf-ro tf-iv tf-v-view tf-v-check1">
                         <td class="text-right col-sm-2">
                             <label>审核通过或不通过原因</label>
                         </td>
@@ -374,12 +362,12 @@
                 </tbody>
             </table>
             <div style="display:block; height:50px;"></div>
-            <div style="position:fixed; left: 0px; bottom:0px; z-index:999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px; ">
+            <div style="position:fixed; left: 0px; bottom:0px; z-index:9998999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px; ">
                 <div class="row">
                     <div class="col-sm-2"></div>
                     <div class="col-sm-6">
-                        <button type="button" class="btn btn-primary invisible visible-create" data-options="datagrid:'#dg',url:'/action/bm/expense-info/create',success:$.noop" onclick="$$.search(this)">新增提交</button>
-                        <button type="button" class="btn btn-primary invisible visible-update" data-options="datagrid:'#dg',url:'/action/bm/expense-info/update',success:$.noop" onclick="$$.search(this)">编辑提交</button>
+                        <button type="button" class="btn btn-primary hide tf-iv tf-v-create" data-options="datagrid:'#dg',url:'/action/bm/expense-info/create',success:$.noop" onclick="$$.search(this)">新增提交</button>
+                        <button type="button" class="btn btn-primary hide tf-iv tf-v-update" data-options="datagrid:'#dg',url:'/action/bm/expense-info/update',success:$.noop" onclick="$$.search(this)">编辑提交</button>
                     </div>
                     <div class="col-sm-4">
                         <div class="pull-right">
@@ -430,12 +418,61 @@
         return value ? value.substr(0, 10) : value;
     }
 
+    function onChangeExpenseType() {
+        var value = $(this).val();
+        if (value == '1' || value == '4') {
+            $('#expense_cycle').val('1').attr('disabled', 'disabled');
+        } else {
+            $('#expense_cycle').removeAttr('disabled');
+        }
+    }
+
     $(function() {
         $$.transformStatus('body>.page', operateType);
 
-        $('#expense_type').combobox('loadData', $$.param['expense_type']);
-        $('#expense_cycle').combobox('loadData', $$.param['expense_cycle']);
-        $('#proc_st').combobox('loadData', $$.st.procSt[$$.st.alias['expense_info']]);
+        $('#expense_type').on('change', onChangeExpenseType);
+
+        $$.loadSelect('#expense_type', $$.param['expense_type']);
+        $$.loadSelect('#expense_cycle', $$.param['expense_cycle']);
+        $$.loadSelect('#receipt_type', $$.param['receipt_type']);
+        $$.loadSelect('#refund_reason_flag', $$.param['refund_reason_flag']);
+        $$.loadSelect('#refund_type', $$.param['refund_type']);
+
+        // $('#proc_st').combobox('loadData', $$.st.procSt[$$.st.alias['expense_info']]);
+        // 
+        var d1 = $$.request('/action/bm/recipient/list', {}, function(data) {
+            $('#recipient_by').combobox('loadData', data.rows);
+        });
+
+        var d2 = $$.request('/action/bm/parameter/list', {
+            bank: '1'
+        }, function(data) {
+            $('#refund_account_bank').combobox('loadData', data.bank).combobox({
+                onSelect: function (rec) {
+                    $('#').combobox('reload', )
+                }
+            });
+
+
+            onSelect: function(rec){    
+            var url = 'get_data2.php?id='+rec.id;    
+            $('#cc2').combobox('reload', url);    
+        }" 
+        });
+
+        $.when(d1, d2).done(function() {
+            if (query.operateType == 'create') {
+                $$.loadData('#detail', query);
+                $$.request('/action/bm/mchnt-expense/view', query, function(data) {
+                    data.data.start_date = formatDate(data.data.start_date);
+                    data.data.end_date = formatDate(data.data.end_date);
+                    
+                    $('#ff').form('load', data.data);
+                });
+            } else {
+                $$.loadData('#ff', '/action/bm/expense-info/view', query);
+            }
+        });
     });
     </script>
 </body>

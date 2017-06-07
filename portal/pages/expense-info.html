@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>费用信息</title>
+    <link href="../lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="../lib/bootstrap-custom/css/bootstrap.min.css" rel="stylesheet">
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -13,7 +14,12 @@
     <![endif]-->
     <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
     <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
-    <link href="../lib/easyui/themes/icon.css" rel="stylesheet">
+    <style type="text/css">
+        .fa {
+            font-size: 16px;
+            color: #337ab7;
+        }
+    </style>
 </head>
 
 <body>
@@ -79,24 +85,23 @@
             </table>
         </form>
         <div id="tb">
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="$$.open('expense-info-detail.html?operateType=create', '新增费用信息')">新增</a>
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="$$.view(this, 'expense-info-detail.html?operateType=update', '编辑费用信息')">编辑</a>
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">删除</a>
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fa fa-plus',plain:true" onclick="$$.open('expense-info-detail.html?operateType=create', '新增费用信息')">新增</a>
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fa fa-pencil',plain:true" onclick="$$.view(this, 'expense-info-detail.html?operateType=update', '编辑费用信息')">编辑</a>
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fa fa-minus',plain:true">删除</a>
         </div>
         <table id="dg" class="easyui-datagrid" title="费用台账" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id'">
             <thead>
                 <tr>
-                    <th data-options="field:'expense_no',width:100">费用单据号</th>
-                    <th data-options="field:'mchnt_id',width:100">客户号</th>
+                    <th data-options="field:'expense_no',width:120">费用单据号</th>
+                    <th data-options="field:'mchnt_id',width:120">客户号</th>
                     <th data-options="field:'expense_type',width:100,formatter:formatExpenseType">费用类型</th>
                     <th data-options="field:'amount',width:100">金额</th>
                     <th data-options="field:'expense_cycle',width:100,formatter:formatExpenseCycle">收费周期</th>
                     <th data-options="field:'start_date',width:100,formatter:formatDate">收费开始时间</th>
                     <th data-options="field:'end_date',width:100,formatter:formatDate">收费结束时间</th>
-                    <th data-options="field:'recipient_by_nm',width:100">领用人</th>
+                    <th data-options="field:'recipient_by_nm',width:120">领用人</th>
                     <th data-options="field:'proc_st_nm',width:100">处理状态</th>
-                    <th data-options="field:'created_time',width:100">创建日期</th>
-                    <th data-options="field:'op',width:100">操作</th>
+                    <th data-options="field:'created_time',width:150">创建日期</th>
                 </tr>
             </thead>
         </table>
