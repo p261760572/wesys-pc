@@ -212,6 +212,7 @@ window.$$ = (function() {
 
     $$.serializeForm = function(target) {
         var $form = $(target);
+        var $disabled = $form.find('[disabled]').removeAttr('disabled');
         var data = $form.serializeObject();
         $form.each(function(i, element) {
             var opts = $$.parseOptions(element);
@@ -219,8 +220,16 @@ window.$$ = (function() {
                 opts.serialize.call(element, data);
             }
         });
+        $disabled.attr('disabled', 'disabled');
         return data;
     };
+
+
+    $$.validateForm = function (target) {
+        var $form = $(target);
+        $form.form('enableValidation').find('.validatebox-text:hidden').validatebox('disableValidation');
+        return $form.form('validate');
+    }
 
     $$.reset = function(target) {
         var $form = $(target).closest('form');
@@ -237,7 +246,7 @@ window.$$ = (function() {
             return false;
         }
 
-        if (f.form('enableValidation').form('validate') != true) {
+        if ($$.validateForm(f) != true) {
             return false;
         }
 
@@ -272,7 +281,7 @@ window.$$ = (function() {
             return false;
         }
 
-        if (f.form('enableValidation').form('validate') != true) {
+        if ($$.validateForm(f) != true) {
             return false;
         }
 
@@ -326,25 +335,21 @@ window.$$ = (function() {
     $$.submit = function(target) {
         var $form = $(target).closest('form');
         var options = $.extend({
-            transform: true,
             before: $.noop,
             success: function() {
                 $$.success('操作成功');
             }
         }, $$.parseOptions(target));
 
-        var requestData = $$.serializeForm($form);
+        var data = $$.serializeForm($form);
 
-        if (options.before.call(target, requestData) == false) return false;
+        if (options.before.call(target, data) == false) return false;
 
-        if (form.validate($form) == false) return false;
+        if ($$.validateForm($form) != true) return false;
 
-        $$.request(options.url, requestData, function(data) {
-            if (options.transform) {
-                $$.transformStatus($form, true);
-                form.render();
-            }
-            options.success(requestData, data);
+        $$.request(options.url, data, function(result) {
+            $$.transform($form, 'view');
+            options.success.call(target, data, result);
         });
     };
 
@@ -506,62 +511,78 @@ window.$$ = (function() {
     //     }
     // }
 
-    $$.transformDisplay = function(selector, type, isSubmit) {
+    //界面显示转换
+    $$.transformDisplay = function(selector, display) {
         var $target = $(selector);
-
-        type = type || 'search';
-
-        //显示/隐藏
-        var tag = isSubmit ? 'button' : '';
-        // $target.find(tag + '.visible').show().filter('.invisible-' + type).hide();
-        // $target.find(tag + '.invisible').hide().filter('.visible-' + type).show();
-
-        $target.find(tag + '.tf-v').removeClass('hide').filter('.tf-iv-' + type).addClass('hide');
-        $target.find(tag + '.tf-iv').addClass('hide').filter('.tf-v-' + type).removeClass('hide');
+        $target.find('.tf').addClass('hide').filter('.tf-' + display).removeClass('hide');
     };
 
-    $$.transformStatus = function(selector, status, isSubmit) {
+    //表单状态转换
+    $$.transform = function(selector, action, config) {
         var $target = $(selector);
+        if (action == 'view') {
+            $target.find('.tf').removeClass('hide').find('input,textarea,select').each(readonly);
+            $target.find('button.tf').addClass('hide');
+        } else {
+            $target.find('.tf').addClass('hide');
 
-        if (typeof status === 'boolean') {
-            isSubmit = status;
-            status = 'view';
+            var dependencies = config[action];
+            if (dependencies) {
+                for (var i = 0; i < dependencies.length; i++) {
+                    var daction = dependencies[i];
+                    $target.find('.tf-' + daction + ':not(button)').removeClass('hide').find('input,textarea,select').each(readonly);
+                }
+            }
+
+            $target.find('.tf-' + action).removeClass('hide');
         }
 
-        status = status || 'view';
 
-        //显示/隐藏
-        $$.transformDisplay(selector, status, isSubmit);
+        // var $target = $(selector);
+
+        // if (typeof status === 'boolean') {
+        //     isSubmit = status;
+        //     status = 'view';
+        // }
+
+        // status = status || 'view';
+
+        // //显示/隐藏
+        // $$.transformDisplay(selector, status, isSubmit);
 
 
-        $target.find('input[type!="button"],textarea,select').each(function(index, element) {
-            if ($.inArray(status, ['create', 'update']) < 0) {
-                readonly(index, element);
-            } else {
-                editable(index, element);
-            }
-        });
+        // $target.find('input[type!="button"],textarea,select').each(function(index, element) {
+        //     if ($.inArray(status, ['view', 'check1', 'check2']) >= 0) {
+        //         readonly(index, element);
+        //     } else {
+        //         editable(index, element);
+        //     }
+        // });
 
-        $target.find('.tf-ro,.tf-ro-' + status).find('input[type!="button"],textarea,select').each(readonly);
-        $target.find('.tf-e,.tf-e-' + status).find('input[type!="button"],textarea,select').each(editable);
+        // $target.find('.tf-ro,.tf-ro-' + status).find('input[type!="button"],textarea,select').each(readonly);
+        // $target.find('.tf-e,.tf-e-' + status).find('input[type!="button"],textarea,select').each(editable);
 
         function readonly(index, element) {
             var $tmp = $(element);
-            if (element.tagName == 'SELECT' || (element.tagName == 'INPUT' && element.type == 'checkbox')) {
+            if($tmp.hasClass('combobox-f')) {
+                $tmp.combobox('readonly');
+            } else if(element.tagName == 'SELECT' || (element.tagName == 'INPUT' && element.type == 'checkbox')) {
                 $tmp.attr('disabled', 'disabled');
             } else {
-                $tmp.attr('readonly', 'readonly');
+                $tmp.attr('disabled', 'disabled');
             }
         }
 
-        function editable(index, element) {
-            var $tmp = $(element);
-            if (element.tagName == 'SELECT' || (element.tagName == 'INPUT' && element.type == 'checkbox')) {
-                $tmp.removeAttr('disabled');
-            } else {
-                $tmp.removeAttr('readonly');
-            }
-        }
+        // function editable(index, element) {
+        //     var $tmp = $(element);
+        //     if($tmp.hasClass('combobox-f')) {
+        //         $tmp.combobox('readonly', false);
+        //     } else if(element.tagName == 'SELECT' || (element.tagName == 'INPUT' && element.type == 'checkbox')) {
+        //         $tmp.removeAttr('disabled');
+        //     } else {
+        //         $tmp.removeAttr('readonly');
+        //     }
+        // }
     };
 
 

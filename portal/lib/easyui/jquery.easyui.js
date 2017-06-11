@@ -2920,307 +2920,416 @@ $.fn.tooltip.defaults={position:"bottom",content:null,trackMouse:false,deltaX:0,
  * To use it on other terms please contact us: info@jeasyui.com
  *
  */
-(function($){
-function _1(_2){
-$(_2).addClass("validatebox-text");
-};
-function _3(_4){
-var _5=$.data(_4,"validatebox");
-_5.validating=false;
-if(_5.vtimer){
-clearTimeout(_5.vtimer);
-}
-if(_5.ftimer){
-clearTimeout(_5.ftimer);
-}
-$(_4).tooltip("destroy");
-$(_4).unbind();
-$(_4).remove();
-};
-function _6(_7){
-var _8=$.data(_7,"validatebox").options;
-$(_7).unbind(".validatebox");
-if(_8.novalidate||_8.disabled){
-return;
-}
-for(var _9 in _8.events){
-$(_7).bind(_9+".validatebox",{target:_7},_8.events[_9]);
-}
-};
-function _a(e){
-var _b=e.data.target;
-var _c=$.data(_b,"validatebox");
-var _d=_c.options;
-if($(_b).attr("readonly")){
-return;
-}
-_c.validating=true;
-_c.value=_d.val(_b);
-(function(){
-if(!$(_b).is(":visible")){
-_c.validating=false;
-}
-if(_c.validating){
-var _e=_d.val(_b);
-if(_c.value!=_e){
-_c.value=_e;
-if(_c.vtimer){
-clearTimeout(_c.vtimer);
-}
-_c.vtimer=setTimeout(function(){
-$(_b).validatebox("validate");
-},_d.delay);
-}else{
-if(_c.message){
-_d.err(_b,_c.message);
-}
-}
-_c.ftimer=setTimeout(arguments.callee,_d.interval);
-}
-})();
-};
-function _f(e){
-var _10=e.data.target;
-var _11=$.data(_10,"validatebox");
-var _12=_11.options;
-_11.validating=false;
-if(_11.vtimer){
-clearTimeout(_11.vtimer);
-_11.vtimer=undefined;
-}
-if(_11.ftimer){
-clearTimeout(_11.ftimer);
-_11.ftimer=undefined;
-}
-if(_12.validateOnBlur){
-setTimeout(function(){
-$(_10).validatebox("validate");
-},0);
-}
-_12.err(_10,_11.message,"hide");
-};
-function _13(e){
-var _14=e.data.target;
-var _15=$.data(_14,"validatebox");
-_15.options.err(_14,_15.message,"show");
-};
-function _16(e){
-var _17=e.data.target;
-var _18=$.data(_17,"validatebox");
-if(!_18.validating){
-_18.options.err(_17,_18.message,"hide");
-}
-};
-function _19(_1a,_1b,_1c){
-var _1d=$.data(_1a,"validatebox");
-var _1e=_1d.options;
-var t=$(_1a);
-if(_1c=="hide"||!_1b){
-t.tooltip("hide");
-}else{
-if((t.is(":focus")&&_1d.validating)||_1c=="show"){
-t.tooltip($.extend({},_1e.tipOptions,{content:_1b,position:_1e.tipPosition,deltaX:_1e.deltaX,deltaY:_1e.deltaY})).tooltip("show");
-}
-}
-};
-function _1f(_20){
-var _21=$.data(_20,"validatebox");
-var _22=_21.options;
-var box=$(_20);
-_22.onBeforeValidate.call(_20);
-var _23=_24();
-_23?box.removeClass("validatebox-invalid"):box.addClass("validatebox-invalid");
-_22.err(_20,_21.message);
-_22.onValidate.call(_20,_23);
-return _23;
-function _25(msg){
-_21.message=msg;
-};
-function _26(_27,_28){
-var _29=_22.val(_20);
-var _2a=/([a-zA-Z_]+)(.*)/.exec(_27);
-var _2b=_22.rules[_2a[1]];
-if(_2b&&_29){
-var _2c=_28||_22.validParams||eval(_2a[2]);
-if(!_2b["validator"].call(_20,_29,_2c)){
-var _2d=_2b["message"];
-if(_2c){
-for(var i=0;i<_2c.length;i++){
-_2d=_2d.replace(new RegExp("\\{"+i+"\\}","g"),_2c[i]);
-}
-}
-_25(_22.invalidMessage||_2d);
-return false;
-}
-}
-return true;
-};
-function _24(){
-_25("");
-if(!_22._validateOnCreate){
-setTimeout(function(){
-_22._validateOnCreate=true;
-},0);
-return true;
-}
-if(_22.novalidate||_22.disabled){
-return true;
-}
-if(_22.required){
-if(_22.val(_20)==""){
-_25(_22.missingMessage);
-return false;
-}
-}
-if(_22.validType){
-if($.isArray(_22.validType)){
-for(var i=0;i<_22.validType.length;i++){
-if(!_26(_22.validType[i])){
-return false;
-}
-}
-}else{
-if(typeof _22.validType=="string"){
-if(!_26(_22.validType)){
-return false;
-}
-}else{
-for(var _2e in _22.validType){
-var _2f=_22.validType[_2e];
-if(!_26(_2e,_2f)){
-return false;
-}
-}
-}
-}
-}
-return true;
-};
-};
-function _30(_31,_32){
-var _33=$.data(_31,"validatebox").options;
-if(_32!=undefined){
-_33.disabled=_32;
-}
-if(_33.disabled){
-$(_31).addClass("validatebox-disabled").attr("disabled","disabled");
-}else{
-$(_31).removeClass("validatebox-disabled").removeAttr("disabled");
-}
-};
-function _34(_35,_36){
-var _37=$.data(_35,"validatebox").options;
-_37.readonly=_36==undefined?true:_36;
-if(_37.readonly||!_37.editable){
-$(_35).triggerHandler("blur.validatebox");
-$(_35).addClass("validatebox-readonly").attr("readonly","readonly");
-}else{
-$(_35).removeClass("validatebox-readonly").removeAttr("readonly");
-}
-};
-$.fn.validatebox=function(_38,_39){
-if(typeof _38=="string"){
-return $.fn.validatebox.methods[_38](this,_39);
-}
-_38=_38||{};
-return this.each(function(){
-var _3a=$.data(this,"validatebox");
-if(_3a){
-$.extend(_3a.options,_38);
-}else{
-_1(this);
-_3a=$.data(this,"validatebox",{options:$.extend({},$.fn.validatebox.defaults,$.fn.validatebox.parseOptions(this),_38)});
-}
-_3a.options._validateOnCreate=_3a.options.validateOnCreate;
-_30(this,_3a.options.disabled);
-_34(this,_3a.options.readonly);
-_6(this);
-_1f(this);
-});
-};
-$.fn.validatebox.methods={options:function(jq){
-return $.data(jq[0],"validatebox").options;
-},destroy:function(jq){
-return jq.each(function(){
-_3(this);
-});
-},validate:function(jq){
-return jq.each(function(){
-_1f(this);
-});
-},isValid:function(jq){
-return _1f(jq[0]);
-},enableValidation:function(jq){
-return jq.each(function(){
-$(this).validatebox("options").novalidate=false;
-_6(this);
-_1f(this);
-});
-},disableValidation:function(jq){
-return jq.each(function(){
-$(this).validatebox("options").novalidate=true;
-_6(this);
-_1f(this);
-});
-},resetValidation:function(jq){
-return jq.each(function(){
-var _3b=$(this).validatebox("options");
-_3b._validateOnCreate=_3b.validateOnCreate;
-_1f(this);
-});
-},enable:function(jq){
-return jq.each(function(){
-_30(this,false);
-_6(this);
-_1f(this);
-});
-},disable:function(jq){
-return jq.each(function(){
-_30(this,true);
-_6(this);
-_1f(this);
-});
-},readonly:function(jq,_3c){
-return jq.each(function(){
-_34(this,_3c);
-_6(this);
-_1f(this);
-});
-}};
-$.fn.validatebox.parseOptions=function(_3d){
-var t=$(_3d);
-return $.extend({},$.parser.parseOptions(_3d,["validType","missingMessage","invalidMessage","tipPosition",{delay:"number",interval:"number",deltaX:"number"},{editable:"boolean",validateOnCreate:"boolean",validateOnBlur:"boolean"}]),{required:(t.attr("required")?true:undefined),disabled:(t.attr("disabled")?true:undefined),readonly:(t.attr("readonly")?true:undefined),novalidate:(t.attr("novalidate")!=undefined?true:undefined)});
-};
-$.fn.validatebox.defaults={required:false,validType:null,validParams:null,delay:200,interval:200,missingMessage:"This field is required.",invalidMessage:null,tipPosition:"right",deltaX:0,deltaY:0,novalidate:false,editable:true,disabled:false,readonly:false,validateOnCreate:true,validateOnBlur:false,events:{focus:_a,blur:_f,mouseenter:_13,mouseleave:_16,click:function(e){
-var t=$(e.data.target);
-if(t.attr("type")=="checkbox"||t.attr("type")=="radio"){
-t.focus().validatebox("validate");
-}
-}},val:function(_3e){
-return $(_3e).val();
-},err:function(_3f,_40,_41){
-_19(_3f,_40,_41);
-},tipOptions:{showEvent:"none",hideEvent:"none",showDelay:0,hideDelay:0,zIndex:"",onShow:function(){
-$(this).tooltip("tip").css({color:"#000",borderColor:"#CC9933",backgroundColor:"#FFFFCC"});
-},onHide:function(){
-$(this).tooltip("destroy");
-}},rules:{email:{validator:function(_42){
-return /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i.test(_42);
-},message:"Please enter a valid email address."},url:{validator:function(_43){
-return /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(_43);
-},message:"Please enter a valid URL."},length:{validator:function(_44,_45){
-var len=$.trim(_44).length;
-return len>=_45[0]&&len<=_45[1];
-},message:"Please enter a value between {0} and {1}."},remote:{validator:function(_46,_47){
-var _48={};
-_48[_47[1]]=_46;
-var _49=$.ajax({url:_47[0],dataType:"json",data:_48,async:false,cache:false,type:"post"}).responseText;
-return _49=="true";
-},message:"Please fix this field."}},onBeforeValidate:function(){
-},onValidate:function(_4a){
-}};
-})(jQuery);
+(function($) {
+    function _1(_2) {
+        $(_2).addClass("validatebox-text");
+    };
 
+    function _3(_4) {
+        var _5 = $.data(_4, "validatebox");
+        _5.validating = false;
+        if (_5.vtimer) {
+            clearTimeout(_5.vtimer);
+        }
+        if (_5.ftimer) {
+            clearTimeout(_5.ftimer);
+        }
+        $(_4).tooltip("destroy");
+        $(_4).unbind();
+        $(_4).remove();
+    };
+
+    function _6(_7) {
+        var _8 = $.data(_7, "validatebox").options;
+        $(_7).unbind(".validatebox");
+        if (_8.novalidate || _8.disabled) {
+            return;
+        }
+        for (var _9 in _8.events) {
+            $(_7).bind(_9 + ".validatebox", {
+                target: _7
+            }, _8.events[_9]);
+        }
+    };
+
+    function _a(e) {
+        var _b = e.data.target;
+        var _c = $.data(_b, "validatebox");
+        var _d = _c.options;
+        if ($(_b).attr("readonly")) {
+            return;
+        }
+        _c.validating = true;
+        _c.value = _d.val(_b);
+        (function() {
+            if (!$(_b).is(":visible")) {
+                _c.validating = false;
+            }
+            if (_c.validating) {
+                var _e = _d.val(_b);
+                if (_c.value != _e) {
+                    _c.value = _e;
+                    if (_c.vtimer) {
+                        clearTimeout(_c.vtimer);
+                    }
+                    _c.vtimer = setTimeout(function() {
+                        $(_b).validatebox("validate");
+                    }, _d.delay);
+                } else {
+                    if (_c.message) {
+                        _d.err(_b, _c.message);
+                    }
+                }
+                _c.ftimer = setTimeout(arguments.callee, _d.interval);
+            }
+        })();
+    };
+
+    function _f(e) {
+        var _10 = e.data.target;
+        var _11 = $.data(_10, "validatebox");
+        var _12 = _11.options;
+        _11.validating = false;
+        if (_11.vtimer) {
+            clearTimeout(_11.vtimer);
+            _11.vtimer = undefined;
+        }
+        if (_11.ftimer) {
+            clearTimeout(_11.ftimer);
+            _11.ftimer = undefined;
+        }
+        if (_12.validateOnBlur) {
+            setTimeout(function() {
+                $(_10).validatebox("validate");
+            }, 0);
+        }
+        _12.err(_10, _11.message, "hide");
+    };
+
+    function _13(e) {
+        var _14 = e.data.target;
+        var _15 = $.data(_14, "validatebox");
+        _15.options.err(_14, _15.message, "show");
+    };
+
+    function _16(e) {
+        var _17 = e.data.target;
+        var _18 = $.data(_17, "validatebox");
+        if (!_18.validating) {
+            _18.options.err(_17, _18.message, "hide");
+        }
+    };
+
+    function _19(_1a, _1b, _1c) {
+        var _1d = $.data(_1a, "validatebox");
+        var _1e = _1d.options;
+        var t = $(_1a);
+        if (_1c == "hide" || !_1b) {
+            t.tooltip("hide");
+        } else {
+            if ((t.is(":focus") && _1d.validating) || _1c == "show") {
+                t.tooltip($.extend({}, _1e.tipOptions, {
+                    content: _1b,
+                    position: _1e.tipPosition,
+                    deltaX: _1e.deltaX,
+                    deltaY: _1e.deltaY
+                })).tooltip("show");
+            }
+        }
+    };
+
+    function _1f(_20) {
+        var _21 = $.data(_20, "validatebox");
+        var _22 = _21.options;
+        var box = $(_20);
+        _22.onBeforeValidate.call(_20);
+        var _23 = _24();
+        _23 ? box.removeClass("validatebox-invalid") : box.addClass("validatebox-invalid");
+        _22.err(_20, _21.message);
+        _22.onValidate.call(_20, _23);
+        return _23;
+
+        function _25(msg) {
+            _21.message = msg;
+        };
+
+        function _26(_27, _28) {
+            var _29 = _22.val(_20);
+            var _2a = /([a-zA-Z_]+)(.*)/.exec(_27);
+            var _2b = _22.rules[_2a[1]];
+            if (_2b && _29) {
+                var _2c = _28 || _22.validParams || eval(_2a[2]);
+                if (!_2b["validator"].call(_20, _29, _2c)) {
+                    var _2d = _2b["message"];
+                    if (_2c) {
+                        for (var i = 0; i < _2c.length; i++) {
+                            _2d = _2d.replace(new RegExp("\\{" + i + "\\}", "g"), _2c[i]);
+                        }
+                    }
+                    _25(_22.invalidMessage || _2d);
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        function _24() {
+            _25("");
+            if (!_22._validateOnCreate) {
+                setTimeout(function() {
+                    _22._validateOnCreate = true;
+                }, 0);
+                return true;
+            }
+            if (_22.novalidate || _22.disabled) {
+                return true;
+            }
+            if (_22.required) {
+                if (_22.val(_20) == "") {
+                    _25(_22.missingMessage);
+                    return false;
+                }
+            }
+            if (_22.validType) {
+                if ($.isArray(_22.validType)) {
+                    for (var i = 0; i < _22.validType.length; i++) {
+                        if (!_26(_22.validType[i])) {
+                            return false;
+                        }
+                    }
+                } else {
+                    if (typeof _22.validType == "string") {
+                        if (!_26(_22.validType)) {
+                            return false;
+                        }
+                    } else {
+                        for (var _2e in _22.validType) {
+                            var _2f = _22.validType[_2e];
+                            if (!_26(_2e, _2f)) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        };
+    };
+
+    function _30(_31, _32) {
+        var _33 = $.data(_31, "validatebox").options;
+        if (_32 != undefined) {
+            _33.disabled = _32;
+        }
+        if (_33.disabled) {
+            $(_31).addClass("validatebox-disabled").attr("disabled", "disabled");
+        } else {
+            $(_31).removeClass("validatebox-disabled").removeAttr("disabled");
+        }
+    };
+
+    function _34(_35, _36) {
+        var _37 = $.data(_35, "validatebox").options;
+        _37.readonly = _36 == undefined ? true : _36;
+        if (_37.readonly || !_37.editable) {
+            $(_35).triggerHandler("blur.validatebox");
+            $(_35).addClass("validatebox-readonly").attr("readonly", "readonly");
+        } else {
+            $(_35).removeClass("validatebox-readonly").removeAttr("readonly");
+        }
+    };
+    $.fn.validatebox = function(_38, _39) {
+        if (typeof _38 == "string") {
+            return $.fn.validatebox.methods[_38](this, _39);
+        }
+        _38 = _38 || {};
+        return this.each(function() {
+            var _3a = $.data(this, "validatebox");
+            if (_3a) {
+                $.extend(_3a.options, _38);
+            } else {
+                _1(this);
+                _3a = $.data(this, "validatebox", {
+                    options: $.extend({}, $.fn.validatebox.defaults, $.fn.validatebox.parseOptions(this), _38)
+                });
+            }
+            _3a.options._validateOnCreate = _3a.options.validateOnCreate;
+            _30(this, _3a.options.disabled);
+            _34(this, _3a.options.readonly);
+            _6(this);
+            _1f(this);
+        });
+    };
+    $.fn.validatebox.methods = {
+        options: function(jq) {
+            return $.data(jq[0], "validatebox").options;
+        },
+        destroy: function(jq) {
+            return jq.each(function() {
+                _3(this);
+            });
+        },
+        validate: function(jq) {
+            return jq.each(function() {
+                _1f(this);
+            });
+        },
+        isValid: function(jq) {
+            return _1f(jq[0]);
+        },
+        enableValidation: function(jq) {
+            return jq.each(function() {
+                $(this).validatebox("options").novalidate = false;
+                _6(this);
+                _1f(this);
+            });
+        },
+        disableValidation: function(jq) {
+            return jq.each(function() {
+                $(this).validatebox("options").novalidate = true;
+                _6(this);
+                _1f(this);
+            });
+        },
+        resetValidation: function(jq) {
+            return jq.each(function() {
+                var _3b = $(this).validatebox("options");
+                _3b._validateOnCreate = _3b.validateOnCreate;
+                _1f(this);
+            });
+        },
+        enable: function(jq) {
+            return jq.each(function() {
+                _30(this, false);
+                _6(this);
+                _1f(this);
+            });
+        },
+        disable: function(jq) {
+            return jq.each(function() {
+                _30(this, true);
+                _6(this);
+                _1f(this);
+            });
+        },
+        readonly: function(jq, _3c) {
+            return jq.each(function() {
+                _34(this, _3c);
+                _6(this);
+                _1f(this);
+            });
+        }
+    };
+    $.fn.validatebox.parseOptions = function(_3d) {
+        var t = $(_3d);
+        return $.extend({}, $.parser.parseOptions(_3d, ["validType", "missingMessage", "invalidMessage", "tipPosition", {
+            delay: "number",
+            interval: "number",
+            deltaX: "number"
+        }, {
+            editable: "boolean",
+            validateOnCreate: "boolean",
+            validateOnBlur: "boolean"
+        }]), {
+            required: (t.attr("required") ? true : undefined),
+            disabled: (t.attr("disabled") ? true : undefined),
+            readonly: (t.attr("readonly") ? true : undefined),
+            novalidate: (t.attr("novalidate") != undefined ? true : undefined)
+        });
+    };
+    $.fn.validatebox.defaults = {
+        required: false,
+        validType: null,
+        validParams: null,
+        delay: 200,
+        interval: 200,
+        missingMessage: "This field is required.",
+        invalidMessage: null,
+        tipPosition: "right",
+        deltaX: 0,
+        deltaY: 0,
+        novalidate: false,
+        editable: true,
+        disabled: false,
+        readonly: false,
+        validateOnCreate: true,
+        validateOnBlur: false,
+        events: {
+            focus: _a,
+            blur: _f,
+            mouseenter: _13,
+            mouseleave: _16,
+            click: function(e) {
+                var t = $(e.data.target);
+                if (t.attr("type") == "checkbox" || t.attr("type") == "radio") {
+                    t.focus().validatebox("validate");
+                }
+            }
+        },
+        val: function(_3e) {
+            return $(_3e).val();
+        },
+        err: function(_3f, _40, _41) {
+            _19(_3f, _40, _41);
+        },
+        tipOptions: {
+            showEvent: "none",
+            hideEvent: "none",
+            showDelay: 0,
+            hideDelay: 0,
+            zIndex: "",
+            onShow: function() {
+                $(this).tooltip("tip").css({
+                    color: "#000",
+                    borderColor: "#CC9933",
+                    backgroundColor: "#FFFFCC"
+                });
+            },
+            onHide: function() {
+                $(this).tooltip("destroy");
+            }
+        },
+        rules: {
+            email: {
+                validator: function(_42) {
+                    return /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i.test(_42);
+                },
+                message: "Please enter a valid email address."
+            },
+            url: {
+                validator: function(_43) {
+                    return /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(_43);
+                },
+                message: "Please enter a valid URL."
+            },
+            length: {
+                validator: function(_44, _45) {
+                    var len = $.trim(_44).length;
+                    return len >= _45[0] && len <= _45[1];
+                },
+                message: "Please enter a value between {0} and {1}."
+            },
+            remote: {
+                validator: function(_46, _47) {
+                    var _48 = {};
+                    _48[_47[1]] = _46;
+                    var _49 = $.ajax({
+                        url: _47[0],
+                        dataType: "json",
+                        data: _48,
+                        async: false,
+                        cache: false,
+                        type: "post"
+                    }).responseText;
+                    return _49 == "true";
+                },
+                message: "Please fix this field."
+            }
+        },
+        onBeforeValidate: function() {},
+        onValidate: function(_4a) {}
+    };
+})(jQuery);
 
 /**
  * jQuery EasyUI 1.5.2
@@ -9222,407 +9331,468 @@ $.fn.tabs.defaults={width:"auto",height:"auto",headerWidth:150,tabWidth:"auto",t
  * To use it on other terms please contact us: info@jeasyui.com
  *
  */
-(function($){
-function _1(_2,_3){
-var _4=$.data(_2,"form").options;
-$.extend(_4,_3||{});
-var _5=$.extend({},_4.queryParams);
-if(_4.onSubmit.call(_2,_5)==false){
-return;
-}
-var _6=$(_2).find(".textbox-text:focus");
-_6.triggerHandler("blur");
-_6.focus();
-var _7=null;
-if(_4.dirty){
-var ff=[];
-$.map(_4.dirtyFields,function(f){
-if($(f).hasClass("textbox-f")){
-$(f).next().find(".textbox-value").each(function(){
-ff.push(this);
-});
-}else{
-ff.push(f);
-}
-});
-_7=$(_2).find("input[name]:enabled,textarea[name]:enabled,select[name]:enabled").filter(function(){
-return $.inArray(this,ff)==-1;
-});
-_7.attr("disabled","disabled");
-}
-if(_4.ajax){
-if(_4.iframe){
-_8(_2,_5);
-}else{
-if(window.FormData!==undefined){
-_9(_2,_5);
-}else{
-_8(_2,_5);
-}
-}
-}else{
-$(_2).submit();
-}
-if(_4.dirty){
-_7.removeAttr("disabled");
-}
-};
-function _8(_a,_b){
-var _c=$.data(_a,"form").options;
-var _d="easyui_frame_"+(new Date().getTime());
-var _e=$("<iframe id="+_d+" name="+_d+"></iframe>").appendTo("body");
-_e.attr("src",window.ActiveXObject?"javascript:false":"about:blank");
-_e.css({position:"absolute",top:-1000,left:-1000});
-_e.bind("load",cb);
-_f(_b);
-function _f(_10){
-var _11=$(_a);
-if(_c.url){
-_11.attr("action",_c.url);
-}
-var t=_11.attr("target"),a=_11.attr("action");
-_11.attr("target",_d);
-var _12=$();
-try{
-for(var n in _10){
-var _13=$("<input type=\"hidden\" name=\""+n+"\">").val(_10[n]).appendTo(_11);
-_12=_12.add(_13);
-}
-_14();
-_11[0].submit();
-}
-finally{
-_11.attr("action",a);
-t?_11.attr("target",t):_11.removeAttr("target");
-_12.remove();
-}
-};
-function _14(){
-var f=$("#"+_d);
-if(!f.length){
-return;
-}
-try{
-var s=f.contents()[0].readyState;
-if(s&&s.toLowerCase()=="uninitialized"){
-setTimeout(_14,100);
-}
-}
-catch(e){
-cb();
-}
-};
-var _15=10;
-function cb(){
-var f=$("#"+_d);
-if(!f.length){
-return;
-}
-f.unbind();
-var _16="";
-try{
-var _17=f.contents().find("body");
-_16=_17.html();
-if(_16==""){
-if(--_15){
-setTimeout(cb,100);
-return;
-}
-}
-var ta=_17.find(">textarea");
-if(ta.length){
-_16=ta.val();
-}else{
-var pre=_17.find(">pre");
-if(pre.length){
-_16=pre.html();
-}
-}
-}
-catch(e){
-}
-_c.success.call(_a,_16);
-setTimeout(function(){
-f.unbind();
-f.remove();
-},100);
-};
-};
-function _9(_18,_19){
-var _1a=$.data(_18,"form").options;
-var _1b=new FormData($(_18)[0]);
-for(var _1c in _19){
-_1b.append(_1c,_19[_1c]);
-}
-$.ajax({url:_1a.url,type:"post",xhr:function(){
-var xhr=$.ajaxSettings.xhr();
-if(xhr.upload){
-xhr.upload.addEventListener("progress",function(e){
-if(e.lengthComputable){
-var _1d=e.total;
-var _1e=e.loaded||e.position;
-var _1f=Math.ceil(_1e*100/_1d);
-_1a.onProgress.call(_18,_1f);
-}
-},false);
-}
-return xhr;
-},data:_1b,dataType:"html",cache:false,contentType:false,processData:false,complete:function(res){
-_1a.success.call(_18,res.responseText);
-}});
-};
-function _20(_21,_22){
-var _23=$.data(_21,"form").options;
-if(typeof _22=="string"){
-var _24={};
-if(_23.onBeforeLoad.call(_21,_24)==false){
-return;
-}
-$.ajax({url:_22,data:_24,dataType:"json",success:function(_25){
-_26(_25);
-},error:function(){
-_23.onLoadError.apply(_21,arguments);
-}});
-}else{
-_26(_22);
-}
-function _26(_27){
-var _28=$(_21);
-for(var _29 in _27){
-var val=_27[_29];
-if(!_2a(_29,val)){
-if(!_2b(_29,val)){
-_28.find("input[name=\""+_29+"\"]").val(val);
-_28.find("textarea[name=\""+_29+"\"]").val(val);
-_28.find("select[name=\""+_29+"\"]").val(val);
-}
-}
-}
-_23.onLoadSuccess.call(_21,_27);
-_28.form("validate");
-};
-function _2a(_2c,val){
-var cc=$(_21).find("[switchbuttonName=\""+_2c+"\"]");
-if(cc.length){
-cc.switchbutton("uncheck");
-cc.each(function(){
-if(_2d($(this).switchbutton("options").value,val)){
-$(this).switchbutton("check");
-}
-});
-return true;
-}
-cc=$(_21).find("input[name=\""+_2c+"\"][type=radio], input[name=\""+_2c+"\"][type=checkbox]");
-if(cc.length){
-cc._propAttr("checked",false);
-cc.each(function(){
-if(_2d($(this).val(),val)){
-$(this)._propAttr("checked",true);
-}
-});
-return true;
-}
-return false;
-};
-function _2d(v,val){
-if(v==String(val)||$.inArray(v,$.isArray(val)?val:[val])>=0){
-return true;
-}else{
-return false;
-}
-};
-function _2b(_2e,val){
-var _2f=$(_21).find("[textboxName=\""+_2e+"\"],[sliderName=\""+_2e+"\"]");
-if(_2f.length){
-for(var i=0;i<_23.fieldTypes.length;i++){
-var _30=_23.fieldTypes[i];
-var _31=_2f.data(_30);
-if(_31){
-if(_31.options.multiple||_31.options.range){
-_2f[_30]("setValues",val);
-}else{
-_2f[_30]("setValue",val);
-}
-return true;
-}
-}
-}
-return false;
-};
-};
-function _32(_33){
-$("input,select,textarea",_33).each(function(){
-if($(this).hasClass("textbox-value")){
-return;
-}
-var t=this.type,tag=this.tagName.toLowerCase();
-if(t=="text"||t=="hidden"||t=="password"||tag=="textarea"){
-this.value="";
-}else{
-if(t=="file"){
-var _34=$(this);
-if(!_34.hasClass("textbox-value")){
-var _35=_34.clone().val("");
-_35.insertAfter(_34);
-if(_34.data("validatebox")){
-_34.validatebox("destroy");
-_35.validatebox();
-}else{
-_34.remove();
-}
-}
-}else{
-if(t=="checkbox"||t=="radio"){
-this.checked=false;
-}else{
-if(tag=="select"){
-this.selectedIndex=-1;
-}
-}
-}
-}
-});
-var tmp=$();
-var _36=$(_33);
-var _37=$.data(_33,"form").options;
-for(var i=0;i<_37.fieldTypes.length;i++){
-var _38=_37.fieldTypes[i];
-var _39=_36.find("."+_38+"-f").not(tmp);
-if(_39.length&&_39[_38]){
-_39[_38]("clear");
-tmp=tmp.add(_39);
-}
-}
-_36.form("validate");
-};
-function _3a(_3b){
-_3b.reset();
-var _3c=$(_3b);
-var _3d=$.data(_3b,"form").options;
-for(var i=_3d.fieldTypes.length-1;i>=0;i--){
-var _3e=_3d.fieldTypes[i];
-var _3f=_3c.find("."+_3e+"-f");
-if(_3f.length&&_3f[_3e]){
-_3f[_3e]("reset");
-}
-}
-_3c.form("validate");
-};
-function _40(_41){
-var _42=$.data(_41,"form").options;
-$(_41).unbind(".form");
-if(_42.ajax){
-$(_41).bind("submit.form",function(){
-setTimeout(function(){
-_1(_41,_42);
-},0);
-return false;
-});
-}
-$(_41).bind("_change.form",function(e,t){
-if($.inArray(t,_42.dirtyFields)==-1){
-_42.dirtyFields.push(t);
-}
-_42.onChange.call(this,t);
-}).bind("change.form",function(e){
-var t=e.target;
-if(!$(t).hasClass("textbox-text")){
-if($.inArray(t,_42.dirtyFields)==-1){
-_42.dirtyFields.push(t);
-}
-_42.onChange.call(this,t);
-}
-});
-_43(_41,_42.novalidate);
-};
-function _44(_45,_46){
-_46=_46||{};
-var _47=$.data(_45,"form");
-if(_47){
-$.extend(_47.options,_46);
-}else{
-$.data(_45,"form",{options:$.extend({},$.fn.form.defaults,$.fn.form.parseOptions(_45),_46)});
-}
-};
-function _48(_49){
-if($.fn.validatebox){
-var t=$(_49);
-t.find(".validatebox-text:not(:disabled)").validatebox("validate");
-var _4a=t.find(".validatebox-invalid");
-_4a.filter(":not(:disabled):first").focus();
-return _4a.length==0;
-}
-return true;
-};
-function _43(_4b,_4c){
-var _4d=$.data(_4b,"form").options;
-_4d.novalidate=_4c;
-$(_4b).find(".validatebox-text:not(:disabled)").validatebox(_4c?"disableValidation":"enableValidation");
-};
-$.fn.form=function(_4e,_4f){
-if(typeof _4e=="string"){
-this.each(function(){
-_44(this);
-});
-return $.fn.form.methods[_4e](this,_4f);
-}
-return this.each(function(){
-_44(this,_4e);
-_40(this);
-});
-};
-$.fn.form.methods={options:function(jq){
-return $.data(jq[0],"form").options;
-},submit:function(jq,_50){
-return jq.each(function(){
-_1(this,_50);
-});
-},load:function(jq,_51){
-return jq.each(function(){
-_20(this,_51);
-});
-},clear:function(jq){
-return jq.each(function(){
-_32(this);
-});
-},reset:function(jq){
-return jq.each(function(){
-_3a(this);
-});
-},validate:function(jq){
-return _48(jq[0]);
-},disableValidation:function(jq){
-return jq.each(function(){
-_43(this,true);
-});
-},enableValidation:function(jq){
-return jq.each(function(){
-_43(this,false);
-});
-},resetValidation:function(jq){
-return jq.each(function(){
-$(this).find(".validatebox-text:not(:disabled)").validatebox("resetValidation");
-});
-},resetDirty:function(jq){
-return jq.each(function(){
-$(this).form("options").dirtyFields=[];
-});
-}};
-$.fn.form.parseOptions=function(_52){
-var t=$(_52);
-return $.extend({},$.parser.parseOptions(_52,[{ajax:"boolean",dirty:"boolean"}]),{url:(t.attr("action")?t.attr("action"):undefined)});
-};
-$.fn.form.defaults={fieldTypes:["combobox","combotree","combogrid","combotreegrid","datetimebox","datebox","combo","datetimespinner","timespinner","numberspinner","spinner","slider","searchbox","numberbox","passwordbox","filebox","textbox","switchbutton"],novalidate:false,ajax:true,iframe:true,dirty:false,dirtyFields:[],url:null,queryParams:{},onSubmit:function(_53){
-return $(this).form("validate");
-},onProgress:function(_54){
-},success:function(_55){
-},onBeforeLoad:function(_56){
-},onLoadSuccess:function(_57){
-},onLoadError:function(){
-},onChange:function(_58){
-}};
-})(jQuery);
+(function($) {
+    function _1(_2, _3) {
+        var _4 = $.data(_2, "form").options;
+        $.extend(_4, _3 || {});
+        var _5 = $.extend({}, _4.queryParams);
+        if (_4.onSubmit.call(_2, _5) == false) {
+            return;
+        }
+        var _6 = $(_2).find(".textbox-text:focus");
+        _6.triggerHandler("blur");
+        _6.focus();
+        var _7 = null;
+        if (_4.dirty) {
+            var ff = [];
+            $.map(_4.dirtyFields, function(f) {
+                if ($(f).hasClass("textbox-f")) {
+                    $(f).next().find(".textbox-value").each(function() {
+                        ff.push(this);
+                    });
+                } else {
+                    ff.push(f);
+                }
+            });
+            _7 = $(_2).find("input[name]:enabled,textarea[name]:enabled,select[name]:enabled").filter(function() {
+                return $.inArray(this, ff) == -1;
+            });
+            _7.attr("disabled", "disabled");
+        }
+        if (_4.ajax) {
+            if (_4.iframe) {
+                _8(_2, _5);
+            } else {
+                if (window.FormData !== undefined) {
+                    _9(_2, _5);
+                } else {
+                    _8(_2, _5);
+                }
+            }
+        } else {
+            $(_2).submit();
+        }
+        if (_4.dirty) {
+            _7.removeAttr("disabled");
+        }
+    };
 
+    function _8(_a, _b) {
+        var _c = $.data(_a, "form").options;
+        var _d = "easyui_frame_" + (new Date().getTime());
+        var _e = $("<iframe id=" + _d + " name=" + _d + "></iframe>").appendTo("body");
+        _e.attr("src", window.ActiveXObject ? "javascript:false" : "about:blank");
+        _e.css({
+            position: "absolute",
+            top: -1000,
+            left: -1000
+        });
+        _e.bind("load", cb);
+        _f(_b);
+
+        function _f(_10) {
+            var _11 = $(_a);
+            if (_c.url) {
+                _11.attr("action", _c.url);
+            }
+            var t = _11.attr("target"),
+                a = _11.attr("action");
+            _11.attr("target", _d);
+            var _12 = $();
+            try {
+                for (var n in _10) {
+                    var _13 = $("<input type=\"hidden\" name=\"" + n + "\">").val(_10[n]).appendTo(_11);
+                    _12 = _12.add(_13);
+                }
+                _14();
+                _11[0].submit();
+            } finally {
+                _11.attr("action", a);
+                t ? _11.attr("target", t) : _11.removeAttr("target");
+                _12.remove();
+            }
+        };
+
+        function _14() {
+            var f = $("#" + _d);
+            if (!f.length) {
+                return;
+            }
+            try {
+                var s = f.contents()[0].readyState;
+                if (s && s.toLowerCase() == "uninitialized") {
+                    setTimeout(_14, 100);
+                }
+            } catch (e) {
+                cb();
+            }
+        };
+        var _15 = 10;
+
+        function cb() {
+            var f = $("#" + _d);
+            if (!f.length) {
+                return;
+            }
+            f.unbind();
+            var _16 = "";
+            try {
+                var _17 = f.contents().find("body");
+                _16 = _17.html();
+                if (_16 == "") {
+                    if (--_15) {
+                        setTimeout(cb, 100);
+                        return;
+                    }
+                }
+                var ta = _17.find(">textarea");
+                if (ta.length) {
+                    _16 = ta.val();
+                } else {
+                    var pre = _17.find(">pre");
+                    if (pre.length) {
+                        _16 = pre.html();
+                    }
+                }
+            } catch (e) {}
+            _c.success.call(_a, _16);
+            setTimeout(function() {
+                f.unbind();
+                f.remove();
+            }, 100);
+        };
+    };
+
+    function _9(_18, _19) {
+        var _1a = $.data(_18, "form").options;
+        var _1b = new FormData($(_18)[0]);
+        for (var _1c in _19) {
+            _1b.append(_1c, _19[_1c]);
+        }
+        $.ajax({
+            url: _1a.url,
+            type: "post",
+            xhr: function() {
+                var xhr = $.ajaxSettings.xhr();
+                if (xhr.upload) {
+                    xhr.upload.addEventListener("progress", function(e) {
+                        if (e.lengthComputable) {
+                            var _1d = e.total;
+                            var _1e = e.loaded || e.position;
+                            var _1f = Math.ceil(_1e * 100 / _1d);
+                            _1a.onProgress.call(_18, _1f);
+                        }
+                    }, false);
+                }
+                return xhr;
+            },
+            data: _1b,
+            dataType: "html",
+            cache: false,
+            contentType: false,
+            processData: false,
+            complete: function(res) {
+                _1a.success.call(_18, res.responseText);
+            }
+        });
+    };
+
+    function _20(_21, _22) {
+        var _23 = $.data(_21, "form").options;
+        if (typeof _22 == "string") {
+            var _24 = {};
+            if (_23.onBeforeLoad.call(_21, _24) == false) {
+                return;
+            }
+            $.ajax({
+                url: _22,
+                data: _24,
+                dataType: "json",
+                success: function(_25) {
+                    _26(_25);
+                },
+                error: function() {
+                    _23.onLoadError.apply(_21, arguments);
+                }
+            });
+        } else {
+            _26(_22);
+        }
+
+        function _26(_27) {
+            var _28 = $(_21);
+            for (var _29 in _27) {
+                var val = _27[_29];
+                if (!_2a(_29, val)) {
+                    if (!_2b(_29, val)) {
+                        _28.find("input[name=\"" + _29 + "\"]").val(val);
+                        _28.find("textarea[name=\"" + _29 + "\"]").val(val);
+                        _28.find("select[name=\"" + _29 + "\"]").val(val);
+                    }
+                }
+            }
+            _23.onLoadSuccess.call(_21, _27);
+            _28.form("validate");
+        };
+
+        function _2a(_2c, val) {
+            var cc = $(_21).find("[switchbuttonName=\"" + _2c + "\"]");
+            if (cc.length) {
+                cc.switchbutton("uncheck");
+                cc.each(function() {
+                    if (_2d($(this).switchbutton("options").value, val)) {
+                        $(this).switchbutton("check");
+                    }
+                });
+                return true;
+            }
+            cc = $(_21).find("input[name=\"" + _2c + "\"][type=radio], input[name=\"" + _2c + "\"][type=checkbox]");
+            if (cc.length) {
+                cc._propAttr("checked", false);
+                cc.each(function() {
+                    if (_2d($(this).val(), val)) {
+                        $(this)._propAttr("checked", true);
+                    }
+                });
+                return true;
+            }
+            return false;
+        };
+
+        function _2d(v, val) {
+            if (v == String(val) || $.inArray(v, $.isArray(val) ? val : [val]) >= 0) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        function _2b(_2e, val) {
+            var _2f = $(_21).find("[textboxName=\"" + _2e + "\"],[sliderName=\"" + _2e + "\"]");
+            if (_2f.length) {
+                for (var i = 0; i < _23.fieldTypes.length; i++) {
+                    var _30 = _23.fieldTypes[i];
+                    var _31 = _2f.data(_30);
+                    if (_31) {
+                        if (_31.options.multiple || _31.options.range) {
+                            _2f[_30]("setValues", val);
+                        } else {
+                            _2f[_30]("setValue", val);
+                        }
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+    };
+
+    function _32(_33) {
+        $("input,select,textarea", _33).each(function() {
+            if ($(this).hasClass("textbox-value")) {
+                return;
+            }
+            var t = this.type,
+                tag = this.tagName.toLowerCase();
+            if (t == "text" || t == "hidden" || t == "password" || tag == "textarea") {
+                this.value = "";
+            } else {
+                if (t == "file") {
+                    var _34 = $(this);
+                    if (!_34.hasClass("textbox-value")) {
+                        var _35 = _34.clone().val("");
+                        _35.insertAfter(_34);
+                        if (_34.data("validatebox")) {
+                            _34.validatebox("destroy");
+                            _35.validatebox();
+                        } else {
+                            _34.remove();
+                        }
+                    }
+                } else {
+                    if (t == "checkbox" || t == "radio") {
+                        this.checked = false;
+                    } else {
+                        if (tag == "select") {
+                            this.selectedIndex = -1;
+                        }
+                    }
+                }
+            }
+        });
+        var tmp = $();
+        var _36 = $(_33);
+        var _37 = $.data(_33, "form").options;
+        for (var i = 0; i < _37.fieldTypes.length; i++) {
+            var _38 = _37.fieldTypes[i];
+            var _39 = _36.find("." + _38 + "-f").not(tmp);
+            if (_39.length && _39[_38]) {
+                _39[_38]("clear");
+                tmp = tmp.add(_39);
+            }
+        }
+        _36.form("validate");
+    };
+
+    function _3a(_3b) {
+        _3b.reset();
+        var _3c = $(_3b);
+        var _3d = $.data(_3b, "form").options;
+        for (var i = _3d.fieldTypes.length - 1; i >= 0; i--) {
+            var _3e = _3d.fieldTypes[i];
+            var _3f = _3c.find("." + _3e + "-f");
+            if (_3f.length && _3f[_3e]) {
+                _3f[_3e]("reset");
+            }
+        }
+        _3c.form("validate");
+    };
+
+    function _40(_41) {
+        var _42 = $.data(_41, "form").options;
+        $(_41).unbind(".form");
+        if (_42.ajax) {
+            $(_41).bind("submit.form", function() {
+                setTimeout(function() {
+                    _1(_41, _42);
+                }, 0);
+                return false;
+            });
+        }
+        $(_41).bind("_change.form", function(e, t) {
+            if ($.inArray(t, _42.dirtyFields) == -1) {
+                _42.dirtyFields.push(t);
+            }
+            _42.onChange.call(this, t);
+        }).bind("change.form", function(e) {
+            var t = e.target;
+            if (!$(t).hasClass("textbox-text")) {
+                if ($.inArray(t, _42.dirtyFields) == -1) {
+                    _42.dirtyFields.push(t);
+                }
+                _42.onChange.call(this, t);
+            }
+        });
+        _43(_41, _42.novalidate);
+    };
+
+    function _44(_45, _46) {
+        _46 = _46 || {};
+        var _47 = $.data(_45, "form");
+        if (_47) {
+            $.extend(_47.options, _46);
+        } else {
+            $.data(_45, "form", {
+                options: $.extend({}, $.fn.form.defaults, $.fn.form.parseOptions(_45), _46)
+            });
+        }
+    };
+
+    function _48(_49) {
+        if ($.fn.validatebox) {
+            var t = $(_49);
+            t.find(".validatebox-text:not(:disabled)").validatebox("validate");
+            var _4a = t.find(".validatebox-invalid");
+            _4a.filter(":not(:disabled):first").focus();
+            return _4a.length == 0;
+        }
+        return true;
+    };
+
+    function _43(_4b, _4c) {
+        var _4d = $.data(_4b, "form").options;
+        _4d.novalidate = _4c;
+        $(_4b).find(".validatebox-text").validatebox(_4c ? "disableValidation" : "enableValidation");
+    };
+    $.fn.form = function(_4e, _4f) {
+        if (typeof _4e == "string") {
+            this.each(function() {
+                _44(this);
+            });
+            return $.fn.form.methods[_4e](this, _4f);
+        }
+        return this.each(function() {
+            _44(this, _4e);
+            _40(this);
+        });
+    };
+    $.fn.form.methods = {
+        options: function(jq) {
+            return $.data(jq[0], "form").options;
+        },
+        submit: function(jq, _50) {
+            return jq.each(function() {
+                _1(this, _50);
+            });
+        },
+        load: function(jq, _51) {
+            return jq.each(function() {
+                _20(this, _51);
+            });
+        },
+        clear: function(jq) {
+            return jq.each(function() {
+                _32(this);
+            });
+        },
+        reset: function(jq) {
+            return jq.each(function() {
+                _3a(this);
+            });
+        },
+        validate: function(jq) {
+            return _48(jq[0]);
+        },
+        disableValidation: function(jq) {
+            return jq.each(function() {
+                _43(this, true);
+            });
+        },
+        enableValidation: function(jq) {
+            return jq.each(function() {
+                _43(this, false);
+            });
+        },
+        resetValidation: function(jq) {
+            return jq.each(function() {
+                $(this).find(".validatebox-text:not(:disabled)").validatebox("resetValidation");
+            });
+        },
+        resetDirty: function(jq) {
+            return jq.each(function() {
+                $(this).form("options").dirtyFields = [];
+            });
+        }
+    };
+    $.fn.form.parseOptions = function(_52) {
+        var t = $(_52);
+        return $.extend({}, $.parser.parseOptions(_52, [{
+            ajax: "boolean",
+            dirty: "boolean"
+        }]), {
+            url: (t.attr("action") ? t.attr("action") : undefined)
+        });
+    };
+    $.fn.form.defaults = {
+        fieldTypes: ["combobox", "combotree", "combogrid", "combotreegrid", "datetimebox", "datebox", "combo", "datetimespinner", "timespinner", "numberspinner", "spinner", "slider", "searchbox", "numberbox", "passwordbox", "filebox", "textbox", "switchbutton"],
+        novalidate: false,
+        ajax: true,
+        iframe: true,
+        dirty: false,
+        dirtyFields: [],
+        url: null,
+        queryParams: {},
+        onSubmit: function(_53) {
+            return $(this).form("validate");
+        },
+        onProgress: function(_54) {},
+        success: function(_55) {},
+        onBeforeLoad: function(_56) {},
+        onLoadSuccess: function(_57) {},
+        onLoadError: function() {},
+        onChange: function(_58) {}
+    };
+})(jQuery);
 
 (function($) {
     //单例
@@ -9660,7 +9830,7 @@ return $(this).form("validate");
     };
 })(jQuery);
 
-// $.fn.validatebox.defaults.novalidate = true;
+$.fn.validatebox.defaults.novalidate = true;
 $.fn.validatebox.defaults.validateOnCreate = false;
 $.fn.validatebox.defaults.validateOnBlur = true;
 if ($.fn.pagination){
