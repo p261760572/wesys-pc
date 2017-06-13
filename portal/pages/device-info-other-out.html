@@ -6,183 +6,276 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>其它出库</title>
-    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
-    <link rel="stylesheet" type="text/css" href="../css/base.css">
+    <link href="../lib/iconfont/iconfont.css" rel="stylesheet">
+    <link href="../lib/bootstrap-custom/css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+    <style type="text/css">
+    .fi {
+        font-size: 16px;
+        color: #337ab7;
+    }
+    </style>
 </head>
 
 <body>
-    <div class="panel panel-padding">
-        <form class="layui-form" action="" method="post">
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>设备编号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="device_no" lay-verify="required" placeholder="请输入设备编号" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <button type="button" class="layui-btn" onclick="add(this)">增加</button>
-                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="panel panel-padding">
-        <form class="layui-form" action="" method="post">
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>经手人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="hand_by" lay-verify="required" placeholder="请输入经手人" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">备注</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="note" placeholder="请输入备注" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <button type="button" class="layui-btn" onclick="$$.submit(this)" data-options="url:'/action/bm/device-info/other-out',transform:false,before:beforeSubmit,success:submitSuccess">提交</button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="panel panel-padding">
-        <div class="layui-btn-group">
-            <button class="layui-btn layui-btn-small layui-btn-danger" onclick="deleteChecked(this)">
-                <i class="layui-icon">&#xe640;</i> 删除
-            </button>
-        </div>
-        <div id="list" data-options="idField:'device_no'">
-        </div>
-    </div>
-    <script id="list-tpl" type="text/html">
-        <div class="layui-form">
-            <table class="layui-table">
-                <thead>
-                    <tr>
-                        <th>
-                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
-                        </th>
-                        <th>设备编号</th>
-                        <th>仓库</th>
-                        <th>生产厂家</th>
-                        <th>设备型号</th>
-                        <th>终端投资方</th>
-                    </tr>
-                </thead>
+    <div class="page">
+        <form data-options="serialize:$.noop">
+            <table class="table" style="width: 970px;">
+                <!-- <caption>查询费用信息</caption> -->
                 <tbody>
-                    {{each rows as row i}}
-                    <tr data-index="{{i}}">
-                        <td>
-                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="check">
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>设备编号</label>
                         </td>
-                        <td>
-                            {{row.device_no}}
-                        </td>
-                        <td>
-                            {{row.depot_name}}
-                        </td>
-                        <td>
-                            {{row.manufacturer}}
-                        </td>
-                        <td>
-                            {{row.device_type}}
-                        </td>
-                        <td>
-                            {{row.term_inves | formatTermInves}}
+                        <td colspan="3" class="col-sm-10">
+                            <input type="text" name="device_no" class="easyui-validatebox" data-options="required:true">
+                            <span style="color: red;">*</span>
+                            <label style="padding: 0 10px;">间隔</label>
+                            <input type="text" name="inc" value="1" class="easyui-validatebox" data-options="required:true" style="width: 100px;">
+                            <span style="color: red;">*</span>
+                            <label style="padding: 0 10px;">数量</label>
+                            <input type="text" name="count" value="1" class="easyui-validatebox" data-options="required:true" style="width: 100px;">
+                            <span style="color: red;">*</span>
+                            <button type="button" class="btn btn-primary" onclick="batchAdd(this)">批量增加</button>
+                            <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
                         </td>
                     </tr>
-                    {{/each}}
                 </tbody>
             </table>
+        </form>
+        <form data-options="serialize:serializeForm">
+            <table class="table" style="width: 970px;">
+                <!-- <caption>查询费用信息</caption> -->
+                <tbody>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>仓库</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <select id="depot_id" name="depot_id" class="easyui-validatebox" data-options="required:true">
+                                <option value="">--请选择--</option>
+                            </select>
+                            <span style="color: red;">*</span>
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>经手人</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="hand_by" class="easyui-validatebox" data-options="required:true">
+                            <span style="color: red;">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>备注</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="note">
+                        </td>
+                        <td class="text-right col-sm-2">
+                        </td>
+                        <td class="col-sm-4">
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td colspan="3">
+                            <button type="button" class="btn btn-primary" data-options="url:'/action/bm/device-info/other-out',before:beforeSubmit,success:submitSuccess" onclick="$$.submit(this)">提交</button>
+                            <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+        <div id="tb">
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-trash',plain:true" onclick="batchDelete()">删除</a>
         </div>
-    </script>
-    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
-    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
-    <script type="text/javascript" src="../js/template.js"></script>
-    <script type="text/javascript" src="../js/base.js"></script>
-    <script type="text/javascript" src="../js/param.js"></script>
-    <script type="text/javascript">
+        <table id="dg" class="easyui-datagrid" title="设备信息" data-options="singleSelect:false,rownumbers:true,toolbar:'#tb'">
+            <thead>
+                <tr>
+                    <th data-options="field:'chk',checkbox:true"></th>
+                    <th data-options="field:'device_no',width:120">设备编号</th>
+                    <th data-options="field:'depot_name',width:120">仓库</th>
+                    <th data-options="field:'manufacturer',width:120">生产厂家</th>
+                    <th data-options="field:'device_type',width:120">设备型号</th>
+                    <th data-options="field:'term_inves',width:100,formatter:formatTermInves">终端投资方</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <script src="../lib/jquery/jquery.min.js"></script>
+    <script src="../lib/toastr/toastr.min.js"></script>
+    <script src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script src="../lib/easyui/jquery.easyui.min.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/st.js"></script>
+    <script src="../js/param.js"></script>
+    <!-- <script src="../js/district.js"></script> -->
+    <script>
     var query = $$.parseQueryString();
+    var displayType = query.displayType;
     var operateType = query.operateType;
-    var form = layui.form();
-    var element = layui.element();
     var cache = {};
 
-
-    function add(target) {
-        var $form = $(target).closest('form');
-        var requestData = $$.serializeForm($form);
-        if (form.validate($form) == false) return false;
-
-        requestData.device_no = requestData.device_no.toUpperCase();
-
-        $$.request('/action/bm/device-info/view', requestData, function(data) {
-            var device_no = data.data.device_no;
-            if (device_no) {
-                if (data.data.proc_st != '1') {
-                    $$.msg('设备不在库', {
-                        icon: 2
-                    });
-                } else {
-                    //重复检查
-                    if ($$.datagrid('#list', 'getRowIndex', device_no) >= 0) {
-                        $$.msg('设备编号不能重复增加');
-                        return false;
-                    }
-
-                    $$.datagrid('#list', 'appendRow', data.data);
-                }
-            } else {
-                $$.msg('设备不存在');
-            }
-        });
+    function serializeForm(data) {
+        data.rows = $('#dg').datagrid('getRows');
     }
 
     function beforeSubmit(data) {
-        data.rows = $$.datagrid('#list', 'getRows');
         if (data.rows.length == 0) {
-            $$.msg('请先增加设备');
+            $$.error('请先增加设备');
             return false;
         }
     }
 
-    function submitSuccess(requestData, data) {
-        $$.msg('操作成功', {
-            icon: 1
-        });
-        $$.datagrid('#list', 'loadData', []);
+    function submitSuccess(data, result) {
+        $('#dg').datagrid('loadData', []);
+        $$.success('操作成功');
     }
 
-    function deleteChecked(target) {
-        var rows = $$.datagrid('#list', 'getChecked');
-        var i, index;
-        for (i = 0; i < rows.length; i++) {
-            index = $$.datagrid('#list', 'getRowIndex', rows[i]);
-            $$.datagrid('#list', 'deleteRow', index);
-        }
+    function hasNext(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['device_info']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
 
     function formatTermInves(value) {
         return $$.formatField(cache['term_inves'], value);
     }
 
-    template.helper('formatTermInves', formatTermInves);
+    function formatOperIn(value) {
+        return $$.formatField($$.st.operIn[$$.st.alias['device_info']], value);
+    }
+
+    function formatProcSt(value) {
+        return $$.formatField($$.st.procSt[$$.st.alias['device_info']], value);
+    }
+
+    function onChangeManufacturer() {
+        var value = $(this).val();
+        $$.request('/action/bm/device-type/list', {
+            manufacturer: value
+        }, function(data) {
+            $$.loadSelect('#device_type', data.rows, {
+                valueField: 'device_type',
+                textField: 'device_name'
+            });
+        });
+    }
+
+    function string_add_num(str, n) {
+        var str_add = "";
+        for (var i = str.length - 1; i >= 0; i--) {
+            if (str.charAt(i) < '0' || str.charAt(i) > '9') {
+                str_add = str.charAt(i) + str_add;
+                continue;
+            }
+            n = parseInt(str.charAt(i)) + n;
+            if (n > 9) {
+                str_add = String(n - 10) + str_add;
+                n = 1;
+            } else if (n < 0) {
+                str_add = String(n + 10) + str_add;
+                n = -1;
+            } else {
+                str_add = String(n) + str_add;
+                n = 0;
+            }
+        }
+        return {
+            str: str_add,
+            carry: n
+        };
+    }
+
+
+    function addOne(data, device_no) {
+        data.device_no = device_no;
+        $$.request('/action/bm/device-info/view', data, function(result) {
+            var tmp_device_no = result.data.device_no;
+            if (tmp_device_no) {
+                if (result.data.proc_st != '1') {
+                    $$.error(device_no + '设备状态不是在库');
+                } else {
+                    //重复检查
+                    var isRepeat = false;
+                    $.each($('#dg').datagrid('getRows'), function(i, n) {
+                        if (n.device_no == device_no) {
+                            isRepeat = true;
+                            return false;
+                        }
+                    });
+
+                    if (isRepeat) {
+                        $$.error('设备编号'+device_no+'不能重复增加');
+                        return false;
+                    }
+
+                    $('#dg').datagrid('appendRow', result.data);
+                }
+            } else {
+                $$.error('设备'+device_no+'不存在');
+            }
+        });
+    }
+
+
+
+    function batchAdd(target) {
+        var $form = $(target).closest('form');
+        var data = $$.serializeForm($form);
+        if ($$.validateForm($form) != true) return false;
+
+        var rows = $('#dg').datagrid('getRows');
+
+        data.device_no = data.device_no.toUpperCase();
+        var device_no = data.device_no;
+        var count = parseInt(data.count);
+        var inc = parseInt(data.inc);
+
+        for (var i = 0; i < count; i++) {
+            addOne(data, device_no);
+            var tmp = string_add_num(device_no, inc);
+            device_no = tmp.str;
+        }
+    }
+
+    function batchDelete() {
+        var dg = $('#dg');
+        var rows = dg.datagrid('getChecked');
+        for (var i = 0; i < rows.length; i++) {
+            var index = dg.datagrid('getRowIndex', rows[i]);
+            dg.datagrid('deleteRow', index);
+        }
+    }
 
     $(function() {
+        $$.transformDisplay('#tb', displayType);
+
+        $('#manufacturer').on('change', onChangeManufacturer);
+
         $$.request('/action/bm/parameter/list', {
+            manufacturer: '1',
             term_inves: '1'
         }, function(data) {
+            $$.loadSelect('#manufacturer', data.manufacturer);
+            $$.loadSelect('#term_inves', data.term_inves);
+
             cache['term_inves'] = data.term_inves;
         });
 
-        $$.datagrid('#list', {
-            tpl: '#list-tpl',
-            data: []
-        })
+        $$.request('/action/bm/depot-info/list', {}, function(data) {
+            $$.loadSelect('#depot_id', data.rows, {
+                valueField: 'depot_id',
+                textField: 'depot_name'
+            });
+        });
     });
     </script>
 </body>

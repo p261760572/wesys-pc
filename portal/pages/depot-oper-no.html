@@ -92,7 +92,7 @@
                     <tr>
                         <td></td>
                         <td colspan="3">
-                            <button type="button" class="btn btn-primary" data-options="datagrid:'#dg',url:'/action/bm/device-info/search'" onclick="$$.search(this)">查询</button>
+                            <button type="button" class="btn btn-primary" data-options="datagrid:'#dg',url:'/action/bm/depot-oper-no/search'" onclick="$$.search(this)">查询</button>
                             <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
                             <!-- <button type="button" class="btn btn-success" data-options="datagrid:'#dg',url:'/action/bm/device-info/export'" onclick="$$.export(this)">导出</button> -->
                         </td>
@@ -113,7 +113,7 @@
                     <th data-options="field:'note',width:100">备注</th>
                     <th data-options="field:'created_time',width:100">操作日期</th>
                     <th data-options="field:'created_by',width:100">操作人</th>
-                    <th data-options="field:'oper_in',width:120,formatter:formatOperIn">操作人</th>
+                    <th data-options="field:'oper_in',width:120,formatter:formatOperIn">操作标志</th>
                     <!-- <th data-options="field:'proc_st',width:100,formatter:formatProcSt">操作标志</th> -->
                 </tr>
             </thead>
@@ -178,7 +178,7 @@
             depot_oper_no: rowData.depot_oper_no
         };
         $('#dg2').datagrid('clearSelections').datagrid({
-            url: '/action/bm/depot-oper-list/search',
+            url: $$.wrapUrl('/action/bm/depot-oper-list/search'),
             pageNumber: 1,
             queryParams: params
         });

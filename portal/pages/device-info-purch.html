@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>设备信息</title>
+    <title>采购入库</title>
     <link href="../lib/iconfont/iconfont.css" rel="stylesheet">
     <link href="../lib/bootstrap-custom/css/bootstrap.min.css" rel="stylesheet">
     <!--[if lt IE 9]>
@@ -24,57 +24,99 @@
 
 <body>
     <div class="page">
-        <form data-options="serialize:serializeSearch">
+        <form data-options="serialize:$.noop">
             <table class="table" style="width: 970px;">
                 <!-- <caption>查询费用信息</caption> -->
                 <tbody>
                     <tr>
                         <td class="text-right col-sm-2">
-                            <label>设备编号</label>
-                        </td>
-                        <td class="col-sm-4">
-                            <input type="text" name="device_no">
-                        </td>
-                        <td class="text-right col-sm-2">
                             <label>生产厂家</label>
                         </td>
                         <td class="col-sm-4">
-                            <select id="manufacturer" name="manufacturer">
+                            <select id="manufacturer" name="manufacturer" class="easyui-validatebox" data-options="required:true">
                                 <option value="">--请选择--</option>
                             </select>
+                            <span style="color: red;">*</span>
                         </td>
-                    </tr>
-                    <tr>
                         <td class="text-right col-sm-2">
                             <label>设备型号</label>
                         </td>
                         <td class="col-sm-4">
-                            <select id="device_type" name="device_type">
+                            <select id="device_type" name="device_type" class="easyui-validatebox" data-options="required:true">
                                 <option value="">--请选择--</option>
                             </select>
-                        </td>
-                        <td class="text-right col-sm-2">
-                            <label>仓库</label>
-                        </td>
-                        <td class="col-sm-4">
-                            <select id="depot_id" name="depot_id">
-                                <option value="">--请选择--</option>
-                            </select>
+                            <span style="color: red;">*</span>
                         </td>
                     </tr>
                     <tr>
                         <td class="text-right col-sm-2">
-                            <label>终端标识码</label>
+                            <label>生产日期</label>
                         </td>
                         <td class="col-sm-4">
-                            <input type="text" name="term_no">
+                            <input type="text" name="production_date" class="Wdate" onfocus="WdatePicker()">
                         </td>
                         <td class="text-right col-sm-2">
-                            <label>创建时间</label>
+                            <label>终端投资方</label>
                         </td>
                         <td class="col-sm-4">
-                            <input id="created_time" type="text" class="Wdate" name="created_time" style="width: 120px;" onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})">
-                            <input id="created_time2" type="text" class="Wdate" name="created_time2" style="width: 120px;" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})">
+                            <select id="term_inves" name="term_inves" class="easyui-validatebox" data-options="required:true">
+                                <option value="">--请选择--</option>
+                            </select>
+                            <span style="color: red;">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>设备编号</label>
+                        </td>
+                        <td colspan="3" class="col-sm-10">
+                            <input type="text" name="device_no" class="easyui-validatebox" data-options="required:true">
+                            <span style="color: red;">*</span>
+                            <label style="padding: 0 10px;">间隔</label>
+                            <input type="text" name="inc" value="1" class="easyui-validatebox" data-options="required:true" style="width: 100px;">
+                            <span style="color: red;">*</span>
+                            <label style="padding: 0 10px;">数量</label>
+                            <input type="text" name="count" value="1" class="easyui-validatebox" data-options="required:true" style="width: 100px;">
+                            <span style="color: red;">*</span>
+                            <button type="button" class="btn btn-primary" onclick="batchAdd(this)">批量增加</button>
+                            <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <form data-options="serialize:serializeForm">
+            <table class="table" style="width: 970px;">
+                <!-- <caption>查询费用信息</caption> -->
+                <tbody>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>仓库</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <select id="depot_id" name="depot_id" class="easyui-validatebox" data-options="required:true">
+                                <option value="">--请选择--</option>
+                            </select>
+                            <span style="color: red;">*</span>
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>经手人</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="hand_by" class="easyui-validatebox" data-options="required:true">
+                            <span style="color: red;">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>备注</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="note">
+                        </td>
+                        <td class="text-right col-sm-2">
+                        </td>
+                        <td class="col-sm-4">
                         </td>
                     </tr>
                 </tbody>
@@ -82,35 +124,24 @@
                     <tr>
                         <td></td>
                         <td colspan="3">
-                            <button type="button" class="btn btn-primary" data-options="datagrid:'#dg',url:'/action/bm/device-info/search'" onclick="$$.search(this)">查询</button>
+                            <button type="button" class="btn btn-primary" data-options="url:'/action/bm/device-info/purch',before:beforeSubmit,success:submitSuccess" onclick="$$.submit(this)">提交</button>
                             <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
-                            <!-- <button type="button" class="btn btn-success" data-options="datagrid:'#dg',url:'/action/bm/device-info/export'" onclick="$$.export(this)">导出</button> -->
                         </td>
                     </tr>
                 </tfoot>
             </table>
         </form>
         <div id="tb">
-            <!-- <a href="#" class="easyui-linkbutton" data-options="iconCls:'fa fa-plus',plain:true" onclick="$$.open('expense-info-detail.html?operateType=create', '新增费用信息')">新增</a> -->
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'expense-info-detail.html?operateType=view', '费用信息详情')">详情</a>
-            <a href="#" class="easyui-linkbutton tf tf-receipt" data-options="iconCls:'fi fi-receipt',plain:true" onclick="$$.view(this, 'expense-info-detail.html?operateType=receipt', '费用信息收款')">收款</a>
-            <a href="#" class="easyui-linkbutton tf tf-cancel" data-options="iconCls:'fi fi-cancel',plain:true" onclick="$$.view(this, 'expense-info-detail.html?operateType=cancel', '费用信息作废')">作废</a>
-            <a href="#" class="easyui-linkbutton tf tf-refund" data-options="iconCls:'fi fi-refund',plain:true" onclick="$$.view(this, 'expense-info-detail.html?operateType=refund', '费用信息退款')">退款</a>
-            <a href="#" class="easyui-linkbutton tf tf-refund-confirm" data-options="iconCls:'fi fi-refund',plain:true" onclick="$$.view(this, 'expense-info-detail.html?operateType=refund-confirm', '费用信息退款')">退款确认</a>
-            <!-- <a href="#" class="easyui-linkbutton" data-options="iconCls:'fa fa-minus',plain:true">退款</a> -->
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-trash',plain:true" onclick="batchDelete()">删除</a>
         </div>
-        <table id="dg" class="easyui-datagrid" title="设备信息" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id'">
+        <table id="dg" class="easyui-datagrid" title="设备信息" data-options="singleSelect:false,rownumbers:true,toolbar:'#tb'">
             <thead>
                 <tr>
+                    <th data-options="field:'chk',checkbox:true"></th>
                     <th data-options="field:'device_no',width:120">设备编号</th>
+                    <th data-options="field:'manufacturer',width:120">生产厂家</th>
                     <th data-options="field:'device_type',width:120">设备型号</th>
-                    <th data-options="field:'depot_name',width:100">仓库</th>
                     <th data-options="field:'term_inves',width:100,formatter:formatTermInves">终端投资方</th>
-                    <th data-options="field:'term_no',width:100">终端标识码</th>
-                    <th data-options="field:'mchnt_name',width:100">商户名称</th>
-                    <th data-options="field:'last_modified_time',width:100">最后修改时间</th>
-                    <th data-options="field:'oper_in',width:120,formatter:formatOperIn">操作标志</th>
-                    <th data-options="field:'proc_st',width:100,formatter:formatProcSt">处理状态</th>
                 </tr>
             </thead>
         </table>
@@ -129,11 +160,20 @@
     var operateType = query.operateType;
     var cache = {};
 
-    function serializeSearch(data) {
-        var procStMap = {
-            'check1': '1'
-        };
-        data.proc_st2 = procStMap[displayType];
+    function serializeForm(data) {
+        data.rows = $('#dg').datagrid('getRows');
+    }
+
+    function beforeSubmit(data) {
+        if (data.rows.length == 0) {
+            $$.error('请先增加设备');
+            return false;
+        }
+    }
+
+    function submitSuccess(data, result) {
+        $('#dg').datagrid('loadData', []);
+        $$.success('操作成功');
     }
 
     function hasNext(oper_in, proc_st, action) {
@@ -164,6 +204,79 @@
             });
         });
     }
+
+    function string_add_num(str, n) {
+        var str_add = "";
+        for (var i = str.length - 1; i >= 0; i--) {
+            if (str.charAt(i) < '0' || str.charAt(i) > '9') {
+                str_add = str.charAt(i) + str_add;
+                continue;
+            }
+            n = parseInt(str.charAt(i)) + n;
+            if (n > 9) {
+                str_add = String(n - 10) + str_add;
+                n = 1;
+            } else if (n < 0) {
+                str_add = String(n + 10) + str_add;
+                n = -1;
+            } else {
+                str_add = String(n) + str_add;
+                n = 0;
+            }
+        }
+        return {
+            str: str_add,
+            carry: n
+        };
+    }
+
+    function batchAdd(target) {
+        var $form = $(target).closest('form');
+        var data = $$.serializeForm($form);
+        if ($$.validateForm($form) != true) return false;
+
+        var rows = $('#dg').datagrid('getRows');
+
+        data.device_no = data.device_no.toUpperCase();
+        var device_no = data.device_no;
+        var count = parseInt(data.count);
+        var inc = parseInt(data.inc);
+
+        for (var i = 0; i < count; i++) {
+            //重复检查
+            var isRepeat = false;
+            $.each(rows, function(i, n) {
+                if (n.device_no == device_no) {
+                    isRepeat = true;
+                    return false;
+                }
+            });
+
+            if (isRepeat) {
+                $$.error('设备编号不能重复增加');
+                return false;
+            }
+
+            var row = $.extend({}, data, {
+                device_no: device_no
+            });
+
+            $('#dg').datagrid('appendRow', row);
+
+            var tmp = string_add_num(device_no, inc);
+            device_no = tmp.str;
+        }
+    }
+
+    function batchDelete() {
+        var dg = $('#dg');
+        var rows = dg.datagrid('getChecked');
+        for (var i = 0; i < rows.length; i++) {
+            var index = dg.datagrid('getRowIndex', rows[i]);
+            dg.datagrid('deleteRow', index);
+        }
+    }
+
 
     $(function() {
         $$.transformDisplay('#tb', displayType);

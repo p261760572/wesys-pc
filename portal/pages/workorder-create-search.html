@@ -6,374 +6,227 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>派单</title>
-    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
-    <link rel="stylesheet" type="text/css" href="../css/base.css">
+    <link href="../lib/iconfont/iconfont.css" rel="stylesheet">
+    <link href="../lib/bootstrap-custom/css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+    <style type="text/css">
+    .fi {
+        font-size: 16px;
+        color: #337ab7;
+    }
+    </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="panel panel-padding">
-            <form id="search" class="layui-form" action="" method="post" data-options="serialize:serializeSearch">
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">客户号</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">联系人</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="linkman" placeholder="请输入联系人" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">手机</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="mobile" placeholder="请输入手机" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">商户简称</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="mchnt_abbr" placeholder="请输入商户简称" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">所在地区</label>
-                    <div class="layui-input-inline">
-                        <select name="province" lay-filter="province" id="province">
-                            <option value="">请选择省</option>
-                        </select>
-                    </div>
-                    <div class="layui-input-inline">
-                        <select name="city" lay-filter="city" id="city">
-                            <option value="">请选择市</option>
-                        </select>
-                    </div>
-                    <div class="layui-input-inline">
-                        <select name="district" lay-filter="district" id="district">
-                            <option value="">请选择县/区</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">创建日期</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="created_time" placeholder="请输入开始日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})" id="created_time">
-                        </div>
-                        <div class="layui-form-mid">-</div>
-                        <div class="layui-input-inline">
-                            <input type="text" name="created_time2" placeholder="请输入结束日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})" id="created_time2">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/mchnt-base-info/search'" id="search-btn">查询</button>
-                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                    </div>
-                </div>
-            </form>
+    <div class="page">
+        <form data-options="serialize:serializeSearch">
+            <table class="table" style="width: 970px;">
+                <!-- <caption>查询费用信息</caption> -->
+                <tbody>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>客户号</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="mchnt_id">
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>联系人</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="linkman">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>手机</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="mobile">
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>商户简称</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="mchnt_abbr">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>所在地区</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <select id="province" name="province" style="width: 100px;">
+                                <option value="">--请选择省--</option>
+                            </select>
+                            <select id="city" name="city" style="width: 100px;">
+                                <option value="">--请选择市--</option>
+                            </select>
+                            <select id="district" name="district" style="width: 100px;">
+                                <option value="">--请选择县/区--</option>
+                            </select>
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>创建时间</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input id="created_time" type="text" class="Wdate" name="created_time" style="width: 120px;" onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})">
+                            <input id="created_time2" type="text" class="Wdate" name="created_time2" style="width: 120px;" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})">
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td colspan="3">
+                            <button type="button" class="btn btn-primary" data-options="datagrid:'#dg',url:'/action/bm/mchnt-base-info/search'" onclick="$$.search(this)">查询</button>
+                            <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+        
+        <table id="dg" class="easyui-datagrid" title="客户信息" data-options="singleSelect:true,pagination:true,rownumbers:true,idField:'rec_id',onClickRow:onClickRow">
+            <thead>
+                <tr>
+                    <th data-options="field:'mchnt_id',width:120">客户号</th>
+                    <th data-options="field:'linkman',width:100">联系人</th>
+                    <th data-options="field:'mobile',width:100">手机</th>
+                    <th data-options="field:'mchnt_abbr',width:200">商户简称</th>
+                    <th data-options="field:'telno',width:100">联系电话</th>
+                    <th data-options="field:'district_name',width:150">所在地区</th>
+                    <th data-options="field:'license_no',width:200">营业执照号</th>
+                    <th data-options="field:'proc_st_nm',width:100">处理状态</th>
+                    <th data-options="field:'created_time',width:150">创建日期</th>
+                </tr>
+            </thead>
+        </table>
+        <br>
+        <div id="tb2">
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-add',plain:true" onclick="openTab('workorder-create.html?operateType=create-install', '生成装机单')">装机</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-add',plain:true" onclick="openTab('workorder-create.html?operateType=create-other', '生成维护单')">维护</a>
         </div>
-        <div class="panel panel-padding">
-            <!-- <div class="layui-btn-group">
-                <button class="layui-btn layui-btn-small" onclick="$$.goto(this)" data-options="url:$$.url('expense-info-detail.html?operateType=create',{}),title:'新增费用信息'">
-                    生成费用单
-                </button>
-            </div> -->
-            <div id="list" data-options="loadSuccess:loadSuccess,clickRow:clickRow">
-            </div>
-        </div>
-        <div class="panel panel-padding hide" id="search-term-panel">
-            <form class="layui-form" action="" method="post" data-options="serialize:serializeSearchTerm">
-                <div class="layui-form-item">
-                    <div class="layui-inline hide">
-                        <label class="layui-form-label">客户号</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">终端标识</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="term_no" placeholder="请输入终端标识" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">门店名称</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="shop_name" placeholder="请输入门店名称" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/term-info/search',datagrid:'#term-list',tpl:'#term-list-tpl',before:beforeSearchTerm" id="search-term-btn">查询</button>
-                    </div>
-                </div>
-            </form>
-            <div class="layui-btn-group">
-                <button class="layui-btn layui-btn-small" onclick="add(this)" data-options="url:'workorder-create.html?operateType=create',title:'生成工作单'">
-                    <i class="layui-icon">&#xe654;</i> 派单
-                </button>
-            </div>
-            <div id="term-list">
-            </div>
-        </div>
+        <table id="dg2" class="easyui-datagrid" title="终端信息" data-options="singleSelect:false,pagination:true,rownumbers:true,toolbar:'#tb2',idField:'term_no'">
+            <thead>
+                <tr>
+                    <th data-options="field:'chk',checkbox:true"></th>
+                    <th data-options="field:'term_no',width:120">终端标识</th>
+                    <th data-options="field:'linkman',width:100">联系人</th>
+                    <th data-options="field:'mobile',width:100">手机</th>
+                    <th data-options="field:'shop_name',width:200">门店名称</th>
+                    <th data-options="field:'district_name',width:150">所在地区</th>
+                    <th data-options="field:'proc_st_nm',width:100">处理状态</th>
+                    <th data-options="field:'created_time',width:150">创建日期</th>
+                </tr>
+            </thead>
+        </table>
     </div>
-    <script id="list-tpl" type="text/html">
-        <div class="layui-form">
-            <table class="layui-table">
-                <thead>
-                    <tr>
-                        <!-- <th>
-                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
-                        </th> -->
-                        <th>客户号</th>
-                        <th>联系人</th>
-                        <th>手机</th>
-                        <th>商户简称</th>
-                        <th>联系电话</th>
-                        <th>所在地区</th>
-                        <th>营业执照号</th>
-                        <!-- <th>操作标志</th> -->
-                        <th>处理状态</th>
-                        <th>创建日期</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{each rows as row i}}
-                    <tr data-index="{{i}}">
-                        <!-- <td>
-                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="check">
-                        </td> -->
-                        <td>
-                            {{row.mchnt_id}}
-                        </td>
-                        <td>
-                            {{row.linkman}}
-                        </td>
-                        <td>
-                            {{row.mobile}}
-                        </td>
-                        <td>
-                            {{row.mchnt_abbr}}
-                        </td>
-                        <td>
-                            {{row.telno}}
-                        </td>
-                        <td>
-                            {{row.district_name}}
-                        </td>
-                        <td>
-                            {{row.license_no}}
-                        </td>
-                        <!-- <td>
-                            {{row.oper_in_nm}}
-                        </td> -->
-                        <td>
-                            {{row.proc_st_nm}}
-                        </td>
-                        <td>
-                            {{row.created_time}}
-                        </td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
-    </script>
-    <script id="term-list-tpl" type="text/html">
-        <div class="layui-form">
-            <table class="layui-table">
-                <thead>
-                    <tr>
-                        <th>
-                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
-                        </th>
-                        <th>终端标识</th>
-                        <th>联系人</th>
-                        <th>手机号</th>
-                        <th>门店名称</th>
-                        <th>所在地区</th>
-                        <!-- <th>操作标志</th> -->
-                        <th>处理状态</th>
-                        <th>创建日期</th>
-                        <!-- <th>操作</th> -->
-                    </tr>
-                </thead>
-                <tbody>
-                    {{each rows as row i}}
-                    <tr data-index="{{i}}">
-                        <td>
-                            <input type="checkbox" name="checkbox" lay-skin="primary">
-                        </td>
-                        <td>
-                            {{row.term_no}}
-                        </td>
-                        <td>
-                            {{row.linkman}}
-                        </td>
-                        <td>
-                            {{row.mobile}}
-                        </td>
-                        <td>
-                            {{row.shop_name}}
-                        </td>
-                        <td>
-                            {{row.district_name}}
-                        </td>
-                        <!-- <td>
-                            {{row.oper_in_nm}}
-                        </td> -->
-                        <td>
-                            {{row.proc_st_nm}}
-                        </td>
-                        <td>
-                            {{row.created_time}}
-                        </td>
-                        <!-- <td>
-                            <div class="layui-btn-group">
-                                {{if displayType=='create-install'}}
-                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'workorder-create.html?operateType=create-install',title:'生成装机单',keys:'mchnt_id,term_no',datagrid:'#term-list'">
-                                    装机
-                                </button>
-                                {{/if}} {{if displayType=='create-other'}}
-                                <button class="layui-btn layui-btn-mini" onclick="$$.do(this,{{i}})" data-options="url:'workorder-create.html?operateType=create-other',title:'生成维护单',keys:'mchnt_id,term_no',datagrid:'#term-list'">
-                                    维护
-                                </button>
-                                {{/if}}
-                            </div>
-                        </td> -->
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
-    </script>
-    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
-    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
-    <script type="text/javascript" src="../js/template.js"></script>
-    <script type="text/javascript" src="../js/base.js"></script>
-    <script type="text/javascript" src="../js/st.js"></script>
-    <script type="text/javascript" src="../js/param.js"></script>
-    <script type="text/javascript" src="../js/district.js"></script>
-    <script type="text/javascript">
+    <script src="../lib/jquery/jquery.min.js"></script>
+    <script src="../lib/toastr/toastr.min.js"></script>
+    <script src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script src="../lib/easyui/jquery.easyui.min.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/st.js"></script>
+    <script src="../js/param.js"></script>
+    <script src="../js/district.js"></script>
+    <script>
     var query = $$.parseQueryString();
     var displayType = query.displayType;
     var operateType = query.operateType;
-    var form = layui.form();
-    var element = layui.element();
 
     function serializeSearch(data) {
-        // var procStMap = {
-        //     'check1': '1'
-        // };
-        // data.proc_st = procStMap[displayType];
+         
     }
 
-    function beforeSearchTerm(data) {
-        var selected = $$.datagrid('#list', 'getSelected');
+    function openTab(url, title) {
+        var selected = $('#dg').datagrid('getSelected');
         if (!selected) {
-            $$.msg('请先选择客户');
+            $$.info('请先选择客户');
             return false;
         }
-    }
 
-    function serializeSearchTerm(data) {
-        var selected = $$.datagrid('#list', 'getSelected');
-        if (selected) {
-            data.mchnt_id = selected.mchnt_id;
+        var $dg = $('#dg2');
+        var dgOpts = $dg.datagrid('options');
+        var rows = $dg.datagrid('getChecked');
+        if (rows.length) {
+            if (!dgOpts.idField) {
+                $$.info('没有记录ID！');
+                return false;
+            }
+
+            var params = {
+                mchnt_id: selected.mchnt_id
+            };
+            var tmp = [];
+            for (var i = 0; i < rows.length; i++) {
+                tmp.push(rows[i][dgOpts.idField]);
+            }
+            
+            params[dgOpts.idField] = tmp.join(',');
+
+            $$.open($$.url(url, params), title);
+        } else {
+            $$.info('请选择记录！');
+            return false;
         }
-
-        if (displayType == 'create-install') {
-            data.term_status = '1';
-        } else if (displayType == 'create-other') {
-            data.term_status = '3';
-        }
-    }
-
-    function reload() {
-        $$.datagrid('#list', 'reload');
     }
 
     function hasNext(oper_in, proc_st, action) {
-        var rows = $$.st.transition[$$.st.alias['mchnt_base_info']]
+        var rows = $$.st.transition[$$.st.alias['expense_info']]
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
 
-    function loadSuccess(data) {
-        $$.datagrid('#term-list', {
-            tpl: '#term-list-tpl',
-            url: null,
-            data: []
+    function formatExpenseType(value) {
+        return $$.formatField($$.param['expense_type'], value);
+    }
+
+    function formatExpenseCycle(value) {
+        return $$.formatField($$.param['expense_cycle'], value);
+    }
+
+    function formatDate(value) {
+        return value ? value.substr(0, 10) : value;
+    }
+
+    function onClickRow(rowIndex, rowData) {
+        var params = {
+            mchnt_id: rowData.mchnt_id
+        };
+        $('#dg2').datagrid('clearSelections').datagrid({
+            url: $$.wrapUrl('/action/bm/term-info/search'),
+            pageNumber: 1,
+            queryParams: params
         });
-        $('#search-term-panel').removeClass('hide');
     }
 
-    function clickRow(index, row) {
-        $("#search-term-btn").click();
+    function onChangeProvince() {
+        var value = $(this).val();
+        $$.loadSelect('#city', districtData['city'][value] || []);
+        $$.loadSelect('#district', []);
     }
 
-    function add() {
-        var selected = $$.datagrid('#list', 'getSelected');
-        if (!selected) {
-            $$.msg('请先选择客户');
-            return false;
-        }
-
-        var checked = $$.datagrid('#term-list', 'getChecked');
-        if (!checked.length) {
-            $$.msg('请选择终端');
-            return false;
-        }
-
-        var mchnt_id = selected.mchnt_id;
-        var term_no = [];
-        $.each(checked, function (index, value) {
-            term_no.push(value.term_no);
-        });
-
-        if (displayType == 'create-install') {
-            var url = $$.url('workorder-create.html?operateType=create-install', {
-                mchnt_id: mchnt_id,
-                term_no: term_no.join(',')
-            })
-
-            $$.open(url, '生成装机单');
-        } else if (displayType == 'create-other') {
-            var url = $$.url('workorder-create.html?operateType=create-other', {
-                mchnt_id: mchnt_id,
-                term_no: term_no.join(',')
-            })
-
-            $$.open(url, '生成维护单');
-        }
+    function onChangeCity() {
+        var value = $(this).val();
+        $$.loadSelect('#district', districtData['district'][$('#province').val() + value]);
     }
-
-    template.helper('hasNext', hasNext);
-    template.helper('operateType', operateType);
-    template.helper('displayType', displayType);
 
     $(function() {
-        form.on('select(province)', function(data) {
-            $$.loadSelect('#city', districtData['city'][data.value]);
-            $$.loadSelect('#district', []);
-            form.render('select');
-        });
+        $$.transformDisplay('#tb', displayType);
 
-        form.on('select(city)', function(data) {
-            $$.loadSelect('#district', districtData['district'][$('#province').val() + data.value]);
-            form.render('select');
-        });
+        $('#province').on('change', onChangeProvince);
+        $('#city').on('change', onChangeCity);
 
         $$.loadSelect('#province', districtData['province']);
 
-        form.render('select');
+        $$.loadSelect('#expense_type', $$.param['expense_type']);
+        $$.loadSelect('#expense_cycle', $$.param['expense_cycle']);
+        $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['expense_info']]);
     });
     </script>
 </body>

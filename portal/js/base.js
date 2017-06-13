@@ -337,6 +337,7 @@ window.$$ = (function() {
         var options = $.extend({
             before: $.noop,
             success: function() {
+                $$.transform($form, 'view');
                 $$.success('操作成功');
             }
         }, $$.parseOptions(target));
@@ -347,8 +348,7 @@ window.$$ = (function() {
 
         if ($$.validateForm($form) != true) return false;
 
-        $$.request(options.url, data, function(result) {
-            $$.transform($form, 'view');
+        $$.request(options.url, data, function(result) {            
             options.success.call(target, data, result);
         });
     };

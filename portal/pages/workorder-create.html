@@ -1,228 +1,213 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>商户信息</title>
-    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
-    <link rel="stylesheet" type="text/css" href="../css/base.css">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
     <style type="text/css">
-
+    input[disabled],
+    select[disabled],
+    textarea[disabled] {
+        background-color: rgb(235, 235, 228);
+    }
+    
+    input[type=checkbox] {
+        width: 16px;
+        height: 16px;
+        margin-left: 15px;
+    }
     </style>
 </head>
 
 <body>
-    <div class="panel panel-padding">
-        <form id="detail" class="layui-form" action="" method="post" data-options="load:loadDetail,serialize:serializeDetail">
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>客户号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="mchnt_id" placeholder="" autocomplete="off" class="layui-input" id="mchnt-id">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>联系人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="linkman" lay-verify="required" placeholder="请输入联系人" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>手机</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="mobile" lay-verify="required" placeholder="请输入手机" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label"><span class="required">*</span>商户简称</label>
-                <div class="layui-input-block">
-                    <input type="text" name="mchnt_abbr" lay-verify="required" placeholder="请输入商户简称" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">联系电话</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="telno" placeholder="请输入联系电话" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">常用邮箱</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="email" placeholder="请输入常用邮箱" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label"><span class="required">*</span>所在地区</label>
-                <div class="layui-input-inline">
-                    <select name="province" lay-verify="required" lay-filter="province" id="province">
-                        <option value="">请选择省</option>
-                    </select>
-                </div>
-                <div class="layui-input-inline">
-                    <select name="city" lay-verify="required" lay-filter="city" id="city">
-                        <option value="">请选择市</option>
-                    </select>
-                </div>
-                <div class="layui-input-inline">
-                    <select name="district" lay-verify="required" lay-filter="district" id="district">
-                        <option value="">请选择县/区</option>
-                    </select>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label"><span class="required">*</span>详细地址</label>
-                <div class="layui-input-block">
-                    <input type="text" name="addr" lay-verify="required" placeholder="请输入详细地址" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>拓展方</label>
-                    <div class="layui-input-inline">
-                        <select name="expand_inst_id" lay-verify="required" lay-search id="expand-inst-id">
-                            <option value=""></option>
+    <div class="page">
+        <form id="ff" action="/action/bm/mchnt-base-info/view" data-options="serialize:serializeForm,load:loadForm">
+            <table class="table tf tf-view" style="width: 980px;">
+                <caption>商户信息</caption>
+                <tr>
+                    <td class="text-right col-sm-2">
+                        <label>客户号</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="required:true">
+                        <span style="color: red;">*</span>
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>联系人</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="linkman" class="easyui-validatebox" data-options="required:true">
+                        <span style="color: red;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right col-sm-2">
+                        <label>手机</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="mobile" class="easyui-validatebox" data-options="required:true">
+                        <span style="color: red;">*</span>
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>商户简称</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="mchnt_abbr" class="easyui-validatebox" data-options="required:true">
+                        <span style="color: red;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right col-sm-2">
+                        <label>联系电话</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="telno" class="easyui-validatebox" data-options="">
+                        <!-- <span style="color: red;">*</span> -->
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>所在地区</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <select id="province" name="province" style="width: 100px;">
+                            <option value="">--请选择省--</option>
                         </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>拓展人</label>
-                    <div class="layui-input-inline">
-                        <select name="expand_id" lay-verify="required" lay-search id="expand-id">
-                            <option value=""></option>
+                        <select id="city" name="city" style="width: 100px;">
+                            <option value="">--请选择市--</option>
                         </select>
-                    </div>
-                </div>
-            </div>
-            <div id="list">
-            </div>
-            <div class="layui-form-item editable-create-install editable-create-other">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>执行人</label>
-                    <div class="layui-input-inline">
-                        <select name="work_id" lay-verify="required" lay-search lay-filter="work_id" id="work-id">
-                            <option value=""></option>
+                        <select id="district" name="district" style="width: 100px;">
+                            <option value="">--请选择县/区--</option>
                         </select>
+                        <!-- <span style="color: red;">*</span> -->
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right col-sm-2">
+                        <label>详细地址</label>
+                    </td>
+                    <td colspan="3" class="col-sm-4">
+                        <input type="text" name="addr" class="easyui-validatebox" data-options="required:true" style="width: 500px;">
+                        <span style="color: red;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right col-sm-2">
+                        <label>拓展方</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true">
+                        <span style="color: red;">*</span>
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>拓展人</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" id="expand_id" name="expand_id" class="easyui-combobox" data-options="required:true">
+                        <span style="color: red;">*</span>
+                    </td>
+                </tr>
+            </table>
+            <table class="table" style="width: 980px;">
+                <tr>
+                    <td class="text-right col-sm-2">
+                        <label>执行人</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" id="work_id" name="work_id" class="easyui-combobox" data-options="required:true">
+                        <span style="color: red;">*</span>
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>维护人</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" id="maintained_by" name="maintained_by" class="easyui-combobox" data-options="required:true">
+                        <span style="color: red;">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right col-sm-2">
+                        <label>工作单内容</label>
+                    </td>
+                    <td colspan="3" class="col-sm-10">
+                        <label>
+                            <input type="checkbox" name="work_content" id="work_content0">换机
+                        </label>
+                        <label>
+                            <input type="checkbox" name="work_content" id="work_content1">送纸
+                        </label>
+                        <label>
+                            <input type="checkbox" name="work_content" id="work_content2">调单
+                        </label>
+                        <label>
+                            <input type="checkbox" name="work_content" id="work_content4">移机
+                        </label>
+                        <label>
+                            <input type="checkbox" name="work_content" id="work_content4">其它
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right col-sm-2">
+                        <label>备注</label>
+                    </td>
+                    <td colspan="3" class="col-sm-4">
+                        <input type="text" name="remark" class="easyui-validatebox" data-options="">
+                    </td>
+                </tr>
+            </table>
+            <table id="dg" class="easyui-datagrid" data-options="singleSelect:true,pagination:false,rownumbers:true,idField:'rec_id'">
+                <thead>
+                    <tr>
+                        <th data-options="field:'mchnt_id',width:120">终端标识</th>
+                        <th data-options="field:'mchnt_abbr',width:120">联系人</th>
+                        <th data-options="field:'expense_type',width:100">手机号</th>
+                        <th data-options="field:'amount',width:100">门店名称</th>
+                        <th data-options="field:'expense_cycle',width:100">所在地区</th>
+                        <th data-options="field:'proc_st_nm',width:100">处理状态</th>
+                    </tr>
+                </thead>
+            </table>
+            <div style="display:block; height:50px;"></div>
+            <div style="position:fixed; left: 0px; bottom:0px; z-index:9998999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px; ">
+                <div class="row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-8">
+                        <button type="button" class="btn btn-primary hide tf tf-create-install" data-options="datagrid:'#dg',url:'/action/bm/workorder/create-install'" onclick="$$.submit(this)">提交</button>
+                        <button type="button" class="btn btn-primary hide hide tf tf-create-other" data-options="datagrid:'#dg',url:'/action/bm/workorder/create-other'" onclick="$$.submit(this)">提交</button>
+                        <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
                     </div>
-                </div>
-                <div class="layui-inline hide invisible visible-create-install">
-                    <label class="layui-form-label"><span class="required">*</span>维护人</label>
-                    <div class="layui-input-inline">
-                        <select name="maintained_by" lay-verify="required" lay-search id="maintained-by">
-                            <option value=""></option>
-                        </select>
+                    <div class="col-sm-2">
                     </div>
-                </div>
-            </div>
-            <div class="layui-form-item invisible visible-create-other editable">
-                <div class="layui-inline">
-                    <label class="layui-form-label">工作单内容</label>
-                    <div class="layui-input-block">
-                        <input type="checkbox" name="work_content" title="换机" lay-skin="primary" id="work_content0">
-                        <input type="checkbox" name="work_content" title="送纸" lay-skin="primary" id="work_content1">
-                        <input type="checkbox" name="work_content" title="调单" lay-skin="primary" id="work_content2">
-                        <input type="checkbox" name="work_content" title="移机" lay-skin="primary" id="work_content3">
-                        <input type="checkbox" name="work_content" title="其它" lay-skin="primary" id="work_content4">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item editable-create-install editable-create-other">
-                <label class="layui-form-label">备注</label>
-                <div class="layui-input-block">
-                    <input type="text" name="remark" placeholder="请输入备注" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button type="button" class="layui-btn visible invisible-view" onclick="$$.submit(this)" data-options="url:'/action/bm/workorder/' + operateType">提交</button>
-                    <button type="button" class="layui-btn layui-btn-primary" onclick="$$.close()">关闭</button>
                 </div>
             </div>
         </form>
-        <div id="term-list">
-        </div>
     </div>
-    <script id="term-list-tpl" type="text/html">
-        <div class="layui-form">
-            <table class="layui-table">
-                <thead>
-                    <tr>
-                        <th>终端标识</th>
-                        <th>联系人</th>
-                        <th>手机号</th>
-                        <th>门店名称</th>
-                        <th>所在地区</th>
-                        <!-- <th>操作标志</th> -->
-                        <th>处理状态</th>
-                        <!-- <th>操作</th> -->
-                    </tr>
-                </thead>
-                <tbody>
-                    {{each rows as row i}}
-                    <tr data-index="{{i}}">
-                        <td>
-                            {{row.term_no}}
-                        </td>
-                        <td>
-                            {{row.linkman}}
-                        </td>
-                        <td>
-                            {{row.mobile}}
-                        </td>
-                        <td>
-                            {{row.shop_name}}
-                        </td>
-                        <td>
-                            {{row.district_name}}
-                        </td>
-                        <!-- <td>
-                            {{row.oper_in_nm}}
-                        </td> -->
-                        <td>
-                            {{row.proc_st_nm}}
-                        </td>
-                        <!-- <td>
-                            <div class="layui-btn-group">
-                            </div>
-                        </td> -->
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
-    </script>
-    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
-    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
-    <script type="text/javascript" src="../js/template.js"></script>
-    <script type="text/javascript" src="../js/base.js"></script>
-    <script type="text/javascript" src="../js/param.js"></script>
-    <script type="text/javascript" src="../js/district.js"></script>
-    <script type="text/javascript">
+    <script src="../lib/jquery/jquery.min.js"></script>
+    <script src="../lib/toastr/toastr.min.js"></script>
+    <script src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script src="../lib/easyui/jquery.easyui.min.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/st.js"></script>
+    <script src="../js/param.js"></script>
+    <script src="../js/district.js"></script>
+    <script>
     var query = $$.parseQueryString();
     var displayType = query.displayType;
     var operateType = query.operateType;
-    var form = layui.form();
-    var element = layui.element();
 
-    function loadDetail(data) {
+    function loadForm(data) {
         $('#province').val(data.data.province).change();
         $('#city').val(data.data.city).change();
         $('#district').val(data.data.district);
-
-        // $$.datagrid('#list', {
-        //     tpl: '#list-tpl',
-        //     data: data.term_param
-        // });
     }
 
-    function serializeDetail(data) {
+    function serializeForm(data) {
         var work_content = [];
         for (var i = 0; i < 9; i++) {
             work_content.push($('#work_content' + i).is(":checked") ? '1' : '0');
@@ -236,87 +221,104 @@
             data.work_order_type = '2';
         }
 
-        data.term = $$.datagrid('#term-list', 'getRows');
+        data.term = $('#dg').datagrid('getRows');
     }
 
+    function hasNext(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['expense_info']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
+
+    function formatExpenseType(value) {
+        return $$.formatField($$.param['expense_type'], value);
+    }
+
+    function formatExpenseCycle(value) {
+        return $$.formatField($$.param['expense_cycle'], value);
+    }
+
+    function formatDate(value) {
+        return value ? value.substr(0, 10) : value;
+    }
+
+    function onChangeExpenseType() {
+        var value = $(this).val();
+        if (value == '1' || value == '4') {
+            $('#expense_cycle').val('1').attr('disabled', 'disabled');
+        } else {
+            $('#expense_cycle').removeAttr('disabled');
+        }
+    }
+
+    function onChangeBank(rec) {
+        // $$.request('/action/bm/bank-branch/search', rec, function (result) {
+        //     $('#refund_account_bank_branch_cd').combobox('loadData', result.rows);
+        // });
+        $('#refund_account_bank_branch_cd').combobox('clear').combobox('reload');
+    }
+
+    function bankBranchLoader(param, success, error) {
+        var q = param.q || '';
+        // if (q.length <= 1) return false;
+
+        $$.request('/action/bm/bank-branch/search', {
+            q: q,
+            bank_cd: $('#refund_account_bank').combobox('getValue')
+        }, function(result) {
+            $('#refund_account_bank_branch_cd').combobox('loadData', result.rows);
+        }, {
+            loading: false
+        });
+    }
 
     function onChangeProvince() {
         var value = $(this).val();
-        $$.loadSelect('#city', districtData['city'][value]);
+        $$.loadSelect('#city', districtData['city'][value] || []);
         $$.loadSelect('#district', []);
-        form.render('select');
     }
 
     function onChangeCity() {
         var value = $(this).val();
         $$.loadSelect('#district', districtData['district'][$('#province').val() + value]);
-        form.render('select');
-    }
-
-    function onChangeWorkId() {
-        var value = $(this).val();
-        $('#maintained-by').val(value);
-        form.render('select');
-    }
-
-    function submitSuccess() {
-
     }
 
     $(function() {
+        $$.transform('body>.page', operateType, {
+            'create-install': ['view'],
+            'create-other': ['view']
+        });
 
         $('#province').on('change', onChangeProvince);
         $('#city').on('change', onChangeCity);
 
-        form.on('select(province)', function(data) {
-            $(data.elem).change();
-        });
-
-        form.on('select(city)', function(data) {
-            $(data.elem).change();
-        });
-
-        $('#work-id').on('change', onChangeWorkId);
-        form.on('select(work_id)', function(data) {
-            $(data.elem).change();
-        });
-
         $$.loadSelect('#province', districtData['province']);
-        $$.loadSelect('#mchnt-type', $$.param['mchnt_type']);
-        form.render('select');
 
         var d1 = $$.request('/action/bm/expand/list', {}, function(data) {
-            $$.loadSelect('#expand-id', data.rows);
-            form.render('select');
+            // $$.loadSelect('#expand_id', data.rows);
+            $('#expand_id').combobox('loadData', data.rows);
         });
 
         var d2 = $$.request('/action/bm/parameter/list', {
             expand_inst: '1',
-            // term_inves: '1',
-            // equi_type: '1',
             installed_by: '1',
             maintained_by: '1'
         }, function(data) {
-            $$.loadSelect('#expand-inst-id', data.expand_inst);
-            // $$.loadSelect('#term-inves', data.term_inves);
-            // $$.loadSelect('#equi-type', data.equi_type);
-            $$.loadSelect('#work-id', data.installed_by);
-            $$.loadSelect('#maintained-by', data.maintained_by);
-            form.render('select');
+            // $$.loadSelect('#expand_inst_id', data.expand_inst);
+            // $$.loadSelect('#work_id', data.installed_by);
+            // $$.loadSelect('#maintained_by', data.maintained_by);
+
+            $('#expand_inst_id').combobox('loadData', data.expand_inst);
+            $('#work_id').combobox('loadData', data.installed_by);
+            $('#maintained_by').combobox('loadData', data.maintained_by);
         });
 
-        $$.transformStatus('#detail', operateType);
-
         $.when(d1, d2).done(function() {
-            $$.view('#detail', '/action/bm/mchnt-base-info/view', query);
+            $$.loadData('#ff', '/action/bm/mchnt-base-info/view', query);
 
             $$.request('/action/bm/term-info/list', {
                 term_no: query.term_no.split(',')
             }, function(data) {
-                $$.datagrid('#term-list', {
-                    tpl: '#term-list-tpl',
-                    data: data.term
-                });
+                $('#dg').datagrid('loadData', data.term);
             });
         });
     });
