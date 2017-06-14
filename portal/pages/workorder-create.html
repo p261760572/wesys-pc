@@ -14,7 +14,10 @@
     <style type="text/css">
     input[disabled],
     select[disabled],
-    textarea[disabled] {
+    textarea[disabled],
+    input[readonly],
+    select[readonly],
+    textarea[readonly] {
         background-color: rgb(235, 235, 228);
     }
     
@@ -29,21 +32,21 @@
 <body>
     <div class="page">
         <form id="ff" action="/action/bm/mchnt-base-info/view" data-options="serialize:serializeForm,load:loadForm">
-            <table class="table tf tf-view" style="width: 980px;">
+            <table class="table" style="width: 980px;">
                 <caption>商户信息</caption>
                 <tr>
                     <td class="text-right col-sm-2">
                         <label>客户号</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="required:true">
+                        <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="required:true" disabled>
                         <span style="color: red;">*</span>
                     </td>
                     <td class="text-right col-sm-2">
                         <label>联系人</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" name="linkman" class="easyui-validatebox" data-options="required:true">
+                        <input type="text" name="linkman" class="easyui-validatebox" data-options="required:true" disabled>
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
@@ -52,14 +55,14 @@
                         <label>手机</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" name="mobile" class="easyui-validatebox" data-options="required:true">
+                        <input type="text" name="mobile" class="easyui-validatebox" data-options="required:true" disabled>
                         <span style="color: red;">*</span>
                     </td>
                     <td class="text-right col-sm-2">
                         <label>商户简称</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" name="mchnt_abbr" class="easyui-validatebox" data-options="required:true">
+                        <input type="text" name="mchnt_abbr" class="easyui-validatebox" data-options="required:true" disabled>
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
@@ -68,20 +71,20 @@
                         <label>联系电话</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" name="telno" class="easyui-validatebox" data-options="">
+                        <input type="text" name="telno" class="easyui-validatebox" data-options="" disabled>
                         <!-- <span style="color: red;">*</span> -->
                     </td>
                     <td class="text-right col-sm-2">
                         <label>所在地区</label>
                     </td>
                     <td class="col-sm-4">
-                        <select id="province" name="province" style="width: 100px;">
+                        <select id="province" name="province" style="width: 100px;" disabled>
                             <option value="">--请选择省--</option>
                         </select>
-                        <select id="city" name="city" style="width: 100px;">
+                        <select id="city" name="city" style="width: 100px;" disabled>
                             <option value="">--请选择市--</option>
                         </select>
-                        <select id="district" name="district" style="width: 100px;">
+                        <select id="district" name="district" style="width: 100px;" disabled>
                             <option value="">--请选择县/区--</option>
                         </select>
                         <!-- <span style="color: red;">*</span> -->
@@ -92,7 +95,7 @@
                         <label>详细地址</label>
                     </td>
                     <td colspan="3" class="col-sm-4">
-                        <input type="text" name="addr" class="easyui-validatebox" data-options="required:true" style="width: 500px;">
+                        <input type="text" name="addr" class="easyui-validatebox" data-options="required:true" style="width: 500px;" disabled>
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
@@ -101,19 +104,19 @@
                         <label>拓展方</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true">
+                        <input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true,readonly:true">
                         <span style="color: red;">*</span>
                     </td>
                     <td class="text-right col-sm-2">
                         <label>拓展人</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" id="expand_id" name="expand_id" class="easyui-combobox" data-options="required:true">
+                        <input type="text" id="expand_id" name="expand_id" class="easyui-combobox" data-options="required:true,readonly:true">
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
             </table>
-            <table class="table" style="width: 980px;">
+            <table class="table tf tf-create-install tf-create-other" style="width: 980px;">
                 <tr>
                     <td class="text-right col-sm-2">
                         <label>执行人</label>
@@ -164,11 +167,11 @@
             <table id="dg" class="easyui-datagrid" data-options="singleSelect:true,pagination:false,rownumbers:true,idField:'rec_id'">
                 <thead>
                     <tr>
-                        <th data-options="field:'mchnt_id',width:120">终端标识</th>
-                        <th data-options="field:'mchnt_abbr',width:120">联系人</th>
-                        <th data-options="field:'expense_type',width:100">手机号</th>
-                        <th data-options="field:'amount',width:100">门店名称</th>
-                        <th data-options="field:'expense_cycle',width:100">所在地区</th>
+                        <th data-options="field:'term_no',width:120">终端标识</th>
+                        <th data-options="field:'linkman',width:100">联系人</th>
+                        <th data-options="field:'mobile',width:100">手机号</th>
+                        <th data-options="field:'shop_name',width:200">门店名称</th>
+                        <th data-options="field:'district_name',width:150">所在地区</th>
                         <th data-options="field:'proc_st_nm',width:100">处理状态</th>
                     </tr>
                 </thead>
@@ -178,8 +181,8 @@
                 <div class="row">
                     <div class="col-sm-2"></div>
                     <div class="col-sm-8">
-                        <button type="button" class="btn btn-primary hide tf tf-create-install" data-options="datagrid:'#dg',url:'/action/bm/workorder/create-install'" onclick="$$.submit(this)">提交</button>
-                        <button type="button" class="btn btn-primary hide hide tf tf-create-other" data-options="datagrid:'#dg',url:'/action/bm/workorder/create-other'" onclick="$$.submit(this)">提交</button>
+                        <button type="button" class="btn btn-primary hide tf tf-create-install" data-options="url:'/action/bm/workorder/create-install'" onclick="$$.submit(this)">提交</button>
+                        <button type="button" class="btn btn-primary hide hide tf tf-create-other" data-options="url:'/action/bm/workorder/create-other'" onclick="$$.submit(this)">提交</button>
                         <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
                     </div>
                     <div class="col-sm-2">

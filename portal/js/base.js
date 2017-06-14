@@ -305,11 +305,12 @@ window.$$ = (function() {
                 return false;
             }
 
-            if (opts.before && opts.before.call(target, row) == false) {
+            var params = {};
+
+            if (opts.before && opts.before.call(target, row, params) == false) {
                 return false;
             }
-
-            var params = {};
+            
             params[dgOpts.idField] = row[dgOpts.idField];
 
             $$.open($$.url(url, params), title);

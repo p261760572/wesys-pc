@@ -1,275 +1,282 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>工作单</title>
-    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
-    <link rel="stylesheet" type="text/css" href="../lib/select2/css/select2.min.css">
-    <link rel="stylesheet" type="text/css" href="../css/base.css">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+    <style type="text/css">
+    input[disabled],
+    select[disabled],
+    textarea[disabled] {
+        background-color: rgb(235, 235, 228);
+    }
+
+    input[type=checkbox] {
+        width: 16px;
+        height: 16px;
+        margin-left: 15px;
+    }
+    </style>
 </head>
 
 <body>
-    <div class="panel panel-padding">
-        <form id="detail" class="layui-form" action="" method="post" data-options="load:loadDetail,serialize:serializeDetail">
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>工单号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="work_order_no" lay-verify="required" placeholder="请输入工单号" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>客户号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="mchnt_id" lay-verify="required" placeholder="请输入客户号" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>工作单类型</label>
-                    <div class="layui-input-inline">
-                        <select name="work_order_type" lay-verify="required" id="work-order-type">
-                            <option></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">工作单内容</label>
-                    <div class="layui-input-block">
-                        <input type="checkbox" name="work_content" title="换机" lay-skin="primary" id="work_content0">
-                        <input type="checkbox" name="work_content" title="送纸" lay-skin="primary" id="work_content1">
-                        <input type="checkbox" name="work_content" title="调单" lay-skin="primary" id="work_content2">
-                        <input type="checkbox" name="work_content" title="移机" lay-skin="primary" id="work_content3">
-                        <input type="checkbox" name="work_content" title="其它" lay-skin="primary" id="work_content4">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>执行人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="work_nm" lay-verify="required" placeholder="请输入执行人" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">计划执行日期</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="plan_date" placeholder="请输入计划执行日期" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view">
-                <label class="layui-form-label">注释</label>
-                <div class="layui-input-block">
-                    <input type="text" name="remark" placeholder="请输入注释" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item editable-sign">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>执行结果</label>
-                    <div class="layui-input-inline">
-                        <select name="work_result" lay-verify="required">
-                            <option></option>
+    <div class="page">
+        <form id="ff" action="/action/bm/workorder/view" data-options="serialize:serializeForm,load:onLoadForm">
+            <table class="table" style="width: 970px;">
+                <caption>工作单</caption>
+                <tr class="tf tf-create">
+                    <td class="text-right col-sm-2">
+                        <label>工单号</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="work_order_no" class="easyui-validatebox" data-options="" disabled>
+                        <span style="color: red;">*</span>
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>客户号</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="required:true" disabled>
+                        <span style="color: red;">*</span>
+                    </td>
+                </tr>
+                <tr class="tf tf-create">
+                    <td class="text-right col-sm-2">
+                        <label>工作单内容</label>
+                    </td>
+                    <td colspan="3" class="col-sm-10">
+                        <label>
+                            <input type="checkbox" name="work_content" id="work_content0">换机
+                        </label>
+                        <label>
+                            <input type="checkbox" name="work_content" id="work_content1">送纸
+                        </label>
+                        <label>
+                            <input type="checkbox" name="work_content" id="work_content2">调单
+                        </label>
+                        <label>
+                            <input type="checkbox" name="work_content" id="work_content4">移机
+                        </label>
+                        <label>
+                            <input type="checkbox" name="work_content" id="work_content4">其它
+                        </label>
+                    </td>
+                </tr>
+                <tr class="tf tf-create">
+                    <td class="text-right col-sm-2">
+                        <label>执行人</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="work_nm" class="easyui-validatebox" data-options="required:true">
+                        <span style="color: red;">*</span>
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>计划执行日期</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="plan_date" class="easyui-validatebox Wdate" data-options="">
+                    </td>
+                </tr>
+                <tr class="tf tf-create">
+                    <td class="text-right col-sm-2">
+                        <label>备注</label>
+                    </td>
+                    <td colspan="3" class="col-sm-10">
+                        <input type="text" name="remark" class="easyui-validatebox" data-options="" style="width: 500px;">
+                    </td>
+                </tr>
+                <tr class="tf tf-sign">
+                    <td class="text-right col-sm-2">
+                        <label>执行结果</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <select name="work_result" class="easyui-validatebox" data-options="required:true">
+                            <option value="">--请选择--</option>
                             <option value="1">成功</option>
                             <option value="0">失败</option>
                         </select>
+                        <span style="color: red;">*</span>
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>执行日期</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="work_date" class="easyui-validatebox Wdate" data-options="required:true" onfocus="WdatePicker()">
+                        <span style="color: red;">*</span>
+                    </td>
+                </tr>
+                <tr class="tf tf-sign">
+                    <td class="text-right col-sm-2">
+                        <label>提交备注</label>
+                    </td>
+                    <td colspan="3" class="col-sm-10">
+                        <input type="text" name="sign_remark" class="easyui-validatebox" data-options="" style="width: 500px;">
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>签收人</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="sign_by" class="easyui-validatebox" data-options="">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>签收时间</label>
+                    </td>
+                    <td colspan="3" class="col-sm-2">
+                        <input type="text" name="sign_time" class="easyui-validatebox" data-options="">
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>打印标识</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="print_flag" class="easyui-validatebox" data-options="">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>调试标志</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <select name="debug_flag" class="easyui-validatebox" data-options="required:true">
+                            <option value="">--请选择--</option>
+                            <option value="1">已调试</option>
+                            <option value="0">未调试</option>
+                        </select>
+                        <span style="color: red;">*</span>
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>调试人</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="debug_by" class="easyui-validatebox" data-options="">
+                        <span style="color: red;">*</span>
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>调试时间</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="debug_time" class="easyui-validatebox" data-options="">
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>出库标志</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="depot_flag" class="easyui-validatebox" data-options="">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>押金标志</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="deposit_flag" class="easyui-validatebox" data-options="">
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>记录编号</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="rec_id">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>操作标志/处理状态</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <!-- <input type="text" name="oper_in" style="width: 100px;">
+                        <input type="text" name="proc_st" style="width: 100px;"> -->
+                        <!-- <select name="oper_in">
+                            </select>
+                            <select name="proc_st">
+                            </select> -->
+                        <select id="oper_in" name="oper_in" style="width: 100px;">
+                            <option value="">--请选择--</option>
+                        </select>
+                        <select id="proc_st" name="proc_st" style="width: 100px;">
+                            <option value="">--请选择--</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>创建人</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="created_by">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>创建时间</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="created_time">
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>最后修改人</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="last_modified_by">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>最后修改时间</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="last_modified_time">
+                    </td>
+                </tr>
+            </table>
+            <table id="dg" class="easyui-datagrid" data-options="singleSelect:true,pagination:false,rownumbers:true,idField:'rec_id'">
+                <thead>
+                    <tr>
+                        <th data-options="field:'term_no',width:120">终端标识</th>
+                        <th data-options="field:'linkman',width:100">联系人</th>
+                        <th data-options="field:'mobile',width:100">手机号</th>
+                        <th data-options="field:'shop_name',width:200">门店名称</th>
+                        <th data-options="field:'district_name',width:150">所在地区</th>
+                        <th data-options="field:'proc_st_nm',width:100">处理状态</th>
+                    </tr>
+                </thead>
+            </table>
+            <div style="display:block; height:50px;"></div>
+            <div style="position:fixed; left: 0px; bottom:0px; z-index:9998999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px; ">
+                <div class="row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-8">
+                        <button type="button" class="btn btn-primary hide tf tf-sign" data-options="datagrid:'#dg',url:'/action/bm/workorder/sign'" onclick="$$.submit(this)">提交</button>
+                        <button type="button" class="btn btn-primary hide tf tf-cancel" data-options="datagrid:'#dg',url:'/action/bm/workorder/cancel'" onclick="$$.submit(this)">作废</button>
+                        <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
                     </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>执行日期</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="work_date" lay-verify="required" placeholder="请输入执行日期" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker()" id="work-date">
+                    <div class="col-sm-2">
                     </div>
-                </div>
-            </div>
-            <div class="layui-form-item editable-sign">
-                <label class="layui-form-label">提交备注</label>
-                <div class="layui-input-block">
-                    <input type="text" name="sign_remark" placeholder="请输入提交备注" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view">
-                <div class="layui-inline">
-                    <label class="layui-form-label">签收人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="sign_by" placeholder="请输入签收人" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">签收日期</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="sign_time" placeholder="请输入签收日期" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item invisible">
-                <div class="layui-inline">
-                    <label class="layui-form-label">打印标识</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="print_flag" placeholder="请输入打印标识" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">调试标志</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="debug_flag" placeholder="请输入调试标志" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item invisible">
-                <div class="layui-inline">
-                    <label class="layui-form-label">调试人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="debug_by" placeholder="请输入调试人" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">调试时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="debug_time" placeholder="请输入调试时间" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item invisible">
-                <div class="layui-inline">
-                    <label class="layui-form-label">出库标志</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="depot_flag" placeholder="请输入出库标志" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">押金标志</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="deposit_flag" placeholder="请输入押金标志" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view">
-                <div class="layui-inline">
-                    <label class="layui-form-label">记录编号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="rec_id" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">处理状态</label>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" name="oper_in" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" name="proc_st" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view">
-                <div class="layui-inline">
-                    <label class="layui-form-label">创建人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="created_by" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">创建时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="created_time" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view visible-refund-confirm">
-                <div class="layui-inline">
-                    <label class="layui-form-label">最后修改人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="last_modified_by" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">最后修改时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="last_modified_time" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button type="button" class="layui-btn visible invisible-view" onclick="$$.submit(this)" data-options="url:'/action/bm/workorder/' + operateType">提交</button>
-                    <button type="button" class="layui-btn layui-btn-primary" onclick="$$.close()">关闭</button>
                 </div>
             </div>
         </form>
-        <div id="term-list">
-        </div>
     </div>
-    <script id="term-list-tpl" type="text/html">
-        <div class="layui-form">
-            <table class="layui-table">
-                <thead>
-                    <tr>
-                        <th>终端标识</th>
-                        <th>联系人</th>
-                        <th>手机号</th>
-                        <th>门店名称</th>
-                        <th>所在地区</th>
-                        <!-- <th>操作标志</th> -->
-                        <!-- <th>处理状态</th> -->
-                        <!-- <th>操作</th> -->
-                    </tr>
-                </thead>
-                <tbody>
-                    {{each rows as row i}}
-                    <tr data-index="{{i}}">
-                        <td>
-                            {{row.term_no}}
-                        </td>
-                        <td>
-                            {{row.linkman}}
-                        </td>
-                        <td>
-                            {{row.mobile}}
-                        </td>
-                        <td>
-                            {{row.shop_name}}
-                        </td>
-                        <td>
-                            {{row.district_name}}
-                        </td>
-                        <!-- <td>
-                            {{row.oper_in_nm}}
-                        </td> -->
-                        <!-- <td>
-                            {{row.proc_st}}
-                        </td> -->
-                        <!-- <td>
-                            <div class="layui-btn-group">
-                            </div>
-                        </td> -->
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
-    </script>
-    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
-    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
-    <script type="text/javascript" src="../lib/select2/js/select2.min.js"></script>
-    <script type="text/javascript" src="../js/template.js"></script>
-    <script type="text/javascript" src="../js/base.js"></script>
-    <script type="text/javascript" src="../js/param.js"></script>
-    <!-- <script type="text/javascript" src="../js/district.js"></script> -->
-    <script type="text/javascript" src="../js/st.js"></script>
-    <script type="text/javascript">
+    <script src="../lib/jquery/jquery.min.js"></script>
+    <script src="../lib/toastr/toastr.min.js"></script>
+    <script src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script src="../lib/easyui/jquery.easyui.min.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/st.js"></script>
+    <script src="../js/param.js"></script>
+    <!-- <script src="../js/district.js"></script> -->
+    <script>
     var query = $$.parseQueryString();
     var displayType = query.displayType;
     var operateType = query.operateType;
-    var form = layui.form();
-    var element = layui.element();
 
-
-    function loadDetail(data) {
+    function onLoadForm(data) {
         if (operateType == 'sign') {
             data.data.work_result = '1';
             data.data.work_date = $$.formatDate(new Date(), 'yyyy-MM-dd');
@@ -282,13 +289,10 @@
             }
         }
 
-        $$.datagrid('#term-list', {
-            tpl: '#term-list-tpl',
-            data: data.term
-        });
+        $('#dg').datagrid('loadData', data.term);
     }
 
-    function serializeDetail(data) {
+    function serializeForm(data) {
 
         var work_content = [];
         for (var i = 0; i < 9; i++) {
@@ -297,50 +301,28 @@
         data.work_content = work_content.join('');
     }
 
+    function hasNext(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['workorder']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
+
     function formatDate(value) {
         return value ? value.substr(0, 10) : value;
     }
 
-    // function formatTermProcSt(value) {
-    //     return $$.formatField($$.st.procSt[$$.st.alias['term_info']], value);
-    // }
-
-    // template.helper('formatTermProcSt', formatTermProcSt);
 
     $(function() {
-
-        $$.loadSelect('#work-order-type', $$.param['work_order_type']);
-
-        var d1 = $$.request('/action/bm/recipient/list', {}, function(data) {
-            $$.loadSelect('#recipient-by', data.rows);
-            form.render('select');
+        $$.transform('body>.page', operateType, {
+            'sign': ['create'],
+            'cancel': ['create']
         });
 
-        var d2 = $$.request('/action/bm/parameter/list', {
-            bank: '1'
-        }, function(data) {
-            $$.loadSelect('#refund-account-bank', data.bank, {
-                valueField: 'bank_cd',
-                textField: 'bank_nm'
-            });
-            form.render('select');
-        });
+        $$.loadSelect('#work_order_type', $$.param['work_order_type']);
 
-        form.render();
+        $$.loadSelect('#oper_in', $$.st.operIn[$$.st.alias['workorder']]);
+        $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['workorder']]);
 
-        $$.transformStatus('#detail', operateType);
-        $.when(d1, d2).done(function() {
-            if (query.operateType == 'create') {
-                $$.loadData('#detail', query);
-                $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
-                    // data.data.shop_name = data.data.mchnt_abbr;
-                    $$.loadData('#detail', data.data);
-                    form.render();
-                });
-            } else {
-                $$.view('#detail', '/action/bm/workorder/view', query);
-            }
-        });
+        $$.loadData('#ff', '/action/bm/workorder/view', query);
     });
     </script>
 </body>
