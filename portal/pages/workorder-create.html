@@ -31,7 +31,7 @@
 
 <body>
     <div class="page">
-        <form id="ff" action="/action/bm/mchnt-base-info/view" data-options="serialize:serializeForm,load:loadForm">
+        <form id="ff" action="/action/bm/mchnt-base-info/view" data-options="serialize:onSerializeForm,load:loadForm">
             <table class="table" style="width: 980px;">
                 <caption>商户信息</caption>
                 <tr>
@@ -210,7 +210,7 @@
         $('#district').val(data.data.district);
     }
 
-    function serializeForm(data) {
+    function onSerializeForm(data) {
         var work_content = [];
         for (var i = 0; i < 9; i++) {
             work_content.push($('#work_content' + i).is(":checked") ? '1' : '0');
@@ -251,27 +251,6 @@
         } else {
             $('#expense_cycle').removeAttr('disabled');
         }
-    }
-
-    function onChangeBank(rec) {
-        // $$.request('/action/bm/bank-branch/search', rec, function (result) {
-        //     $('#refund_account_bank_branch_cd').combobox('loadData', result.rows);
-        // });
-        $('#refund_account_bank_branch_cd').combobox('clear').combobox('reload');
-    }
-
-    function bankBranchLoader(param, success, error) {
-        var q = param.q || '';
-        // if (q.length <= 1) return false;
-
-        $$.request('/action/bm/bank-branch/search', {
-            q: q,
-            bank_cd: $('#refund_account_bank').combobox('getValue')
-        }, function(result) {
-            $('#refund_account_bank_branch_cd').combobox('loadData', result.rows);
-        }, {
-            loading: false
-        });
     }
 
     function onChangeProvince() {

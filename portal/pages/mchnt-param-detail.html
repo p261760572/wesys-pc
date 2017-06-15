@@ -25,7 +25,7 @@
         <form id="ff" action="/action/bm/mchnt-param/view" data-options="serialize:onSerializeForm,load:onLoadForm">
             <table class="table" style="width: 970px;">
                 <caption>商户参数</caption>
-                <tr>
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>客户号</label>
                     </td>
@@ -41,7 +41,7 @@
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
-                <tr>
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>收单机构</label>
                     </td>
@@ -63,7 +63,7 @@
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
-                <tr>
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>MCC</label>
                     </td>
@@ -79,7 +79,7 @@
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
-                <tr class="tf">
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>商户名称</label>
                     </td>
@@ -97,12 +97,12 @@
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
-                <tr class="tf">
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>开户银行</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" name="account_bank" class="easyui-combobox" data-options="required:true,valueField:'bank_cd',textField: 'bank_nm'">
+                        <input type="text" id="account_bank" name="account_bank" class="easyui-combobox" data-options="required:true,valueField:'bank_cd',textField:'bank_nm',onChange:onChangeBank">
                         <span style="color: red;">*</span>
                     </td>
                     <td class="text-right col-sm-2">
@@ -117,16 +117,16 @@
                         </select>
                     </td>
                 </tr>
-                <tr class="tf">
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>开户支行</label>
                     </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="account_bank_branch_cd" class="easyui-combobox" data-options="required:true">
+                    <td colspan="3" class="col-sm-10">
+                        <input type="text" id="account_bank_branch_cd" name="account_bank_branch_cd" class="easyui-combobox" data-options="required:true,valueField:'bank_branch_cd',textField:'bank_branch_nm',mode:'remote',loader:bankBranchLoader" style="width: 500px;">
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
-                <tr>
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>账户正面</label>
                     </td>
@@ -134,23 +134,24 @@
                         <input type="file" name="file">
                     </td>
                 </tr>
-                <tr class="tf">
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>开户名称</label>
                     </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="account_name" class="easyui-validatebox" data-options="">
+                    <td colspan="3" class="col-sm-4">
+                        <input type="text" name="account_name" class="easyui-validatebox" data-options="" style="width: 500px;">
                     </td>
                 </tr>
-                <tr class="tf">
-                    <td class="text-right col-sm-2">
+                <tr class="tf tf-create tf-update">
+                    <td class="text-right col-sm-2" style="vertical-align: middle;">
                         <label>银行账号</label>
                     </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="account_no" class="easyui-validatebox" data-options="">
+                    <td colspan="3" class="col-sm-10">
+                        <input type="text" name="account_no" class="easyui-validatebox" data-options="" style="font-size: 20px;">
+                        <span id="account_no2" style="font-size: 24px; margin-left: 20px;"></span>
                     </td>
                 </tr>
-                <tr>
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>身份证正面</label>
                     </td>
@@ -158,7 +159,7 @@
                         <input type="file" name="file">
                     </td>
                 </tr>
-                <tr class="tf">
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>身份证反面</label>
                     </td>
@@ -166,7 +167,7 @@
                         <input type="file" name="file">
                     </td>
                 </tr>
-                <tr class="tf">
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>入账授权书</label>
                     </td>
@@ -174,23 +175,23 @@
                         <input type="file" name="file">
                     </td>
                 </tr>
-                <tr class="tf">
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>借记卡手续费</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" name="debit_card_fee" class="easyui-combobox" data-options="">
+                        <input type="text" id="debit_card_fee" name="debit_card_fee" class="easyui-combobox" data-options="">
                         <span style="color: red;">*</span>
                     </td>
                     <td class="text-right col-sm-2">
                         <label>贷记卡手续费</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" name="credit_card_fee" class="easyui-combobox" data-options="">
+                        <input type="text" id="credit_card_fee" name="credit_card_fee" class="easyui-combobox" data-options="">
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
-                <tr>
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>扫码手续费(‰)</label>
                     </td>
@@ -210,7 +211,7 @@
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
-                <tr>
+                <!-- <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>信用卡限额</label>
                     </td>
@@ -224,7 +225,7 @@
                         <input type="text" name="credit_date_limit" class="easyui-validatebox" data-options="">
                     </td>
                 </tr>
-                <tr>
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>借记卡限额</label>
                     </td>
@@ -237,20 +238,20 @@
                     <td class="col-sm-4">
                         <input type="text" name="debit_date_limit" class="easyui-validatebox" data-options="">
                     </td>
-                </tr>
-                <tr class="tf">
+                </tr> -->
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>拓展方</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" name="expand_inst_id" class="easyui-combobox" data-options="required:true">
+                        <input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true">
                         <span style="color: red;">*</span>
                     </td>
                     <td class="text-right col-sm-2">
                         <label>拓展人</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" name="expand_id" class="easyui-combobox" data-options="required:true">
+                        <input type="text" id="expand_id" name="expand_id" class="easyui-combobox" data-options="required:true">
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
@@ -321,7 +322,7 @@
                         <input type="text" name="last_checked_time">
                     </td>
                 </tr>
-                <tr class="tf">
+                <tr class="tf tf-check1">
                     <td class="text-right col-sm-2">
                         <label>审核备注</label>
                     </td>
@@ -361,16 +362,13 @@
     var operateType = query.operateType;
 
     function onLoadForm(data) {
-        $('#acq_inst_id').change();
+        $('#acq_inst_id').val(data.data.acq_inst_id).change();
         $('#busi_type').attr('data-value', data.data.busi_type);
         $('#province').val(data.data.account_province).change();
         $('#city').val(data.data.account_city).change();
         // $('#district').val(data.data.district);
         $('#account_no2').text(formatAccountNo(data.data.account_no));
-        if (data.data.account_bank_branch_cd) {
-            // $('#account-bank-branch-cd').html('<option value="' + data.data.account_bank_branch_cd + '">' + data.data.account_bank_branch_nm + '</option>').trigger('change');
-        }
-
+        
         $.each(data.images, function(index, value) {
             // var $elem = $('#detail').find('input[type=file][data-type=' + value.elec_info_type + ']');
             // renderImgbox($elem, value);
@@ -428,7 +426,7 @@
     function onChangeProvince() {
         var value = $(this).val();
         $$.loadSelect('#city', districtData['city'][value] || []);
-        $$.loadSelect('#district', []);
+        // $$.loadSelect('#district', []);
     }
 
     // function onChangeCity() {
@@ -452,7 +450,7 @@
         // $$.request('/action/bm/bank-branch/search', rec, function (result) {
         //     $('#refund_account_bank_branch_cd').combobox('loadData', result.rows);
         // });
-        $('#raccount_bank_branch_cd').combobox('clear').combobox('reload');
+        $('#account_bank_branch_cd').combobox('clear').combobox('reload');
     }
 
     function bankBranchLoader(param, success, error) {
@@ -463,18 +461,32 @@
             q: q,
             bank_cd: $('#account_bank').combobox('getValue')
         }, function(result) {
-            $('#account_bank_branch_cd').combobox('loadData', result.rows);
+            success(result.rows);
+        }, function() {
+            error.apply(this, arguments);
         }, {
             loading: false
         });
     }
 
+    function formatAccountNo(v) {
+        var nv = '';
+        var i;
+        for (i = 0; i < v.length; i++) {
+            if (i > 0 && i % 4 == 0) {
+                nv += '-';
+            }
+            nv += v.charAt(i);
+        }
+        return nv;
+    }
+
     $(function() {
-        // $$.transform('body>.page', operateType, {
-        //     'create': [],
-        //     'update': [],
-        //     'check1': ['create', 'update']
-        // });
+        $$.transform('body>.page', operateType, {
+            'create': [],
+            'update': [],
+            'check1': ['create', 'update']
+        });
 
         $('#acq_inst_id').on('change', onChangeAcqInstId);
         $('#province').on('change', onChangeProvince);
@@ -487,13 +499,14 @@
 
         $$.loadSelect('#province', districtData['province']);
 
-
-        // $$.loadSelect('#oper_in', $$.st.operIn[$$.st.alias['mchnt_param']]);
-        // $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['mchnt_param']]);
+        $$.loadSelect('#account_type', $$.param['account_type']);
+        $$.loadSelect('#oper_in', $$.st.operIn[$$.st.alias['mchnt_param']]);
+        $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['mchnt_param']]);
 
 
         var d1 = $$.request('/action/bm/expand/list', {}, function(data) {
-            $$.loadSelect('#expand-id', data.rows);
+            // $$.loadSelect('#expand_id', data.rows);
+             $('#expand_id').combobox('loadData', data.rows);
         });
 
         var d2 = $$.request('/action/bm/parameter/list', {

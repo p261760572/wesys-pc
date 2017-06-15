@@ -22,64 +22,64 @@
 
 <body>
     <div class="page">
-        <form id="ff" action="/action/bm/term-param
-/view" data-options="serialize:onSerializeForm,load:onLoadForm">
+        <form id="ff" action="/action/bm/term-param/view" data-options="serialize:onSerializeForm,load:onLoadForm">
             <table class="table" style="width: 970px;">
                 <caption>终端参数</caption>
-                <tr>
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>终端标识</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" name="term_no" class="easyui-validatebox" data-options="">
+                        <input type="text" name="term_no" class="easyui-validatebox" data-options="" disabled>
                         <span style="color: red;">*</span>
                     </td>
                     <td class="text-right col-sm-2">
                         <label>终端参数ID</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" name="term_param_id" class="easyui-validatebox" data-options="">
+                        <input type="text" name="term_param_id" class="easyui-validatebox" data-options="" disabled>
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
-                <tr class="tf">
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>门店名称</label>
                     </td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="shop_name" class="easyui-validatebox" data-options="">
+                        <input type="text" name="shop_name" class="easyui-validatebox" data-options="" style="width: 500px;" disabled>
+                        <span style="color: red;">*</span>
+                    </td>
+                </tr>
+                <tr class="tf tf-create tf-update">
+                    <td class="text-right col-sm-2">
+                        <label>商户参数</label>
+                    </td>
+                    <td colspan="3" class="col-sm-10">
+                        <input type="text" name="term_param_id" class="easyui-combobox" data-options="valueField:'mchnt_param_id',textField:'text',mode:'remote',loader:mchntParamLoader" style="width: 500px;">
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
                 <tr>
                     <td class="text-right col-sm-2">
-                        <label>商户参数</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="term_param_id" class="easyui-combobox" data-options="">
-                        <span style="color: red;">*</span>
-                    </td>
-                    <td class="text-right col-sm-2">
                         <label>终端号</label>
                     </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="term_id" class="easyui-validatebox" data-options="required:true">
-                        <span style="color: red;">*</span>
+                    <td colspan="3" class="col-sm-10">
+                        <input type="text" name="term_id" class="easyui-validatebox" data-options="">
                     </td>
                 </tr>
-                <tr class="tf">
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>拓展方</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" name="expand_inst_id" class="easyui-combobox" data-options="required:true">
+                        <input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true">
                         <span style="color: red;">*</span>
                     </td>
                     <td class="text-right col-sm-2">
                         <label>拓展人</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" name="expand_id" class="easyui-combobox" data-options="required:true">
+                        <input type="text" id="expand_id" name="expand_id" class="easyui-combobox" data-options="required:true">
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
@@ -150,7 +150,7 @@
                         <input type="text" name="last_checked_time">
                     </td>
                 </tr>
-                <tr class="tf">
+                <tr class="tf tf-check1">
                     <td class="text-right col-sm-2">
                         <label>审核备注</label>
                     </td>
@@ -197,7 +197,6 @@
 
     }
 
-
     function mchntParamLoader(param, success, error) {
         var q = param.q || '';
         // if (q.length <= 1) return false;
@@ -206,52 +205,49 @@
             q: q,
             term_no2: query.term_no
         }, function(result) {
-            $('#mchnt_param_id').combobox('loadData', result.rows);
+            for (var i = 0; i < result.rows.length; i++) {
+                result.rows[i]['text'] = formatMchntParam(result.rows[i]);
+            }
+            success(result.rows);
+        }, function() {
+            error.apply(this, arguments);
         }, {
             loading: false
         });
     }
 
-
-
+    function formatMchntParam(row) {
+        return row.busi_type_nm + '/' + row.mchnt_name + '/' + (row.mchnt_cd || '');
+    }
 
     function hasNext(oper_in, proc_st, action) {
         var rows = $$.st.transition[$$.st.alias['term_param']]
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
 
-
-
-
     $(function() {
-        // $$.transform('body>.page', operateType, {
-        //     'create': [],
-        //     'update': [],
-        //     'check1': ['create', 'update']
-        // });
-
+        $$.transform('body>.page', operateType, {
+            'create': [],
+            'update': [],
+            'check1': ['create', 'update']
+        });
 
         // $('#province').on('change', onChangeProvince);
         // $('#city').on('change', onChangeCity);
         // $$.loadSelect('#province', districtData['province']);
 
-        $$.loadSelect('#term_status', $$.param['term_status']);
-        // $$.loadSelect('#oper_in', $$.st.operIn[$$.st.alias['term_param']]);
-        // $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['term_param']]);
-
+        // $$.loadSelect('#term_status', $$.param['term_status']);
+        $$.loadSelect('#oper_in', $$.st.operIn[$$.st.alias['term_param']]);
+        $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['term_param']]);
 
         var d1 = $$.request('/action/bm/expand/list', {}, function(data) {
             $('#expand_id').combobox('loadData', data.rows);
         });
 
         var d2 = $$.request('/action/bm/parameter/list', {
-            expand_inst: '1',
-            term_inves: '1',
-            equi_type: '1'
+            expand_inst: '1'
         }, function(data) {
             $('#expand_inst_id').combobox('loadData', data.expand_inst);
-            $('#term_inves').combobox('loadData', data.term_inves);
-            $$.loadSelect('#equi_type', data.equi_type);
         });
 
         $.when(d1, d2).done(function() {

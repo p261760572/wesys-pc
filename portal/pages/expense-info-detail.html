@@ -212,8 +212,7 @@
                     </td>
                     <td colspan="3" class="col-sm-10">
                         <input type="text" name="refund_amount" class="easyui-validatebox" data-options="required:true">
-                        <span style="color: red;">*</span>
-                        退款金额累计
+                        <span style="color: red;">*</span> 退款金额累计
                         <span id="refund_amount_total" class="badge">0.00</span>
                     </td>
                 </tr>
@@ -456,7 +455,9 @@
             q: q,
             bank_cd: $('#refund_account_bank').combobox('getValue')
         }, function(result) {
-            $('#refund_account_bank_branch_cd').combobox('loadData', result.rows);
+            success(result.rows);
+        }, function() {
+            error.apply(this, arguments);
         }, {
             loading: false
         });

@@ -127,7 +127,8 @@
         </table>
         <br>
         <div id="tb2">
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true,before:beforeWorkorderOut" onclick="$$.view(this, 'device-info-workorder-out.html?displayType=workorder-out', '工单出库')">出库</a>            
+            <a href="#" class="easyui-linkbutton tf tfd-workorder-out" data-options="iconCls:'fi fi-operate',plain:true,before:beforeWorkorderOutIn" onclick="$$.view(this, 'device-info-workorder-out.html?displayType=workorder-out', '工单出库')">出库</a>
+            <a href="#" class="easyui-linkbutton tf tfd-workorder-in" data-options="iconCls:'fi fi-operate',plain:true,before:beforeWorkorderOutIn" onclick="$$.view(this, 'device-info-workorder-in.html?displayType=workorder-in', '工单入库')">入库</a>
         </div>
         <table id="dg2" class="easyui-datagrid" title="终端信息" data-options="singleSelect:true,pagination:false,rownumbers:true,toolbar:'#tb2',idField:'term_no'">
                 <thead>
@@ -215,12 +216,12 @@
         });
     }
 
-    function beforeWorkorderOut(row, params) {
+    function beforeWorkorderOutIn(row, params) {
         params['work_order_no'] = row['work_order_no'];
     }
 
     $(function() {
-        $$.transformDisplay('#tb', displayType);
+        $$.transformDisplay('#tb2', displayType);
 
         $$.loadSelect('#work_order_type', $$.param['work_order_type']);
         $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['workorder']]);

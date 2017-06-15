@@ -87,12 +87,12 @@
             </table>
         </form>
         <div id="tb">
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('mchnt-param-detail.html?operateType=create', '新增商户参数')">新增</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('mchnt-param-detail.html?operateType=create', '新增商户参数')">新增</a>
             <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-param-detail.html?operateType=view', '商户参数详情')">详情</a>
-            <a href="#" class="easyui-linkbutton tf tf-receipt" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-param-detail.html?operateType=update', '编辑商户参数')">编辑</a>
-            <a href="#" class="easyui-linkbutton tf tf-cancel" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-param-detail.html?operateType=update', '审核商户参数')">审核</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update tf-update" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-param-detail.html?operateType=update', '编辑商户参数')">编辑</a>
+            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-check1" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-param-detail.html?operateType=check1', '审核商户参数')">审核</a>
         </div>
-        <table id="dg" class="easyui-datagrid" title="商户参数" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id'">
+        <table id="dg" class="easyui-datagrid" title="商户参数" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id',onClickRow:onClickRow">
             <thead>
                 <tr>
                     <th data-options="field:'mchnt_id',width:120">客户号</th>
@@ -100,7 +100,7 @@
                     <th data-options="field:'acq_inst_id',width:100">收单机构</th>
                     <th data-options="field:'mchnt_cd',width:100">商户号</th>
                     <th data-options="field:'mchnt_name',width:100">商户名称</th>
-                    <th data-options="field:'account_type',width:100">账户类型</th>
+                    <th data-options="field:'account_type',width:100,formatter:formatAccountType">账户类型</th>
                     <th data-options="field:'account_name',width:100">开户名称</th>
                     <th data-options="field:'account_name',width:100">开户银行</th>
                     <th data-options="field:'proc_st_nm',width:100">处理状态</th>
@@ -133,6 +133,20 @@
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
 
+    function onClickRow(rowIndex, rowData) {
+        var actionMap = {
+            'update': 'update',
+            'check1-pass': 'check1'
+        }
+        var bb = $('#tb').find('.tfd-' + displayType);
+        $.each(actionMap, function(action, selector) {
+            bb.filter('.tf-' + selector).addClass('hide');
+            if (hasNext(rowData.oper_in, rowData.proc_st, action)) {
+                bb.filter('.tf-' + selector).removeClass('hide');
+            }
+        })
+    }
+
     function formatAccountType(value) {
         return $$.formatField($$.param['account_type'], value);
     }
@@ -148,23 +162,23 @@
         $$.loadSelect('#district', districtData['district'][$('#province').val() + value]);
     }
 
-    function onChangeAcqInstId() {
-        var value = $(this).val();
+    // function onChangeAcqInstId() {
+    //     var value = $(this).val();
 
-        $$.request('/action/bm/acq-inst-busi/list', {
-            acq_inst_id: value
-        }, function(result) {
-            $$.loadSelect('#busi_type', result.rows, {
-                valueField: 'busi_type',
-                textField: 'busi_type_nm'
-            });
-        });
-    }
+    //     $$.request('/action/bm/acq-inst-busi/list', {
+    //         acq_inst_id: value
+    //     }, function(result) {
+    //         $$.loadSelect('#busi_type', result.rows, {
+    //             valueField: 'busi_type',
+    //             textField: 'busi_type_nm'
+    //         });
+    //     });
+    // }
 
     $(function() {
         $$.transformDisplay('#tb', displayType);
 
-        $('#acq_inst_id').on('change', onChangeAcqInstId);
+        // $('#acq_inst_id').on('change', onChangeAcqInstId);
         // $('#province').on('change', onChangeProvince);
         // $('#city').on('change', onChangeCity);
         // $$.loadSelect('#province', districtData['province']);
@@ -172,14 +186,14 @@
         $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['mchnt_param']]);
 
 
-        $$.request('/action/bm/parameter/list', {
-            acq_inst: '1'
-        }, function(result) {
-            $$.loadSelect('#acq_inst_id', result.acq_inst, {
-                valueField: 'acq_inst_id',
-                textField: 'acq_inst_nm'
-            });
-        });
+        // $$.request('/action/bm/parameter/list', {
+        //     acq_inst: '1'
+        // }, function(result) {
+        //     $$.loadSelect('#acq_inst_id', result.acq_inst, {
+        //         valueField: 'acq_inst_id',
+        //         textField: 'acq_inst_nm'
+        //     });
+        // });
 
         if (query.mchnt_id) {
             $('#ff').form('load', query);

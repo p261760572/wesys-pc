@@ -121,7 +121,7 @@
                 </tbody>
             </table>
         </form>
-        <form id="ff2" data-options="serialize:serializeForm">
+        <form id="ff2" data-options="serialize:onSerializeForm">
             <table class="table" style="width: 970px;">
                 <!-- <caption>查询费用信息</caption> -->
                 <tbody>
@@ -134,23 +134,25 @@
                             <span style="color: red;">*</span>
                         </td>
                         <td class="text-right col-sm-2">
+                            <label>仓库</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <select id="depot_id" name="depot_id" class="easyui-validatebox" data-options="required:true">
+                                <option value="">--请选择--</option>
+                            </select>
+                            <span style="color: red;">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
                             <label>经手人</label>
                         </td>
                         <td class="col-sm-4">
                             <input type="text" name="hand_by" class="easyui-validatebox" data-options="required:true">
                             <span style="color: red;">*</span>
                         </td>
-                    </tr>
-                    <tr>
                         <td class="text-right col-sm-2">
                             <label>备注</label>
-                        </td>
-                        <td class="col-sm-4">
-                            <input type="text" name="note">
-                        </td>
-                        <td class="text-right col-sm-2">
-                        </td>
-                        <td class="col-sm-4">
                         </td>
                     </tr>
                 </tbody>
@@ -181,16 +183,16 @@
             </thead>
         </table>
         <div style="display:block; height:50px;"></div>
-            <div style="position:fixed; left: 0px; bottom:0px; z-index:9998999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px; ">
-                <div class="row">
-                    <div class="col-sm-2"></div>
-                    <div class="col-sm-8">
-                        <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
-                    </div>
-                    <div class="col-sm-2">
-                    </div>
+        <div style="position:fixed; left: 0px; bottom:0px; z-index:9998999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px; ">
+            <div class="row">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8">
+                    <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
+                </div>
+                <div class="col-sm-2">
                 </div>
             </div>
+        </div>
     </div>
     <script src="../lib/jquery/jquery.min.js"></script>
     <script src="../lib/toastr/toastr.min.js"></script>
@@ -206,7 +208,7 @@
     var operateType = query.operateType;
     var cache = {};
 
-    function serializeForm(data) {
+    function onSerializeForm(data) {
         data.rows = $('#dg').datagrid('getRows');
     }
 
@@ -282,8 +284,8 @@
         $$.request('/action/bm/device-info/view', data, function(result) {
             var tmp_device_no = result.data.device_no;
             if (tmp_device_no) {
-                if (result.data.proc_st != '1') {
-                    $$.error(device_no + '设备状态不是在库');
+                if (result.data.proc_st != '2') {
+                    $$.error(device_no + '设备状态不是已安装');
                 } else {
                     //重复检查
                     var isRepeat = false;
@@ -360,6 +362,12 @@
             cache['term_inves'] = data.term_inves;
         });
 
+        $$.request('/action/bm/depot-info/list', {}, function(data) {
+            $$.loadSelect('#depot_id', data.rows, {
+                valueField: 'depot_id',
+                textField: 'depot_name'
+            });
+        });
 
         $.when(d1, d2).done(function() {
             $$.loadData('#ff', '/action/bm/term-info/view', query);

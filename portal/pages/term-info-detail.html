@@ -17,270 +17,263 @@
     textarea[disabled] {
         background-color: rgb(235, 235, 228);
     }
+
+    .tab-body-overflow {
+        overflow: hidden;
+    }
     </style>
 </head>
 
 <body>
-    <div class="page">
-        <form id="ff" action="/action/bm/term-info
-/view" data-options="serialize:onSerializeForm,load:onLoadForm">
-            <table class="table" style="width: 970px;">
-                <caption>终端信息</caption>
-                <tr>
-                    <td class="text-right col-sm-2">
-                        <label>客户号</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="">
-                        <span style="color: red;">*</span>
-                    </td>
-                    <td class="text-right col-sm-2">
-                        <label>终端标识</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="term_no" class="easyui-validatebox" data-options="">
-                        <span style="color: red;">*</span>
-                    </td>
-                </tr>
-                <tr class="tf">
-                    <td class="text-right col-sm-2">
-                        <label>联系人</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="linkman" class="easyui-combobox" data-options="">
-                        <span style="color: red;">*</span>
-                    </td>
-                    <td class="text-right col-sm-2">
-                        <label>手机号</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="mobile" class="easyui-combobox" data-options="">
-                        <span style="color: red;">*</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-right col-sm-2">
-                        <label>门店名称</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="shop_name" class="easyui-validatebox" data-options="required:true">
-                        <span style="color: red;">*</span>
-                    </td>
-                    <td class="text-right col-sm-2">
-                        <label>联系电话</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="telno" class="easyui-combobox" data-options="">
-                        <span style="color: red;">*</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-right col-sm-2">
-                        <label>信用卡限额</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="credit_card_limit" class="easyui-validatebox" data-options="">
-                    </td>
-                    <td class="text-right col-sm-2">
-                        <label>信用卡日限额</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="credit_date_limit" class="easyui-validatebox" data-options="">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-right col-sm-2">
-                        <label>所在地区</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <select id="province" name="province" style="width: 100px;">
-                            <option value="">--请选择省--</option>
-                        </select>
-                        <select id="city" name="city" style="width: 100px;">
-                            <option value="">--请选择市--</option>
-                        </select>
-                        <select id="district" name="district" style="width: 100px;">
-                            <option value="">--请选择县/区--</option>
-                        </select>
-                    </td>
-                    <td class="text-right col-sm-2">
-                        <label>详细地址</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="addr" class="easyui-validatebox" data-options="">
-                    </td>
-                </tr>
-                <tr class="tf">
-                    <td class="text-right col-sm-2">
-                        <label>终端投资方</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" id="term_inves" name="term_inves" class="easyui-combobox" data-options="required:true">
-                        <span style="color: red;">*</span>
-                    </td>
-                    <td class="text-right col-sm-2">
-                        <label>机具类型</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <select id="equi_type" name="equi_type">
-                            <option value="">--请选择--</option>
-                        </select>
-                        <span style="color: red;">*</span>
-                    </td>
-                </tr>
-                <tr class="tf">
-                    <td class="text-right col-sm-2">
-                        <label>拓展方</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="expand_inst_id" class="easyui-combobox" data-options="required:true">
-                        <span style="color: red;">*</span>
-                    </td>
-                    <td class="text-right col-sm-2">
-                        <label>拓展人</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="expand_id" class="easyui-combobox" data-options="required:true">
-                        <span style="color: red;">*</span>
-                    </td>
-                </tr>
-                <tr class="tf">
-                    <td class="text-right col-sm-2">
-                        <label>装机日期</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="installed_date" class="easyui-combobox" data-options="required:true">
-                        <span style="color: red;">*</span>
-                    </td>
-                    <td class="text-right col-sm-2">
-                        <label>撤机日期</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="removed_date" class="easyui-combobox" data-options="required:true">
-                        <span style="color: red;">*</span>
-                    </td>
-                </tr>
-                <tr class="tf">
-                    <td class="text-right col-sm-2">
-                        <label>装机人</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="installed_by" class="easyui-combobox" data-options="required:true">
-                        <span style="color: red;">*</span>
-                    </td>
-                    <td class="text-right col-sm-2">
-                        <label>维护人</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="maintained_by" class="easyui-combobox" data-options="required:true">
-                        <span style="color: red;">*</span>
-                    </td>
-                </tr>
-                <tr class="tf">
-                    <td class="text-right col-sm-2">
-                        <label>终端状态</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="term_status" class="easyui-combobox" data-options="required:true">
-                        <span style="color: red;">*</span>
-                    </td>
-                    <td class="text-right col-sm-2">
-                    </td>
-                    <td class="col-sm-4">
-                    </td>
-                </tr>
-                <tr class="tf">
-                    <td class="text-right col-sm-2">
-                        <label>记录编号</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="rec_id">
-                    </td>
-                    <td class="text-right col-sm-2">
-                        <label>操作标志/处理状态</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <!-- <input type="text" name="oper_in" style="width: 100px;">
+    <div id="tt" class="easyui-tabs" data-options="fit:true,border:false,tabHeight:36,onSelect:onSelectTab" style="overflow:hidden;">
+        <div title="基本资料">
+            <div class="page">
+                <form id="ff" action="/action/bm/term-info/view" data-options="serialize:onSerializeForm,load:onLoadForm">
+                    <table class="table" style="width: 970px;">
+                        <caption>终端信息</caption>
+                        <tr class="tf tf-create tf-update">
+                            <td class="text-right col-sm-2">
+                                <label>客户号</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="" disabled>
+                                <span style="color: red;">*</span>
+                            </td>
+                            <td class="text-right col-sm-2">
+                                <label>终端标识</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="term_no" class="easyui-validatebox" data-options="" disabled>
+                                <span style="color: red;">*</span>
+                            </td>
+                        </tr>
+                        <tr class="tf tf-create tf-update">
+                            <td class="text-right col-sm-2">
+                                <label>联系人</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="linkman" class="easyui-validatebox" data-options="">
+                                <span style="color: red;">*</span>
+                            </td>
+                            <td class="text-right col-sm-2">
+                                <label>手机号</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="mobile" class="easyui-validatebox" data-options="">
+                                <span style="color: red;">*</span>
+                            </td>
+                        </tr>
+                        <tr class="tf tf-create tf-update">
+                            <td class="text-right col-sm-2">
+                                <label>门店名称</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="shop_name" class="easyui-validatebox" data-options="required:true">
+                                <span style="color: red;">*</span>
+                            </td>
+                            <td class="text-right col-sm-2">
+                                <label>联系电话</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="telno" class="easyui-validatebox" data-options="">
+                            </td>
+                        </tr>
+                        <tr class="tf tf-create tf-update">
+                            <td class="text-right col-sm-2">
+                                <label>所在地区</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <select id="province" name="province" style="width: 100px;">
+                                    <option value="">--请选择省--</option>
+                                </select>
+                                <select id="city" name="city" style="width: 100px;">
+                                    <option value="">--请选择市--</option>
+                                </select>
+                                <select id="district" name="district" style="width: 100px;">
+                                    <option value="">--请选择县/区--</option>
+                                </select>
+                            </td>
+                            <td class="text-right col-sm-2">
+                                <label>详细地址</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="addr" class="easyui-validatebox" data-options="">
+                            </td>
+                        </tr>
+                        <tr class="tf tf-create tf-update">
+                            <td class="text-right col-sm-2">
+                                <label>终端投资方</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" id="term_inves" name="term_inves" class="easyui-combobox" data-options="required:true">
+                                <span style="color: red;">*</span>
+                            </td>
+                            <td class="text-right col-sm-2">
+                                <label>机具类型</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <select id="equi_type" name="equi_type">
+                                    <option value="">--请选择--</option>
+                                </select>
+                                <span style="color: red;">*</span>
+                            </td>
+                        </tr>
+                        <tr class="tf tf-create tf-update">
+                            <td class="text-right col-sm-2">
+                                <label>拓展方</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true">
+                                <span style="color: red;">*</span>
+                            </td>
+                            <td class="text-right col-sm-2">
+                                <label>拓展人</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" id="expand_id" name="expand_id" class="easyui-combobox" data-options="required:true">
+                                <span style="color: red;">*</span>
+                            </td>
+                        </tr>
+                        <tr class="tf">
+                            <td class="text-right col-sm-2">
+                                <label>装机日期</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="installed_date" class="easyui-validatebox Wdate" data-options="">
+                            </td>
+                            <td class="text-right col-sm-2">
+                                <label>撤机日期</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="removed_date" class="easyui-validatebox Wdate" data-options="">
+                            </td>
+                        </tr>
+                        <tr class="tf">
+                            <td class="text-right col-sm-2">
+                                <label>装机人</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="installed_by" class="easyui-combobox" data-options="">
+                            </td>
+                            <td class="text-right col-sm-2">
+                                <label>维护人</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="maintained_by" class="easyui-combobox" data-options="">
+                            </td>
+                        </tr>
+                        <tr class="tf">
+                            <td class="text-right col-sm-2">
+                                <label>终端状态</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <select id="term_status" name="term_status">
+                                    <option value="">--请选择省--</option>
+                                </select>
+                                <span style="color: red;">*</span>
+                            </td>
+                            <td class="text-right col-sm-2">
+                            </td>
+                            <td class="col-sm-4">
+                            </td>
+                        </tr>
+                        <tr class="tf">
+                            <td class="text-right col-sm-2">
+                                <label>记录编号</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="rec_id">
+                            </td>
+                            <td class="text-right col-sm-2">
+                                <label>操作标志/处理状态</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <!-- <input type="text" name="oper_in" style="width: 100px;">
                         <input type="text" name="proc_st" style="width: 100px;"> -->
-                        <!-- <select name="oper_in">
+                                <!-- <select name="oper_in">
                             </select>
                             <select name="proc_st">
                             </select> -->
-                        <select id="oper_in" name="oper_in" style="width: 100px;">
-                            <option value="">--请选择--</option>
-                        </select>
-                        <select id="proc_st" name="proc_st" style="width: 100px;">
-                            <option value="">--请选择--</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr class="tf">
-                    <td class="text-right col-sm-2">
-                        <label>创建人</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="created_by">
-                    </td>
-                    <td class="text-right col-sm-2">
-                        <label>创建时间</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="created_time">
-                    </td>
-                </tr>
-                <tr class="tf">
-                    <td class="text-right col-sm-2">
-                        <label>最后修改人</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="last_modified_by">
-                    </td>
-                    <td class="text-right col-sm-2">
-                        <label>最后修改时间</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="last_modified_time">
-                    </td>
-                </tr>
-                <tr class="tf">
-                    <td class="text-right col-sm-2">
-                        <label>最后审核人</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="last_checked_by">
-                    </td>
-                    <td class="text-right col-sm-2">
-                        <label>最后审核时间</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="last_checked_time">
-                    </td>
-                </tr>
-                <tr class="tf">
-                    <td class="text-right col-sm-2">
-                        <label>审核备注</label>
-                    </td>
-                    <td colspan="3" class="col-sm-4">
-                        <input type="text" name="checked_reason" style="width: 500px;">
-                    </td>
-                </tr>
-            </table>
-            <div style="display:block; height:50px;"></div>
-            <div style="position:fixed; left: 0px; bottom:0px; z-index:9998999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px;">
-                <div class="row">
-                    <div class="col-sm-2"></div>
-                    <div class="col-sm-8">
-                        <button type="button" class="btn btn-primary tf" data-options="datagrid:'#dg',url:'/action/bm/term-info/create'" onclick="$$.submit(this)">新增提交</button>
-                        <button type="button" class="btn btn-primary tf tf-update" data-options="datagrid:'#dg',url:'/action/bm/term-info/update'" onclick="$$.submit(this)">编辑提交</button>
-                        <button type="button" class="btn btn-primary tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-info/check1-pass'" onclick="$$.submit(this)">审核通过</button>
-                        <button type="button" class="btn btn-primary tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-info/check1-nopass'" onclick="$$.submit(this)">审核驳回</button>
-                        <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
+                                <select id="oper_in" name="oper_in" style="width: 100px;">
+                                    <option value="">--请选择--</option>
+                                </select>
+                                <select id="proc_st" name="proc_st" style="width: 100px;">
+                                    <option value="">--请选择--</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr class="tf">
+                            <td class="text-right col-sm-2">
+                                <label>创建人</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="created_by">
+                            </td>
+                            <td class="text-right col-sm-2">
+                                <label>创建时间</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="created_time">
+                            </td>
+                        </tr>
+                        <tr class="tf">
+                            <td class="text-right col-sm-2">
+                                <label>最后修改人</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="last_modified_by">
+                            </td>
+                            <td class="text-right col-sm-2">
+                                <label>最后修改时间</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="last_modified_time">
+                            </td>
+                        </tr>
+                        <tr class="tf">
+                            <td class="text-right col-sm-2">
+                                <label>最后审核人</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="last_checked_by">
+                            </td>
+                            <td class="text-right col-sm-2">
+                                <label>最后审核时间</label>
+                            </td>
+                            <td class="col-sm-4">
+                                <input type="text" name="last_checked_time">
+                            </td>
+                        </tr>
+                        <tr class="tf tf-check1">
+                            <td class="text-right col-sm-2">
+                                <label>审核备注</label>
+                            </td>
+                            <td colspan="3" class="col-sm-4">
+                                <input type="text" name="checked_reason" style="width: 500px;">
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="display:block; height:50px;"></div>
+                    <div style="position:fixed; left: 0px; bottom:0px; z-index:9998999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px;">
+                        <div class="row">
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-8">
+                                <button type="button" class="btn btn-primary tf" data-options="datagrid:'#dg',url:'/action/bm/term-info/create'" onclick="$$.submit(this)">新增提交</button>
+                                <button type="button" class="btn btn-primary tf tf-update" data-options="datagrid:'#dg',url:'/action/bm/term-info/update'" onclick="$$.submit(this)">编辑提交</button>
+                                <button type="button" class="btn btn-primary tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-info/check1-pass'" onclick="$$.submit(this)">审核通过</button>
+                                <button type="button" class="btn btn-primary tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-info/check1-nopass'" onclick="$$.submit(this)">审核驳回</button>
+                                <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
+                            </div>
+                            <div class="col-sm-2">
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-2">
-                    </div>
-                </div>
+                </form>
             </div>
-        </form>
+        </div>
+        <div title="终端参数" data-options="bodyCls:'tab-body-overflow'">
+            <iframe src="#" frameborder="0" style="width:100%; height:100%; border: 0; overflow: hidden;"></iframe>
+        </div>
     </div>
     <script src="../lib/jquery/jquery.min.js"></script>
     <script src="../lib/toastr/toastr.min.js"></script>
@@ -360,15 +353,39 @@
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
 
+    function onSelectTab(title, index) {
+        if (index == 0) {
+            return;
+        }
 
+        var data = $$.serializeForm('#ff');
+
+        if (!data.term_no) {
+            $('#tt').tabs('select', 0);
+            return;
+        }
+
+        query.term_no = data.term_no;
+        if (index == 1) {
+            updateIframeSrc(index, $$.url('term-param.html', query));
+        }
+
+        function updateIframeSrc(index, url) {
+            var panel = $('#tt').tabs('getTab', index);
+            var iframe = panel.find('iframe');
+            if (iframe.attr('src') != url) {
+                iframe.attr('src', url);
+            }
+        }
+    }
 
 
     $(function() {
-        // $$.transform('body>.page', operateType, {
-        //     'create': [],
-        //     'update': [],
-        //     'check1': ['create', 'update']
-        // });
+        $$.transform('.page', operateType, {
+            'create': [],
+            'update': [],
+            'check1': ['create', 'update']
+        });
 
 
         $('#province').on('change', onChangeProvince);
@@ -376,8 +393,8 @@
         $$.loadSelect('#province', districtData['province']);
 
         $$.loadSelect('#term_status', $$.param['term_status']);
-        // $$.loadSelect('#oper_in', $$.st.operIn[$$.st.alias['mchnt_param']]);
-        // $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['mchnt_param']]);
+        $$.loadSelect('#oper_in', $$.st.operIn[$$.st.alias['term_info']]);
+        $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['term_info']]);
 
 
         var d1 = $$.request('/action/bm/expand/list', {}, function(data) {
@@ -403,7 +420,7 @@
                     $('#province').val(data.data.province).change();
                     $('#city').val(data.data.city).change();
                     $('#district').val(data.data.district);
-                    
+
                     $('#ff').form('load', data.data);
                 });
             } else {

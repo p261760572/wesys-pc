@@ -355,36 +355,36 @@ window.$$ = (function() {
     };
 
 
-    $$.goto = function(target) {
-        var options = $.extend({}, $$.parseOptions(target));
+    // $$.goto = function(target) {
+    //     var options = $.extend({}, $$.parseOptions(target));
 
-        var url = $$.url(options.url, {
-            // displayType: displayType
-        });
+    //     var url = $$.url(options.url, {
+    //         // displayType: displayType
+    //     });
 
-        $$.open(url, options.title);
-    };
+    //     $$.open(url, options.title);
+    // };
 
-    $$.do = function(target, index) {
-        var options = $.extend({
-            datagrid: '#list',
-            keys: 'rec_id'
-        }, $$.parseOptions(target));
+    // $$.do = function(target, index) {
+    //     var options = $.extend({
+    //         datagrid: '#list',
+    //         keys: 'rec_id'
+    //     }, $$.parseOptions(target));
 
-        var row = $$.datagrid(options.datagrid, 'getRows')[index];
-        var params = $$.getKeys(row, options.keys)
-        if (window.displayType) params.displayType = displayType;
+    //     var row = $$.datagrid(options.datagrid, 'getRows')[index];
+    //     var params = $$.getKeys(row, options.keys)
+    //     if (window.displayType) params.displayType = displayType;
 
-        var url = $$.url(options.url, params);
+    //     var url = $$.url(options.url, params);
 
-        $$.open(url, options.title);
-    };
+    //     $$.open(url, options.title);
+    // };
 
     $$.loadSelect = function(selector, rows, options) {
         options = $.extend({
             valueField: 'value',
             textField: 'text'
-        }, options || {});
+        }, $$.parseOptions(selector), options || {});
         var $select = $(selector);
         $select.children().slice(1).remove();
 
@@ -515,7 +515,7 @@ window.$$ = (function() {
     //界面显示转换
     $$.transformDisplay = function(selector, display) {
         var $target = $(selector);
-        $target.find('.tf').addClass('hide').filter('.tf-' + display).removeClass('hide');
+        $target.find('.tf').addClass('hide').filter('.tfd-' + display).removeClass('hide');
     };
 
     //表单状态转换

@@ -87,20 +87,20 @@
             </table>
         </form>
         <div id="tb">
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('term-info-detail.html?operateType=create', '新增终端信息')">新增</a>
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-info-detail.html?operateType=view', '终端信息详情')">详情</a>
-            <a href="#" class="easyui-linkbutton tf tf-receipt" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-info-detail.html?operateType=update', '编辑终端信息')">编辑</a>
-            <a href="#" class="easyui-linkbutton tf tf-cancel" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-info-detail.html?operateType=update', '审核终端信息')">审核</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('term-info-detail.html?displayType='+displayType+'&operateType=create', '新增终端信息')">新增</a>
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-info-detail.html?displayType='+displayType+'&operateType=view', '终端信息详情')">详情</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update tf-update" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-info-detail.html?displayType='+displayType+'&operateType=update', '编辑终端信息')">编辑</a>
+            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-check1" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-info-detail.html?displayType='+displayType+&'operateType=check1', '审核终端信息')">审核</a>
         </div>
-        <table id="dg" class="easyui-datagrid" title="终端信息" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id'">
+        <table id="dg" class="easyui-datagrid" title="终端信息" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id',onClickRow:onClickRow">
             <thead>
                 <tr>
                     <th data-options="field:'mchnt_id',width:120">客户号</th>
                     <th data-options="field:'term_no',width:120">终端标识</th>
                     <th data-options="field:'linkman',width:100">联系人</th>
                     <th data-options="field:'mobile',width:100">手机号</th>
-                    <th data-options="field:'shop_name',width:100">门店名称</th>
-                    <th data-options="field:'district_name',width:100">所在地区</th>
+                    <th data-options="field:'shop_name',width:200">门店名称</th>
+                    <th data-options="field:'district_name',width:150">所在地区</th>
                     <th data-options="field:'term_status',width:100,formatter:formatTermStatus">终端状态</th>
                     <th data-options="field:'proc_st_nm',width:100">处理状态</th>
                 </tr>
@@ -132,6 +132,20 @@
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
 
+    function onClickRow(rowIndex, rowData) {
+        var actionMap = {
+            'update': 'update',
+            'check1-pass': 'check1'
+        }
+        var bb = $('#tb').find('.tfd-' + displayType);
+        $.each(actionMap, function(action, selector) {
+            bb.filter('.tf-' + selector).addClass('hide');
+            if (hasNext(rowData.oper_in, rowData.proc_st, action)) {
+                bb.filter('.tf-' + selector).removeClass('hide');
+            }
+        })
+    }
+
     function formatTermStatus(value) {
         return $$.formatField($$.param['term_status'], value);
     }
@@ -147,12 +161,10 @@
         $$.loadSelect('#district', districtData['district'][$('#province').val() + value]);
     }
 
- 
-
     $(function() {
         $$.transformDisplay('#tb', displayType);
 
-     
+
         // $('#province').on('change', onChangeProvince);
         // $('#city').on('change', onChangeCity);
         // $$.loadSelect('#province', districtData['province']);

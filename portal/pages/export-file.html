@@ -6,146 +6,117 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>导出文件</title>
-    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
-    <link rel="stylesheet" type="text/css" href="../css/base.css">
+    <link href="../lib/iconfont/iconfont.css" rel="stylesheet">
+    <link href="../lib/bootstrap-custom/css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+    <style type="text/css">
+    .fi {
+        font-size: 16px;
+        color: #337ab7;
+    }
+    </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="panel panel-padding">
-            <form id="search" class="layui-form" action="" method="post" data-options="serialize:onSerializeSearch">
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">导出类型</label>
-                        <div class="layui-input-inline">
-                            <select name="export_type" id="export-type">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/export-file/search'" id="search-btn">查询</button>
-                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="panel panel-padding">
-            <div id="list">
-            </div>
-        </div>
-    </div>
-    <script id="list-tpl" type="text/html">
-        <div class="layui-form">
-            <table class="layui-table">
-                <thead>
-                    <tr>
-                        <th>导出类型</th>
-                        <th>批次号</th>
-                        <th>备注</th>
-                        <th>操作人</th>
-                        <th>操作时间</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
+    <div class="page">
+        <form data-options="serialize:serializeSearch">
+            <table class="table" style="width: 970px;">
+                <!-- <caption>查询导出文件</caption> -->
                 <tbody>
-                    {{each rows as row i}}
-                    <tr data-index="{{i}}">
-                        <td>
-                            {{row.export_type_nm}}
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>导出类型</label>
                         </td>
-                        <td>
-                            {{row.rec_id}}
+                        <td class="col-sm-4">
+                            <select id="export_type" name="export_type">
+                                <option value="">--请选择--</option>
+                            </select>
                         </td>
-                        <td>
-                            {{row.remark}}
+                        <td class="text-right col-sm-2">
                         </td>
-                        <td>
-                            {{row.created_by}}
-                        </td>
-                        <td>
-                            {{row.created_time}}
-                        </td>
-                        <td>
-                            <!-- <div class="layui-btn-group"> -->
-                                {{if row.export_url}}
-                                <a class="layui-btn layui-btn-mini" href="/p/{{row.export_url}}">
-                                    下载
-                                </a>
-                                {{/if}}
-                                {{if row.export_type=='2'}}
-                                <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="exportElecInfo({{row.rec_id}})">
-                                    导出影印件
-                                </button>
-                                {{/if}}
-                            <!-- </div> -->
+                        <td class="col-sm-4">
                         </td>
                     </tr>
-                    {{/each}}
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td colspan="3">
+                            <button type="button" id="search-btn" class="btn btn-primary" data-options="datagrid:'#dg',url:'/action/bm/export-file/search'" onclick="$$.search(this)">查询</button>
+                            <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
-        </div>
-    </script>
-    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
-    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
-    <script type="text/javascript" src="../js/template.js"></script>
-    <script type="text/javascript" src="../js/base.js"></script>
-    <script type="text/javascript" src="../js/st.js"></script>
-    <script type="text/javascript" src="../js/param.js"></script>
-    <script type="text/javascript" src="../js/district.js"></script>
-    <script type="text/javascript">
+        </form>
+        <table id="dg" class="easyui-datagrid" title="导出文件" data-options="singleSelect:true,pagination:true,rownumbers:true,idField:'rec_id'">
+            <thead>
+                <tr>
+                    <th data-options="field:'export_type_nm',width:120">导出类型</th>
+                    <th data-options="field:'rec_id',width:120">批次号</th>
+                    <th data-options="field:'remark',width:100">备注</th>
+                    <th data-options="field:'created_by',width:100">操作人</th>
+                    <th data-options="field:'created_time',width:150">操作时间</th>
+                    <th data-options="field:'op',width:200,formatter:formatOp">操作</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <script src="../lib/jquery/jquery.min.js"></script>
+    <script src="../lib/toastr/toastr.min.js"></script>
+    <script src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script src="../lib/easyui/jquery.easyui.min.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/st.js"></script>
+    <script src="../js/param.js"></script>
+    <!-- <script src="../js/district.js"></script> -->
+    <script>
     var query = $$.parseQueryString();
+    var displayType = query.displayType;
     var operateType = query.operateType;
-    var form = layui.form();
-    var element = layui.element();
 
-    function reload() {
-        $$.datagrid('#list', 'reload');
+    function serializeSearch(data) {
+        data.remark = $('#export_type').find('option:selected').text();
     }
 
-    function onSerializeSearch(data) {
-        data.remark = $('#export-type').find('option:selected').text();
+    function formatOp(value, row, index) {
+        var operate = '';
+        if (row.export_url) {
+            operate += '<a href="' + $$.wrapUrl(row.export_url) + '" target="_blank">下载</a>';
+        }
+
+        if (row.export_type == '2') {
+            operate += '<a href="#" class="btn" onclick="exportElecInfo(\'' + row.rec_id + '\')">导出影印件</a>';
+        }
+        return operate;
     }
+
 
     function exportElecInfo(batch_no) {
-        $$.request('/action/bm/mchnt-export/export-elec', {            
+        $$.request('/action/bm/mchnt-export/export-elec', {
             batch_no: batch_no
         }, function(data) {
-            $$.msg('操作成功', {
-                icon: 1
-            });
+            $$.success('操作成功');
 
-            var index = layer.open({
-                type: 2,
-                title: false,
-                content: $$.wrapUrl(data.url)
-            });
-
-            layer.close(index);
+            var iframe = $('<iframe src="' + $$.wrapUrl(data.url) + '" style="display:none;"></iframe>').appendTo('body');
+            setTimeout(function() {
+                iframe.remove();
+            }, 1000);
         });
     }
 
-    function hasNext(oper_in, proc_st, action) {
-        var rows = $$.st.transition[$$.st.alias['']]
-        return $$.hasNextStatus(rows, oper_in, proc_st, action);
-    }
-
-    template.helper('hasNext', hasNext);
-    template.helper('operateType', operateType);
-
     $(function() {
+        // $$.transformDisplay('#tb', displayType);
+
         $$.request('/action/bm/parameter/list', {
             export_type: '1'
         }, function(data) {
-            $$.loadSelect('#export-type', data.export_type, {
-                // valueField: 'fee_cd',
-                // textField: 'fee_nm'
-            });
-
-            form.render('select');
+            $$.loadSelect('#export_type', data.export_type);
         });
 
         $('#search-btn').click();

@@ -28,7 +28,7 @@
 
 <body>
     <div class="page">
-        <form id="ff" action="/action/bm/workorder/view" data-options="serialize:serializeForm,load:onLoadForm">
+        <form id="ff" action="/action/bm/workorder/view" data-options="serialize:onSerializeForm,load:onLoadForm">
             <table class="table" style="width: 970px;">
                 <caption>工作单</caption>
                 <tr class="tf tf-create">
@@ -292,7 +292,7 @@
         $('#dg').datagrid('loadData', data.term);
     }
 
-    function serializeForm(data) {
+    function onSerializeForm(data) {
 
         var work_content = [];
         for (var i = 0; i < 9; i++) {

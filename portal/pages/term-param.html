@@ -87,12 +87,12 @@
             </table>
         </form>
         <div id="tb">
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('term-param-detail.html?operateType=create', '新增终端参数')">新增</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('term-param-detail.html?operateType=create', '新增终端参数')">新增</a>
             <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-param-detail.html?operateType=view', '终端参数详情')">详情</a>
-            <a href="#" class="easyui-linkbutton tf tf-receipt" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-param-detail.html?operateType=update', '编辑终端参数')">编辑</a>
-            <a href="#" class="easyui-linkbutton tf tf-cancel" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-param-detail.html?operateType=update', '审核终端参数')">审核</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update tf-update" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-param-detail.html?operateType=update', '编辑终端参数')">编辑</a>
+            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-check1" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-param-detail.html?operateType=check1', '审核终端参数')">审核</a>
         </div>
-        <table id="dg" class="easyui-datagrid" title="终端参数" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id'">
+        <table id="dg" class="easyui-datagrid" title="终端参数" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id',onClickRow:onClickRow">
             <thead>
                 <tr>
                     <th data-options="field:'mchnt_id',width:120">客户号</th>
@@ -131,6 +131,20 @@
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
 
+    function onClickRow(rowIndex, rowData) {
+        var actionMap = {
+            'update': 'update',
+            'check1-pass': 'check1'
+        }
+        var bb = $('#tb').find('.tfd-' + displayType);
+        $.each(actionMap, function(action, selector) {
+            bb.filter('.tf-' + selector).addClass('hide');
+            if (hasNext(rowData.oper_in, rowData.proc_st, action)) {
+                bb.filter('.tf-' + selector).removeClass('hide');
+            }
+        })
+    }
+
     function formatTermStatus(value) {
         return $$.formatField($$.param['term_status'], value);
     }
@@ -145,8 +159,6 @@
         var value = $(this).val();
         $$.loadSelect('#district', districtData['district'][$('#province').val() + value]);
     }
-
-
 
     $(function() {
         $$.transformDisplay('#tb', displayType);

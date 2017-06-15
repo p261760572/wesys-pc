@@ -103,21 +103,21 @@
             </table>
         </form>
         <div id="tb">
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('mchnt-base-info-detail.html?operateType=create', '新增商户信息')">新增</a>
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-base-info-detail.html?operateType=view', '商户信息详情')">详情</a>
-            <a href="#" class="easyui-linkbutton tf tf-receipt" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-base-info-detail.html?operateType=update', '编辑商户信息')">编辑</a>
-            <a href="#" class="easyui-linkbutton tf tf-cancel" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-base-info-detail.html?operateType=update', '审核商户信息')">审核</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('mchnt-base-info-detail.html?displayType='+displayType+'&operateType=create', '新增商户信息')">新增</a>
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-base-info-detail.html?displayType='+displayType+'&operateType=view', '商户信息详情')">详情</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update tf-update" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-base-info-detail.html?displayType='+displayType+'&operateType=update', '编辑商户信息')">编辑</a>
+            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-check1" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-base-info-detail.html?displayType='+displayType+'&operateType=check1', '审核商户信息')">审核</a>
         </div>
-        <table id="dg" class="easyui-datagrid" title="商户信息" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id'">
+        <table id="dg" class="easyui-datagrid" title="商户信息" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id',onClickRow:onClickRow">
             <thead>
                 <tr>
                     <th data-options="field:'mchnt_id',width:120">客户号</th>
-                    <th data-options="field:'linkman',width:120">联系人</th>
+                    <th data-options="field:'linkman',width:100">联系人</th>
                     <th data-options="field:'mobile',width:100">手机</th>
-                    <th data-options="field:'mchnt_abbr',width:100">商户简称</th>
+                    <th data-options="field:'mchnt_abbr',width:200">商户简称</th>
                     <th data-options="field:'telno',width:100">联系电话</th>
-                    <th data-options="field:'district_name',width:100">所在地区</th>
-                    <th data-options="field:'license_no',width:100">营业执照号</th>
+                    <th data-options="field:'district_name',width:150">所在地区</th>
+                    <th data-options="field:'license_no',width:180">营业执照号</th>
                     <th data-options="field:'proc_st_nm',width:100">处理状态</th>
                     <th data-options="field:'created_time',width:150">创建日期</th>
                 </tr>
@@ -147,6 +147,20 @@
     function hasNext(oper_in, proc_st, action) {
         var rows = $$.st.transition[$$.st.alias['mchnt_base_info']]
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
+
+    function onClickRow(rowIndex, rowData) {
+        var actionMap = {
+            'update': 'update',
+            'check1-pass': 'check1'
+        }
+        var bb = $('#tb').find('.tfd-' + displayType);
+        $.each(actionMap, function(action, selector) {
+            bb.filter('.tf-' + selector).addClass('hide');
+            if (hasNext(rowData.oper_in, rowData.proc_st, action)) {
+                bb.filter('.tf-' + selector).removeClass('hide');
+            }
+        })
     }
 
     function onChangeProvince() {

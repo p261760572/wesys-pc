@@ -85,7 +85,7 @@
                 </tbody>
             </table>
         </form>
-        <form data-options="serialize:serializeForm">
+        <form data-options="serialize:onSerializeForm">
             <table class="table" style="width: 970px;">
                 <!-- <caption>查询费用信息</caption> -->
                 <tbody>
@@ -160,7 +160,7 @@
     var operateType = query.operateType;
     var cache = {};
 
-    function serializeForm(data) {
+    function onSerializeForm(data) {
         data.rows = $('#dg').datagrid('getRows');
     }
 
