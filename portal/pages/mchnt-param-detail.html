@@ -339,7 +339,7 @@
                         <button type="button" class="btn btn-primary tf" data-options="datagrid:'#dg',url:'/action/bm/mchnt-param/create'" onclick="$$.submit(this)">新增提交</button>
                         <button type="button" class="btn btn-primary tf tf-update" data-options="datagrid:'#dg',url:'/action/bm/mchnt-param/update'" onclick="$$.submit(this)">编辑提交</button>
                         <button type="button" class="btn btn-primary tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/mchnt-param/check1-pass'" onclick="$$.submit(this)">审核通过</button>
-                        <button type="button" class="btn btn-primary tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/mchnt-param/check1-nopass'" onclick="$$.submit(this)">审核驳回</button>
+                        <button type="button" class="btn btn-danger tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/mchnt-param/check1-nopass'" onclick="$$.submit(this)">审核驳回</button>
                         <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
                     </div>
                     <div class="col-sm-2">
@@ -373,6 +373,10 @@
             // var $elem = $('#detail').find('input[type=file][data-type=' + value.elec_info_type + ']');
             // renderImgbox($elem, value);
             // $elem.attr('data-value', value.serverid);
+        });
+        
+        $('#account_bank_branch_cd').combobox('reload', {
+            bank_branch_cd: data.data.account_bank_branch_cd
         });
     }
 
@@ -450,23 +454,41 @@
         // $$.request('/action/bm/bank-branch/search', rec, function (result) {
         //     $('#refund_account_bank_branch_cd').combobox('loadData', result.rows);
         // });
-        $('#account_bank_branch_cd').combobox('clear').combobox('reload');
+        
+        if($('#account_bank_branch_cd').combobox('options').queryParams['bank_branch_cd']) {
+            return;
+        }
+
+        $('#account_bank_branch_cd').combobox('clear').combobox('reload');        
     }
 
     function bankBranchLoader(param, success, error) {
         var q = param.q || '';
         // if (q.length <= 1) return false;
+        
+        var queryParams;
+        if (param.bank_branch_cd) {
+            queryParams = {
+                bank_branch_cd: param.bank_branch_cd
+            };
+        } else {
+            queryParams = {
+                q: q,
+                bank_cd: $('#account_bank').combobox('getValue')
+            };
+        }
 
-        $$.request('/action/bm/bank-branch/search', {
-            q: q,
-            bank_cd: $('#account_bank').combobox('getValue')
-        }, function(result) {
+        $$.request('/action/bm/bank-branch/search', queryParams, function(result) {
             success(result.rows);
         }, function() {
             error.apply(this, arguments);
         }, {
             loading: false
         });
+
+        setTimeout(function () {
+            delete $('#account_bank_branch_cd').combobox('options').queryParams['bank_branch_cd'];
+        }, 0);
     }
 
     function formatAccountNo(v) {

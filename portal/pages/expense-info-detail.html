@@ -412,6 +412,10 @@
         data.data.start_date = formatDate(data.data.start_date);
         data.data.end_date = formatDate(data.data.end_date);
         $('#refund_amount_total').text(parseFloat(data.data.refund_amount_total || 0).toFixed(2));
+
+        $('#refund_account_bank_branch_cd').combobox('reload', {
+            bank_branch_cd: refund_account_bank_branch_cd
+        });
     }
 
     function hasNext(oper_in, proc_st, action) {
@@ -444,23 +448,39 @@
         // $$.request('/action/bm/bank-branch/search', rec, function (result) {
         //     $('#refund_account_bank_branch_cd').combobox('loadData', result.rows);
         // });
+        if ($('#refund_account_bank_branch_cd').combobox('options').queryParams['bank_branch_cd']) {
+            return;
+        }
         $('#refund_account_bank_branch_cd').combobox('clear').combobox('reload');
     }
 
     function bankBranchLoader(param, success, error) {
         var q = param.q || '';
         // if (q.length <= 1) return false;
+        
+        var queryParams;
+        if (param.bank_branch_cd) {
+            queryParams = {
+                bank_branch_cd: param.bank_branch_cd
+            };
+        } else {
+            queryParams = {
+                q: q,
+                bank_cd: $('#refund_account_bank').combobox('getValue')
+            };
+        }
 
-        $$.request('/action/bm/bank-branch/search', {
-            q: q,
-            bank_cd: $('#refund_account_bank').combobox('getValue')
-        }, function(result) {
+        $$.request('/action/bm/bank-branch/search', queryParams, function(result) {
             success(result.rows);
         }, function() {
             error.apply(this, arguments);
         }, {
             loading: false
         });
+
+        setTimeout(function () {
+            delete $('#refund_account_bank_branch_cd').combobox('options').queryParams['bank_branch_cd'];
+        }, 0);
     }
 
     $(function() {

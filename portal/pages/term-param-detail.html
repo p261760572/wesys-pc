@@ -55,11 +55,11 @@
                         <label>商户参数</label>
                     </td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="term_param_id" class="easyui-combobox" data-options="valueField:'mchnt_param_id',textField:'text',mode:'remote',loader:mchntParamLoader" style="width: 500px;">
+                        <input type="text" id="mchnt_param_id" name="mchnt_param_id" class="easyui-combobox" data-options="valueField:'mchnt_param_id',textField:'text',mode:'remote',loader:mchntParamLoader" style="width: 500px;">
                         <span style="color: red;">*</span>
                     </td>
                 </tr>
-                <tr>
+                <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>终端号</label>
                     </td>
@@ -167,7 +167,7 @@
                         <button type="button" class="btn btn-primary tf" data-options="datagrid:'#dg',url:'/action/bm/term-param/create'" onclick="$$.submit(this)">新增提交</button>
                         <button type="button" class="btn btn-primary tf tf-update" data-options="datagrid:'#dg',url:'/action/bm/term-param/update'" onclick="$$.submit(this)">编辑提交</button>
                         <button type="button" class="btn btn-primary tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-param/check1-pass'" onclick="$$.submit(this)">审核通过</button>
-                        <button type="button" class="btn btn-primary tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-param/check1-nopass'" onclick="$$.submit(this)">审核驳回</button>
+                        <button type="button" class="btn btn-danger tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-param/check1-nopass'" onclick="$$.submit(this)">审核驳回</button>
                         <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
                     </div>
                     <div class="col-sm-2">
@@ -190,7 +190,9 @@
     var operateType = query.operateType;
 
     function onLoadForm(data) {
-
+        $('#mchnt_param_id').combobox('reload', {
+            mchnt_param_id: data.data.mchnt_param_id
+        });
     }
 
     function onSerializeForm(data) {
@@ -199,12 +201,22 @@
 
     function mchntParamLoader(param, success, error) {
         var q = param.q || '';
-        // if (q.length <= 1) return false;
 
-        $$.request('/action/bm/mchnt-param/search', {
-            q: q,
-            term_no2: query.term_no
-        }, function(result) {
+        if (!query.term_no && !param.mchnt_param_id) return false;
+        // 
+        var queryParams;
+        if (param.mchnt_param_id) {
+            queryParams = {
+                mchnt_param_id: param.mchnt_param_id
+            };
+        } else {
+            queryParams = {
+                q: q,
+                term_no2: query.term_no
+            };
+        }
+
+        $$.request('/action/bm/mchnt-param/search', queryParams, function(result) {
             for (var i = 0; i < result.rows.length; i++) {
                 result.rows[i]['text'] = formatMchntParam(result.rows[i]);
             }
@@ -214,6 +226,8 @@
         }, {
             loading: false
         });
+
+        $('#mchnt_param_id').combobox('options').queryParams['mchnt_param_id'] = undefined;
     }
 
     function formatMchntParam(row) {

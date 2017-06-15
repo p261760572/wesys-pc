@@ -24,7 +24,7 @@
 
 <body>
     <div class="page">
-        <form data-options="serialize:serializeSearch">
+        <form id="ff" data-options="serialize:serializeSearch">
             <table class="table" style="width: 970px;">
                 <!-- <caption>查询商户信息</caption> -->
                 <tbody>
@@ -176,6 +176,12 @@
 
     $(function() {
         $$.transformDisplay('#tb', displayType);
+
+        $('#ff').on('keyup', function(event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });    
 
         $('#province').on('change', onChangeProvince);
         $('#city').on('change', onChangeCity);

@@ -2035,3 +2035,7 @@ select {
 .combobox-stick {
     font-size: 14px;
 }
+
+.textbox .textbox-text {
+    font-size: 14px;
+}

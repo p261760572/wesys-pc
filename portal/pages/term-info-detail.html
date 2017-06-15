@@ -21,6 +21,10 @@
     .tab-body-overflow {
         overflow: hidden;
     }
+
+    .page {
+        font-size: 14px;
+    }
     </style>
 </head>
 
@@ -261,7 +265,7 @@
                                 <button type="button" class="btn btn-primary tf" data-options="datagrid:'#dg',url:'/action/bm/term-info/create'" onclick="$$.submit(this)">新增提交</button>
                                 <button type="button" class="btn btn-primary tf tf-update" data-options="datagrid:'#dg',url:'/action/bm/term-info/update'" onclick="$$.submit(this)">编辑提交</button>
                                 <button type="button" class="btn btn-primary tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-info/check1-pass'" onclick="$$.submit(this)">审核通过</button>
-                                <button type="button" class="btn btn-primary tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-info/check1-nopass'" onclick="$$.submit(this)">审核驳回</button>
+                                <button type="button" class="btn btn-danger tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-info/check1-nopass'" onclick="$$.submit(this)">审核驳回</button>
                                 <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
                             </div>
                             <div class="col-sm-2">
