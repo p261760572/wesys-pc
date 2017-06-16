@@ -61,7 +61,7 @@
 
 <body>
     <div class="container">
-        <form class="form-signin" id="signin-form">
+        <form class="form-signin" id="signin-form" method="post">
             <input type="hidden" name="pubkey" id="pubkey" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwpSBCzntA06ceIathHYbN/RsrXey/L5nhhJmrT5z+qrfjz0+zKE/XwmerNnOMYKDt1YRXzmwD/ma+6mQN0yXMnqCIpNGy/QvOqHlQbVy7DJLHXVP7kHl1T4tkxzUbMmA9y7/B0cp1yorfF8oJbe3M2/p0qQ8zF74kXpGaum5FJkqoLTzl+v10qso2PQxp4TP5U1qPioLF1uJAJzlv1lb5Z0RBesOPj+FgG0oh/+bPvL0rJ4QCYnFqDsMcvi4jd9wD6+hyZVG4j+R92YhJHWNy+sgXboLXZTwdTE8sglfAtRK1+ITGKdcYo94Jlo65Kdlxrn0vEPrYSN4/nBwsfq7BQIDAQAB">
             <h2 class="form-signin-heading">登录</h2>
             <div class="form-group">
@@ -128,6 +128,10 @@
     }
 
     $(function() {
+        // $('#signin-form').on('submit', function (e) {
+        //     e.preventDefault();
+        // });
+
         $('#signin-form').formValidation({
             framework: 'bootstrap',
             icon: {
@@ -159,8 +163,11 @@
         }).on('success.form.fv', function(e) {
             // Prevent form submission
             e.preventDefault();
+            e.returnValue = false;
 
             login(e.target);
+
+            return false;
         });
     });
     </script>
