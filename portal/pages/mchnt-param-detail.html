@@ -17,6 +17,42 @@
     textarea[disabled] {
         background-color: rgb(235, 235, 228);
     }
+    
+    .img-box {
+        width: 100px;
+        height: 100px;
+        position: relative;
+        margin-right: 5px;
+    }
+    
+    .img-box img {
+        max-height: 100%;
+    }
+    
+    .img-operate {
+        position: absolute;
+        bottom: 0;
+    }
+    
+    .img-box.glyphicon-upload:before {
+        position: absolute;
+        font-size: 30px;
+        top: 50%;
+        left: 50%;
+        margin-top: -15px;
+        margin-left: -15px;
+        color: #337ab7;
+        line-height: 1;
+    }
+    
+    .img-box input[type=file] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        margin: -4px 0 0 -4px;
+    }
     </style>
 </head>
 
@@ -55,8 +91,6 @@
                         <label>业务类型</label>
                     </td>
                     <td class="col-sm-4">
-                       
-
                         <select id="busi_type" name="busi_type" class="easyui-validatebox" data-options="required:true">
                             <option value="">--请选择--</option>
                         </select>
@@ -131,7 +165,11 @@
                         <label>账户正面</label>
                     </td>
                     <td colspan="3" class="col-sm-2">
-                        <input type="file" name="file">
+                        <div class="img-box-wrap">
+                            <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
+                                <input type="file" name="file" data-type="zhzm">
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 <tr class="tf tf-create tf-update">
@@ -156,7 +194,11 @@
                         <label>身份证正面</label>
                     </td>
                     <td colspan="3" class="col-sm-4">
-                        <input type="file" name="file">
+                        <div class="img-box-wrap">
+                            <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
+                                <input type="file" name="file" data-type="sfzzm">
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 <tr class="tf tf-create tf-update">
@@ -164,7 +206,11 @@
                         <label>身份证反面</label>
                     </td>
                     <td colspan="3" class="col-sm-4">
-                        <input type="file" name="file">
+                        <div class="img-box-wrap">
+                            <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
+                                <input type="file" name="file" data-type="sfzfm">
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 <tr class="tf tf-create tf-update">
@@ -172,7 +218,11 @@
                         <label>入账授权书</label>
                     </td>
                     <td colspan="3" class="col-sm-4">
-                        <input type="file" name="file">
+                        <div class="img-box-wrap">
+                            <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
+                                <input type="file" name="file" data-type="rzsqs">
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 <tr class="tf tf-create tf-update">
@@ -361,6 +411,24 @@
     var displayType = query.displayType;
     var operateType = query.operateType;
 
+    function renderImgbox($file, data) {
+        var $box = $('<div class="thumbnail pull-left img-box">' +
+            '<a href="' + $$.wrapUrl('/action/uploads/' + data.serverid) + '" target="_blank">'+ 
+            '<img src="' + $$.wrapUrl('/action/uploads/' + data.serverid) + '"></a>' +
+            '<div class="img-operate">' +
+            '<button class="btn btn-xs btn-danger hide tf tf-create tf-update">删除</button>' +
+            // '<a href="#" class="btn btn-xs btn-default">识别</a>' +
+            '</div></div>').data('data', {
+            elec_info_type: $file.attr('data-type'),
+            serverid: data.serverid
+        });
+        $file.closest('.img-box').before($box);
+
+        if($.inArray(query.operateType, ['create','update']) < 0) {
+            $box.find('.img-operate').addClass('hide');
+        }
+    }
+
     function onLoadForm(data) {
         $('#acq_inst_id').val(data.data.acq_inst_id).change();
         $('#busi_type').attr('data-value', data.data.busi_type);
@@ -368,13 +436,12 @@
         $('#city').val(data.data.account_city).change();
         // $('#district').val(data.data.district);
         $('#account_no2').text(formatAccountNo(data.data.account_no));
-        
+
         $.each(data.images, function(index, value) {
-            // var $elem = $('#detail').find('input[type=file][data-type=' + value.elec_info_type + ']');
-            // renderImgbox($elem, value);
-            // $elem.attr('data-value', value.serverid);
+            var $file = $('#ff').find(':file[data-type=' + value.elec_info_type + ']');
+            renderImgbox($file, value);
         });
-        
+
         $('#account_bank_branch_cd').combobox('reload', {
             bank_branch_cd: data.data.account_bank_branch_cd
         });
@@ -383,7 +450,7 @@
     function onSerializeForm(data) {
         // 照片
         var images = [];
-        $('#ff').find('.img-box').each(function(index, elem) {
+        $('#ff').find('.img-box:not(.glyphicon-upload)').each(function(index, elem) {
             var tmp = $(elem).data('data');
             images.push(tmp);
         });
@@ -454,18 +521,18 @@
         // $$.request('/action/bm/bank-branch/search', rec, function (result) {
         //     $('#refund_account_bank_branch_cd').combobox('loadData', result.rows);
         // });
-        
-        if($('#account_bank_branch_cd').combobox('options').queryParams['bank_branch_cd']) {
+
+        if ($('#account_bank_branch_cd').combobox('options').queryParams['bank_branch_cd']) {
             return;
         }
 
-        $('#account_bank_branch_cd').combobox('clear').combobox('reload');        
+        $('#account_bank_branch_cd').combobox('clear').combobox('reload');
     }
 
     function bankBranchLoader(param, success, error) {
         var q = param.q || '';
         // if (q.length <= 1) return false;
-        
+
         var queryParams;
         if (param.bank_branch_cd) {
             queryParams = {
@@ -486,7 +553,7 @@
             loading: false
         });
 
-        setTimeout(function () {
+        setTimeout(function() {
             delete $('#account_bank_branch_cd').combobox('options').queryParams['bank_branch_cd'];
         }, 0);
     }
@@ -503,12 +570,43 @@
         return nv;
     }
 
+    function initUpload() {
+        if($.inArray(query.operateType, ['create','update']) < 0) {
+            $('.img-box.glyphicon-upload').addClass('hide');
+        }
+        
+        $('.img-box-wrap').on('click', '.btn-danger', function() {
+            $(this).closest('.img-box').remove();
+        });
+        $('#ff').find(':file').on('change', function() {
+            var $file = $(this);
+            if (!$file.val()) return;
+
+            $.mask.show();
+            $.ajax({
+                url: $$.wrapUrl('/action/upload'),
+                files: $(this),
+                iframe: true,
+                dataType: 'json',
+                success: function(data) {
+                    renderImgbox($file, data);
+                }
+            }).always(function() {
+                $.mask.hide();
+            });
+
+            $(this).val('');
+        });
+    }
+
     $(function() {
         $$.transform('body>.page', operateType, {
             'create': [],
             'update': [],
             'check1': ['create', 'update']
         });
+
+        initUpload();
 
         $('#acq_inst_id').on('change', onChangeAcqInstId);
         $('#province').on('change', onChangeProvince);
@@ -528,7 +626,7 @@
 
         var d1 = $$.request('/action/bm/expand/list', {}, function(data) {
             // $$.loadSelect('#expand_id', data.rows);
-             $('#expand_id').combobox('loadData', data.rows);
+            $('#expand_id').combobox('loadData', data.rows);
         });
 
         var d2 = $$.request('/action/bm/parameter/list', {
