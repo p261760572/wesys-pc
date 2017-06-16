@@ -225,7 +225,7 @@ window.$$ = (function() {
     };
 
 
-    $$.validateForm = function (target) {
+    $$.validateForm = function(target) {
         var $form = $(target);
         $form.form('enableValidation').find('.validatebox-text:hidden').validatebox('disableValidation');
         return $form.form('validate');
@@ -271,7 +271,7 @@ window.$$ = (function() {
     }
 
 
-    $$.export = function exportData(target) {
+    $$.exportData = function(target) {
         var opts = $$.parseOptions(target);
         var f = $(target).closest('form');
         var url = opts.url;
@@ -310,7 +310,7 @@ window.$$ = (function() {
             if (opts.before && opts.before.call(target, row, params) == false) {
                 return false;
             }
-            
+
             params[dgOpts.idField] = row[dgOpts.idField];
 
             $$.open($$.url(url, params), title);
@@ -349,7 +349,7 @@ window.$$ = (function() {
 
         if ($$.validateForm($form) != true) return false;
 
-        $$.request(options.url, data, function(result) {            
+        $$.request(options.url, data, function(result) {
             options.success.call(target, data, result);
         });
     };
@@ -565,9 +565,9 @@ window.$$ = (function() {
 
         function readonly(index, element) {
             var $tmp = $(element);
-            if($tmp.hasClass('combobox-f')) {
+            if ($tmp.hasClass('combobox-f')) {
                 $tmp.combobox('readonly');
-            } else if(element.tagName == 'SELECT' || (element.tagName == 'INPUT' && element.type == 'checkbox')) {
+            } else if (element.tagName == 'SELECT' || (element.tagName == 'INPUT' && element.type == 'checkbox')) {
                 $tmp.attr('disabled', 'disabled');
             } else {
                 $tmp.attr('disabled', 'disabled');
@@ -727,17 +727,19 @@ $$.generateTreeData = function(rows, options) {
     }
 }
 
-$.fn.combobox.defaults.loader = function(param, success, error) {
-    var q = param.q || '';
-    if (q.length <= 2) {
-        return false
-    }
+if ($.fn.combobox) {
+    $.fn.combobox.defaults.loader = function(param, success, error) {
+        var q = param.q || '';
+        // if (q.length <= 2) {
+        //     return false
+        // }
 
-    var url = $(this).combobox('options').url;
+        var url = $(this).combobox('options').url;
 
-    $$.request(url, param, function (data) {
-        success(data.rows)
-    }, function () {
-        error.apply(this, arguments);
-    })    
-};
+        $$.request(url, param, function(data) {
+            success(data.rows)
+        }, function() {
+            error.apply(this, arguments);
+        })
+    };
+}
