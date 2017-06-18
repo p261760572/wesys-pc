@@ -28,35 +28,35 @@
                 <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>终端标识</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="term_no" class="easyui-validatebox" data-options="" disabled>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>终端参数ID</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="term_param_id" class="easyui-validatebox" data-options="" disabled>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                 </tr>
                 <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>门店名称</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="shop_name" class="easyui-validatebox" data-options="" style="width: 500px;" disabled>
-                        <span style="color: red;">*</span>
+                        <input type="text" name="shop_name" class="easyui-validatebox" data-options="" disabled>
+                        
                     </td>
                 </tr>
                 <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>商户参数</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" id="mchnt_param_id" name="mchnt_param_id" class="easyui-combobox" data-options="valueField:'mchnt_param_id',textField:'text',mode:'remote',loader:mchntParamLoader" style="width: 500px;">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;"><input type="text" id="mchnt_param_id" name="mchnt_param_id" class="easyui-combobox" data-options="required:true,valueField:'mchnt_param_id',textField:'text',mode:'remote',loader:mchntParamLoader"></div>
+                        
                     </td>
                 </tr>
                 <tr class="tf tf-create tf-update">
@@ -70,17 +70,17 @@
                 <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>拓展方</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
-                        <input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;"><input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true"></div>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>拓展人</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
-                        <input type="text" id="expand_id" name="expand_id" class="easyui-combobox" data-options="required:true">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;"><input type="text" id="expand_id" name="expand_id" class="easyui-combobox" data-options="required:true"></div>
+                        
                     </td>
                 </tr>
                 <tr class="tf">
@@ -155,16 +155,16 @@
                         <label>审核备注</label>
                     </td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="checked_reason" style="width: 500px;">
+                        <input type="text" name="checked_reason">
                     </td>
                 </tr>
             </table>
             <div style="display:block; height:50px;"></div>
-            <div style="position:fixed; left: 0px; bottom:0px; z-index:9998999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px;">
+            <div style="position:fixed; left: 0px; bottom:0px; z-index:8999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px;">
                 <div class="row">
                     <div class="col-sm-2"></div>
                     <div class="col-sm-8">
-                        <button type="button" class="btn btn-primary tf" data-options="datagrid:'#dg',url:'/action/bm/term-param/create'" onclick="$$.submit(this)">新增提交</button>
+                        <button type="button" class="btn btn-primary tf tf-create" data-options="datagrid:'#dg',url:'/action/bm/term-param/create'" onclick="$$.submit(this)">新增提交</button>
                         <button type="button" class="btn btn-primary tf tf-update" data-options="datagrid:'#dg',url:'/action/bm/term-param/update'" onclick="$$.submit(this)">编辑提交</button>
                         <button type="button" class="btn btn-primary tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-param/check1-pass'" onclick="$$.submit(this)">审核通过</button>
                         <button type="button" class="btn btn-danger tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-param/check1-nopass'" onclick="$$.submit(this)">审核驳回</button>

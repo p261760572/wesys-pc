@@ -161,8 +161,15 @@
         $$.loadSelect('#district', districtData['district'][$('#province').val() + value]);
     }
 
+    $('#ff input[name=mchnt_id]').attr('value', query.mchnt_id);
     $(function() {
         $$.transformDisplay('#tb', displayType);
+
+        $('#ff').on('keyup', function(event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
 
 
         // $('#province').on('change', onChangeProvince);

@@ -24,11 +24,11 @@
                     <tr>
                         <td class="text-right col-sm-2">
                             <label>清算日期</label>
-                        </td>
+                        <span style="color: red;">*</span></td>
                         <td class="col-sm-4">
                             <input id="settle_date" type="text" class="easyui-validatebox Wdate" name="settle_date" data-options="required:true" style="width: 120px;" onfocus="WdatePicker({onpicked:function(){$dp.$('settle_date2').focus();},maxDate:'#F{$dp.$D(\'settle_date2\')}'})">
                             <input id="settle_date2" type="text" class="easyui-validatebox Wdate" name="settle_date2" data-options="required:true" style="width: 120px;" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'settle_date\')}'})">
-                            <span style="color: red;">*</span>
+                            
                         </td>
                         <td class="text-right col-sm-2"></td>
                         <td class="col-sm-4"></td>

@@ -470,3 +470,43 @@ $(function () {
         return invalidbox.length === 0;
     };
 })(jQuery);
+
+(function($) {
+    //单例
+    var mask, maskMsg;
+    var count = 0;
+
+    $.mask = {
+        show: function show(options) {
+            count ++;
+            if (mask) return;
+
+            options = $.extend({
+                msg: '正在处理，请稍候。。。'
+            }, options);
+
+            mask = $('<div class="mask"></div>').appendTo('body');
+            maskMsg = $('<div class="mask-msg"></div>').html(options.msg).appendTo('body');
+
+            mask.css({
+                width: Math.max(document.body.clientWidth, document.documentElement.clientWidth),
+                height: Math.max(document.body.clientHeight, document.documentElement.clientHeight)
+            });
+
+            maskMsg.outerHeight(40); //box-sizing问题
+            maskMsg.css({
+                left: (mask.outerWidth() - maskMsg.outerWidth()) / 2,
+                top: (Math.min(document.body.clientHeight, document.documentElement.clientHeight) - maskMsg.outerHeight()) / 2
+            });
+        },
+        hide: function hide(target) {
+            count--;
+            if (mask && count <= 0) {
+                mask.remove();
+                maskMsg.remove();
+                mask = null;
+                count = 0;
+            }
+        }
+    };
+})(jQuery);

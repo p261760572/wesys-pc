@@ -142,3 +142,7 @@ textarea[readonly] {
 .textbox .textbox-text {
     font-size: 14px;
 }
+
+.panel-body {
+    font-size: 14px;   
+}

@@ -3660,8 +3660,7 @@ $.fn.linkbutton.defaults={id:null,disabled:false,toggle:false,selected:false,out
             var c = $(_13).clone();
             c.css("visibility", "hidden");
             c.insertAfter(_13);
-            console.info(c);
-            _16.width = c.width();
+            _16.width = c.outerWidth();
             c.remove();
         }
         var _18 = tb.is(":visible");
@@ -11341,9 +11340,11 @@ $.messager.defaults=$.extend({},$.fn.dialog.defaults,{ok:"Ok",cancel:"Cancel",wi
 (function($) {
     //单例
     var mask, maskMsg;
+    var count = 0;
 
     $.mask = {
         show: function show(options) {
+            count ++;
             if (mask) return;
 
             options = $.extend({
@@ -11361,14 +11362,16 @@ $.messager.defaults=$.extend({},$.fn.dialog.defaults,{ok:"Ok",cancel:"Cancel",wi
             maskMsg.outerHeight(40); //box-sizing问题
             maskMsg.css({
                 left: (mask.outerWidth() - maskMsg.outerWidth()) / 2,
-                top: (mask.outerHeight() - maskMsg.outerHeight()) / 2
+                top: (Math.min(document.body.clientHeight, document.documentElement.clientHeight) - maskMsg.outerHeight()) / 2
             });
         },
         hide: function hide(target) {
-            if (mask) {
+            count--;
+            if (mask && count <= 0) {
                 mask.remove();
                 maskMsg.remove();
                 mask = null;
+                count = 0;
             }
         }
     };

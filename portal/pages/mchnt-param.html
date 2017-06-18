@@ -175,8 +175,15 @@
     //     });
     // }
 
+    $('#ff input[name=mchnt_id]').attr('value', query.mchnt_id);
     $(function() {
         $$.transformDisplay('#tb', displayType);
+
+        $('#ff').on('keyup', function(event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
 
         // $('#acq_inst_id').on('change', onChangeAcqInstId);
         // $('#province').on('change', onChangeProvince);

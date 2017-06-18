@@ -24,7 +24,7 @@
 
 <body>
     <div class="page">
-        <form data-options="serialize:serializeSearch">
+        <form id="ff" data-options="serialize:serializeSearch">
             <table class="table" style="width: 970px;">
                 <!-- <caption>查询文件装载</caption> -->
                 <tbody>
@@ -42,6 +42,7 @@
                         </td>
                         <td class="col-sm-4">
                             <input type="file" name="file">
+                            <input type="hidden" name="serverid">
                         </td>
                     </tr>
                 </tbody>
@@ -66,7 +67,7 @@
                             <label>装载类型</label>
                         </td>
                         <td class="col-sm-4">
-                            <select id="file_type" name="file_type">
+                            <select id="file_type2" name="file_type">
                                 <option value="">--请选择--</option>
                             </select>
                         </td>
@@ -106,6 +107,7 @@
         </table>
     </div>
     <script src="../lib/jquery/jquery.min.js"></script>
+    <script src="../lib/jquery-iframe-transport/jquery.iframe-transport.js"></script>
     <script src="../lib/toastr/toastr.min.js"></script>
     <script src="../lib/My97DatePicker/WdatePicker.js"></script>
     <script src="../lib/easyui/jquery.easyui.min.js"></script>
@@ -167,8 +169,38 @@
     }
 
 
+    function initUpload() {
+      
+        $('#ff').find(':file').on('change', function() {
+            var $file = $(this);
+            if (!$file.val()) return;
+
+            $.mask.show();
+            $.ajax({
+                type: 'POST',
+                url: $$.wrapUrl('/action/upload'),
+                files: $(this),
+                iframe: true,
+                dataType: 'json',
+                success: function(data) {
+                    if ($$.errcode(data) == 0) {
+                        $file.parent().find('input[name=serverid]').val(data.serverid);
+                    } else {
+                        $$.error($$.errmsg(data));
+                    }
+                }
+            }).always(function() {
+                $.mask.hide();
+            });
+
+            // $(this).val('');
+        });
+    }
+
     $(function() {
         $$.transformDisplay('#tb', displayType);
+
+        initUpload();
 
         $$.request('/action/bm/parameter/list', {
             file_type: '1'

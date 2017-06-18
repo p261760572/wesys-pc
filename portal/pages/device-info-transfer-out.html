@@ -31,16 +31,16 @@
                     <tr>
                         <td class="text-right col-sm-2">
                             <label>设备编号</label>
-                        </td>
+                        <span style="color: red;">*</span></td>
                         <td colspan="3" class="col-sm-10">
                             <input type="text" name="device_no" class="easyui-validatebox" data-options="required:true">
-                            <span style="color: red;">*</span>
+                            
                             <label style="padding: 0 10px;">间隔</label>
                             <input type="text" name="inc" value="1" class="easyui-validatebox" data-options="required:true" style="width: 100px;">
-                            <span style="color: red;">*</span>
+                            
                             <label style="padding: 0 10px;">数量</label>
                             <input type="text" name="count" value="1" class="easyui-validatebox" data-options="required:true" style="width: 100px;">
-                            <span style="color: red;">*</span>
+                            
                             <button type="button" class="btn btn-primary" onclick="batchAdd(this)">批量增加</button>
                             <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
                         </td>
@@ -55,19 +55,19 @@
                     <tr>
                         <td class="text-right col-sm-2">
                             <label>目的仓库</label>
-                        </td>
+                        <span style="color: red;">*</span></td>
                         <td class="col-sm-4">
                             <select id="dest_depot_id" name="dest_depot_id" class="easyui-validatebox" data-options="required:true">
                                 <option value="">--请选择--</option>
                             </select>
-                            <span style="color: red;">*</span>
+                            
                         </td>
                         <td class="text-right col-sm-2">
                             <label>经手人</label>
-                        </td>
+                        <span style="color: red;">*</span></td>
                         <td class="col-sm-4">
                             <input type="text" name="hand_by" class="easyui-validatebox" data-options="required:true">
-                            <span style="color: red;">*</span>
+                            
                         </td>
                     </tr>
                     <tr>

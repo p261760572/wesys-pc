@@ -34,17 +34,17 @@
                 <tr class="tf tf-create">
                     <td class="text-right col-sm-2">
                         <label>工单号</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="work_order_no" class="easyui-validatebox" data-options="" disabled>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>客户号</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="required:true" disabled>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                 </tr>
                 <tr class="tf tf-create">
@@ -72,10 +72,10 @@
                 <tr class="tf tf-create">
                     <td class="text-right col-sm-2">
                         <label>执行人</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="work_nm" class="easyui-validatebox" data-options="required:true">
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>计划执行日期</label>
@@ -89,27 +89,27 @@
                         <label>备注</label>
                     </td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="remark" class="easyui-validatebox" data-options="" style="width: 500px;">
+                        <input type="text" name="remark" class="easyui-validatebox" data-options="">
                     </td>
                 </tr>
                 <tr class="tf tf-sign">
                     <td class="text-right col-sm-2">
                         <label>执行结果</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <select name="work_result" class="easyui-validatebox" data-options="required:true">
                             <option value="">--请选择--</option>
                             <option value="1">成功</option>
                             <option value="0">失败</option>
                         </select>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>执行日期</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="work_date" class="easyui-validatebox Wdate" data-options="required:true" onfocus="WdatePicker()">
-                        <span style="color: red;">*</span>
+                        
                     </td>
                 </tr>
                 <tr class="tf tf-sign">
@@ -117,7 +117,7 @@
                         <label>提交备注</label>
                     </td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="sign_remark" class="easyui-validatebox" data-options="" style="width: 500px;">
+                        <input type="text" name="sign_remark" class="easyui-validatebox" data-options="">
                     </td>
                 </tr>
                 <tr class="tf">
@@ -143,23 +143,23 @@
                     </td>
                     <td class="text-right col-sm-2">
                         <label>调试标志</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <select name="debug_flag" class="easyui-validatebox" data-options="required:true">
                             <option value="">--请选择--</option>
                             <option value="1">已调试</option>
                             <option value="0">未调试</option>
                         </select>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                 </tr>
                 <tr class="tf">
                     <td class="text-right col-sm-2">
                         <label>调试人</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="debug_by" class="easyui-validatebox" data-options="">
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>调试时间</label>
@@ -249,7 +249,7 @@
                 </thead>
             </table>
             <div style="display:block; height:50px;"></div>
-            <div style="position:fixed; left: 0px; bottom:0px; z-index:9998999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px; ">
+            <div style="position:fixed; left: 0px; bottom:0px; z-index:8999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px; ">
                 <div class="row">
                     <div class="col-sm-2"></div>
                     <div class="col-sm-8">

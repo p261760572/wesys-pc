@@ -37,46 +37,46 @@
                 <tr>
                     <td class="text-right col-sm-2">
                         <label>客户号</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="required:true" disabled>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>联系人</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="linkman" class="easyui-validatebox" data-options="required:true" disabled>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                 </tr>
                 <tr>
                     <td class="text-right col-sm-2">
                         <label>手机</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="mobile" class="easyui-validatebox" data-options="required:true" disabled>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>商户简称</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="mchnt_abbr" class="easyui-validatebox" data-options="required:true" disabled>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                 </tr>
                 <tr>
                     <td class="text-right col-sm-2">
                         <label>联系电话</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="telno" class="easyui-validatebox" data-options="" disabled>
-                        <!-- <span style="color: red;">*</span> -->
+                        <!--  -->
                     </td>
                     <td class="text-right col-sm-2">
                         <label>所在地区</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <select id="province" name="province" style="width: 100px;" disabled>
                             <option value="">--请选择省--</option>
@@ -87,32 +87,32 @@
                         <select id="district" name="district" style="width: 100px;" disabled>
                             <option value="">--请选择县/区--</option>
                         </select>
-                        <!-- <span style="color: red;">*</span> -->
+                        <!--  -->
                     </td>
                 </tr>
                 <tr>
                     <td class="text-right col-sm-2">
                         <label>详细地址</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="addr" class="easyui-validatebox" data-options="required:true" style="width: 500px;" disabled>
-                        <span style="color: red;">*</span>
+                        <input type="text" name="addr" class="easyui-validatebox" data-options="required:true" disabled>
+                        
                     </td>
                 </tr>
                 <tr>
                     <td class="text-right col-sm-2">
                         <label>拓展方</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
-                        <input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true,readonly:true">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;"><input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true,readonly:true"></div>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>拓展人</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
-                        <input type="text" id="expand_id" name="expand_id" class="easyui-combobox" data-options="required:true,readonly:true">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;"><input type="text" id="expand_id" name="expand_id" class="easyui-combobox" data-options="required:true,readonly:true"></div>
+                        
                     </td>
                 </tr>
             </table>
@@ -120,17 +120,17 @@
                 <tr>
                     <td class="text-right col-sm-2">
                         <label>执行人</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
-                        <input type="text" id="work_id" name="work_id" class="easyui-combobox" data-options="required:true">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;"><input type="text" id="work_id" name="work_id" class="easyui-combobox" data-options="required:true"></div>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>维护人</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
-                        <input type="text" id="maintained_by" name="maintained_by" class="easyui-combobox" data-options="required:true">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;"><input type="text" id="maintained_by" name="maintained_by" class="easyui-combobox" data-options="required:true"></div>
+                        
                     </td>
                 </tr>
                 <tr>
@@ -177,7 +177,7 @@
                 </thead>
             </table>
             <div style="display:block; height:50px;"></div>
-            <div style="position:fixed; left: 0px; bottom:0px; z-index:9998999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px; ">
+            <div style="position:fixed; left: 0px; bottom:0px; z-index:8999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px; ">
                 <div class="row">
                     <div class="col-sm-2"></div>
                     <div class="col-sm-8">

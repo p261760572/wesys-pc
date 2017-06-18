@@ -58,91 +58,49 @@
 
 <body>
     <div class="page">
-    <table class="table" style="width: 970px;">
-                <!-- <caption>商户参数</caption> -->
-                <tr class="tf tf-create tf-update">
-                    <td class="text-right col-sm-2">
-                        <label>客户号</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="">
-                        <span style="color: red;">*</span>
-                    </td>
-                    <td class="text-right col-sm-2">
-                        <label>商户参数ID</label>
-                    </td>
-                    <td class="col-sm-4">
-                        <input type="text" name="mchnt_param_id" class="easyui-validatebox" data-options="">
-                        <span style="color: red;">*</span>
-                    </td>
-                </tr>
-                <tr class="tf tf-create tf-update">
-                    <td class="text-right col-sm-2">
-                        <label>账户正面</label>
-                    </td>
-                    <td colspan="3" class="col-sm-10">
-                        <div class="img-box-wrap">
-                            <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
-                                <input type="file" name="file" data-type="zhzm">
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="tf tf-check1">
-                    <td class="text-right col-sm-2">
-                        <label>审核备注</label>
-                    </td>
-                    <td colspan="3" class="col-sm-10">
-                        <input type="text" name="checked_reason" style="width: 500px;">
-                    </td>
-                </tr>
-                </table>
         <form id="ff" action="/action/bm/mchnt-param/view" data-options="serialize:onSerializeForm,load:onLoadForm">
             <table class="table" style="width: 970px;">
                 <!-- <caption>商户参数</caption> -->
-                <tr class="tf tf-create tf-update">
+                <tr>
                     <td class="text-right col-sm-2">
                         <label>客户号</label>
-                    </td>
+                        <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
-                        <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="">
-                        <span style="color: red;">*</span>
+                        <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="" disabled>
                     </td>
                     <td class="text-right col-sm-2">
                         <label>商户参数ID</label>
-                    </td>
+                        <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
-                        <input type="text" name="mchnt_param_id" class="easyui-validatebox" data-options="">
-                        <span style="color: red;">*</span>
+                        <input type="text" name="mchnt_param_id" class="easyui-validatebox" data-options="" disabled>
                     </td>
                 </tr>
                 <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>收单机构</label>
-                    </td>
+                        <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <select id="acq_inst_id" name="acq_inst_id" class="easyui-validatebox" data-options="required:true">
                             <option value="">--请选择--</option>
                         </select>
-                        <span style="color: red;">*</span>
                     </td>
                     <td class="text-right col-sm-2">
                         <label>业务类型</label>
-                    </td>
+                        <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <select id="busi_type" name="busi_type" class="easyui-validatebox" data-options="required:true">
                             <option value="">--请选择--</option>
                         </select>
-                        <span style="color: red;">*</span>
                     </td>
                 </tr>
                 <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>MCC</label>
-                    </td>
+                        <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
-                        <input type="text" name="mcc" class="easyui-combobox" data-options="required:true,valueField:'mcc',textField:'mcc_nm'">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;">
+                            <input type="text" id="mcc" name="mcc" class="easyui-combobox" data-options="required:true,valueField:'mcc',textField:'mcc_nm'">
+                        </div>
                     </td>
                     <td class="text-right col-sm-2">
                         <label>商户号</label>
@@ -154,28 +112,27 @@
                 <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>商户名称</label>
-                    </td>
+                        <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="mchnt_name" class="easyui-validatebox" data-options="required:true">
-                        <span style="color: red;">*</span>
                     </td>
                     <td class="text-right col-sm-2">
                         <label>账户类型</label>
-                    </td>
+                        <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <select id="account_type" name="account_type" class="easyui-validatebox" data-options="required:true">
                             <option value="">--请选择--</option>
                         </select>
-                        <span style="color: red;">*</span>
                     </td>
                 </tr>
                 <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>开户银行</label>
-                    </td>
+                        <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
-                        <input type="text" id="account_bank" name="account_bank" class="easyui-combobox" data-options="required:true,valueField:'bank_cd',textField:'bank_nm',onChange:onChangeBank">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;">
+                            <input type="text" id="account_bank" name="account_bank" class="easyui-combobox" data-options="required:true,valueField:'bank_cd',textField:'bank_nm',onChange:onChangeBank">
+                        </div>
                     </td>
                     <td class="text-right col-sm-2">
                         <label>开户银行省/市</label>
@@ -192,10 +149,11 @@
                 <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>开户支行</label>
-                    </td>
+                        <span style="color: red;">*</span></td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" id="account_bank_branch_cd" name="account_bank_branch_cd" class="easyui-combobox" data-options="required:true,valueField:'bank_branch_cd',textField:'bank_branch_nm',mode:'remote',loader:bankBranchLoader" style="width: 500px;">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;">
+                            <input type="text" id="account_bank_branch_cd" name="account_bank_branch_cd" class="easyui-combobox" data-options="required:true,valueField:'bank_branch_cd',textField:'bank_branch_nm',mode:'remote',loader:bankBranchLoader">
+                        </div>
                     </td>
                 </tr>
                 <tr class="tf tf-create tf-update">
@@ -215,7 +173,7 @@
                         <label>开户名称</label>
                     </td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="account_name" class="easyui-validatebox" data-options="" style="width: 500px;">
+                        <input type="text" name="account_name" class="easyui-validatebox" data-options="">
                     </td>
                 </tr>
                 <tr class="tf tf-create tf-update">
@@ -223,7 +181,7 @@
                         <label>银行账号</label>
                     </td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="account_no" class="easyui-validatebox" data-options="" style="font-size: 20px;">
+                        <input type="text" name="account_no" class="easyui-validatebox" data-options="" style="font-size: 20px; width: 40%;">
                         <span id="account_no2" style="font-size: 24px; margin-left: 20px;"></span>
                     </td>
                 </tr>
@@ -266,37 +224,39 @@
                 <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>借记卡手续费</label>
+                        <span style="color: red;">*</span>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" id="debit_card_fee" name="debit_card_fee" class="easyui-combobox" data-options="">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;">
+                            <input type="text" id="debit_card_fee" name="debit_card_fee" class="easyui-combobox" data-options="">
+                        </div>
                     </td>
                     <td class="text-right col-sm-2">
                         <label>贷记卡手续费</label>
+                        <span style="color: red;">*</span>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" id="credit_card_fee" name="credit_card_fee" class="easyui-combobox" data-options="">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;">
+                            <input type="text" id="credit_card_fee" name="credit_card_fee" class="easyui-combobox" data-options="">
+                        </div>
                     </td>
                 </tr>
                 <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>扫码手续费(‰)</label>
-                    </td>
+                        <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="fee" value="5" class="easyui-validatebox" data-options="required:true">
-                        <span style="color: red;">*</span>
                     </td>
                     <td class="text-right col-sm-2">
                         <label>信用卡开关</label>
-                    </td>
+                        <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <select id="credit_flag" name="credit_flag" class="easyui-validatebox" data-options="required:true">
                             <option value="">--请选择--</option>
-                            <option value="1">开</option>
+                            <option value="1" selected>开</option>
                             <option value="0">关</option>
                         </select>
-                        <span style="color: red;">*</span>
                     </td>
                 </tr>
                 <!-- <tr class="tf tf-create tf-update">
@@ -330,17 +290,19 @@
                 <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>拓展方</label>
-                    </td>
+                        <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
-                        <input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;">
+                            <input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true">
+                        </div>
                     </td>
                     <td class="text-right col-sm-2">
                         <label>拓展人</label>
-                    </td>
+                        <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
-                        <input type="text" id="expand_id" name="expand_id" class="easyui-combobox" data-options="required:true">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;">
+                            <input type="text" id="expand_id" name="expand_id" class="easyui-combobox" data-options="required:true">
+                        </div>
                     </td>
                 </tr>
                 <tr class="tf">
@@ -415,17 +377,17 @@
                         <label>审核备注</label>
                     </td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="checked_reason" style="width: 500px;">
+                        <input type="text" name="checked_reason">
                     </td>
                 </tr>
             </table>
             <div style="display:block; height:50px;"></div>
-            <div style="position:fixed; left: 0px; bottom:0px; z-index:9998999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px;">
+            <div style="position:fixed; left: 0px; bottom:0px; z-index:8999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px;">
                 <div class="row">
                     <div class="col-sm-2"></div>
                     <div class="col-sm-8">
-                        <button type="button" class="btn btn-primary tf" data-options="datagrid:'#dg',url:'/action/bm/mchnt-param/create'" onclick="$$.submit(this)">新增提交</button>
-                        <button type="button" class="btn btn-primary tf tf-update" data-options="datagrid:'#dg',url:'/action/bm/mchnt-param/update'" onclick="$$.submit(this)">编辑提交</button>
+                        <button type="button" class="btn btn-primary tf tf-create" data-options="datagrid:'#dg',url:'/action/bm/mchnt-param/create',success:submitSuccess" onclick="$$.submit(this)">新增提交</button>
+                        <button type="button" class="btn btn-primary tf tf-update" data-options="datagrid:'#dg',url:'/action/bm/mchnt-param/update',success:submitSuccess" onclick="$$.submit(this)">编辑提交</button>
                         <button type="button" class="btn btn-primary tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/mchnt-param/check1-pass'" onclick="$$.submit(this)">审核通过</button>
                         <button type="button" class="btn btn-danger tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/mchnt-param/check1-nopass'" onclick="$$.submit(this)">审核驳回</button>
                         <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
@@ -437,6 +399,7 @@
         </form>
     </div>
     <script src="../lib/jquery/jquery.min.js"></script>
+    <script src="../lib/jquery-iframe-transport/jquery.iframe-transport.js"></script>
     <script src="../lib/toastr/toastr.min.js"></script>
     <script src="../lib/My97DatePicker/WdatePicker.js"></script>
     <script src="../lib/easyui/jquery.easyui.min.js"></script>
@@ -451,10 +414,10 @@
 
     function renderImgbox($file, data) {
         var $box = $('<div class="thumbnail pull-left img-box">' +
-            '<a href="' + $$.wrapUrl('/action/uploads/' + data.serverid) + '" target="_blank">'+ 
+            '<a href="' + $$.wrapUrl('/action/uploads/' + data.serverid) + '" target="_blank">' +
             '<img src="' + $$.wrapUrl('/action/uploads/' + data.serverid) + '"></a>' +
             '<div class="img-operate">' +
-            '<button class="btn btn-xs btn-danger hide tf tf-create tf-update">删除</button>' +
+            '<button class="btn btn-xs btn-danger">删除</button>' +
             // '<a href="#" class="btn btn-xs btn-default">识别</a>' +
             '</div></div>').data('data', {
             elec_info_type: $file.attr('data-type'),
@@ -462,7 +425,7 @@
         });
         $file.closest('.img-box').before($box);
 
-        if($.inArray(query.operateType, ['create','update']) < 0) {
+        if ($.inArray(query.operateType, ['create', 'update']) < 0) {
             $box.find('.img-operate').addClass('hide');
         }
     }
@@ -497,11 +460,12 @@
     }
 
     function submitSuccess(data, result) {
+        var $form = $(this).closest('form');
+
         $$.transform($form, 'view');
-        $$.success('操作成功');
 
         if (result.data) {
-            $('#ff').form('load', result.data)
+            $form.form('load', result.data)
         }
 
         if (operateType == 'create') {
@@ -609,10 +573,10 @@
     }
 
     function initUpload() {
-        if($.inArray(query.operateType, ['create','update']) < 0) {
+        if ($.inArray(query.operateType, ['create', 'update']) < 0) {
             $('.img-box.glyphicon-upload').addClass('hide');
         }
-        
+
         $('.img-box-wrap').on('click', '.btn-danger', function() {
             $(this).closest('.img-box').remove();
         });
@@ -622,12 +586,17 @@
 
             $.mask.show();
             $.ajax({
+                type: 'POST',
                 url: $$.wrapUrl('/action/upload'),
                 files: $(this),
                 iframe: true,
                 dataType: 'json',
                 success: function(data) {
-                    renderImgbox($file, data);
+                    if ($$.errcode(data) == 0) {
+                        renderImgbox($file, data);
+                    } else {
+                        $$.error($$.errmsg(data));
+                    }
                 }
             }).always(function() {
                 $.mask.hide();
@@ -683,7 +652,7 @@
             $('#expand_inst_id').combobox('loadData', data.expand_inst);
             $('#debit_card_fee').combobox('loadData', data.debit_fee_algo);
             $('#credit_card_fee').combobox('loadData', data.credit_fee_algo);
-            $('#mcc').combobox('loadData', data.bank);
+            $('#mcc').combobox('loadData', data.mcc);
             $('#account_bank').combobox('loadData', data.bank);
         });
 
@@ -691,8 +660,8 @@
             if (query.operateType == 'create') {
                 $('#ff').form('load', query);
                 $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
-                    $('#province').val(data.data.account_province).change();
-                    $('#city').val(data.data.account_city);
+                    $('#province').val(data.data.province).change();
+                    $('#city').val(data.data.city);
                     data.data.account_name = data.data.cert_name;
                     $('#ff').form('load', data.data);
                 });

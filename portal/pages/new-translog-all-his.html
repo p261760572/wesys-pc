@@ -33,17 +33,17 @@
                     <tr>
                         <td class="text-right col-sm-2">
                             <label>清算日期</label>
-                        </td>
+                        <span style="color: red;">*</span></td>
                         <td class="col-sm-4">
                             <input id="settle_date" type="text" class="easyui-validatebox Wdate" name="settle_date" data-options="required:true" style="width: 120px;" onfocus="WdatePicker({onpicked:function(){$dp.$('settle_date2').focus();},maxDate:'#F{$dp.$D(\'settle_date2\')}'})">
                             <input id="settle_date2" type="text" class="easyui-validatebox Wdate" name="settle_date2" data-options="required:true" style="width: 120px;" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'settle_date\')}'})">
-                            <span style="color: red;">*</span>
+                            
                         </td>
                         <td class="text-right col-sm-2">
                             <label>收单机构</label>
                         </td>
                         <td class="col-sm-4">
-                            <input id="acq_inst_id" type="text" class="easyui-combobox" name="acq_inst_id" data-options="valueField:'acq_inst_id',textField:'acq_inst_nm',editable:false">
+                            <div class="col-sm-12" style="padding:0;"><input id="acq_inst_id" type="text" class="easyui-combobox" name="acq_inst_id" data-options="valueField:'acq_inst_id',textField:'acq_inst_nm',editable:false"></div>
                         </td>
                     </tr>
                     <tr>
@@ -71,7 +71,7 @@
                             <label>拓展方</label>
                         </td>
                         <td class="col-sm-4">
-                            <input id="expand_inst_id" type="text" class="easyui-combobox" name="expand_inst_id" data-options="">
+                            <div class="col-sm-12" style="padding:0;"><input id="expand_inst_id" type="text" class="easyui-combobox" name="expand_inst_id" data-options=""></div>
                         </td>
                     </tr>
                 </tbody>

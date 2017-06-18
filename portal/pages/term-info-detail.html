@@ -38,42 +38,42 @@
                         <tr class="tf tf-create tf-update">
                             <td class="text-right col-sm-2">
                                 <label>客户号</label>
-                            </td>
+                            <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
                                 <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="" disabled>
-                                <span style="color: red;">*</span>
+                                
                             </td>
                             <td class="text-right col-sm-2">
                                 <label>终端标识</label>
-                            </td>
+                            <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
-                                <input type="text" name="term_no" class="easyui-validatebox" data-options="" disabled>
-                                <span style="color: red;">*</span>
+                                <input type="text" id="term_no" name="term_no" class="easyui-validatebox" data-options="" disabled>
+                                
                             </td>
                         </tr>
                         <tr class="tf tf-create tf-update">
                             <td class="text-right col-sm-2">
                                 <label>联系人</label>
-                            </td>
+                            <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
                                 <input type="text" name="linkman" class="easyui-validatebox" data-options="">
-                                <span style="color: red;">*</span>
+                                
                             </td>
                             <td class="text-right col-sm-2">
                                 <label>手机号</label>
-                            </td>
+                            <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
                                 <input type="text" name="mobile" class="easyui-validatebox" data-options="">
-                                <span style="color: red;">*</span>
+                                
                             </td>
                         </tr>
                         <tr class="tf tf-create tf-update">
                             <td class="text-right col-sm-2">
                                 <label>门店名称</label>
-                            </td>
+                            <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
                                 <input type="text" name="shop_name" class="easyui-validatebox" data-options="required:true">
-                                <span style="color: red;">*</span>
+                                
                             </td>
                             <td class="text-right col-sm-2">
                                 <label>联系电话</label>
@@ -107,35 +107,35 @@
                         <tr class="tf tf-create tf-update">
                             <td class="text-right col-sm-2">
                                 <label>终端投资方</label>
-                            </td>
+                            <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
-                                <input type="text" id="term_inves" name="term_inves" class="easyui-combobox" data-options="required:true">
-                                <span style="color: red;">*</span>
+                                <div class="col-sm-12" style="padding:0;"><input type="text" id="term_inves" name="term_inves" class="easyui-combobox" data-options="required:true"></div>
+                                
                             </td>
                             <td class="text-right col-sm-2">
                                 <label>机具类型</label>
-                            </td>
+                            <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
-                                <select id="equi_type" name="equi_type">
+                                <select id="equi_type" name="equi_type" class="easyui-validatebox" data-options="required:true">
                                     <option value="">--请选择--</option>
                                 </select>
-                                <span style="color: red;">*</span>
+                                
                             </td>
                         </tr>
                         <tr class="tf tf-create tf-update">
                             <td class="text-right col-sm-2">
                                 <label>拓展方</label>
-                            </td>
+                            <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
-                                <input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true">
-                                <span style="color: red;">*</span>
+                                <div class="col-sm-12" style="padding:0;"><input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true"></div>
+                                
                             </td>
                             <td class="text-right col-sm-2">
                                 <label>拓展人</label>
-                            </td>
+                            <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
-                                <input type="text" id="expand_id" name="expand_id" class="easyui-combobox" data-options="required:true">
-                                <span style="color: red;">*</span>
+                                <div class="col-sm-12" style="padding:0;"><input type="text" id="expand_id" name="expand_id" class="easyui-combobox" data-options="required:true"></div>
+                                
                             </td>
                         </tr>
                         <tr class="tf">
@@ -157,24 +157,24 @@
                                 <label>装机人</label>
                             </td>
                             <td class="col-sm-4">
-                                <input type="text" name="installed_by" class="easyui-combobox" data-options="">
+                                <div class="col-sm-12" style="padding:0;"><input type="text" name="installed_by" class="easyui-combobox" data-options=""></div>
                             </td>
                             <td class="text-right col-sm-2">
                                 <label>维护人</label>
                             </td>
                             <td class="col-sm-4">
-                                <input type="text" name="maintained_by" class="easyui-combobox" data-options="">
+                                <div class="col-sm-12" style="padding:0;"><input type="text" name="maintained_by" class="easyui-combobox" data-options=""></div>
                             </td>
                         </tr>
                         <tr class="tf">
                             <td class="text-right col-sm-2">
                                 <label>终端状态</label>
-                            </td>
+                            <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
                                 <select id="term_status" name="term_status">
                                     <option value="">--请选择省--</option>
                                 </select>
-                                <span style="color: red;">*</span>
+                                
                             </td>
                             <td class="text-right col-sm-2">
                             </td>
@@ -253,17 +253,17 @@
                                 <label>审核备注</label>
                             </td>
                             <td colspan="3" class="col-sm-10">
-                                <input type="text" name="checked_reason" style="width: 500px;">
+                                <input type="text" name="checked_reason">
                             </td>
                         </tr>
                     </table>
                     <div style="display:block; height:50px;"></div>
-                    <div style="position:fixed; left: 0px; bottom:0px; z-index:9998999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px;">
+                    <div style="position:fixed; left: 0px; bottom:0px; z-index:8999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px;">
                         <div class="row">
                             <div class="col-sm-2"></div>
                             <div class="col-sm-8">
-                                <button type="button" class="btn btn-primary tf" data-options="datagrid:'#dg',url:'/action/bm/term-info/create'" onclick="$$.submit(this)">新增提交</button>
-                                <button type="button" class="btn btn-primary tf tf-update" data-options="datagrid:'#dg',url:'/action/bm/term-info/update'" onclick="$$.submit(this)">编辑提交</button>
+                                <button type="button" class="btn btn-primary tf tf-create" data-options="datagrid:'#dg',url:'/action/bm/term-info/create',success:submitSuccess" onclick="$$.submit(this)">新增提交</button>
+                                <button type="button" class="btn btn-primary tf tf-update" data-options="datagrid:'#dg',url:'/action/bm/term-info/update',success:submitSuccess" onclick="$$.submit(this)">编辑提交</button>
                                 <button type="button" class="btn btn-primary tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-info/check1-pass'" onclick="$$.submit(this)">审核通过</button>
                                 <button type="button" class="btn btn-danger tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-info/check1-nopass'" onclick="$$.submit(this)">审核驳回</button>
                                 <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
@@ -276,7 +276,7 @@
             </div>
         </div>
         <div title="终端参数" data-options="bodyCls:'tab-body-overflow'">
-            <iframe src="#" frameborder="0" style="width:100%; height:100%; border: 0; overflow: hidden;"></iframe>
+            <iframe src="javascript:void(0)" frameborder="0" style="width:100%; height:100%; border: 0; overflow: hidden;"></iframe>
         </div>
     </div>
     <script src="../lib/jquery/jquery.min.js"></script>
@@ -310,11 +310,12 @@
     }
 
     function submitSuccess(data, result) {
+        var $form = $(this).closest('form');
+
         $$.transform($form, 'view');
-        $$.success('操作成功');
 
         if (result.data) {
-            $('#ff').form('load', result.data)
+            $form.form('load', result.data)
         }
 
         if (operateType == 'create') {
@@ -369,6 +370,7 @@
             return;
         }
 
+        query.mchnt_id = data.mchnt_id;
         query.term_no = data.term_no;
         if (index == 1) {
             updateIframeSrc(index, $$.url('term-param.html', query));

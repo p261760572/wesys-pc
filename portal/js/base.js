@@ -383,13 +383,15 @@ window.$$ = (function() {
         var $select = $(selector);
         $select.children().slice(1).remove();
 
-        var html = [],
-            row;
-        for (var i = 0; i < rows.length; i++) {
-            row = rows[i]
-            html.push('<option value="' + row[options['valueField']] + '">' + row[options['textField']] + '</option>')
+        if (rows) {
+            var html = [],
+                row;
+            for (var i = 0; i < rows.length; i++) {
+                row = rows[i]
+                html.push('<option value="' + row[options['valueField']] + '">' + row[options['textField']] + '</option>')
+            }
+            $(selector).append(html);
         }
-        $(selector).append(html);
     }
 
     $$.loadData = function(selector, url, params) {
@@ -562,7 +564,7 @@ window.$$ = (function() {
             var $tmp = $(element);
             if ($tmp.hasClass('combobox-f')) {
                 $tmp.combobox('readonly');
-            } else if (element.tagName == 'SELECT' || (element.tagName == 'INPUT' && element.type == 'checkbox') || $tmp.hasClass('Wdate')) {
+            } else if (element.tagName == 'SELECT' || (element.tagName == 'INPUT' && $.inArray(element.type, ['checkbox', 'file']) >= 0) || $tmp.hasClass('Wdate')) {
                 $tmp.attr('disabled', 'disabled');
             } else {
                 $tmp.attr('readonly', 'readonly');

@@ -160,8 +160,16 @@
         $$.loadSelect('#district', districtData['district'][$('#province').val() + value]);
     }
 
+    $('#ff input[name=mchnt_id]').attr('value', query.mchnt_id);
+    $('#ff input[name=term_no]').attr('value', query.term_no);
     $(function() {
         $$.transformDisplay('#tb', displayType);
+
+        $('#ff').on('keyup', function(event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
 
 
         $$.request('/action/bm/expand-inst/list', {}, function(data) {

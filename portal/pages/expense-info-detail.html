@@ -28,71 +28,71 @@
                 <tr>
                     <td class="text-right col-sm-2">
                         <label>费用单据号</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="expense_no" class="easyui-validatebox" data-options="" disabled>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>客户号</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="required:true" disabled>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                 </tr>
                 <tr>
                     <td class="text-right col-sm-2">
                         <label>商户简称</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="mchnt_abbr" class="easyui-validatebox" style="width: 500px;" data-options="required:true" disabled>
-                        <span style="color: red;">*</span>
+                        <input type="text" name="mchnt_abbr" class="easyui-validatebox" data-options="required:true" disabled>
+                        
                     </td>
                 </tr>
                 <tr>
                     <td class="text-right col-sm-2">
                         <label>商户名称</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="mchnt_name" class="easyui-validatebox" style="width: 500px;" data-options="required:true" disabled>
-                        <span style="color: red;">*</span>
+                        <input type="text" name="mchnt_name" class="easyui-validatebox" data-options="required:true" disabled>
+                        
                     </td>
                 </tr>
                 <tr class="hide tf tf-create">
                     <td class="text-right col-sm-2">
                         <label>费用类型</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <select id="expense_type" name="expense_type" class="easyui-validatebox" data-options="required:true">
                             <option value="">--请选择--</option>
                         </select>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>金额</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="amount" class="easyui-validatebox" data-options="required:true">
-                        <span style="color: red;">*</span>
+                        
                     </td>
                 </tr>
                 <tr class="hide tf tf-create">
                     <td class="text-right col-sm-2">
                         <label>收费周期</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <select id="expense_cycle" name="expense_cycle" class="easyui-validatebox" data-options="required:true">
                             <option value="">--请选择--</option>
                         </select>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>收费开始时间</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="start_date" class="easyui-validatebox Wdate" data-options="required:true" onfocus="WdatePicker()">
-                        <span style="color: red;">*</span>
+                        
                     </td>
                 </tr>
                 <tr class="hide tf tf-create">
@@ -106,7 +106,7 @@
                         <label>领用人</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" id="recipient_by" name="recipient_by" class="easyui-combobox" data-options="">
+                        <div class="col-sm-12" style="padding:0;"><input type="text" id="recipient_by" name="recipient_by" class="easyui-combobox" data-options=""></div>
                     </td>
                 </tr>
                 <tr class="hide tf tf-create">
@@ -114,7 +114,7 @@
                         <label>备注</label>
                     </td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="remark" class="easyui-validatebox" style="width: 500px;" data-options="">
+                        <input type="text" name="remark" class="easyui-validatebox" data-options="">
                     </td>
                 </tr>
                 <tr class="hide tf tf-receipt">
@@ -126,21 +126,21 @@
                     </td>
                     <td class="text-right col-sm-2">
                         <label>收款方式</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <select id="receipt_type" name="receipt_type" class="easyui-validatebox" data-options="required:true">
                             <option value="">--请选择--</option>
                         </select>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                 </tr>
                 <tr class="hide tf tf-receipt">
                     <td class="text-right col-sm-2">
                         <label>收款日期</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="receipt_date" class="easyui-validatebox Wdate" data-options="required:true" onfocus="WdatePicker()">
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>收款备注</label>
@@ -180,81 +180,81 @@
                 <tr class="hide tf tf-cancel">
                     <td class="text-right col-sm-2">
                         <label>作废备注</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="cancel_remark" class="easyui-validatebox" style="width: 500px;" data-options="required:true">
-                        <span style="color: red;">*</span>
+                        <input type="text" name="cancel_remark" class="easyui-validatebox" data-options="required:true">
+                        
                     </td>
                 </tr>
                 <tr class="hide tf tf-refund">
                     <td class="text-right col-sm-2">
                         <label>退款原因</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <select id="refund_reason_flag" name="refund_reason_flag" class="easyui-validatebox" data-options="required:true">
                             <option value="">--请选择--</option>
                         </select>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>退款方式</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <select id="refund_type" name="refund_type" class="easyui-validatebox" data-options="required:true">
                             <option value="">--请选择--</option>
                         </select>
-                        <span style="color: red;">*</span>
+                        
                     </td>
                 </tr>
                 <tr class="hide tf tf-refund">
                     <td class="text-right col-sm-2">
                         <label>退款金额</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td colspan="3" class="col-sm-10">
                         <input type="text" name="refund_amount" class="easyui-validatebox" data-options="required:true">
-                        <span style="color: red;">*</span> 退款金额累计
+                         退款金额累计
                         <span id="refund_amount_total" class="badge">0.00</span>
                     </td>
                 </tr>
                 <tr class="hide tf tf-refund">
                     <td class="text-right col-sm-2">
                         <label>退款开户名称</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="refund_account_name" class="easyui-validatebox" data-options="required:true">
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>退款开户银行</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
-                        <input type="text" id="refund_account_bank" name="refund_account_bank" class="easyui-combobox" data-options="required:true,valueField:'bank_cd',textField:'bank_nm',onChange:onChangeBank">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;"><input type="text" id="refund_account_bank" name="refund_account_bank" class="easyui-combobox" data-options="required:true,valueField:'bank_cd',textField:'bank_nm',onChange:onChangeBank"></div>
+                        
                     </td>
                 </tr>
                 <tr class="hide tf tf-refund">
                     <td class="text-right col-sm-2">
                         <label>退款开户支行</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" id="refund_account_bank_branch_cd" name="refund_account_bank_branch_cd" class="easyui-combobox" style="width: 500px;" data-options="required:true,valueField:'bank_branch_cd',textField:'bank_branch_nm',mode:'remote',loader:bankBranchLoader">
-                        <span style="color: red;">*</span>
+                        <div class="col-sm-12" style="padding:0;"><input type="text" id="refund_account_bank_branch_cd" name="refund_account_bank_branch_cd" class="easyui-combobox" data-options="required:true,valueField:'bank_branch_cd',textField:'bank_branch_nm',mode:'remote',loader:bankBranchLoader"></div>
+                        
                     </td>
                 </tr>
                 <tr class="hide tf tf-refund">
                     <td class="text-right col-sm-2">
                         <label>退款银行账号</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="refund_account_no" class="easyui-validatebox" data-options="required:true">
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>可退付日期</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="refund_date" class="easyui-validatebox Wdate" data-options="required:true" onfocus="WdatePicker()">
-                        <span style="color: red;">*</span>
+                        
                     </td>
                 </tr>
                 <tr class="tf">
@@ -276,7 +276,7 @@
                         <label>退款备注</label>
                     </td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="refund_remark" class="easyui-validatebox" style="width: 500px;" data-options="">
+                        <input type="text" name="refund_remark" class="easyui-validatebox" data-options="">
                     </td>
                 </tr>
                 <tr class="tf">
@@ -296,10 +296,10 @@
                 <tr class="tf">
                     <td class="text-right col-sm-2">
                         <label>打印标志</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="print_flag" class="easyui-validatebox" data-options="">
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td class="text-right col-sm-2">
                         <label>验证随机数</label>
@@ -311,10 +311,10 @@
                 <tr class="tf">
                     <td class="text-right col-sm-2">
                         <label>客户费用ID</label>
-                    </td>
+                    <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
                         <input type="text" name="mchnt_expense_id" class="easyui-validatebox" data-options="required:true">
-                        <span style="color: red;">*</span>
+                        
                     </td>
                     <td>
                         &nbsp;
@@ -378,7 +378,7 @@
                 </tr>
             </table>
             <div style="display:block; height:50px;"></div>
-            <div style="position:fixed; left: 0px; bottom:0px; z-index:9998999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px; ">
+            <div style="position:fixed; left: 0px; bottom:0px; z-index:8999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px; ">
                 <div class="row">
                     <div class="col-sm-2"></div>
                     <div class="col-sm-8">
