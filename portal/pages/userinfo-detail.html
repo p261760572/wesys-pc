@@ -1,0 +1,275 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>用户</title>
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+    <style type="text/css">
+    input[disabled],
+    select[disabled],
+    textarea[disabled] {
+        background-color: rgb(235, 235, 228);
+    }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <form id="ff" action="/action/bm/term-param/view" data-options="serialize:onSerializeForm,load:onLoadForm">
+            <table class="table" style="width: 970px;">
+                <caption>用户</caption>
+                <tr class="tf tf-create tf-update">
+                    <td class="text-right col-sm-2">
+                        <label>用户ID</label>
+                        <span style="color: red;">*</span></td>
+                    <td class="col-sm-4">
+                        <input type="text" name="userid" class="easyui-validatebox" data-options="" readonly>
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>登录名</label>
+                        <span style="color: red;">*</span></td>
+                    <td class="col-sm-4">
+                        <input type="text" name="login_name" class="easyui-validatebox" data-options="">
+                    </td>
+                </tr>
+                <tr class="tf tf-create tf-update">
+                    <td class="text-right col-sm-2">
+                        <label>昵称</label>
+                        <span style="color: red;">*</span></td>
+                    <td colspan="3" class="col-sm-10">
+                        <input type="text" name="nickname" class="easyui-validatebox" data-options="">
+                    </td>
+                </tr>
+                <tr class="tf tf-create tf-update">
+                    <td class="text-right col-sm-2">
+                        <label>登录密码</label>
+                        <span style="color: red;">*</span></td>
+                    <td colspan="3" class="col-sm-10">
+                        <input type="text" name="login_pwd" class="easyui-validatebox" data-options="">
+                    </td>
+                </tr>
+                <tr class="tf tf-create tf-update">
+                    <td class="text-right col-sm-2">
+                        <label>手机号码</label>
+                    </td>
+                    <td colspan="3" class="col-sm-10">
+                        <input type="text" name="mobile" class="easyui-validatebox" data-options="">
+                    </td>
+                </tr>
+                <tr class="tf tf-create tf-update">
+                    <td class="text-right col-sm-2">
+                        <label>联系电话</label>
+                        <span style="color: red;">*</span></td>
+                    <td class="col-sm-4">
+                        <input type="text" name="telno" class="easyui-validatebox" data-options="">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>邮件地址</label>
+                        <span style="color: red;">*</span></td>
+                    <td class="col-sm-4">
+                        <input type="text" name="email" class="easyui-validatebox" data-options="">
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>记录编号</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="rec_id">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>操作标志/处理状态</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <!-- <input type="text" name="oper_in" style="width: 100px;">
+                        <input type="text" name="proc_st" style="width: 100px;"> -->
+                        <!-- <select name="oper_in">
+                            </select>
+                            <select name="proc_st">
+                            </select> -->
+                        <select id="oper_in" name="oper_in" style="width: 100px;">
+                            <option value="">--请选择--</option>
+                        </select>
+                        <select id="proc_st" name="proc_st" style="width: 100px;">
+                            <option value="">--请选择--</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>创建人</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="created_by">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>创建时间</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="created_time">
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>最后修改人</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="last_modified_by">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>最后修改时间</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="last_modified_time">
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>最后审核人</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="last_checked_by">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>最后审核时间</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="last_checked_time">
+                    </td>
+                </tr>
+                <tr class="tf tf-check1">
+                    <td class="text-right col-sm-2">
+                        <label>审核备注</label>
+                    </td>
+                    <td colspan="3" class="col-sm-10">
+                        <input type="text" name="checked_reason">
+                    </td>
+                </tr>
+            </table>
+            <div style="display:block; height:50px;"></div>
+            <div style="position:fixed; left: 0px; bottom:0px; z-index:8999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px;">
+                <div class="row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-8">
+                        <button type="button" class="btn btn-primary tf tf-create" data-options="datagrid:'#dg',url:'/action/bm/term-param/create'" onclick="$$.submit(this)">新增提交</button>
+                        <button type="button" class="btn btn-primary tf tf-update" data-options="datagrid:'#dg',url:'/action/bm/term-param/update'" onclick="$$.submit(this)">编辑提交</button>
+                        <button type="button" class="btn btn-primary tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-param/check1-pass'" onclick="$$.submit(this)">审核通过</button>
+                        <button type="button" class="btn btn-danger tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/term-param/check1-nopass'" onclick="$$.submit(this)">审核驳回</button>
+                        <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
+                    </div>
+                    <div class="col-sm-2">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="../lib/jquery/jquery.min.js"></script>
+    <script src="../lib/toastr/toastr.min.js"></script>
+    <script src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script src="../lib/easyui/jquery.easyui.min.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/st.js"></script>
+    <script src="../js/param.js"></script>
+    <script src="../js/district.js"></script>
+    <script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function onLoadForm(data) {
+        $('#mchnt_param_id').combobox('reload', {
+            mchnt_param_id: data.data.mchnt_param_id
+        });
+    }
+
+    function onSerializeForm(data) {
+
+    }
+
+    function mchntParamLoader(param, success, error) {
+        var q = param.q || '';
+
+        if (!query.term_no && !param.mchnt_param_id) return false;
+        // 
+        var queryParams;
+        if (param.mchnt_param_id) {
+            queryParams = {
+                mchnt_param_id: param.mchnt_param_id
+            };
+        } else {
+            queryParams = {
+                q: q,
+                term_no2: query.term_no
+            };
+        }
+
+        $$.request('/action/bm/mchnt-param/search', queryParams, function(result) {
+            for (var i = 0; i < result.rows.length; i++) {
+                result.rows[i]['text'] = formatMchntParam(result.rows[i]);
+            }
+            success(result.rows);
+        }, function() {
+            error.apply(this, arguments);
+        }, {
+            loading: false
+        });
+
+        $('#mchnt_param_id').combobox('options').queryParams['mchnt_param_id'] = undefined;
+    }
+
+    function formatMchntParam(row) {
+        return row.busi_type_nm + '/' + row.mchnt_name + '/' + (row.mchnt_cd || '');
+    }
+
+    function hasNext(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['term_param']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
+
+    $(function() {
+        // $$.transform('body>.page', operateType, {
+        //     'create': [],
+        //     'update': [],
+        //     'check1': ['create', 'update']
+        // });
+
+        // $('#province').on('change', onChangeProvince);
+        // $('#city').on('change', onChangeCity);
+        // $$.loadSelect('#province', districtData['province']);
+
+        // $$.loadSelect('#term_status', $$.param['term_status']);
+        $$.loadSelect('#oper_in', $$.st.operIn[$$.st.alias['term_param']]);
+        $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['term_param']]);
+
+        var d1 = $$.request('/action/bm/expand/list', {}, function(data) {
+            $('#expand_id').combobox('loadData', data.rows);
+        });
+
+        var d2 = $$.request('/action/bm/parameter/list', {
+            expand_inst: '1'
+        }, function(data) {
+            $('#expand_inst_id').combobox('loadData', data.expand_inst);
+        });
+
+        $.when(d1, d2).done(function() {
+            if (query.operateType == 'create') {
+                $('#ff').form('load', query);
+                $$.request('/action/bm/term-info/view', query, function(data) {
+                    $('#ff').form('load', data.data);
+                });
+            } else {
+                $$.loadData('#ff', '/action/bm/term-param/view', query);
+            }
+        });
+    });
+    </script>
+</body>
+
+</html>
