@@ -58,9 +58,48 @@
 
 <body>
     <div class="page">
+    <table class="table" style="width: 970px;">
+                <!-- <caption>商户参数</caption> -->
+                <tr class="tf tf-create tf-update">
+                    <td class="text-right col-sm-2">
+                        <label>客户号</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="">
+                        <span style="color: red;">*</span>
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>商户参数ID</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="mchnt_param_id" class="easyui-validatebox" data-options="">
+                        <span style="color: red;">*</span>
+                    </td>
+                </tr>
+                <tr class="tf tf-create tf-update">
+                    <td class="text-right col-sm-2">
+                        <label>账户正面</label>
+                    </td>
+                    <td colspan="3" class="col-sm-10">
+                        <div class="img-box-wrap">
+                            <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
+                                <input type="file" name="file" data-type="zhzm">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="tf tf-check1">
+                    <td class="text-right col-sm-2">
+                        <label>审核备注</label>
+                    </td>
+                    <td colspan="3" class="col-sm-10">
+                        <input type="text" name="checked_reason" style="width: 500px;">
+                    </td>
+                </tr>
+                </table>
         <form id="ff" action="/action/bm/mchnt-param/view" data-options="serialize:onSerializeForm,load:onLoadForm">
             <table class="table" style="width: 970px;">
-                <caption>商户参数</caption>
+                <!-- <caption>商户参数</caption> -->
                 <tr class="tf tf-create tf-update">
                     <td class="text-right col-sm-2">
                         <label>客户号</label>
@@ -109,8 +148,7 @@
                         <label>商户号</label>
                     </td>
                     <td class="col-sm-4">
-                        <input type="text" name="mchnt_cd" class="easyui-validatebox" data-options="required:true">
-                        <span style="color: red;">*</span>
+                        <input type="text" name="mchnt_cd" class="easyui-validatebox" data-options="">
                     </td>
                 </tr>
                 <tr class="tf tf-create tf-update">
@@ -164,7 +202,7 @@
                     <td class="text-right col-sm-2">
                         <label>账户正面</label>
                     </td>
-                    <td colspan="3" class="col-sm-2">
+                    <td colspan="3" class="col-sm-10">
                         <div class="img-box-wrap">
                             <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
                                 <input type="file" name="file" data-type="zhzm">
@@ -176,7 +214,7 @@
                     <td class="text-right col-sm-2">
                         <label>开户名称</label>
                     </td>
-                    <td colspan="3" class="col-sm-4">
+                    <td colspan="3" class="col-sm-10">
                         <input type="text" name="account_name" class="easyui-validatebox" data-options="" style="width: 500px;">
                     </td>
                 </tr>
@@ -193,7 +231,7 @@
                     <td class="text-right col-sm-2">
                         <label>身份证正面</label>
                     </td>
-                    <td colspan="3" class="col-sm-4">
+                    <td colspan="3" class="col-sm-10">
                         <div class="img-box-wrap">
                             <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
                                 <input type="file" name="file" data-type="sfzzm">
@@ -205,7 +243,7 @@
                     <td class="text-right col-sm-2">
                         <label>身份证反面</label>
                     </td>
-                    <td colspan="3" class="col-sm-4">
+                    <td colspan="3" class="col-sm-10">
                         <div class="img-box-wrap">
                             <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
                                 <input type="file" name="file" data-type="sfzfm">
@@ -217,7 +255,7 @@
                     <td class="text-right col-sm-2">
                         <label>入账授权书</label>
                     </td>
-                    <td colspan="3" class="col-sm-4">
+                    <td colspan="3" class="col-sm-10">
                         <div class="img-box-wrap">
                             <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
                                 <input type="file" name="file" data-type="rzsqs">
@@ -376,7 +414,7 @@
                     <td class="text-right col-sm-2">
                         <label>审核备注</label>
                     </td>
-                    <td colspan="3" class="col-sm-4">
+                    <td colspan="3" class="col-sm-10">
                         <input type="text" name="checked_reason" style="width: 500px;">
                     </td>
                 </tr>

@@ -60,17 +60,12 @@ window.$$ = (function() {
                 if (callback) callback();
             }
         }
-        $.messager.confirm('确认', msg, callback);
+        $.messager.confirm('确认对话框', msg, fn);
     }
 
     //提示
-    $$.prompt = function(title, yes) {
-        layer.prompt({
-            title: title,
-        }, function(value, index, elem) {
-            layer.close(index);
-            if (yes) yes(value);
-        });
+    $$.prompt = function(msg, callback) {
+        $.messager.prompt('提示信息', msg, callback);
     };
 
     //解析查询字符串
@@ -567,10 +562,10 @@ window.$$ = (function() {
             var $tmp = $(element);
             if ($tmp.hasClass('combobox-f')) {
                 $tmp.combobox('readonly');
-            } else if (element.tagName == 'SELECT' || (element.tagName == 'INPUT' && element.type == 'checkbox')) {
+            } else if (element.tagName == 'SELECT' || (element.tagName == 'INPUT' && element.type == 'checkbox') || $tmp.hasClass('Wdate')) {
                 $tmp.attr('disabled', 'disabled');
             } else {
-                $tmp.attr('disabled', 'disabled');
+                $tmp.attr('readonly', 'readonly');
             }
         }
 
@@ -725,21 +720,4 @@ $$.generateTreeData = function(rows, options) {
 
         return node;
     }
-}
-
-if ($.fn.combobox) {
-    $.fn.combobox.defaults.loader = function(param, success, error) {
-        var q = param.q || '';
-        // if (q.length <= 2) {
-        //     return false
-        // }
-
-        var url = $(this).combobox('options').url;
-
-        $$.request(url, param, function(data) {
-            success(data.rows)
-        }, function() {
-            error.apply(this, arguments);
-        })
-    };
 }

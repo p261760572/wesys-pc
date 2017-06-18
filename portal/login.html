@@ -12,7 +12,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <link href="lib/toastr/toastr.min.css" rel="stylesheet">
-    <link href="lib/formvalidation/css/formValidation.min.css" rel="stylesheet">
+    <link href="lib/jquery-validatebox/validatebox.css" rel="stylesheet">
     <style type="text/css">
     body {
         padding-top: 40px;
@@ -56,6 +56,10 @@
     .checkbox-custom label {
         vertical-align: top;
     }
+
+    .help-block {
+        color: #f96868;
+    }
     </style>
 </head>
 
@@ -66,16 +70,16 @@
             <h2 class="form-signin-heading">登录</h2>
             <div class="form-group">
                 <label class="">用户名</label>
-                <input type="text" class="form-control" name="login_name" placeholder="请输入用户名/手机号" required autofocus>
+                <input type="text" class="form-control easyui-validatebox" name="login_name" placeholder="请输入用户名/手机号" required autofocus>
             </div>
             <div class="form-group">
                 <label class="">密码</label>
-                <input type="password" class="form-control" name="login_pwd" placeholder="请输入密码" required>
+                <input type="password" class="form-control easyui-validatebox" name="login_pwd" placeholder="请输入密码" required>
             </div>
             <div class="form-group">
                 <label class="">验证码</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" name="captcha" placeholder="请输入验证码">
+                    <input type="text" class="form-control easyui-validatebox" name="captcha" placeholder="请输入验证码" required>
                     <a class="input-group-addon padding-0" href="javascript:;">
                         <img src="/p/action/user/captcha" height="40" onclick="this.src='/p/action/user/captcha?t='+new Date().getTime()">
                     </a>
@@ -88,20 +92,32 @@
                 </div>
                 <a class="pull-right" href="#">忘记密码了？</a>
             </div> -->
-            <button class="btn btn-lg btn-primary btn-block" type="submit">登录
+            <button type="button" class="btn btn-lg btn-primary btn-block" onclick="login()">登录
             </button>
         </form>
     </div>
     <!-- /container -->
     <script src="lib/jquery/jquery.min.js"></script>
-    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="lib/toastr/toastr.min.js"></script>
-    <script src="lib/formvalidation/js/formValidation.min.js"></script>
-    <script src="lib/formvalidation/js/framework/bootstrap.min.js"></script>
-    <script src="lib/formvalidation/js/language/zh_CN.js"></script>
+    <script src="lib/jquery-validatebox/jquery.validatebox.min.js"></script>
     <script src="lib/jsencrypt/jsencrypt.min.js"></script>
     <script src="js/base.js"></script>
     <script type="text/javascript">
+    $.fn.validatebox.defaults.err = err;
+
+    function err(target, message) {
+        var t = $(target);
+        if (t.parent().hasClass('input-group')) {
+            t = t.parent();
+        }
+        var m = t.next('.help-block');
+        if (!m.length) {
+            m = $('<small class="help-block"></small>').insertAfter(t);
+        }
+        m.html(message);        
+    }
+
+
     function encryptPassword(password) {
         //加密密码
         var crypt = new JSEncrypt();
@@ -109,12 +125,11 @@
         return crypt.encrypt(password);
     }
 
-    function login(target) {
-        var $form = $(target);
+    function login() {
+        var $form = $('#signin-form');
         var data = $form.serializeObject();
 
-        // var fv = $form.data('formValidation');
-        // if (fv.validate().isValid() != true) return;
+        if ($form.validate() != true) return;
 
         data.login_pwd = encryptPassword(data.login_pwd);
 
@@ -122,52 +137,14 @@
             window.location.href = 'index.html';
         }, function(data) {
             $$.error($$.errmsg(data));
-        }, {
-            loading: false
         });
     }
 
-    $(function() {
-        // $('#signin-form').on('submit', function (e) {
-        //     e.preventDefault();
-        // });
-
-        $('#signin-form').formValidation({
-            framework: 'bootstrap',
-            icon: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
-            },
-            locale: 'zh_CN',
-            fields: {
-                login_name: {
-                    validators: {
-                        notEmpty: {}
-                    }
-                },
-                login_pwd: {
-                    validators: {
-                        notEmpty: {}
-                    }
-                },
-                captcha: {
-                    validators: {
-                        notEmpty: {},
-                        stringLength: {
-                            min: 4
-                        }
-                    }
-                }
+    $(function () {
+        $('#signin-form').on('keyup', function(event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
             }
-        }).on('success.form.fv', function(e) {
-            // Prevent form submission
-            e.preventDefault();
-            e.returnValue = false;
-
-            login(e.target);
-
-            return false;
         });
     });
     </script>

@@ -1,0 +1,1 @@
+$.fn.validatebox.defaults.novalidate=!0,$.fn.validatebox.defaults.validateOnCreate=!1,$.fn.validatebox.defaults.validateOnBlur=!0,$.fn.combobox.defaults.novalidate=!0;
