@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>终端参数</title>
+    <link href="../lib/iconfont/iconfont.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+    <style type="text/css">
+    .fi {
+        font-size: 16px;
+        color: #337ab7;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <form id="ff" data-options="serialize:serializeSearch">
+            <table class="table" style="width: 970px;">
+                <!-- <caption>查询终端参数</caption> -->
+                <tbody>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>客户号</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="mchnt_id">
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>终端标识</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="term_no">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>收单机构</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <select id="acq_inst_id" name="acq_inst_id">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>商户名称</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="mchnt_name">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>商户号</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="mchnt_cd">
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>终端号</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="term_id">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>处理状态</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <select id="proc_st" name="proc_st">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>创建日期</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input id="created_time" type="text" class="Wdate" name="created_time" style="width: 120px;" onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})">
+                            <input id="created_time2" type="text" class="Wdate" name="created_time2" style="width: 120px;" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})">
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td colspan="3">
+                            <button type="button" id="search-btn" class="btn btn-primary" data-options="datagrid:'#dg',url:'/action/bm/term-param/search'" onclick="$$.search(this)">查询</button>
+                            <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                            <!-- <button type="button" class="btn btn-success" data-options="datagrid:'#dg',url:'/action/bm/term-param/export'" onclick="$$.exportData(this)">导出</button> -->
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+        <div id="tb">
+            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="quickDebug(this)">调试</a>
+            
+        </div>
+        <table id="dg" class="easyui-datagrid" title="终端参数" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id',onClickRow:onClickRow">
+            <thead>
+                <tr>
+                    <th data-options="field:'mchnt_id',width:120">客户号</th>
+                    <th data-options="field:'term_no',width:120">终端标识</th>
+                    <!-- <th data-options="field:'mchnt_abbr',width:200">商户简称</th> -->
+                    <th data-options="field:'acq_inst_id',width:100">收单机构</th>
+                    <th data-options="field:'mchnt_name',width:200">商户名称</th>
+                    <th data-options="field:'mchnt_cd',width:150">商户号</th>
+                    <th data-options="field:'term_id',width:100">终端号</th>
+                    <th data-options="field:'proc_st_nm',width:100">处理状态</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <script src="../lib/jquery/jquery.min.js"></script>
+    <script src="../lib/toastr/toastr.min.js"></script>
+    <script src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script src="../lib/easyui/jquery.easyui.min.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/st.js"></script>
+    <script src="../js/param.js"></script>
+    <!-- <script src="../js/district.js"></script> -->
+    <script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+    function serializeSearch(data) {
+        var procStMap = {
+            'check1': '1'
+        };
+        data.proc_st2 = procStMap[displayType];
+    }
+
+    function hasNext(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['term_param']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
+
+    function onClickRow(rowIndex, rowData) {
+        var actionMap = {
+            'update': 'update',
+            'check1-pass': 'check1'
+        }
+        var bb = $('#tb').find('.tfd-' + displayType);
+        $.each(actionMap, function(action, selector) {
+            bb.filter('.tf-' + selector).addClass('hide');
+            if (hasNext(rowData.oper_in, rowData.proc_st, action)) {
+                bb.filter('.tf-' + selector).removeClass('hide');
+            }
+        })
+    }
+
+    function formatTermStatus(value) {
+        return $$.formatField($$.param['term_status'], value);
+    }
+
+    function onChangeProvince() {
+        var value = $(this).val();
+        $$.loadSelect('#city', districtData['city'][value] || []);
+        $$.loadSelect('#district', []);
+    }
+
+    function onChangeCity() {
+        var value = $(this).val();
+        $$.loadSelect('#district', districtData['district'][$('#province').val() + value]);
+    }
+
+    function quickDebug(target) {
+        var opts = $$.parseOptions(target);
+        var $dg = $(target).closest('.datagrid-toolbar').next('.datagrid-view').children('.datagrid-f');
+        var dgOpts = $dg.datagrid('options');
+        var row = $dg.datagrid('getSelected');
+        if (row) {
+            if (!dgOpts.idField) {
+                $$.info('没有记录ID！');
+                return false;
+            }
+
+            var params = {};
+            params[dgOpts.idField] = row[dgOpts.idField];
+
+            $$.prompt('请输入设备编号', function (device_no) {
+                if (device_no) {
+                    params['device_no'] = device_no;
+                    $$.request('/action/bm/term-param/quick-debug', params, function (result) {
+                        $$.confirm('验证码：' + result.data.tms_captcha, $.noop);
+                    });
+                }
+            });
+        } else {
+            $$.info('请选择记录！');
+            return false;
+        }
+
+        
+    }
+
+ 
+    $(function() {
+        // $$.transformDisplay('#tb', displayType);
+
+        $('#ff').on('keyup', function(event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+
+        $$.request('/action/bm/parameter/list', {
+            acq_inst: '1'
+        }, function(data) {
+            $$.loadSelect('#acq_inst_id', data.acq_inst, {
+                valueField: 'acq_inst_id',
+                textField: 'acq_inst_nm'
+            });
+        });
+
+
+        $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['term_param']]);
+    });
+    </script>
+</body>
+
+</html>
