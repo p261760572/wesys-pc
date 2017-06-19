@@ -3,8 +3,15 @@ window.basedir = '/p';
 window.$$ = (function() {
     var $$ = {};
 
-    $$.parseOptions = function function_name(target) {
-        return $.parser.parseOptions($(target)[0]);
+    $$.parseOptions = function(target) {
+        var $target = $(target);
+        if ($target.length > 0) {
+            return $.parser.parseOptions($(target)[0]);
+        }
+
+        if (window.console) console.warn(target);
+
+        return {};
     }
 
     //包裹url,解决根目录问题
@@ -54,18 +61,39 @@ window.$$ = (function() {
     };
 
     //确认
-    $$.confirm = function(msg, callback) {
+    $$.alert = function(title, msg, callback) {
+        if (typeof msg == 'function') {
+            callback = msg;
+            msg = title;
+            title = '提示';
+        }
+        $.messager.alert(title, msg, 'info', callback);
+    }
+
+    //确认
+    $$.confirm = function(title, msg, callback) {
+        if (typeof msg == 'function') {
+            callback = msg;
+            msg = title;
+            title = '确认对话框';
+        }
+
         function fn(r) {
             if (r) {
                 if (callback) callback();
             }
         }
-        $.messager.confirm('确认对话框', msg, fn);
+        $.messager.confirm(title, msg, fn);
     }
 
     //提示
-    $$.prompt = function(msg, callback) {
-        $.messager.prompt('提示信息', msg, callback);
+    $$.prompt = function(title, msg, callback) {
+        if (typeof msg == 'function') {
+            callback = msg;
+            msg = title;
+            title = '提示信息';
+        }
+        $.messager.prompt(title, msg, callback);
     };
 
     //解析查询字符串

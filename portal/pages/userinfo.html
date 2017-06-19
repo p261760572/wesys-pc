@@ -63,15 +63,14 @@
                         </td>
                     </tr>
                     <tr>
-                    <td class="text-right col-sm-2">
-                        <label>机构</label>
-        
-                    </td>
-                    <td class="col-sm-4">
-                        <div class="col-sm-12" style="padding: 0;">
-                            <input type="text" id="inst_id" name="inst_id" class="easyui-combotree" data-options="">
-                        </div>
-                    </td>
+                        <td class="text-right col-sm-2">
+                            <label>机构</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <div class="col-sm-12" style="padding: 0;">
+                                <input type="text" id="inst_id" name="inst_id" class="easyui-combotree" data-options="">
+                            </div>
+                        </td>
                         <td class="text-right col-sm-2">
                             <label>创建日期</label>
                         </td>
@@ -79,7 +78,6 @@
                             <input id="created_time" type="text" class="Wdate" name="created_time" style="width: 120px;" onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})">
                             <input id="created_time2" type="text" class="Wdate" name="created_time2" style="width: 120px;" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})">
                         </td>
-                        
                     </tr>
                 </tbody>
                 <tfoot>
@@ -98,7 +96,6 @@
             <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('userinfo-detail.html?operateType=create', '新增用户')">新增</a>
             <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'userinfo-detail.html?operateType=view', '用户详情')">详情</a>
             <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'userinfo-detail.html?operateType=update', '编辑用户')">编辑</a>
-         
         </div>
         <table id="dg" class="easyui-datagrid" title="用户" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'userid'">
             <thead>
@@ -149,14 +146,20 @@
     function formatUserLevel(value) {
         var rows = [{
             value: '0',
-            text: '普通'
+            text: '普通用户'
+        }, {
+            value: '2',
+            text: '个人代理'
+        }, {
+            value: '3',
+            text: '员工'
         }, {
             value: '5',
             text: '机构'
         }, {
             value: '9',
             text: '管理员'
-        }]
+        }];
         return $$.formatField(rows, value);
     }
 

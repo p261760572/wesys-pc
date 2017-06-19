@@ -19,8 +19,6 @@
         font-size: 16px;
         color: #337ab7;
     }
-
-    
     </style>
 </head>
 
@@ -44,7 +42,7 @@
                             <input type="text" name="linkman">
                         </td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td class="text-right col-sm-2">
                             <label>手机</label>
                         </td>
@@ -56,6 +54,36 @@
                         </td>
                         <td class="col-sm-4">
                             <input type="text" name="mchnt_abbr">
+                        </td>
+                    </tr> -->
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>收单机构</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <select id="acq_inst_id" name="acq_inst_id">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>商户名称</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="mchnt_name">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>商户号</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="mchnt_cd">
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>终端号</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="term_id">
                         </td>
                     </tr>
                     <tr>
@@ -191,6 +219,15 @@
         $$.loadSelect('#province', districtData['province']);
 
         $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['mchnt_base_info']]);
+
+        $$.request('/action/bm/parameter/list', {
+            acq_inst: '1'
+        }, function(data) {
+            $$.loadSelect('#acq_inst_id', data.acq_inst, {
+                valueField: 'acq_inst_id',
+                textField: 'acq_inst_nm'
+            });
+        });
     });
     </script>
 </body>
