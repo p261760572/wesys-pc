@@ -562,8 +562,15 @@ window.$$ = (function() {
 
         function readonly(index, element) {
             var $tmp = $(element);
+
+            if ($tmp.hasClass('textbox-f')) {
+                $tmp.textbox('textbox').css('background-color', '#ebebe4');
+            }
+
             if ($tmp.hasClass('combobox-f')) {
                 $tmp.combobox('readonly');
+            } else if ($tmp.hasClass('combotree-f')) {
+                $tmp.combotree('readonly');
             } else if (element.tagName == 'SELECT' || (element.tagName == 'INPUT' && $.inArray(element.type, ['checkbox', 'file']) >= 0) || $tmp.hasClass('Wdate')) {
                 $tmp.attr('disabled', 'disabled');
             } else {

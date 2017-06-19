@@ -2245,7 +2245,7 @@ textarea[disabled],
 input[readonly],
 select[readonly],
 textarea[readonly] {
-    background-color: rgb(235, 235, 228);
+    background-color: #ebebe4;
 }
 
 .page {
@@ -2369,4 +2369,8 @@ textarea[readonly] {
 
 .panel-body {
     font-size: 14px;   
+}
+
+.textbox input.textbox-text[readonly] {
+    background-color: #fff;
 }
