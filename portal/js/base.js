@@ -72,7 +72,7 @@ window.$$ = (function() {
 
     //确认
     $$.confirm = function(title, msg, callback) {
-        if (typeof msg == 'function') {
+        if (typeof msg != 'string') {
             callback = msg;
             msg = title;
             title = '确认对话框';
@@ -88,7 +88,7 @@ window.$$ = (function() {
 
     //提示
     $$.prompt = function(title, msg, callback) {
-        if (typeof msg == 'function') {
+        if (typeof msg != 'string') {
             callback = msg;
             msg = title;
             title = '提示信息';
@@ -284,6 +284,7 @@ window.$$ = (function() {
                     opts.success.call(target, data);
                 }
 
+                $(opts.datagrid).datagrid('clearChecked');
                 //解决滚动条引起的panel宽度问题
                 $(opts.datagrid).datagrid('getPanel').panel('resize');
             },
@@ -450,33 +451,41 @@ window.$$ = (function() {
 
     //批量提交
     $$.batchSubmit = function(target) {
-        var opts = $$.parseOptions(target);
         var $dg = $(target).closest('.datagrid-toolbar').next('.datagrid-view').children('.datagrid-f');
         var dgOpts = $dg.datagrid('options');
         var rows = $dg.datagrid('getChecked');
+
+        var opts = $.extend({
+            before: function(data, callback) {
+                $$.confirm('确认要' + opts.msg + '勾选的记录？', function() {
+                    callback();
+                });
+            },
+            success: function() {
+                $$.success('操作成功');
+                $dg.datagrid('reload');
+            }
+        }, $$.parseOptions(target));
+
         if (rows.length) {
             var keyRows = [];
             for (var i = 0; i < rows.length; i++) {
-                keyRows.push($$.getKeys([dgOpts.idField], rows[i]));
+                keyRows.push($$.getKeys(rows[i], dgOpts.idField));
             }
 
             var data = {
                 rows: keyRows
             };
 
-            if (opts.before && opts.before.call(target, data) == false) {
-                return false;
-            }
-
-            if ($$.confirm('确认要' + opts.msg + '选中的记录？')) {
+            var callback = function() {
                 $$.request(opts.url, data, function(result) {
-                    if (opts.success) {
-                        opts.success.call(data, request, result);
-                    }
+                    opts.success.call(target, data, result);
                 });
-            }
+            };
+
+            opts.before.call(target, data, callback);
         } else {
-            $$.info('请选择记录！');
+            $$.info('请勾选记录！');
             return false;
         }
     }

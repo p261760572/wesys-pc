@@ -11665,6 +11665,9 @@ $.fn.combobox.defaults.novalidate = true;
 $.fn.combobox.defaults.iconWidth = 26;
 $.fn.combotree.defaults.novalidate = true;
 $.fn.combotree.defaults.iconWidth = 26;
+$.fn.datagrid.defaults.selectOnCheck = false;
+$.fn.datagrid.defaults.checkOnSelect = false;
+
 if ($.fn.pagination){
 	$.fn.pagination.defaults.beforePageText = '第';
 	$.fn.pagination.defaults.afterPageText = '共{pages}页';

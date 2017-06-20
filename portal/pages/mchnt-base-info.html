@@ -136,11 +136,15 @@
             <a href="#" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('mchnt-base-info-detail.html?displayType='+displayType+'&operateType=create', '新增商户信息')">新增</a>
             <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-base-info-detail.html?displayType='+displayType+'&operateType=view', '商户信息详情')">详情</a>
             <a href="#" class="easyui-linkbutton tf tfd-update tf-update" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-base-info-detail.html?displayType='+displayType+'&operateType=update', '编辑商户信息')">编辑</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update tf-batch-cancel-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-base-info/batch-cancel-check1',msg:'取消待审'" onclick="$$.batchSubmit(this)">批量取消待审</a>
             <a href="#" class="easyui-linkbutton tf tfd-check1 tf-check1" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-base-info-detail.html?displayType='+displayType+'&operateType=check1', '审核商户信息')">审核</a>
+            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-base-info/batch-check1-pass',msg:'审核通过'" onclick="$$.batchSubmit(this)">批量审核通过</a>
+            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-base-info/batch-check1-nopass',msg:'审核驳回',before:beforeCheck1" onclick="$$.batchSubmit(this)">批量审核驳回</a>
         </div>
-        <table id="dg" class="easyui-datagrid" title="商户信息" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id',onClickRow:onClickRow">
+        <table id="dg" class="easyui-datagrid" title="商户信息" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id',onClickRow:onClickRow,onCheck:onCheckRow,onUncheck:onCheckRow,onCheckAll:onCheckRow,onUncheckAll:onCheckRow">
             <thead>
                 <tr>
+                    <th data-options="field:'chk',checkbox:true"></th>
                     <th data-options="field:'mchnt_id',width:120">客户号</th>
                     <th data-options="field:'linkman',width:100">联系人</th>
                     <th data-options="field:'mobile',width:100">手机</th>
@@ -190,7 +194,39 @@
             if (hasNext(rowData.oper_in, rowData.proc_st, action)) {
                 bb.filter('.tf-' + selector).removeClass('hide');
             }
-        })
+        });
+    }    
+
+    function onCheckRow() {
+        var actionMap = {            
+            'cancel-check1': 'batch-cancel-check1',
+            'check1-pass': 'batch-check1'
+        }
+        var $dg = $('#dg');
+        var rows = $dg.datagrid('getChecked');
+        var bb = $('#tb').find('.tfd-' + displayType);
+        $.each(actionMap, function(action, selector) {
+            var show = true;
+            bb.filter('.tf-' + selector).addClass('hide');
+
+            for (var i = 0; i < rows.length; i++) {
+                if (!hasNext(rows[i].oper_in, rows[i].proc_st, action)) {
+                    show = false;
+                }
+            }
+
+            if (show) {
+                bb.filter('.tf-' + selector).removeClass('hide');
+            }
+        });
+    }
+
+    function beforeCheck1(data, callback) {
+        var opts = $$.parseOptions(this);
+        $$.prompt('请输入' + opts.msg + '原因', function(r) {
+            data.checked_reason = r;
+            callback();
+        });
     }
 
     function onChangeProvince() {
