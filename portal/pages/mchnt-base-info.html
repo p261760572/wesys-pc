@@ -141,7 +141,7 @@
             <a href="#" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-base-info/batch-check1-pass',msg:'审核通过'" onclick="$$.batchSubmit(this)">批量审核通过</a>
             <a href="#" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-base-info/batch-check1-nopass',msg:'审核驳回',before:beforeCheck1" onclick="$$.batchSubmit(this)">批量审核驳回</a>
         </div>
-        <table id="dg" class="easyui-datagrid" title="商户信息" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id',onClickRow:onClickRow,onCheck:onCheckRow,onUncheck:onCheckRow,onCheckAll:onCheckRow,onUncheckAll:onCheckRow">
+        <table id="dg" class="easyui-datagrid" title="商户信息" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id',onClickRow:onClickRow,onCheck:onCheckRow,onUncheck:onCheckRow,onCheckAll:onCheckRow,onUncheckAll:onCheckRow,collapsible:true">
             <thead>
                 <tr>
                     <th data-options="field:'chk',checkbox:true"></th>
@@ -154,6 +154,32 @@
                     <th data-options="field:'license_no',width:180">营业执照号</th>
                     <th data-options="field:'proc_st_nm',width:100">处理状态</th>
                     <th data-options="field:'created_time',width:150">创建日期</th>
+                </tr>
+            </thead>
+        </table>
+        <br>
+        <div id="tb2">
+            <a href="#" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('mchnt-param-detail.html?displayType='+displayType+'&operateType=create&mchnt_id='+query.mchnt_id, '新增商户参数')">新增</a>
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-param-detail.html?operateType=view', '商户参数详情')">详情</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update tf-update" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-param-detail.html?operateType=update', '编辑商户参数')">编辑</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update tf-batch-cancel-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-param/batch-cancel-check1',msg:'取消待审'" onclick="$$.batchSubmit(this)">批量取消待审</a>
+            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-check1" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-param-detail.html?operateType=check1', '审核商户参数')">审核</a>
+            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-param/batch-check1-pass',msg:'审核通过'" onclick="$$.batchSubmit(this)">批量审核通过</a>
+            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-param/batch-check1-nopass',msg:'审核驳回',before:beforeCheck1" onclick="$$.batchSubmit(this)">批量审核驳回</a>
+        </div>
+        <table id="dg2" class="easyui-datagrid" title="商户参数" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb2',idField:'rec_id',onClickRow:onClickRow,onCheck:onCheckRow,onUncheck:onCheckRow,onCheckAll:onCheckRow,onUncheckAll:onCheckRow">
+            <thead>
+                <tr>
+                    <th data-options="field:'chk',checkbox:true"></th>
+                    <th data-options="field:'mchnt_id',width:120">客户号</th>
+                    <th data-options="field:'busi_type_nm',width:120">业务类型</th>
+                    <th data-options="field:'acq_inst_id',width:100">收单机构</th>
+                    <th data-options="field:'mchnt_cd',width:100">商户号</th>
+                    <th data-options="field:'mchnt_name',width:100">商户名称</th>
+                    <th data-options="field:'account_type',width:100,formatter:formatAccountType">账户类型</th>
+                    <th data-options="field:'account_name',width:100">开户名称</th>
+                    <th data-options="field:'account_name',width:100">开户银行</th>
+                    <th data-options="field:'proc_st_nm',width:100">处理状态</th>
                 </tr>
             </thead>
         </table>
@@ -183,16 +209,18 @@
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
 
-    function onClickRow(rowIndex, rowData) {
+    function onClickRow(rowIndex, rowData) {        
         var actionMap = {
             'update': 'update',
             'check1-pass': 'check1'
-        }
-        var bb = $('#tb').find('.tfd-' + displayType);
+        };
+        var $dg = $(this);
+        var $panel = $dg.datagrid('getPanel');
+        var $bb = $panel.find('div.datagrid-toolbar').find('.tfd-' + displayType);
         $.each(actionMap, function(action, selector) {
-            bb.filter('.tf-' + selector).addClass('hide');
+            $bb.filter('.tf-' + selector).addClass('hide');
             if (hasNext(rowData.oper_in, rowData.proc_st, action)) {
-                bb.filter('.tf-' + selector).removeClass('hide');
+                $bb.filter('.tf-' + selector).removeClass('hide');
             }
         });
     }    
@@ -202,12 +230,13 @@
             'cancel-check1': 'batch-cancel-check1',
             'check1-pass': 'batch-check1'
         }
-        var $dg = $('#dg');
+        var $dg = $(this);
+        var $panel = $dg.datagrid('getPanel');
         var rows = $dg.datagrid('getChecked');
-        var bb = $('#tb').find('.tfd-' + displayType);
+        var $bb = $panel.find('div.datagrid-toolbar').find('.tfd-' + displayType);
         $.each(actionMap, function(action, selector) {
             var show = true;
-            bb.filter('.tf-' + selector).addClass('hide');
+            $bb.filter('.tf-' + selector).addClass('hide');
 
             for (var i = 0; i < rows.length; i++) {
                 if (!hasNext(rows[i].oper_in, rows[i].proc_st, action)) {
@@ -216,7 +245,7 @@
             }
 
             if (show) {
-                bb.filter('.tf-' + selector).removeClass('hide');
+                $bb.filter('.tf-' + selector).removeClass('hide');
             }
         });
     }
@@ -238,6 +267,10 @@
     function onChangeCity() {
         var value = $(this).val();
         $$.loadSelect('#district', districtData['district'][$('#province').val() + value]);
+    }
+
+    function formatAccountType(value) {
+        return $$.formatField($$.param['account_type'], value);
     }
 
     $(function() {
