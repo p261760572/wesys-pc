@@ -5,151 +5,112 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>客户-费用</title>
-    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
-    <link rel="stylesheet" type="text/css" href="../css/base.css">
+    <title>商户费用</title>
+    <link href="../lib/iconfont/iconfont.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+    <style type="text/css">
+    .fi {
+        font-size: 16px;
+        color: #337ab7;
+    }
+    </style>
 </head>
 
 <body>
-    <div class="container">
-        <div id="search-panel" class="panel panel-padding">
-            <form id="search" class="layui-form" action="" method="post" data-options="serialize:serializeSearch">
-                <div class="layui-form-item">
-                    <div class="layui-inline hide">
-                        <label class="layui-form-label">客户号</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="mchnt_id" placeholder="请输入客户号" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">费用类型</label>
-                        <div class="layui-input-inline">
-                            <select name="expense_type" id="expense-type">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">处理状态</label>
-                        <div class="layui-input-inline">
-                            <select name="proc_st" id="proc_st">
-                                <option value=""></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <button type="button" class="layui-btn" onclick="$$.search(this)" data-options="url:'/action/bm/mchnt-expense/search'" id="search-btn">查询</button>
-                        <!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="panel panel-padding" id="list-panel">
-            <div class="layui-btn-group hide invisible visible-update">
-                <button class="layui-btn layui-btn-small" onclick="add(this)" data-options="url:$$.url('mchnt-expense-detail.html?operateType=create',{mchnt_id:query.mchnt_id}),title:'新增费用'">
-                    <i class="layui-icon">&#xe654;</i> 新增
-                </button>
-            </div>
-            <div class="layui-btn-group hide invisible visible-check1">
-                <button class="layui-btn layui-btn-small layui-btn-normal" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/mchnt-expense/batch-check1-pass'">
-                    <i class="layui-icon">&#x1005;</i> 审核通过
-                </button>
-                <button class="layui-btn layui-btn-small layui-btn-danger" onclick="$$.batchSubmit(this)" data-options="url:'/action/bm/mchnt-expense/batch-check1-nopass',type:'prompt',title:'请输入驳回原因',promptKey:'checked_reason'">
-                    <i class="layui-icon">&#xe633;</i> 审核驳回
-                </button>
-                <!-- <button class="layui-btn layui-btn-small layui-btn-danger" onclick="onBatchDelete()">
-                    <i class="layui-icon">&#xe640;</i> 删除
-                </button> -->
-            </div>
-            <div id="list">
-            </div>
-        </div>
-    </div>
-    <script id="list-tpl" type="text/html">
-        <div class="layui-form">
-            <table class="layui-table">
-                <thead>
-                    <tr>
-                        <th>
-                            <input type="checkbox" name="checkbox" lay-skin="primary" lay-filter="allCheck">
-                        </th>
-                        <th>客户号</th>
-                        <th>费用类型</th>
-                        <th>金额</th>
-                        <th>收费周期</th>
-                        <th>收费开始时间</th>
-                        <th>收费结束时间</th>
-                        <th>处理状态</th>
-                        <th>创建日期</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
+    <div class="page">
+        <form id="ff" data-options="serialize:serializeSearch">
+            <table class="table" style="width: 970px;">
+                <!-- <caption>查询商户费用</caption> -->
                 <tbody>
-                    {{each rows as row i}}
-                    <tr data-index="{{i}}">
-                        <td>
-                            <input type="checkbox" name="checkbox" value="{{i}}" lay-skin="primary">
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>客户号</label>
                         </td>
-                        <td>
-                            {{row.mchnt_id}}
+                        <td class="col-sm-4">
+                            <input type="text" name="mchnt_id">
                         </td>
-                        <td>
-                            {{row.expense_type | formatExpenseType}}
+                        <td class="text-right col-sm-2">
+                            <label>费用类型</label>
                         </td>
-                        <td>
-                            {{row.amount}}
-                        </td>
-                        <td>
-                            {{row.expense_cycle | formatExpenseCycle}}
-                        </td>
-                        <td>
-                            {{row.start_date}}
-                        </td>
-                        <td>
-                            {{row.end_date}}
-                        </td>
-                        <td>
-                            {{row.proc_st_nm}}
-                        </td>
-                        <td>
-                            {{row.created_time}}
-                        </td>
-                        <td>
-                            <div class="layui-btn-group">
-                                <button class="layui-btn layui-btn-mini layui-btn-primary" onclick="doit(this,{{i}})" data-options="url:'mchnt-expense-detail.html?operateType=view',title:'查看费用'">
-                                    查看
-                                </button>
-                                {{if displayType=='update'}} {{if hasNext(row.oper_in,row.proc_st,'update')}}
-                                <button class="layui-btn layui-btn-mini" onclick="doit(this,{{i}})" data-options="url:'mchnt-expense-detail.html?operateType=update',title:'编辑费用'">
-                                    编辑
-                                </button>
-                                {{/if}} {{/if}} {{if displayType=='check1'}} {{if hasNext(row.oper_in,row.proc_st,'check1-pass')}}
-                                <button class="layui-btn layui-btn-mini" onclick="doit(this,{{i}})" data-options="url:'mchnt-expense-detail.html?operateType=check1',title:'审核费用'">
-                                    审核
-                                </button>
-                                {{/if}} {{/if}}
-                            </div>
+                        <td class="col-sm-4">
+                            <select id="expense_type" name="expense_type">
+                                <option value="">--请选择--</option>
+                            </select>
                         </td>
                     </tr>
-                    {{/each}}
+                    <tr>
+                        <td class="text-right col-sm-2">
+                            <label>处理状态</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <select id="proc_st" name="proc_st">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>创建日期</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input id="created_time" type="text" class="Wdate" name="created_time" style="width: 120px;" onfocus="WdatePicker({onpicked:function(){$dp.$('created_time2').focus();},maxDate:'#F{$dp.$D(\'created_time2\')}'})">
+                            <input id="created_time2" type="text" class="Wdate" name="created_time2" style="width: 120px;" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'created_time\')}'})">
+                        </td>
+                    </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td colspan="3">
+                            <button type="button" id="search-btn" class="btn btn-primary" data-options="datagrid:'#dg',url:'/action/bm/mchnt-expense/search'" onclick="$$.search(this)">查询</button>
+                            <button type="button" class="btn btn-default btn-outline" onclick="$$.reset(this)">重置</button>
+                            <!-- <button type="button" class="btn btn-success" data-options="datagrid:'#dg',url:'/action/bm/mchnt-expense/export'" onclick="$$.exportData(this)">导出</button> -->
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
+        </form>
+        <div id="tb">
+            <a href="#" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('mchnt-expense-detail.html?displayType='+displayType+'&operateType=create&mchnt_id='+query.mchnt_id, '新增商户费用')">新增</a>
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-expense-detail.html?displayType='+displayType+'&operateType=view', '商户费用详情')">详情</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update tf-update" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-expense-detail.html?displayType='+displayType+'&operateType=update', '编辑商户费用')">编辑</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update tf-batch-cancel-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-expense/batch-cancel-check1',msg:'取消待审'" onclick="$$.batchSubmit(this)">批量取消待审</a>
+            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-check1" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-expense-detail.html?displayType='+displayType+'&operateType=check1', '审核商户费用')">审核</a>
+            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-expense/batch-check1-pass',msg:'审核通过'" onclick="$$.batchSubmit(this)">批量审核通过</a>
+            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-expense/batch-check1-nopass',msg:'审核驳回',before:beforeCheck1" onclick="$$.batchSubmit(this)">批量审核驳回</a>
         </div>
-    </script>
-    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
-    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
-    <script type="text/javascript" src="../js/template.js"></script>
-    <script type="text/javascript" src="../js/base.js"></script>
-    <script type="text/javascript" src="../js/st.js"></script>
-    <script type="text/javascript" src="../js/param.js"></script>
-    <script type="text/javascript" src="../js/district.js"></script>
-    <script type="text/javascript">
+        <table id="dg" class="easyui-datagrid" title="商户费用" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id',onClickRow:onClickRow,onCheck:onCheckRow,onUncheck:onCheckRow,onCheckAll:onCheckRow,onUncheckAll:onCheckRow">
+            <thead>
+                <tr>
+                    <th data-options="field:'chk',checkbox:true"></th>
+                    <th data-options="field:'mchnt_id',width:120">客户号</th>
+                    <th data-options="field:'expense_type',width:120,formatter:formatExpenseType">费用类型</th>
+                    <th data-options="field:'amount',width:100">金额</th>
+                    <th data-options="field:'expense_cycle',width:100,formatter:formatExpenseCycle">收费周期</th>
+                    <th data-options="field:'start_date',width:200">收费开始时间</th>
+                    <th data-options="field:'end_date',width:150">收费结束时间</th>
+                    <th data-options="field:'proc_st_nm',width:100">处理状态</th>
+                    <th data-options="field:'created_time',width:100">创建日期</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <script src="../lib/jquery/jquery.min.js"></script>
+    <script src="../lib/toastr/toastr.min.js"></script>
+    <script src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script src="../lib/easyui/jquery.easyui.min.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/st.js"></script>
+    <script src="../js/param.js"></script>
+    <script src="../js/district.js"></script>
+    <script>
     var query = $$.parseQueryString();
     var displayType = query.displayType;
     var operateType = query.operateType;
-    var form = layui.form();
-    var element = layui.element();
 
     function serializeSearch(data) {
         var procStMap = {
@@ -158,13 +119,55 @@
         data.proc_st2 = procStMap[displayType];
     }
 
-    function reload() {
-        $$.datagrid('#list', 'reload');
-    }
-
     function hasNext(oper_in, proc_st, action) {
         var rows = $$.st.transition[$$.st.alias['mchnt_expense']]
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
+    }
+
+    function onClickRow(rowIndex, rowData) {
+        var actionMap = {
+            'update': 'update',
+            'check1-pass': 'check1'
+        }
+        var bb = $('#tb').find('.tfd-' + displayType);
+        $.each(actionMap, function(action, selector) {
+            bb.filter('.tf-' + selector).addClass('hide');
+            if (hasNext(rowData.oper_in, rowData.proc_st, action)) {
+                bb.filter('.tf-' + selector).removeClass('hide');
+            }
+        })
+    }
+
+    function onCheckRow() {
+        var actionMap = {
+            'cancel-check1': 'batch-cancel-check1',
+            'check1-pass': 'batch-check1'
+        }
+        var $dg = $('#dg');
+        var rows = $dg.datagrid('getChecked');
+        var bb = $('#tb').find('.tfd-' + displayType);
+        $.each(actionMap, function(action, selector) {
+            var show = true;
+            bb.filter('.tf-' + selector).addClass('hide');
+
+            for (var i = 0; i < rows.length; i++) {
+                if (!hasNext(rows[i].oper_in, rows[i].proc_st, action)) {
+                    show = false;
+                }
+            }
+
+            if (show) {
+                bb.filter('.tf-' + selector).removeClass('hide');
+            }
+        });
+    }
+
+    function beforeCheck1(data, callback) {
+        var opts = $$.parseOptions(this);
+        $$.prompt('请输入' + opts.msg + '原因', function(r) {
+            data.checked_reason = r;
+            callback();
+        });
     }
 
     function formatExpenseType(value) {
@@ -175,67 +178,37 @@
         return $$.formatField($$.param['expense_cycle'], value);
     }
 
-    function add(target) {
-        var options = $.extend({}, $$.parseOptions(target));
+    function onChangeProvince() {
+        var value = $(this).val();
+        $$.loadSelect('#city', districtData['city'][value] || []);
+        $$.loadSelect('#district', []);
+    }
 
-        var url = $$.url(options.url, {
-            // displayType: displayType
-        });
+    function onChangeCity() {
+        var value = $(this).val();
+        $$.loadSelect('#district', districtData['district'][$('#province').val() + value]);
+    }
 
-        var index = layer.open({
-            type: 2,
-            title: options.title,
-            area: ['700px', '80%'],
-            // fixed: false, //不固定
-            // maxmin: true,
-            content: url
-        });
-
-        layer.iframeAuto(index);
-    };
-
-    function doit(target, index) {
-        var options = $.extend({
-            datagrid: '#list',
-            keys: 'rec_id'
-        }, $$.parseOptions(target));
-
-        var row = $$.datagrid(options.datagrid, 'getRows')[index];
-        var params = $$.getKeys(row, options.keys)
-        if (window.displayType) params.displayType = displayType;
-
-        var url = $$.url(options.url, params);
-
-        var layerIndex = layer.open({
-            type: 2,
-            title: options.title,
-            area: ['700px', '80%'],
-            // fixed: false, //不固定
-            // maxmin: true,
-            content: url
-        });
-
-        layer.iframeAuto(layerIndex);
-    };
-
-    template.helper('formatExpenseType', formatExpenseType);
-    template.helper('formatExpenseCycle', formatExpenseCycle);
-    template.helper('hasNext', hasNext);
-    template.helper('operateType', operateType);
-    template.helper('displayType', displayType);
-
+    $('#ff input[name=mchnt_id]').attr('value', query.mchnt_id);
     $(function() {
-        $$.loadSelect('#expense-type', $$.param['expense_type']);
+        $$.transformDisplay('#tb', displayType);
+
+        $('#ff').on('keyup', function(event) {
+            if (event.keyCode == 13) {
+                $(this).find('button.btn-primary').click();
+            }
+        });
+
+
+        // $('#province').on('change', onChangeProvince);
+        // $('#city').on('change', onChangeCity);
+        // $$.loadSelect('#province', districtData['province']);
+
+        $$.loadSelect('#expense_type', $$.param['expense_type']);
         $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['mchnt_expense']]);
 
-        // $$.loadSelect('#busi-type', $$.param['busi_type']);
-        $$.transformDisplay('#list-panel', displayType);
-        // form.render('select');
-        // 
-        form.render();
-
         if (query.mchnt_id) {
-            $$.loadData('#search', query);
+            $('#ff').form('load', query);
             $('#search-btn').click();
         }
     });

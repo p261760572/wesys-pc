@@ -87,7 +87,7 @@
             </table>
         </form>
         <div id="tb">
-            <a href="#" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('term-param-detail.html?operateType=create', '新增终端参数')">新增</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('term-param-detail.html?displayType='+displayType+'&operateType=create&term_no='+query.term_no, '新增终端参数')">新增</a>
             <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-param-detail.html?operateType=view', '终端参数详情')">详情</a>
             <a href="#" class="easyui-linkbutton tf tfd-update tf-update" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-param-detail.html?operateType=update', '编辑终端参数')">编辑</a>
             <a href="#" class="easyui-linkbutton tf tfd-update tf-batch-cancel-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/term-param/batch-cancel-check1',msg:'取消待审'" onclick="$$.batchSubmit(this)">批量取消待审</a>

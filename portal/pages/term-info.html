@@ -87,7 +87,7 @@
             </table>
         </form>
         <div id="tb">
-            <a href="#" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('term-info-detail.html?displayType='+displayType+'&operateType=create', '新增终端信息')">新增</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('term-info-detail.html?displayType='+displayType+'&operateType=create&mchnt_id='+query.mchnt_id, '新增终端信息')">新增</a>
             <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-info-detail.html?displayType='+displayType+'&operateType=view', '终端信息详情')">详情</a>
             <a href="#" class="easyui-linkbutton tf tfd-update tf-update" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-info-detail.html?displayType='+displayType+'&operateType=update', '编辑终端信息')">编辑</a>
             <a href="#" class="easyui-linkbutton tf tfd-update tf-batch-cancel-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/term-info/batch-cancel-check1',msg:'取消待审'" onclick="$$.batchSubmit(this)">批量取消待审</a>

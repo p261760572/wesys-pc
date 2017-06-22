@@ -1,219 +1,254 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>客户-费用</title>
-    <link rel="stylesheet" type="text/css" href="../lib/layui/css/layui.css">
-    <link rel="stylesheet" type="text/css" href="../css/base.css">
+    <title>商户费用</title>
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+    <style type="text/css">
+    input[disabled],
+    select[disabled],
+    textarea[disabled] {
+        background-color: rgb(235, 235, 228);
+    }
+    
+    .tab-body-overflow {
+        overflow: hidden;
+    }
+    
+    .page {
+        font-size: 14px;
+    }
+    </style>
 </head>
 
 <body>
-    <div class="panel" style="padding-top: 20px; margin-bottom: 0px;">
-        <form id="detail" class="layui-form" action="" method="post" data-options="serialize:serializeDetail">
+    <div class="page">
+        <form id="ff" action="/action/bm/mchnt-expense/view" data-options="serialize:onSerializeForm,load:onLoadForm">
             <input type="hidden" name="mchnt_expense_id">
-            <div class="layui-form-item">
-                <div class="layui-inline readonly">
-                    <label class="layui-form-label"><span class="required">*</span>客户号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="mchnt_id" lay-verify="required" placeholder="请输入客户号" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>费用类型</label>
-                    <div class="layui-input-inline">
-                        <select name="expense_type" lay-verify="required" lay-filter="expense_type" id="expense-type">
-                            <option value=""></option>
+            <table class="table" style="width: 970px;">
+                <caption>商户费用</caption>
+                <tr class="tf tf-create tf-update">
+                    <td class="text-right col-sm-2">
+                        <label>客户号</label>
+                        <span style="color: red;">*</span></td>
+                    <td class="col-sm-4">
+                        <input type="text" name="mchnt_id" class="easyui-validatebox" data-options="" disabled>
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>费用类型</label>
+                        <span style="color: red;">*</span></td>
+                    <td class="col-sm-4">
+                        <select id="expense_type" name="expense_type" class="easyui-validatebox" data-options="required:true">
+                            <option value="">--请选择--</option>
                         </select>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>金额</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="amount" lay-verify="required" placeholder="请输入金额" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>收费周期</label>
-                    <div class="layui-input-inline">
-                        <select name="expense_cycle" lay-verify="required" id="expense-cycle">
-                            <option value=""></option>
+                    </td>
+                </tr>
+                <tr class="tf tf-create tf-update">
+                    <td class="text-right col-sm-2">
+                        <label>金额</label>
+                        <span style="color: red;">*</span></td>
+                    <td class="col-sm-4">
+                        <input type="text" name="amount" class="easyui-validatebox" data-options="required:true">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>收费周期</label>
+                        <span style="color: red;">*</span></td>
+                    <td class="col-sm-4">
+                        <select id="expense_cycle" name="expense_cycle" class="easyui-validatebox" data-options="required:true">
+                            <option value="">--请选择--</option>
                         </select>
+                    </td>
+                </tr>
+                <tr class="tf tf-create tf-update">
+                    <td class="text-right col-sm-2">
+                        <label>收费开始时间</label>
+                        <span style="color: red;">*</span></td>
+                    <td class="col-sm-4">
+                        <input type="text" name="start_date" class="easyui-validatebox Wdate" data-options="required:true" onfocus="WdatePicker()">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>收费结束时间</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="end_date" class="easyui-validatebox Wdate" data-options="" onfocus="WdatePicker()">
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>备注</label>
+                        <span style="color: red;">*</span></td>
+                    <td colspan="3" class="col-sm-10">
+                        <input type="text" name="remark" class="easyui-validatebox" data-options="">
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>记录编号</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="rec_id">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>操作标志/处理状态</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <!-- <input type="text" name="oper_in" style="width: 100px;">
+                        <input type="text" name="proc_st" style="width: 100px;"> -->
+                        <!-- <select name="oper_in">
+                            </select>
+                            <select name="proc_st">
+                            </select> -->
+                        <select id="oper_in" name="oper_in" style="width: 100px;">
+                            <option value="">--请选择--</option>
+                        </select>
+                        <select id="proc_st" name="proc_st" style="width: 100px;">
+                            <option value="">--请选择--</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>创建人</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="created_by">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>创建时间</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="created_time">
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>最后修改人</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="last_modified_by">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>最后修改时间</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="last_modified_time">
+                    </td>
+                </tr>
+                <tr class="tf">
+                    <td class="text-right col-sm-2">
+                        <label>最后审核人</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="last_checked_by">
+                    </td>
+                    <td class="text-right col-sm-2">
+                        <label>最后审核时间</label>
+                    </td>
+                    <td class="col-sm-4">
+                        <input type="text" name="last_checked_time">
+                    </td>
+                </tr>
+                <tr class="tf tf-check1">
+                    <td class="text-right col-sm-2">
+                        <label>审核备注</label>
+                    </td>
+                    <td colspan="3" class="col-sm-10">
+                        <input type="text" name="checked_reason">
+                    </td>
+                </tr>
+            </table>
+            <div style="display:block; height:50px;"></div>
+            <div style="position:fixed; left: 0px; bottom:0px; z-index:8999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px;">
+                <div class="row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-8">
+                        <button type="button" class="btn btn-primary tf tf-create" data-options="datagrid:'#dg',url:'/action/bm/mchnt-expense/create'" onclick="$$.submit(this)">新增提交</button>
+                        <button type="button" class="btn btn-primary tf tf-update" data-options="datagrid:'#dg',url:'/action/bm/mchnt-expense/update'" onclick="$$.submit(this)">编辑提交</button>
+                        <button type="button" class="btn btn-primary tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/mchnt-expense/check1-pass'" onclick="$$.submit(this)">审核通过</button>
+                        <button type="button" class="btn btn-danger tf tf-check1" data-options="datagrid:'#dg',url:'/action/bm/mchnt-expense/check1-nopass'" onclick="$$.submit(this)">审核驳回</button>
+                        <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
                     </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label"><span class="required">*</span>收费开始时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="start_date" lay-verify="required" placeholder="请输入收费开始时间" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({onpicked:function(){$dp.$('end_date').focus();},maxDate:'#F{$dp.$D(\'end_date\')}'})" id="start_date">
+                    <div class="col-sm-2">
                     </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">收费结束时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="end_date" placeholder="请输入收费结束时间" autocomplete="off" class="layui-input Wdate" onfocus="WdatePicker({minDate:'#F{$dp.$D(\'start_date\')}'})" id="end_date">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">备注</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="remark" placeholder="请输入备注" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view">
-                <div class="layui-inline">
-                    <label class="layui-form-label">记录编号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="rec_id" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">处理状态</label>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" name="oper_in" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-input-inline" style="width: 100px;">
-                        <input type="text" name="proc_st" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view">
-                <div class="layui-inline">
-                    <label class="layui-form-label">创建人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="created_by" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">创建时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="created_time" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view">
-                <div class="layui-inline">
-                    <label class="layui-form-label">最后修改人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="last_modified_by" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">最后修改时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="last_modified_time" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view">
-                <div class="layui-inline">
-                    <label class="layui-form-label">最后审核人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="last_checked_by" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">最后审核时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="last_checked_time" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item hide invisible visible-view visible-check1 editable-check1">
-                <label class="layui-form-label">审核备注</label>
-                <div class="layui-input-block">
-                    <input type="text" name="checked_reason" placeholder="" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button type="button" class="layui-btn hide invisible visible-create visible-update" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-expense/' + operateType,success:submitSuccess">提交</button>
-                    <button type="button" class="layui-btn layui-btn-normal hide invisible visible-check1" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-expense/check1-pass',success:submitSuccess">审核通过</button>
-                    <button type="button" class="layui-btn layui-btn-danger hide invisible visible-check1" onclick="$$.submit(this)" data-options="url:'/action/bm/mchnt-expense/check1-nopass',success:submitSuccess">审核驳回</button>
-                    <button type="button" class="layui-btn layui-btn-primary" onclick="closeLayer()">关闭</button>
                 </div>
             </div>
         </form>
     </div>
-    <script id="upload-tpl" type="text/html">
-        <div class="img-box"><img src="/p/action/uploads/" alt="..." class="img-thumbnail"></div>
-    </script>
-    <script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="../lib/layui/lay/dest/layui.all.js"></script>
-    <script type="text/javascript" src="../lib/My97DatePicker/WdatePicker.js"></script>
-    <script type="text/javascript" src="../js/template.js"></script>
-    <script type="text/javascript" src="../js/base.js"></script>
-    <script type="text/javascript" src="../js/param.js"></script>
-    <script type="text/javascript" src="../js/district.js"></script>
-    <script type="text/javascript">
+    <script src="../lib/jquery/jquery.min.js"></script>
+    <script src="../lib/toastr/toastr.min.js"></script>
+    <script src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script src="../lib/easyui/jquery.easyui.min.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/st.js"></script>
+    <script src="../js/param.js"></script>
+    <script src="../js/district.js"></script>
+    <script>
     var query = $$.parseQueryString();
+    var displayType = query.displayType;
     var operateType = query.operateType;
-    var form = layui.form();
-    var element = layui.element();
 
+    function onLoadForm(data) {
+        // $('#province').val(data.data.province).change();
+        // $('#city').val(data.data.city).change();
+        // $('#district').val(data.data.district);
+    }
 
-    function loadDetail(data) {}
+    function onSerializeForm(data) {
+        // // 照片
+        // var images = [];
+        // $('#ff').find('.img-box').each(function(index, elem) {
+        //     var tmp = $(elem).data('data');
+        //     images.push(tmp);
+        // });
 
-    function serializeDetail(data) {
-        data.expense_cycle = $('#expense-cycle').val();
+        // data.images = images;
     }
 
     function onChangeExpenseType() {
         var value = $(this).val();
         if (value == '1' || value == '4') {
-            $('#expense-cycle').val('1').attr('disabled', 'disabled');
+            $('#expense_cycle').val('1').attr('disabled', 'disabled');
         } else {
-            $('#expense-cycle').removeAttr('disabled');
+            $('#expense_cycle').removeAttr('disabled');
         }
-        form.render('select');
     }
 
-    function closeLayer() {
-        var index = parent.layer.getFrameIndex(window.name);
-        parent.layer.close(index);
+
+    function hasNext(oper_in, proc_st, action) {
+        var rows = $$.st.transition[$$.st.alias['mchnt_param']]
+        return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
 
-    function submitSuccess(requestData, data) {
-        $$.msg('操作成功', {
-            icon: 1
-        }, function() {
-            closeLayer();
-            parent.reload();
-        });
-    }
+
 
     $(function() {
-        $('#expense-type').on('change', onChangeExpenseType);
-
-        form.on('select(expense_type)', function(data) {
-            $(data.elem).change();
+        $$.transform('.page', operateType, {
+            'create': [],
+            'update': [],
+            'check1': ['create', 'update']
         });
 
-        $$.loadSelect('#expense-type', $$.param['expense_type']);
-        $$.loadSelect('#expense-cycle', $$.param['expense_cycle']);
+        $$.loadSelect('#expense_type', $$.param['expense_type']);
+        $$.loadSelect('#expense_cycle', $$.param['expense_cycle']);
+        $$.loadSelect('#oper_in', $$.st.operIn[$$.st.alias['mchnt_expense']]);
+        $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['mchnt_expense']]);
 
-
-        form.render();
-
-        $$.transformStatus('#detail', operateType);
         if (query.operateType == 'create') {
-                $$.loadData('#detail', query);
-                $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
-                    // data.data.shop_name = data.data.mchnt_abbr;
-                    $$.loadData('#detail', data.data);
-                    form.render();
-                });
-            } else {
-                $$.view('#detail', '/action/bm/mchnt-expense/view', query);
-            }
+            $('#ff').form('load', query);
+            $$.request('/action/bm/mchnt-base-info/view', query, function(data) {
+                $('#ff').form('load', data.data);
+            });
+        } else {
+            $$.loadData('#ff', '/action/bm/mchnt-expense/view', query);
+        }
+
     });
     </script>
 </body>
