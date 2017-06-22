@@ -133,15 +133,15 @@
             </table>
         </form>
         <div id="tb">
-            <a href="#" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('mchnt-base-info-detail.html?displayType='+displayType+'&operateType=create', '新增商户信息')">新增</a>
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-base-info-detail.html?displayType='+displayType+'&operateType=view', '商户信息详情')">详情</a>
-            <a href="#" class="easyui-linkbutton tf tfd-update tf-update" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-base-info-detail.html?displayType='+displayType+'&operateType=update', '编辑商户信息')">编辑</a>
-            <a href="#" class="easyui-linkbutton tf tfd-update tf-batch-cancel-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-base-info/batch-cancel-check1',msg:'取消待审'" onclick="$$.batchSubmit(this)">批量取消待审</a>
-            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-check1" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-base-info-detail.html?displayType='+displayType+'&operateType=check1', '审核商户信息')">审核</a>
-            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-base-info/batch-check1-pass',msg:'审核通过'" onclick="$$.batchSubmit(this)">批量审核通过</a>
-            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-base-info/batch-check1-nopass',msg:'审核驳回',before:beforeCheck1" onclick="$$.batchSubmit(this)">批量审核驳回</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('mchnt-base-info-detail.html?displayType='+displayType+'&operateType=create', '新增商户信息')">新增</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-base-info-detail.html?displayType='+displayType+'&operateType=view', '商户信息详情')">详情</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton tf tfd-update tf-update" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-base-info-detail.html?displayType='+displayType+'&operateType=update', '编辑商户信息')">编辑</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton tf tfd-update tf-batch-cancel-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-base-info/batch-cancel-check1',msg:'取消待审'" onclick="$$.batchSubmit(this)">批量取消待审</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton tf tfd-check1 tf-check1" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-base-info-detail.html?displayType='+displayType+'&operateType=check1', '审核商户信息')">审核</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-base-info/batch-check1-pass',msg:'审核通过'" onclick="$$.batchSubmit(this)">批量审核通过</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-base-info/batch-check1-nopass',msg:'审核驳回',before:beforeCheck1" onclick="$$.batchSubmit(this)">批量审核驳回</a>
         </div>
-        <table id="dg" class="easyui-datagrid" title="商户信息" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id',onClickRow:onClickRow,onCheck:onCheckRow,onUncheck:onCheckRow,onCheckAll:onCheckRow,onUncheckAll:onCheckRow,collapsible:true">
+        <table id="dg" class="easyui-datagrid" title="商户信息" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb',idField:'rec_id',onClickRow:onClickRow1,onCheck:onCheckRow,onUncheck:onCheckRow,onCheckAll:onCheckRow,onUncheckAll:onCheckRow,collapsible:true">
             <thead>
                 <tr>
                     <th data-options="field:'chk',checkbox:true"></th>
@@ -159,15 +159,15 @@
         </table>
         <br>
         <div id="tb2">
-            <a href="#" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('mchnt-param-detail.html?displayType='+displayType+'&operateType=create&mchnt_id='+query.mchnt_id, '新增商户参数')">新增</a>
-            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-param-detail.html?operateType=view', '商户参数详情')">详情</a>
-            <a href="#" class="easyui-linkbutton tf tfd-update tf-update" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-param-detail.html?operateType=update', '编辑商户参数')">编辑</a>
-            <a href="#" class="easyui-linkbutton tf tfd-update tf-batch-cancel-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-param/batch-cancel-check1',msg:'取消待审'" onclick="$$.batchSubmit(this)">批量取消待审</a>
-            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-check1" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-param-detail.html?operateType=check1', '审核商户参数')">审核</a>
-            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-param/batch-check1-pass',msg:'审核通过'" onclick="$$.batchSubmit(this)">批量审核通过</a>
-            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-param/batch-check1-nopass',msg:'审核驳回',before:beforeCheck1" onclick="$$.batchSubmit(this)">批量审核驳回</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('mchnt-param-detail.html?displayType='+displayType+'&operateType=create&mchnt_id='+query.mchnt_id, '新增商户参数')">新增</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-param-detail.html?operateType=view', '商户参数详情')">详情</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton tf tfd-update tf-update" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-param-detail.html?operateType=update', '编辑商户参数')">编辑</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton tf tfd-update tf-batch-cancel-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-param/batch-cancel-check1',msg:'取消待审'" onclick="$$.batchSubmit(this)">批量取消待审</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton tf tfd-check1 tf-check1" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'mchnt-param-detail.html?operateType=check1', '审核商户参数')">审核</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-param/batch-check1-pass',msg:'审核通过'" onclick="$$.batchSubmit(this)">批量审核通过</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/mchnt-param/batch-check1-nopass',msg:'审核驳回',before:beforeCheck1" onclick="$$.batchSubmit(this)">批量审核驳回</a>
         </div>
-        <table id="dg2" class="easyui-datagrid" title="商户参数" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb2',idField:'rec_id',onClickRow:onClickRow,onCheck:onCheckRow,onUncheck:onCheckRow,onCheckAll:onCheckRow,onUncheckAll:onCheckRow">
+        <table id="dg2" class="easyui-datagrid" title="商户参数" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb2',idField:'rec_id',onClickRow:onClickRow2,onCheck:onCheckRow,onUncheck:onCheckRow,onCheckAll:onCheckRow,onUncheckAll:onCheckRow">
             <thead>
                 <tr>
                     <th data-options="field:'chk',checkbox:true"></th>
@@ -179,6 +179,31 @@
                     <th data-options="field:'account_type',width:100,formatter:formatAccountType">账户类型</th>
                     <th data-options="field:'account_name',width:100">开户名称</th>
                     <th data-options="field:'account_name',width:100">开户银行</th>
+                    <th data-options="field:'proc_st_nm',width:100">处理状态</th>
+                </tr>
+            </thead>
+        </table>
+        <br>
+        <div id="tb3">
+            <a href="#" class="easyui-linkbutton tf tfd-update" data-options="iconCls:'fi fi-add',plain:true" onclick="$$.open('term-info-detail.html?displayType='+displayType+'&operateType=create&mchnt_id='+query.mchnt_id, '新增终端信息')">新增</a>
+            <a href="#" class="easyui-linkbutton" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-info-detail.html?displayType='+displayType+'&operateType=view', '终端信息详情')">详情</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update tf-update" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-info-detail.html?displayType='+displayType+'&operateType=update', '编辑终端信息')">编辑</a>
+            <a href="#" class="easyui-linkbutton tf tfd-update tf-batch-cancel-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/term-info/batch-cancel-check1',msg:'取消待审'" onclick="$$.batchSubmit(this)">批量取消待审</a>
+            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-check1" data-options="iconCls:'fi fi-operate',plain:true" onclick="$$.view(this, 'term-info-detail.html?displayType='+displayType+'&operateType=check1', '审核终端信息')">审核</a>
+            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/term-info/batch-check1-pass',msg:'审核通过'" onclick="$$.batchSubmit(this)">批量审核通过</a>
+            <a href="#" class="easyui-linkbutton tf tfd-check1 tf-batch-check1" data-options="iconCls:'fi fi-operate',plain:true,url:'/action/bm/term-info/batch-check1-nopass',msg:'审核驳回',before:beforeCheck1" onclick="$$.batchSubmit(this)">批量审核驳回</a>
+        </div>
+        <table id="dg3" class="easyui-datagrid" title="终端信息" data-options="singleSelect:true,pagination:true,rownumbers:true,toolbar:'#tb3',idField:'rec_id',onClickRow:onClickRow,onCheck:onCheckRow,onUncheck:onCheckRow,onCheckAll:onCheckRow,onUncheckAll:onCheckRow">
+            <thead>
+                <tr>
+                    <th data-options="field:'chk',checkbox:true"></th>
+                    <th data-options="field:'mchnt_id',width:120">客户号</th>
+                    <th data-options="field:'term_no',width:120">终端标识</th>
+                    <th data-options="field:'linkman',width:100">联系人</th>
+                    <th data-options="field:'mobile',width:100">手机号</th>
+                    <th data-options="field:'shop_name',width:200">门店名称</th>
+                    <th data-options="field:'district_name',width:150">所在地区</th>
+                    <th data-options="field:'term_status',width:100,formatter:formatTermStatus">终端状态</th>
                     <th data-options="field:'proc_st_nm',width:100">处理状态</th>
                 </tr>
             </thead>
@@ -209,7 +234,60 @@
         return $$.hasNextStatus(rows, oper_in, proc_st, action);
     }
 
-    function onClickRow(rowIndex, rowData) {        
+    function onClickRow1(rowIndex, rowData) {
+        onClickRow.apply(this, arguments);
+
+        var queryParams = {
+            mchnt_id: rowData.mchnt_id
+        };
+        serializeSearch(queryParams);
+
+        $('#dg2').datagrid({
+            url: $$.wrapUrl('/action/bm/mchnt-param/search'),
+            pageNumber: 1,
+            queryParams: queryParams,
+            onLoadSuccess: function(data) {
+                $(this).datagrid('clearChecked');
+                //解决滚动条引起的panel宽度问题
+                $(this).datagrid('getPanel').panel('resize');
+            },
+        });
+
+        $('#dg3').datagrid({
+            url: $$.wrapUrl('/action/bm/term-info/search'),
+            pageNumber: 1,
+            queryParams: queryParams,
+            onLoadSuccess: function(data) {
+                $(this).datagrid('clearChecked');
+                //解决滚动条引起的panel宽度问题
+                $(this).datagrid('getPanel').panel('resize');
+            },
+        });
+    }
+
+    function onClickRow2(rowIndex, rowData) {
+        onClickRow.apply(this, arguments);
+
+        var queryParams = {
+            mchnt_id: rowData.mchnt_id,
+            mchnt_param_id: rowData.mchnt_param_id
+        };
+        serializeSearch(queryParams);
+
+        $('#dg3').datagrid({
+            url: $$.wrapUrl('/action/bm/term-info/search'),
+            pageNumber: 1,
+            queryParams: queryParams,
+            onLoadSuccess: function(data) {
+                $(this).datagrid('clearChecked');
+                //解决滚动条引起的panel宽度问题
+                $(this).datagrid('getPanel').panel('resize');
+            },
+        });
+    }
+
+
+    function onClickRow(rowIndex, rowData) {
         var actionMap = {
             'update': 'update',
             'check1-pass': 'check1'
@@ -223,10 +301,11 @@
                 $bb.filter('.tf-' + selector).removeClass('hide');
             }
         });
-    }    
+    }
+
 
     function onCheckRow() {
-        var actionMap = {            
+        var actionMap = {
             'cancel-check1': 'batch-cancel-check1',
             'check1-pass': 'batch-check1'
         }
@@ -271,6 +350,10 @@
 
     function formatAccountType(value) {
         return $$.formatField($$.param['account_type'], value);
+    }
+
+    function formatTermStatus(value) {
+        return $$.formatField($$.param['term_status'], value);
     }
 
     $(function() {
