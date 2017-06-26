@@ -97,9 +97,9 @@
                     <td class="text-right col-sm-2">
                         <label>MCC</label>
                         <span style="color: red;">*</span></td>
-                    <td class="col-sm-4">
+                    <td class="col-sm-4 tf-check1">
                         <div class="col-sm-12" style="padding:0;">
-                            <input type="text" id="mcc" name="mcc" class="easyui-combobox" data-options="required:true,valueField:'mcc',textField:'mcc_nm'">
+                            <input type="text" id="mcc" name="mcc" class="easyui-combobox" data-options="valueField:'mcc',textField:'mcc_nm'">
                         </div>
                     </td>
                     <td class="text-right col-sm-2">
@@ -612,6 +612,12 @@
             'update': [],
             'check1': ['create', 'update']
         });
+
+        if (operateType == 'check1') {
+            $('#mcc').combobox({
+                required: true
+            });
+        }
 
         initUpload();
 
