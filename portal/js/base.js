@@ -565,7 +565,7 @@ window.$$ = (function() {
             if (dependencies) {
                 for (var i = 0; i < dependencies.length; i++) {
                     var daction = dependencies[i];
-                    $target.find('.tf-' + daction + ':not(button)').removeClass('hide').find('input,textarea,select').each(readonly);
+                    $target.find('.tf-' + daction + ':not(button,.tf-'+ action +')').removeClass('hide').find('input,textarea,select').each(readonly);
                 }
             }
 
