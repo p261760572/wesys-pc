@@ -58,6 +58,7 @@
         width: 100%;
         height: 100%;
         opacity: 0;
+        filter: alpha(opacity=0);
         cursor: pointer;
         margin: -4px 0 0 -4px;
     }
@@ -568,7 +569,9 @@
                 $.mask.hide();
             });
 
-            $(this).val('');
+            setTimeout(function () {
+                $(this).val('');
+            });            
         });
     }
 
