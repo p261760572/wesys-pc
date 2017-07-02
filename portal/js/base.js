@@ -154,8 +154,8 @@ window.$$ = (function() {
 
         if (typeof error !== 'function') {
             options = error;
-            error = function(data) {
-                $$.error($$.errmsg(data));
+            error = function(result) {
+                $$.error($$.errmsg(result));
             };
         }
 
@@ -169,12 +169,12 @@ window.$$ = (function() {
             contentType: 'application/json',
             dataType: 'json',
             data: $.toJSON(data),
-            success: function(data) {
+            success: function(result) {
                 if (options.loading) $.mask.hide();
-                if ($$.errcode(data) == 0) {
-                    success(data)
+                if ($$.errcode(result) == 0) {
+                    success(result)
                 } else {
-                    error(data);
+                    error(result);
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
