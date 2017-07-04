@@ -11,6 +11,7 @@
     <![endif]-->
     <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
     <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+    <link href="../lib/viewerjs/viewer.min.css" rel="stylesheet">
     <style type="text/css">
     input[disabled],
     select[disabled],
@@ -63,8 +64,20 @@
         margin: -4px 0 0 -4px;
     }
     
-    input {
+    /*input {
         width: 100%;
+    }*/
+    
+    .viewer-prev,
+    .viewer-play,
+    .viewer-next,
+    .viewer-flip-horizontal,
+    .viewer-flip-vertical {
+        display: none;
+    }
+
+    .viewer-toolbar {
+        width: 155px;
     }
     </style>
 </head>
@@ -424,6 +437,7 @@
     <script src="../lib/toastr/toastr.min.js"></script>
     <script src="../lib/My97DatePicker/WdatePicker.js"></script>
     <script src="../lib/easyui/jquery.easyui.js"></script>
+    <script src="../lib/viewerjs/viewer.min.js"></script>
     <script src="../js/base.js"></script>
     <script src="../js/st.js"></script>
     <script src="../js/param.js"></script>
@@ -435,11 +449,10 @@
 
     function renderImgbox($file, data) {
         var $box = $('<div class="thumbnail pull-left img-box">' +
-            '<a href="' + $$.wrapUrl('/action/uploads/' + data.serverid) + '" target="_blank">' +
-            '<img src="' + $$.wrapUrl('/action/uploads/' + data.serverid) + '"></a>' +
+            '<img src="' + $$.wrapUrl('/action/uploads/' + data.serverid) + '">' +
             '<div class="img-operate">' +
             '<button class="btn btn-xs btn-danger">删除</button>' +
-            // '<a href="#" class="btn btn-xs btn-default">识别</a>' +
+            // '<a href="' + $$.wrapUrl('/action/uploads/' + data.serverid) + '" class="btn btn-xs btn-default" target="_blank">查看</a>' +
             '</div></div>').data('data', {
             elec_info_type: $file.attr('data-type'),
             serverid: data.serverid
@@ -449,6 +462,12 @@
         if ($.inArray(query.operateType, ['create', 'update']) < 0) {
             $box.find('.img-operate').addClass('hide');
         }
+
+        var viewer = new Viewer($box[0], {
+            title: false,
+            navbar: false,
+            zIndex: 9000
+        });
     }
 
     function onLoadForm(data) {
@@ -569,9 +588,9 @@
                 $.mask.hide();
             });
 
-            setTimeout(function () {
+            setTimeout(function() {
                 $file.val('');
-            });            
+            });
         });
     }
 
