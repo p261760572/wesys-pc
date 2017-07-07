@@ -576,7 +576,7 @@
                 url: $$.wrapUrl('/action/upload'),
                 files: $(this),
                 iframe: true,
-                //dataType: 'json',
+                dataType: 'json',
                 success: function(data) {
                     if ($$.errcode(data) == 0) {
                         renderImgbox($file, data);
