@@ -11,7 +11,7 @@
     <![endif]-->
     <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
     <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
-    <link href="../lib/viewerjs/viewer.min.css" rel="stylesheet">
+    <link href="../lib/viewer/viewer.min.css" rel="stylesheet">
     <style type="text/css">
     input[disabled],
     select[disabled],
@@ -429,7 +429,7 @@
     <script src="../lib/toastr/toastr.min.js"></script>
     <script src="../lib/My97DatePicker/WdatePicker.js"></script>
     <script src="../lib/easyui/jquery.easyui.min.js"></script>
-    <script src="../lib/viewerjs/viewer.min.js"></script>
+    <script src="../lib/viewer/viewer.min.js"></script>
     <script src="../js/base.js"></script>
     <script src="../js/st.js"></script>
     <script src="../js/param.js"></script>
@@ -455,7 +455,7 @@
             $box.find('.img-operate').addClass('hide');
         }
 
-        var viewer = new Viewer($box[0], {
+        $box.viewer({
             title: false,
             navbar: false,
             zIndex: 9000
@@ -622,12 +622,22 @@
                 url: $$.wrapUrl('/action/upload'),
                 files: $(this),
                 iframe: true,
-                dataType: 'json',
+                // dataType: 'json',
                 success: function(data) {
-                    if ($$.errcode(data) == 0) {
-                        renderImgbox($file, data);
+                    var result = $(data).text();                  
+                    try {
+                        result = $.parseJSON(result)
+                    } catch (e) {
+                        console.log(result);
+                        console.error(e);
+                        $$.error('解析JSON异常');
+                        return;
+                    }
+
+                    if ($$.errcode(result) == 0) {
+                        renderImgbox($file, result);
                     } else {
-                        $$.error($$.errmsg(data));
+                        $$.error($$.errmsg(result));
                     }
                 }
             }).always(function() {
@@ -636,7 +646,7 @@
 
             setTimeout(function () {
                 $file.val('');
-            });
+            }, 150);
         });
     }
 
