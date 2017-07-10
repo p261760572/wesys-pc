@@ -183,7 +183,7 @@
                 iframe: true,
                 // dataType: 'json',
                 success: function(data) {
-                    var result = $(data).text();                  
+                    var result = $(data).not('style').text();
                     try {
                         result = $.parseJSON(result)
                     } catch (e) {
