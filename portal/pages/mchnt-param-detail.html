@@ -18,23 +18,23 @@
     textarea[disabled] {
         background-color: rgb(235, 235, 228);
     }
-    
+
     .img-box {
         width: 100px;
         height: 100px;
         position: relative;
         margin-right: 5px;
     }
-    
+
     .img-box img {
         max-height: 100%;
     }
-    
+
     .img-operate {
         position: absolute;
         bottom: 0;
     }
-    
+
     .img-box.glyphicon-upload:before {
         position: absolute;
         font-size: 30px;
@@ -45,7 +45,7 @@
         color: #337ab7;
         line-height: 1;
     }
-    
+
     .img-box input[type=file] {
         position: absolute;
         width: 100%;
@@ -195,7 +195,7 @@
                         <label>银行账号</label>
                     </td>
                     <td colspan="3" class="col-sm-10">
-                        <input type="text" name="account_no" class="easyui-validatebox" data-options="" style="font-size: 20px; width: 40%;">
+                        <input type="text" name="account_no" class="easyui-validatebox" data-options="validType:'accountNo'" style="font-size: 20px; width: 40%;">
                         <span id="account_no2" style="font-size: 24px; margin-left: 20px;"></span>
                     </td>
                 </tr>
@@ -284,7 +284,7 @@
                         <label>扫码手续费(‰)</label>
                         <span style="color: red;">*</span></td>
                     <td class="col-sm-4">
-                        <input type="text" name="fee" value="5" class="easyui-validatebox" data-options="">
+                        <input type="text" name="fee" value="5" class="easyui-validatebox" data-options="validType:'number'">
                     </td>
                     <td class="text-right col-sm-2">
                         <label>信用卡开关</label>
@@ -450,6 +450,16 @@
     var query = $$.parseQueryString();
     var displayType = query.displayType;
     var operateType = query.operateType;
+
+    $.extend($.fn.validatebox.defaults.rules, {
+        accountNo: {
+            validator: function(value, param) {
+                var re = /^[0-9\-]+$/;
+                return re.test(value);
+            },
+            message: '输入内容必须是数字或-'
+        }
+    });
 
     function renderImgbox($file, data) {
         var $box = $('<div class="thumbnail pull-left img-box">' +
@@ -656,7 +666,7 @@
                 $.mask.hide();
             });
 
-            setTimeout(function () {
+            setTimeout(function() {
                 $file.val('');
             }, 150);
         });

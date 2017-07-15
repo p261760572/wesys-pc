@@ -18,31 +18,31 @@
     textarea[disabled] {
         background-color: rgb(235, 235, 228);
     }
-    
+
     .tab-body-overflow {
         overflow: hidden;
     }
-    
+
     .page {
         font-size: 14px;
     }
-    
+
     .img-box {
         width: 100px;
         height: 100px;
         position: relative;
         margin-right: 5px;
     }
-    
+
     .img-box img {
         max-height: 100%;
     }
-    
+
     .img-operate {
         position: absolute;
         bottom: 0;
     }
-    
+
     .img-box.glyphicon-upload:before {
         position: absolute;
         font-size: 30px;
@@ -53,7 +53,7 @@
         color: #337ab7;
         line-height: 1;
     }
-    
+
     .img-box input[type=file] {
         position: absolute;
         width: 100%;
@@ -66,7 +66,7 @@
     /*input {
         width: 100%;
     }*/
-    
+
     .viewer-prev,
     .viewer-play,
     .viewer-next,
@@ -74,7 +74,7 @@
     .viewer-flip-vertical {
         display: none;
     }
-    
+
     .viewer-toolbar {
         width: 155px;
     }
@@ -115,7 +115,7 @@
                                 <label>手机</label>
                                 <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
-                                <input type="text" name="mobile" class="easyui-validatebox" data-options="required:true">
+                                <input type="text" name="mobile" class="easyui-validatebox" data-options="required:true,validType:'mobile'">
                             </td>
                         </tr>
                         <tr class="tf tf-create tf-update">
@@ -131,7 +131,7 @@
                                 <label>联系电话</label>
                             </td>
                             <td class="col-sm-4">
-                                <input type="text" name="telno" class="easyui-validatebox" data-options="">
+                                <input type="text" name="telno" class="easyui-validatebox" data-options="validType:'phone'">
                             </td>
                             <td class="text-right col-sm-2">
                                 <label>常用邮箱</label>
@@ -258,7 +258,7 @@
                                 <label>证件号码</label>
                                 <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
-                                <input type="text" name="cert_id" class="easyui-validatebox" data-options="required:true">
+                                <input type="text" name="cert_id" class="easyui-validatebox" data-options="required:true,validType:'certId'">
                             </td>
                         </tr>
                         <tr class="tf tf-create tf-update">
@@ -446,6 +446,16 @@
     var displayType = query.displayType;
     var operateType = query.operateType;
 
+    $.extend($.fn.validatebox.defaults.rules, {
+        certId: {
+            validator: function(value, param) {
+                var re = /^[0-9X]+$/;
+                return re.test(value);
+            },
+            message: '输入内容必须是数字或X'
+        }
+    });
+
     function renderImgbox($file, data) {
         var $box = $('<div class="thumbnail pull-left img-box">' +
             '<img src="' + $$.wrapUrl('/action/uploads/' + data.serverid) + '">' +
@@ -577,7 +587,7 @@
                 iframe: true,
                 // dataType: 'json',
                 success: function(data) {
-                    var result = $(data).not('style').text();                  
+                    var result = $(data).not('style').text();
                     try {
                         result = $.parseJSON(result)
                     } catch (e) {

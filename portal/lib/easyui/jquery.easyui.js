@@ -11668,6 +11668,76 @@ $.fn.combotree.defaults.iconWidth = 26;
 $.fn.datagrid.defaults.selectOnCheck = false;
 $.fn.datagrid.defaults.checkOnSelect = false;
 
+$.extend($.fn.validatebox.defaults.rules, {    
+    equals: {
+        validator: function(value, param) {
+            return value == $(param[0]).val();
+        },
+        message: '两次输入内容不一致'
+    },
+    combobox: {
+        validator: function(value, param) {
+            var t = $(this).closest('.combobox');
+            var opts = t.combobox('options');
+            var rows = t.combobox('getData');
+            var i;
+            value = t.combobox('getValue');
+            for (i = 0; i < rows.length; i++) {
+                if (rows[i][opts.valueField] == value) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        message: '输入内容必须是选择项'
+    },
+    minLength: {
+        validator: function(value, param) {
+            return value.length >= param[0];
+        },
+        message: '输入内容长度最少为{0}'
+    },
+    maxLength: {
+        validator: function(value, param) {
+            return value.length <= param[0];
+        },
+        message: '输入内容长度最多为{0}'
+    },
+    fixLength: {
+        validator: function(value, param) {
+            return value.length == param[0];
+        },
+        message: '输入内容长度必须等于{0}'
+    },
+    number: {
+        validator: function(value, param) {
+            return !isNaN(value);
+        },
+        message: '输入内容必须是数值'
+    },
+    digit: {
+        validator: function(value, param) {
+            var re = /^[0-9]+$/;
+            return re.test(value);
+        },
+        message: '输入内容必须是数字'
+    },
+    mobile: {
+        validator: function(value, param) {
+            //var re = /^(13|15|17|18)\d{9}$/;
+            var re = /^\d{11}$/;
+            return re.test(value);
+        },
+        message: '输入内容必须是有效的手机号码'
+    },
+    phone: {
+        validator: function(value, param) {
+            var re = /^(([0+]\d{2,3}-)?(0\d{2,3})-)?(\d{7,8})(-(\d{3,}))?$/;
+            return re.test(value);
+        },
+        message: '输入内容必须是有效的电话'
+    }    
+});
 if ($.fn.pagination){
 	$.fn.pagination.defaults.beforePageText = '第';
 	$.fn.pagination.defaults.afterPageText = '共{pages}页';
