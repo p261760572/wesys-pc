@@ -149,9 +149,10 @@
                     <th data-options="field:'linkman',width:100">联系人</th>
                     <th data-options="field:'mobile',width:100">手机</th>
                     <th data-options="field:'mchnt_abbr',width:200">商户简称</th>
-                    <th data-options="field:'telno',width:100">联系电话</th>
-                    <th data-options="field:'district_name',width:150">所在地区</th>
+                    <!-- <th data-options="field:'telno',width:100">联系电话</th> -->
+                    <!-- <th data-options="field:'district_name',width:150">所在地区</th> -->
                     <th data-options="field:'license_no',width:180">营业执照号</th>
+                    <th data-options="field:'expand_inst_nm',width:220">拓展方</th>
                     <th data-options="field:'proc_st_nm',width:100">处理状态</th>
                     <th data-options="field:'created_time',width:150">创建日期</th>
                 </tr>
@@ -340,7 +341,7 @@
     function onClickAdd2(target) {
         var selected = $('#dg').datagrid('getSelected');
         if (selected) {
-            $$.open('mchnt-param-detail.html?displayType='+displayType+'&operateType=create&mchnt_id='+selected.mchnt_id, '新增商户参数');
+            $$.open('mchnt-param-detail.html?displayType=' + displayType + '&operateType=create&mchnt_id=' + selected.mchnt_id, '新增商户参数');
         } else {
             $$.info('请选择商户信息！');
         }
@@ -349,7 +350,7 @@
     function onClickAdd3(target) {
         var selected = $('#dg').datagrid('getSelected');
         if (selected) {
-            $$.open('term-info-detail.html?displayType='+displayType+'&operateType=create&mchnt_id='+selected.mchnt_id, '新增终端信息');
+            $$.open('term-info-detail.html?displayType=' + displayType + '&operateType=create&mchnt_id=' + selected.mchnt_id, '新增终端信息');
         } else {
             $$.info('请选择商户信息！');
         }
