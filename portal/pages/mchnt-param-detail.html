@@ -490,7 +490,9 @@
         $('#province').val(data.data.account_province).change();
         $('#city').val(data.data.account_city).change();
         // $('#district').val(data.data.district);
-        $('#account_no2').text(formatAccountNo(data.data.account_no));
+        if(data.data.account_no != null) {
+			$('#account_no2').text(formatAccountNo(data.data.account_no));
+		}
 
         $.each(data.images, function(index, value) {
             var $file = $('#ff').find(':file[data-type=' + value.elec_info_type + ']');

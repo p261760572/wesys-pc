@@ -1,0 +1,959 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>业务详情</title>
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="../lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="../lib/easyui/themes/bootstrap/easyui.min.css" rel="stylesheet">
+    <style type="text/css">
+    input[disabled],
+    select[disabled],
+    textarea[disabled] {
+        background-color: rgb(235, 235, 228);
+    }
+
+    .tab-body-overflow {
+        overflow: hidden;
+    }
+
+    .page {
+        font-size: 14px;
+    }
+
+    .img-box {
+        width: 70px;
+        height: 70px;
+        position: relative;
+        margin-right: 5px;
+    }
+
+    .img-box img {
+        max-height: 100%;
+    }
+
+    .img-operate {
+        position: absolute;
+        bottom: 0;
+    }
+
+    .img-box.glyphicon-upload:before {
+        position: absolute;
+        font-size: 30px;
+        top: 50%;
+        left: 50%;
+        margin-top: -15px;
+        margin-left: -15px;
+        color: #337ab7;
+        line-height: 1;
+    }
+
+    .img-box input[type=file] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        filter: alpha(opacity=0);
+        cursor: pointer;
+        margin: -4px 0 0 -4px;
+    }
+
+    input {
+        width: 100%;
+    }
+    </style>
+</head>
+
+<body>
+    <div title="基本资料">
+        <div class="page">
+            <form id="ff" action="/action/bm/app-busi/view" data-options="serialize:onSerializeForm,load:onLoadForm">
+                <table class="table" style="width: 970px;">
+                    <caption>商户信息</caption>
+                    <tr class="tf tf-create tf-update">
+                    	<td class="text-right col-sm-2">
+							<label>商户参数ID</label>
+							<span style="color: red;">*</span></td>
+						<td class="col-sm-4">
+							<input type="text" name="mchnt_param_id" class="easyui-validatebox" data-options="" disabled>
+						</td>
+						<td class="text-right col-sm-2">
+							<label>商户类型</label>
+							<span style="color: red;">*</span></td>
+						<td class="col-sm-4">
+							<select id="mchnt_type" name="mchnt_type" class="easyui-validatebox" data-options="required:true">
+								<option value="">--请选择--</option>
+							</select>
+						</td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+						<td class="text-right col-sm-2">
+							<label>收单机构</label>
+							<span style="color: red;">*</span></td>
+						<td class="col-sm-4">
+							<select id="acq_inst_id" name="acq_inst_id" class="easyui-validatebox" data-options="required:true">
+								<option value="">--请选择--</option>
+							</select>
+						</td>
+						<td class="text-right col-sm-2">
+							<label>业务类型</label>
+							<span style="color: red;">*</span></td>
+						<td class="col-sm-4">
+							<select id="busi_type" name="busi_type" class="easyui-validatebox" data-options="required:true">
+								<option value="">--请选择--</option>
+							</select>
+						</td>
+					</tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>证件类型</label>
+                            <span style="color: red;">*</span></td>
+                        <td colspan="3" class="col-sm-10">
+                            <select id="cert_type" name="cert_type" class="easyui-validatebox" data-options="required:true">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>证件正面</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <div class="img-box-wrap">
+                                <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
+                                    <input type="file" name="file" class="easyui-validatebox" data-options="required:true,err:err" data-type="frzjzm">
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>证件反面</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <div class="img-box-wrap">
+                                <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
+                                    <input type="file" name="file" data-type="frzjfm">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>证件人姓名</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4">
+                            <input type="text" name="cert_name" class="easyui-validatebox" data-options="required:true">
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>证件号码</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4">
+                            <input type="text" name="cert_id" class="easyui-validatebox" data-options="required:true,validType:'certId'">
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>证件有效期</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4">
+                            <input type="text" name="cert_date" class="easyui-validatebox Wdate" data-options="required:true" onfocus="WdatePicker()">
+                        </td>
+                        <td class="text-right col-sm-2">
+                        </td>
+                        <td class="col-sm-4">
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>营业执照正面</label>
+                        </td>
+                        <td colspan="3" class="col-sm-10">
+                            <div class="img-box-wrap">
+                                <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
+                                    <input type="file" name="file" data-type="yyzzzm">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>营业执照号</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4">
+                            <div class="input-group">
+                                <input type="text" id="license_no" name="license_no" class="easyui-validatebox form-control" data-options="required:true">
+                                <span class="input-group-btn">
+						        <button class="btn btn-success" type="button" onclick="searchLicense()">查询</button>
+						      	</span>
+                            </div>
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>营业执照期限</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="license_date" class="easyui-validatebox Wdate" data-options="" onfocus="WdatePicker()">
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>商户名称</label>
+                            <span style="color: red;">*</span></td>
+                        <td colspan="3" class="col-sm-10">
+                            <input type="text" name="mchnt_name" class="easyui-validatebox" data-options="required:true">
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>商户联系人</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4">
+                            <input type="text" name="linkman" class="easyui-validatebox" data-options="required:true">
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>手机</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4">
+                            <input type="text" name="mobile" class="easyui-validatebox" data-options="required:true,validType:'mobile'">
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>商户地区</label>
+                            <span style="color: red;">*</span>
+                        </td>
+                        <td class="col-sm-4">
+                            <select id="province" name="province" class="easyui-validatebox" data-options="required:true" style="width: 98px;">
+                                <option value="">--请选择--</option>
+                            </select>
+                            <select id="city" name="city" class="easyui-validatebox" data-options="required:true" style="width: 98px;">
+                                <option value="">--请选择--</option>
+                            </select>
+                            <select id="district" name="district" class="easyui-validatebox" data-options="required:true" style="width: 98px;">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>注册地址</label>
+                        </td>
+                        <td colspan="3" class="col-sm-10">
+                            <input type="text" name="license_addr" class="easyui-validatebox" data-options="">
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>经营范围</label>
+                        </td>
+                        <td colspan="3" class="col-sm-10">
+                            <input type="text" name="business_scope" class="easyui-validatebox" data-options="">
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2 tf tf-create tf-update tf-check1">
+                            <label>MCC</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4 tf tf-create tf-update tf-check1">
+                            <div class="col-sm-12" style="padding:0;">
+                                <input type="text" id="mcc" name="mcc" class="easyui-combobox" data-options="valueField:'mcc',textField:'mcc_nm'">
+                            </div>
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>账户类型</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4">
+                            <select id="account_type" name="account_type" class="easyui-validatebox" data-options="required:true">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>账户正面</label>
+                        </td>
+                        <td colspan="3" class="col-sm-10">
+                            <div class="img-box-wrap">
+                                <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
+                                    <input type="file" name="file" data-type="zhzm">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>开户名称</label>
+                            <span style="color: red;">*</span>
+                        </td>
+                        <td colspan="3" class="col-sm-10">
+                            <input type="text" name="account_name" class="easyui-validatebox" data-options="required:true">
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2" style="vertical-align: middle;">
+                            <label>银行账号</label>
+                            <span style="color: red;">*</span>
+                        </td>
+                        <td colspan="3" class="col-sm-10">
+                            <input type="text" name="account_no" class="easyui-validatebox" data-options="required:true,validType:'accountNo'" style="font-size: 20px; width: 40%;">
+                            <span id="account_no2" style="font-size: 24px; margin-left: 20px;"></span>
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+							<label>开户银行</label>
+							<span style="color: red;">*</span></td>
+						<td class="col-sm-4">
+							<div class="col-sm-12" style="padding:0;">
+								<input type="text" id="account_bank" name="account_bank" class="easyui-combobox" data-options="required:true,valueField:'bank_cd',textField:'bank_nm',onChange:onChangeBank">
+							</div>
+						</td>
+                        <td class="text-right col-sm-2">
+                            <label>开户支行</label>
+                            <span style="color: red;">*</span></td>
+                        <td colspan="3" class="col-sm-10">
+                            <div class="col-sm-12" style="padding:0;">
+                                <input type="text" id="account_bank_branch_cd" name="account_bank_branch_cd" class="easyui-combobox" data-options="required:true,valueField:'bank_branch_cd',textField:'bank_branch_nm',mode:'remote',loader:bankBranchLoader">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>借记卡手续费</label>
+                            <span style="color: red;">*</span>
+                        </td>
+                        <td class="col-sm-4">
+                            <div class="col-sm-12" style="padding:0;">
+                                <input type="text" id="debit_card_fee" name="debit_card_fee" class="easyui-combobox" data-options="">
+                            </div>
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>贷记卡手续费</label>
+                            <span style="color: red;">*</span>
+                        </td>
+                        <td class="col-sm-4">
+                            <div class="col-sm-12" style="padding:0;">
+                                <input type="text" id="credit_card_fee" name="credit_card_fee" class="easyui-combobox" data-options="">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>扫码手续费(‰)</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4">
+                            <input type="text" name="fee" value="5" class="easyui-validatebox" data-options="validType:'number'">
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>信用卡开关</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4">
+                            <select id="credit_flag" name="credit_flag" class="easyui-validatebox" data-options="required:true">
+                                <option value="">--请选择--</option>
+                                <option value="1" selected>开</option>
+                                <option value="0">关</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>门店联系人</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4">
+                            <input type="text" name="t_linkman" class="easyui-validatebox" data-options="required:true">
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>手机</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4">
+                            <input type="text" name="t_mobile2" class="easyui-validatebox" data-options="required:true,validType:'mobile'">
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>门店名称</label>
+                            <span style="color: red;">*</span></td>
+                        <td colspan="3" class="col-sm-10">
+                            <input type="text" name="shop_name" class="easyui-validatebox" data-options="required:true">
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>装机地区</label>
+                            <span style="color: red;">*</span>
+                        </td>
+                        <td class="col-sm-4">
+                            <select id="province2" name="t_province" class="easyui-validatebox" data-options="required:true" style="width: 98px;">
+                                <option value="">--请选择--</option>
+                            </select>
+                            <select id="city2" name="t_city" class="easyui-validatebox" data-options="required:true" style="width: 98px;">
+                                <option value="">--请选择--</option>
+                            </select>
+                            <select id="district2" name="t_district" class="easyui-validatebox" data-options="required:true" style="width: 98px;">
+                                <option value="">--请选择--</option>
+                            </select>
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>终端投资方</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4">
+                            <div class="col-sm-12" style="padding:0;">
+                                <input type="text" id="term_inves" name="term_inves" class="easyui-combobox" data-options="required:true">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>终端地址</label>
+                            <span style="color: red;">*</span>
+                        </td>
+                        <td colspan="3" class="col-sm-10">
+                            <input type="text" name="t_addr" class="easyui-validatebox" data-options="required:true">
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>机具类型</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4">
+                           <select id="equi_type" name="equi_type" class="easyui-validatebox form-control" data-options="required:true">
+                                    <option value="">--请选择--</option>
+                           </select>
+                           
+                            <!--div class="input-group">
+                                <select id="equi_type" name="equi_type" class="easyui-validatebox form-control" data-options="required:true">
+                                    <option value="">--请选择--</option>
+                                </select>
+                                <span class="input-group-addon">
+                                <label>
+                                <input type="checkbox" style="width: 13px; height: 13px; line-height: 13px;">销售	
+                                </label>
+						      </span>
+                            </div-->
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>销售款</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="model" class="easyui-validatebox">
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>销售方式</label>
+                        </td>
+                        <td class="col-sm-4">
+                           <select name="sales_type" class="easyui-validatebox form-control">
+                                    <option value="">--请选择--</option>
+                                    <option value="1">全额销售</option>
+                                    <option value="2">优惠销售</option>
+                                    <option value="3">优质赠送</option>
+                                    <option value="4">押金抵扣</option>
+                           </select>
+                        </td>
+                        
+                        <td class="text-right col-sm-2">
+                            <label>一次收取费用</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="text" name="sales_amount" class="easyui-validatebox">
+                        </td>
+                        
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+						<td class="text-right col-sm-2">
+							<label>终端数量</label>
+						</td>
+						<td class="col-sm-4">
+							<input type="number" name="term_num" class="easyui-validatebox">
+						</td>
+                   		
+                   		<td class="text-right col-sm-2">
+							<label>备注</label>
+						</td>
+						<td class="col-sm-4">
+							<input type="text" name="remark" class="easyui-validatebox">
+						</td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>拓展方</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4">
+                            <div class="col-sm-12" style="padding:0;">
+                                <input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true">
+                            </div>
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>拓展人</label>
+                            <span style="color: red;">*</span></td>
+                        <td class="col-sm-4">
+                            <div class="col-sm-12" style="padding:0;">
+                                <input type="text" id="expand_id" name="expand_id" class="easyui-combobox" data-options="required:true">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="tf tf-create tf-update">
+                        <td class="text-right col-sm-2">
+                            <label>协议</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <div class="img-box-wrap">
+                                <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
+                                    <input type="file" name="file" data-type="xy" data-max="9">
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-right col-sm-2">
+                            <label>信息表</label>
+                        </td>
+                        <td class="col-sm-4">
+                            <div class="img-box-wrap">
+                                <div class="thumbnail pull-left img-box glyphicon glyphicon-upload">
+                                    <input type="file" name="file" data-type="xxb">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div style="display:block; height:50px;"></div>
+                <div style="position:fixed; left: 0px; bottom:0px; z-index:8999; height:42px; background-color: #f2f2f2; width: 1000px; padding: 5px 10px; ">
+                    <div class="row">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-8">
+                           	<button type="button" class="btn btn-primary tf tf-create tf tf-update" data-options="datagrid:'#dg',url:'/action/bm/app-busi/save',success:submitSuccess" onclick="$$.submit(this)">保存</button>
+                            <button type="button" class="btn btn-primary tf tf-create tf tf-update" data-options="datagrid:'#dg',url:'/action/bm/app-busi/commit',success:submitSuccess" onclick="$$.submit(this)">新增提交</button>
+                            <button type="button" class="btn btn-default btn-outline" onclick="$$.close()">关闭</button>
+                        </div>
+                        <div class="col-sm-2">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="../lib/jquery/jquery.min.js"></script>
+    <script src="../lib/jquery-iframe-transport/jquery.iframe-transport.js"></script>
+    <script src="../lib/toastr/toastr.min.js"></script>
+    <script src="../lib/My97DatePicker/WdatePicker.js"></script>
+    <script src="../lib/easyui/jquery.easyui.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/st.js"></script>
+    <script src="../js/param.js"></script>
+    <script src="../js/district.js"></script>
+    <script>
+    var query = $$.parseQueryString();
+    var displayType = query.displayType;
+    var operateType = query.operateType;
+
+	$.extend($.fn.validatebox.defaults.rules, {
+        accountNo: {
+            validator: function(value, param) {
+                var re = /^[0-9\-]+$/;
+                return re.test(value);
+            },
+            message: '输入内容必须是数字或-'
+        }
+    });
+    function err(target, message) {
+        var t = $(target);
+        // if (t.parent().hasClass('input-group')) {
+        //     t = t.parent();
+        // }
+        t = t.parent();
+        t.removeClass('alert-danger');
+        if (message) {
+            t.addClass('alert-danger');
+        }
+        // var m = t.next('.alert-danger');
+        // if (!m.length) {
+        //     m = $('<small class="alert-danger"></small>').insertAfter(t);
+        // }
+        // m.html(message);
+    }
+
+    function renderImgbox($file, data) {
+        var $box = $('<div class="thumbnail pull-left img-box">' +
+            '<a href="' + $$.wrapUrl('/action/uploads/' + data.serverid) + '" target="_blank">' +
+            '<img src="' + $$.wrapUrl('/action/uploads/' + data.serverid) + '"></a>' +
+            '<div class="img-operate">' +
+            '<button class="btn btn-xs btn-danger">删除</button>' +
+            // '<a href="#" class="btn btn-xs btn-default">识别</a>' +
+            '</div></div>').data('data', {
+            elec_info_type: $file.attr('data-type'),
+            serverid: data.serverid
+        });
+        $file.closest('.img-box').before($box);
+
+        // if ($.inArray(query.operateType, ['create', 'update']) < 0) {
+        //     $box.find('.img-operate').addClass('hide');
+        // }
+
+        var maxCount = parseInt($file.attr('data-max') || '1');
+        var count = $file.closest('.img-box-wrap').find('.img-box:not(.glyphicon-upload)').length;
+        if (count >= maxCount) {
+            $file.closest('.img-box').hide();
+        }
+    }
+
+    function onLoadForm(data) {
+		$('#province').val(data.data.province).change();
+        $('#city').val(data.data.city).change();
+        $('#district').val(data.data.district);
+		$('#province2').val(data.data.t_province).change();
+        $('#city2').val(data.data.t_city).change();
+        $('#district2').val(data.data.t_district);
+		$('#acq_inst_id').val(data.data.acq_inst_id).change();
+        $('#busi_type').attr('data-value', data.data.busi_type);
+		$('#account_no2').text(formatAccountNo(data.data.account_no));
+		
+        $.each(data.images, function(index, value) {
+            var $file = $('#ff').find(':file[data-type=' + value.elec_info_type + ']');
+            renderImgbox($file, value);
+        });
+		
+		$('#account_bank_branch_cd').combobox('reload', {
+            bank_branch_cd: data.data.account_bank_branch_cd
+        });
+    }
+
+    function onSerializeForm(data) {
+        // 照片
+        var images = [];
+        $('#ff').find('.img-box:not(.glyphicon-upload)').each(function(index, elem) {
+            var tmp = $(elem).data('data');
+            images.push(tmp);
+        });
+
+        data.images = images;
+    }
+
+	function onChangeProvince() {
+        var value = $(this).val();
+        $$.loadSelect($(this).next('select'), districtData['city'][value] || []);
+        $$.loadSelect($(this).next('select').next('select'), []);
+    }
+
+    function onChangeCity() {
+        var value = $(this).val();
+        $$.loadSelect($(this).next('select'), districtData['district'][$('#province').val() + value]);
+    }
+
+	function onChangeAcqInstId() {
+        var value = $(this).val();
+        $$.request('/action/bm/acq-inst-busi/list', {
+            acq_inst_id: value
+        }, function(data) {
+            $$.loadSelect('#busi_type', data.rows, {
+                valueField: 'busi_type',
+                textField: 'busi_type_nm'
+            });
+            $('#busi_type').val($('#busi_type').attr('data-value'));
+        });
+    }
+		
+	function onChangeBank(rec) {
+        if ($('#account_bank_branch_cd').combobox('options').queryParams['bank_branch_cd']) {
+            return;
+        }
+
+        $('#account_bank_branch_cd').combobox('clear').combobox('reload');
+    }
+		
+	function bankBranchLoader(param, success, error) {
+        var q = param.q || '';
+        var queryParams;
+        if (param.bank_branch_cd) {
+            queryParams = {
+                bank_branch_cd: param.bank_branch_cd
+            };
+        } else {
+            queryParams = {
+                q: q,
+                bank_cd: $('#account_bank').combobox('getValue')
+            };
+        }
+
+        $$.request('/action/bm/bank-branch/search', queryParams, function(result) {
+            success(result.rows);
+        }, function() {
+            error.apply(this, arguments);
+        }, {
+            loading: false
+        });
+
+        setTimeout(function() {
+            delete $('#account_bank_branch_cd').combobox('options').queryParams['bank_branch_cd'];
+        }, 0);
+    }
+
+    function formatAccountNo(v) {
+        var nv = '';
+        var i;
+        for (i = 0; i < v.length; i++) {
+            if (i > 0 && i % 4 == 0) {
+                nv += '-';
+            }
+            nv += v.charAt(i);
+        }
+        return nv;
+    }
+		
+    function uploadSuccess($file, data) {
+        var type = $file.attr('data-type');
+        if (type == 'yyzzzm') {
+            $$.request('/gateway/ocr/general', {
+                serverid: data.serverid
+            }, function(result) {
+                console.log(result);
+                renderImgbox($file, data);
+            });
+        } else {
+            renderImgbox($file, data);
+        }
+    }
+
+    function ocrIdCard($file, result, id_card_side) {
+        $$.request('/gateway/ocr/idcard', {
+            serverid: result.serverid,
+            id_card_side: id_card_side
+        }, function(res) {
+            console.log(res);
+            var data = res.data;
+
+            if (id_card_side == 'front') {
+                $('#ff').form('load', {
+                    cert_name: data.name,
+                    cert_id: data.id,
+                    account_name: data.name
+                });
+            } else {
+                $('#ff').form('load', {
+                    cert_date: data.valid_date
+                });
+            }
+        });
+    }
+
+
+    function ocrBusiness($file, result) {
+        $$.request('/gateway/ocr/business', {
+            serverid: result.serverid
+        }, function(res) {
+            console.log(res);
+            var data = res.data;
+
+            var $crop = $('<div class="img-crop" style="line-height: 70px;">' +
+                '<img src="' + $$.wrapUrl('/action/uploads/' + data.crop_serverid) + '">' +
+                '<button type="button" class="btn btn-info btn-sm">识别</button>' +
+                '</div>').data('data', {
+                serverid: data.crop_serverid
+            });
+            $file.closest('.img-box-wrap').after($crop);
+
+            $('#ff').form('load', {
+                license_no: data.license_no,
+                business_scope: data.business_scope
+            });
+
+            $crop.find('button').on('click', function() {
+                // var data = $(this).closest('.img-crop').data('data');
+                $$.request('/gateway/ocr/business', {
+                    // serverid: data.serverid
+                    serverid: data.crop_serverid
+                }, function(res) {
+                    var data = res.data;
+                    $('#ff').form('load', {
+                        license_no: data.license_no
+                    });
+                });
+            });
+        });
+    }
+
+    function searchLicense() {
+		/*
+        var license_no = $('#license_no').val();
+        $$.request('/gateway/gsxt/license', {
+            license_no: license_no
+        }, function(res) {
+            var data = res.data;
+            $('#ff').form('load', {
+                mchnt_name: data.name,
+                license_addr: data.addr,
+                license_date: data.deadline,
+                cert_name: data.legal_person_name,
+                mchnt_abbr: data.name,
+                linkman: data.legal_person_name
+            });
+        });*/
+    }
+
+    function ocrBankCard($file, result) {
+        $$.request('/gateway/ocr/bankcard', {
+            serverid: result.serverid
+        }, function(res) {
+            console.log(res);
+            var data = res.data;
+
+            $('#ff').form('load', {
+                account_no: data.bank_card_number
+            });
+
+        });
+    }
+
+    function ocrImg($file, result) {
+        renderImgbox($file, result);
+        var type = $file.attr('data-type');
+        if (type == 'yyzzzm') {
+            ocrBusiness($file, result);
+        } else if (type == 'frzjzm') {
+            ocrIdCard($file, result, 'front');
+        } else if (type == 'frzjfm') {
+            ocrIdCard($file, result, 'back');
+        } else if (type == 'zhzm') {
+            ocrBankCard($file, result);
+        }
+    }
+
+
+
+    function initUpload() {
+        $('.img-box-wrap').on('click', '.btn-danger', function() {
+            var $wrap = $(this).closest('.img-box-wrap');
+            var $file = $wrap.find(':file');
+            var maxCount = parseInt($file.attr('data-max') || '1');
+            var count = $wrap.find('.img-box:not(.glyphicon-upload)').length;
+            if (count <= maxCount) {
+                $file.closest('.img-box').show();
+            }
+
+            $(this).closest('.img-box').remove();
+            $wrap.next('.img-crop').remove();
+        });
+
+        $('#ff').find(':file').on('change', function() {
+            var $file = $(this);
+            if (!$file.val()) return;
+
+            $.mask.show();
+            $.ajax({
+                type: 'POST',
+                url: $$.wrapUrl('/action/upload'),
+                files: $(this),
+                iframe: true,
+                // dataType: 'json',
+                success: function(data) {
+                    var result = $(data).not('style').text();
+                    try {
+                        result = $.parseJSON(result)
+                    } catch (e) {
+                        console.log(result);
+                        console.error(e);
+                        $$.error('解析JSON异常');
+                        return;
+                    }
+
+                    if ($$.errcode(result) == 0) {
+                        // renderImgbox($file, result);
+                        ocrImg($file, result);
+                    } else {
+                        $$.error($$.errmsg(result));
+                    }
+                }
+            }).always(function() {
+                $.mask.hide();
+            });
+
+            setTimeout(function() {
+                $file.val('');
+            }, 150);
+        });
+    }
+
+
+
+    $(function() {
+
+		$$.transform('.page', operateType, {
+            'create': [],
+            'update': []
+        });
+        initUpload();
+		
+		$('#acq_inst_id').on('change', onChangeAcqInstId);
+		$('#province').on('change', onChangeProvince);
+		$('#province2').on('change', onChangeProvince);
+		$('#city').on('change', onChangeCity);
+		$('#city2').on('change', onChangeCity);
+		
+		$('#account_no').keyup(function(e) {
+            var v = $(this).val();
+            $('#account_no2').text(formatAccountNo(v));
+        });
+		
+		$$.loadSelect('#province', districtData['province']);
+		$$.loadSelect('#province2', districtData['province']);
+        $$.loadSelect('#cert_type', $$.param['cert_type']);
+        $$.loadSelect('#mchnt_type', $$.param['mchnt_type']);
+
+		$$.loadSelect('#account_type', $$.param['account_type']);
+        $$.loadSelect('#oper_in', $$.st.operIn[$$.st.alias['app_busi']]);
+        $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['app_busi']]);
+
+        var d1 = $$.request('/action/bm/parameter/list', {
+            expand_inst: '1',
+            debit_fee_algo: '1',
+            credit_fee_algo: '1',
+            mcc: '1',
+            acq_inst: '1',
+            bank: '1',
+			term_inves: '1',
+            equi_type: '1'
+        }, function(data) {
+            $$.loadSelect('#acq_inst_id', data.acq_inst, {
+                valueField: 'acq_inst_id',
+                textField: 'acq_inst_nm'
+            });
+
+            $('#expand_inst_id').combobox('loadData', data.expand_inst);
+            $('#debit_card_fee').combobox('loadData', data.debit_fee_algo);
+            $('#credit_card_fee').combobox('loadData', data.credit_fee_algo);
+            $('#mcc').combobox('loadData', data.mcc);
+            $('#account_bank').combobox('loadData', data.bank);
+			$('#term_inves').combobox('loadData', data.term_inves);
+            $$.loadSelect('#equi_type', data.equi_type);
+        });
+
+        var d2 = $$.request('/action/bm/expand/list', {}, function(data) {
+            // $$.loadSelect('#expand_id', data.rows);
+            $('#expand_id').combobox('loadData', data.rows);
+        });
+
+
+        $.when(d1, d2).done(function() {
+            $$.loadData('#ff', '/action/bm/app-busi/view', query);
+        });
+    });
+
+    function submitSuccess(data, result) {
+        var $form = $(this).closest('form');
+
+        $$.transform($form, 'view');
+
+        if (result.data) {
+            $form.form('load', result.data)
+        }
+
+
+        $$.success('操作成功');
+
+    }
+    </script>
+</body>
+
+</html>
