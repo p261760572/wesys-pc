@@ -109,7 +109,7 @@
                                 <label>联系人</label>
                                 <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
-                                <input type="text" name="linkman" class="easyui-validatebox" data-options="required:true">
+                                <input type="text" name="linkman" class="easyui-validatebox" data-options="required:true, validType:'name'">
                             </td>
                             <td class="text-right col-sm-2">
                                 <label>手机</label>
@@ -123,7 +123,7 @@
                                 <label>商户简称</label>
                                 <span style="color: red;">*</span></td>
                             <td colspan="3" class="col-sm-10">
-                                <input type="text" name="mchnt_abbr" class="easyui-validatebox" data-options="required:true">
+                                <input type="text" name="mchnt_abbr" class="easyui-validatebox" data-options="required:true, validType:'maxLength[60]'">
                             </td>
                         </tr>
                         <tr class="tf tf-create tf-update">
@@ -137,7 +137,7 @@
                                 <label>常用邮箱</label>
                             </td>
                             <td class="col-sm-4">
-                                <input type="text" name="email" class="easyui-validatebox" data-options="">
+                                <input type="text" name="email" class="easyui-validatebox" data-options="validType: 'email'">
                             </td>
                         </tr>
                         <tr class="tf tf-create tf-update">
@@ -188,7 +188,7 @@
                                 <label>营业执照号</label>
                                 <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
-                                <input type="text" name="license_no" class="easyui-validatebox" data-options="required:true">
+                                <input type="text" name="license_no" class="easyui-validatebox" data-options="required:true, validType: 'license'">
                             </td>
                             <td class="text-right col-sm-2">
                                 <label>营业执照期限</label>
@@ -252,7 +252,7 @@
                                 <label>证件人姓名</label>
                                 <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
-                                <input type="text" name="cert_name" class="easyui-validatebox" data-options="required:true">
+                                <input type="text" name="cert_name" class="easyui-validatebox" data-options="required:true,validType: 'name'">
                             </td>
                             <td class="text-right col-sm-2">
                                 <label>证件号码</label>
@@ -272,7 +272,7 @@
                                 <label>组织机构代码</label>
                             </td>
                             <td class="col-sm-4">
-                                <input type="text" name="org_code" class="easyui-validatebox" data-options="">
+                                <input type="text" name="org_code" class="easyui-validatebox" data-options="validType: 'orgcode'">
                             </td>
                         </tr>
                         <tr class="tf tf-create tf-update">
@@ -313,7 +313,7 @@
                                 <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
                                 <div class="col-sm-12" style="padding:0;">
-                                    <input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true">
+                                    <input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true, onChange: onChangeExpand">
                                 </div>
                             </td>
                             <td class="text-right col-sm-2">
@@ -449,10 +449,49 @@
     $.extend($.fn.validatebox.defaults.rules, {
         certId: {
             validator: function(value, param) {
-                var re = /^[0-9X]+$/;
+				if($('#cert_type').find("option:selected").text() == '身份证') {
+                	var re = /^\d{15}(\d{2}[A-Za-z0-9])?$/;
+                	return re.test(value);
+				} else {
+					return true;
+				}
+            },
+            message: '请输入有效的证件号码'
+        },
+		name: {
+            validator: function(value, param) {
+                var re = /^[\u4e00-\u9fa5]{2,20}$/; 
                 return re.test(value);
             },
-            message: '输入内容必须是数字或X'
+            message: '真实姓名填写有误'
+        },
+		mobile: {
+            validator: function(value, param) {
+                var re = /^1[3|5|7|8][0-9]\d{4,8}$/;
+                return re.test(value);
+            },
+            message: '请输入有效的手机号'
+        },
+		email: {
+            validator: function(value, param) {
+                var re = /^\w+([-+.]\w+)*@\w+([-.]\\w+)*\.\w+([-.]\w+)*$/; 
+                return re.test(value);
+            },
+            message: '请输入有效的邮箱号码'
+        },
+		license: {
+            validator: function(value, param) {
+                var re = /^([a-zA-Z0-9]{15}|[a-zA-Z0-9]{18})$/;
+                return re.test(value);
+            },
+            message: '请输入有效的营业执照号码'
+        },
+		orgcode: {
+            validator: function(value, param) {
+                var re = /^[a-zA-Z0-9]{8}-[a-zA-Z0-9]$/;
+                return re.test(value);
+            },
+            message: '请输入有效的组织机构代码'
         }
     });
 
@@ -643,7 +682,19 @@
         }
     }
 
+	function onChangeExpand(rec) {
+		$$.request('/action/bm/expand/list', {expand_inst_id: rec}, function(data) {
+		// $$.loadSelect('#expand_id', data.rows);
+			$('#expand_id').combobox('loadData', data.rows);
+		});
+		/*
+        if ($('#account_bank_branch_cd').combobox('options').queryParams['bank_branch_cd']) {
+            return;
+        }
 
+        $('#account_bank_branch_cd').combobox('clear').combobox('reload');*/
+    }
+		
     $(function() {
         $$.transform('.page', operateType, {
             'create': [],
@@ -653,6 +704,9 @@
 
         initUpload();
 
+		$('.easyui-validatebox').bind('blur', function(){
+			$(this).validatebox('enableValidation').validatebox('validate');
+		});
         $('#province').on('change', onChangeProvince);
         $('#city').on('change', onChangeCity);
 
@@ -662,7 +716,7 @@
 
         $$.loadSelect('#oper_in', $$.st.operIn[$$.st.alias['mchnt_base_info']]);
         $$.loadSelect('#proc_st', $$.st.procSt[$$.st.alias['mchnt_base_info']]);
-
+		/*
         var d1 = $$.request('/action/bm/expand-inst/list', {}, function(data) {
             // $$.loadSelect('#expand_inst_id', data.rows);
             $('#expand_inst_id').combobox('loadData', data.rows);
@@ -676,7 +730,12 @@
 
         $.when(d1, d2).done(function() {
             $$.loadData('#ff', '/action/bm/mchnt-base-info/view', query);
+        });*/
+		$$.request('/action/bm/expand-inst/list', {}, function(data) {
+            // $$.loadSelect('#expand_inst_id', data.rows);
+            $('#expand_inst_id').combobox('loadData', data.rows);
         });
+		$$.loadData('#ff', '/action/bm/mchnt-base-info/view', query);
     });
     </script>
 </body>

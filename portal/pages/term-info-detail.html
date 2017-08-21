@@ -127,8 +127,7 @@
                                 <label>拓展方</label>
                             <span style="color: red;">*</span></td>
                             <td class="col-sm-4">
-                                <div class="col-sm-12" style="padding:0;"><input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true"></div>
-                                
+                                <div class="col-sm-12" style="padding:0;"><input type="text" id="expand_inst_id" name="expand_inst_id" class="easyui-combobox" data-options="required:true, onChange: onChangeExpand"></div>
                             </td>
                             <td class="text-right col-sm-2">
                                 <label>拓展人</label>
@@ -385,14 +384,29 @@
         }
     }
 
+	function onChangeExpand(rec) {
+		$$.request('/action/bm/expand/list', {expand_inst_id: rec}, function(data) {
+		// $$.loadSelect('#expand_id', data.rows);
+			$('#expand_id').combobox('loadData', data.rows);
+		});
+		/*
+        if ($('#account_bank_branch_cd').combobox('options').queryParams['bank_branch_cd']) {
+            return;
+        }
 
+        $('#account_bank_branch_cd').combobox('clear').combobox('reload');*/
+    }
+		
     $(function() {
         $$.transform('.page', operateType, {
             'create': [],
             'update': [],
             'check1': ['create', 'update']
         });
-
+		
+		$('.easyui-validatebox').bind('blur', function(){
+			$(this).validatebox('enableValidation').validatebox('validate');
+		});
 
         $('#province').on('change', onChangeProvince);
         $('#city').on('change', onChangeCity);

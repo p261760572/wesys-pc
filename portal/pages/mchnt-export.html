@@ -106,7 +106,7 @@
         $$.request('/action/bm/acq-inst-busi/list', {
             acq_inst_id: value
         }, function(data) {
-            $$.loadSelect('#busi-type', data.rows, {
+            $$.loadSelect('#busi_type', data.rows, {
                 valueField: 'busi_type',
                 textField: 'busi_type_nm'
             });
